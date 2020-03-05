@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-03-05T10:11:01.984Z</updated>
+    <updated>2020-03-05T10:12:49.752Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,104 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[top move]]></title>
+        <id>https://Wei715547.github.io/post/top-move/</id>
+        <link href="https://Wei715547.github.io/post/top-move/">
+        </link>
+        <updated>2020-03-05T10:10:18.000Z</updated>
+        <summary type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class Player : MonoBehaviour<br>
+{<br>
+public float moveSpeed = 3;//属性值<br>
+private SpriteRenderer sr;//引用<br>
+private void Awake()<br>
+{<br>
+sr = GetComponent<SpriteRenderer>();<br>
+}<br>
+public Sprite[] tankSprite;//上，右，下，左。</p>
+<pre><code>// Start is called before the first frame update
+void Start()
+{
+    
+}
+
+// Update is called once per frame
+void Update()
+{
+
+}
+private void FixedUpdate()
+{
+</code></pre>
+]]></summary>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class Player : MonoBehaviour<br>
+{<br>
+public float moveSpeed = 3;//属性值<br>
+private SpriteRenderer sr;//引用<br>
+private void Awake()<br>
+{<br>
+sr = GetComponent<SpriteRenderer>();<br>
+}<br>
+public Sprite[] tankSprite;//上，右，下，左。</p>
+<pre><code>// Start is called before the first frame update
+void Start()
+{
+    
+}
+
+// Update is called once per frame
+void Update()
+{
+
+}
+private void FixedUpdate()
+{
+</code></pre>
+<!-- more -->
+<pre><code>    Move();
+
+   
+}//移动方法
+
+private void Move()
+{
+    float v = Input.GetAxisRaw(&quot;Vertical&quot;);
+    transform.Translate(Vector3.up * v * moveSpeed * Time.deltaTime, Space.World);
+    if (v &lt; 0)
+    {
+        sr.sprite = tankSprite[2];
+    }
+    else if (v &gt; 0)
+    {
+        sr.sprite = tankSprite[0];
+    }
+    if (v != 0)
+    {
+        return;
+    }
+
+
+    float h = Input.GetAxisRaw(&quot;Horizontal&quot;);
+    transform.Translate(Vector3.right * h * moveSpeed * Time.deltaTime, Space.World);
+    if (h &lt; 0)
+    {
+        sr.sprite = tankSprite[3];
+    }
+    else if (h &gt; 0)
+    {
+        sr.sprite = tankSprite[1];
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
         <id>https://Wei715547.github.io/post/hello-gridea/</id>
