@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-03-06T04:49:15.882Z</updated>
+    <updated>2020-03-14T04:52:07.648Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,125 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[jump&落地检测]]></title>
+        <id>https://Wei715547.github.io/post/jumpandluo-di-jian-ce/</id>
+        <link href="https://Wei715547.github.io/post/jumpandluo-di-jian-ce/">
+        </link>
+        <updated>2020-03-14T04:45:53.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class JumpBox : MonoBehaviour<br>
+{<br>
+[Range(0, 10)] public float jumpVelocity = 5f;<br>
+public LayerMask mask;<br>
+public float boxHeight;<br>
+private Vector2 playerSize;<br>
+private Vector2 boxSize;<br>
+private bool jumpRequest;<br>
+private bool grounded;<br>
+private Rigidbody2D _rigidbody2D;</p>
+<pre><code>// Start is called before the first frame update
+void Start()
+{
+    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
+    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
+    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight );
+
+}
+
+// Update is called once per frame
+void Update()
+{
+    if (Input .GetButtonDown (&quot;Jump&quot;)&amp;&amp;grounded )
+    {
+        jumpRequest = true;
+    }
+}
+private void FixedUpdate()
+{
+    if (jumpRequest )
+    {
+        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+        jumpRequest = false ;
+        grounded = false;
+    }
+    else
+    {
+        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
+        if (Physics2D .OverlapBox (boxCenter ,boxSize ,0,mask )!=null )
+        {
+            grounded = true;
+        }
+        else
+        {
+            grounded = false ;
+        }
+    }
+}
+private void OnDrawGizmos()
+{
+    if (grounded )
+    {
+        Gizmos.color =Color.red;
+    }
+    else
+    {
+        Gizmos.color=Color.green;
+    }
+
+    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
+    Gizmos.DrawWireCube(boxCenter, boxSize);
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2D-LR-MOVE]]></title>
+        <id>https://Wei715547.github.io/post/2d-lr-move/</id>
+        <link href="https://Wei715547.github.io/post/2d-lr-move/">
+        </link>
+        <updated>2020-03-08T10:08:16.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1583662256843.PNG" alt="" loading="lazy"><br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class Move : MonoBehaviour<br>
+{<br>
+public float moveSpeed = 3;<br>
+public Animator animator;</p>
+<pre><code>// Start is called before the first frame update
+void Start()
+{
+    
+}
+
+// Update is called once per frame
+void Update()
+{
+    
+}
+private void FixedUpdate()
+{
+
+    move();
+
+
+}
+
+private void move()//移动方法
+{
+    float h = Input.GetAxisRaw(&quot;Horizontal&quot;);
+    transform.Translate(Vector3.right * h * moveSpeed * Time.deltaTime, Space.World);
+    animator.SetFloat(&quot;Horizontal&quot;, Input.GetAxis(&quot;Horizontal&quot;));
+
+}
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Controller]]></title>
         <id>https://Wei715547.github.io/post/controller/</id>
