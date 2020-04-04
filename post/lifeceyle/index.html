@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>jump&amp;落地检测 | Weiwei的个人网站</title>
+<title>LifeCeyle | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1586010991156">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="jump&amp;落地检测 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="LifeCeyle | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -14,9 +14,9 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class JumpBox : MonoBehaviour
+public class Lifecycle : MonoBehaviour
 {
-[R..." />
+..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,14 +79,14 @@ public class JumpBox : MonoBehaviour
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              jump&amp;落地检测
+              LifeCeyle
             </h2>
             <div class="post-info">
               <span>
-                2020-03-14
+                2020-04-04
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
@@ -96,68 +96,84 @@ public class JumpBox : MonoBehaviour
                 <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;</p>
-<p>public class JumpBox : MonoBehaviour<br>
+<p>public class Lifecycle : MonoBehaviour<br>
 {<br>
-[Range(0, 10)] public float jumpVelocity = 5f;<br>
-public LayerMask mask;<br>
-public float boxHeight;<br>
-private Vector2 playerSize;<br>
-private Vector2 boxSize;<br>
-private bool jumpRequest;<br>
-private bool grounded;<br>
-private Rigidbody2D _rigidbody2D;</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
-    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
-    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight );
+//脚本：.cs  类文件<br>
+//附加到游戏体中，定义游戏对象行为指令的代码</p>
+<pre><code>//C#类
+//字段
+//属性
+//构造函数
+//方法
 
+//脚本：
+//字段
+//方法
+
+[SerializeField ]//在编译器中显示私有变量
+private  int a = 100;
+
+[HideInInspector ]//在编译器中隐藏公共变量
+public int b;
+
+[Range (0,100)]
+public float c;
+
+//属性：在编译器中不能显示，通常脚本中不写。
+/*public int A
+{
+    get{ return this.a; }
+    set{ this.a = value; }
+}
+*/
+/*
+public Lifecycle ()//不要在脚本中写构造函数
+{
+    //不能在子线程中访问主线程成员。
+    b = (int)Time.time;
+}
+*/
+
+//*******************初始阶段**********************
+
+//执行时机:创建游对象，立即执行1次 (早于Start)
+//作用：初始化---相当于构造函数
+private void Awake()
+{
+    Debug.Log(&quot;Awake&quot; + Time.time+&quot;-&quot;+this .name );
+    
+}
+//执行时机:创建游对象，脚本启用 才执行（1次）
+//作用：初始化---相当于构造函数
+private void Start()
+{
+    b = Random.Range(1, 100);
+    Debug.Log(&quot;Start&quot; + Time.time+&quot;-&quot;+this .name );//调试
+    print(&quot;ok&quot;);//调试（父类的方法-仅在脚本中可以直接使用）
 }
 
-// Update is called once per frame
-void Update()
-{
-    if (Input .GetButtonDown (&quot;Jump&quot;)&amp;&amp;grounded )
-    {
-        jumpRequest = true;
-    }
-}
+//********************物理阶段*********************
+//执行时机：每隔固定时间执行一次。（时间可以修改  默认值 0.02 s）
+//适用性：适合对物体做物理操作（移动，旋转。。。。），不会受到渲染影响
 private void FixedUpdate()
-{
-    if (jumpRequest )
-    {
-        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
-        jumpRequest = false ;
-        grounded = false;
-    }
-    else
-    {
-        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
-        if (Physics2D .OverlapBox (boxCenter ,boxSize ,0,mask )!=null )
-        {
-            grounded = true;
-        }
-        else
-        {
-            grounded = false ;
-        }
-    }
+{//渲染时间不固定（每帧渲染量不同，机器性能不同）
+    Debug.Log(Time.time);
 }
-private void OnDrawGizmos()
-{
-    if (grounded )
-    {
-        Gizmos.color =Color.red;
-    }
-    else
-    {
-        Gizmos.color=Color.green;
-    }
 
-    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
-    Gizmos.DrawWireCube(boxCenter, boxSize);
+public float time;//调试
+//********************游戏逻辑*********************
+//执行时机：渲染帧执行，执行间隔不固定
+//适用性：处理游戏逻辑
+private void Update()
+{
+    //单帧调试：启动调试  运行场景  暂停游戏 加断点  单帧执行  结束调试
+    //调试过程中，输入代码
+    //右键  快速监视
+    //查看  即时窗口
+    time = Time.time;
 }
+
+//********************结束阶段*********************
 </code></pre>
 <p>}</p>
 
@@ -172,9 +188,9 @@ private void OnDrawGizmos()
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/2d-lr-move/">
+            <a href="https://Wei715547.github.io/post/gameobjectdemo/">
               <h3 class="post-title">
-                2D-LR-MOVE
+                GameObjectDemo
               </h3>
             </a>
           </div>

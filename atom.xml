@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-03-14T04:52:07.648Z</updated>
+    <updated>2020-04-04T14:36:36.447Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,1037 +11,432 @@
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
     <entry>
-        <title type="html"><![CDATA[jump&落地检测]]></title>
-        <id>https://Wei715547.github.io/post/jumpandluo-di-jian-ce/</id>
-        <link href="https://Wei715547.github.io/post/jumpandluo-di-jian-ce/">
+        <title type="html"><![CDATA[Boom向量/三角函数应用]]></title>
+        <id>https://Wei715547.github.io/post/boom-xiang-liang-san-jiao-han-shu-ying-yong/</id>
+        <link href="https://Wei715547.github.io/post/boom-xiang-liang-san-jiao-han-shu-ying-yong/">
         </link>
-        <updated>2020-03-14T04:45:53.000Z</updated>
+        <updated>2020-04-04T14:34:23.000Z</updated>
         <content type="html"><![CDATA[<p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;</p>
-<p>public class JumpBox : MonoBehaviour<br>
+<p>public class Boom : MonoBehaviour<br>
 {<br>
-[Range(0, 10)] public float jumpVelocity = 5f;<br>
-public LayerMask mask;<br>
-public float boxHeight;<br>
-private Vector2 playerSize;<br>
-private Vector2 boxSize;<br>
-private bool jumpRequest;<br>
-private bool grounded;<br>
-private Rigidbody2D _rigidbody2D;</p>
-<pre><code>// Start is called before the first frame update
-void Start()
+public GameObject player;<br>
+private Vector3 dp;<br>
+//private Vector3 ldp;<br>
+private Vector3 liftdp;<br>
+private Vector3 rightdp;<br>
+private float dt;<br>
+private float sin;<br>
+private float rd;<br>
+// Start is called before the first frame update<br>
+void Start()<br>
+{<br>
+rd = player.GetComponent<CapsuleCollider>().radius ;<br>
+}</p>
+<pre><code>// Update is called once per frame
+void Update()
 {
-    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
-    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
-    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight );
+    Draw();
+}
 
+private void VectorCt()
+{
+    
+    dp = player.transform.position - this.transform.position;
+    dt = dp.magnitude;
+    sin = Mathf.Rad2Deg * Mathf.Asin(rd / dt);
+    //ldp = Quaternion.Euler(0, sin, 0) *dp.normalized * dt * Mathf.Cos(sin);
+    liftdp = this.transform.position + Quaternion.Euler(0, sin, 0) * dp;
+   
+    rightdp = this.transform.position + Quaternion.Euler(0, -sin, 0) * dp;
+    
+}
+
+private void CalculateTangent()
+{
+    Vector3 playerToBoom = this.transform.position - player.transform.position;
+    Vector3 playerToExplpsionDirection = playerToBoom.normalized * rd;
+    float angle = Mathf.Acos(rd / playerToBoom.magnitude) * Mathf.Rad2Deg;
+    liftdp = player.transform.position + Quaternion.Euler(0, -angle , 0) * playerToExplpsionDirection;
+    rightdp = player.transform.position + Quaternion.Euler(0, angle, 0) * playerToExplpsionDirection;
+
+}
+
+private void Draw()
+{
+    //VectorCt();
+    CalculateTangent();
+    Debug.DrawLine(this.transform.position, player.transform.position);
+    Debug.DrawLine(this.transform.position, liftdp,Color .blue );
+    Debug.DrawLine(this.transform.position, rightdp,Color .red );
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[四元数API]]></title>
+        <id>https://Wei715547.github.io/post/si-yuan-shu-api/</id>
+        <link href="https://Wei715547.github.io/post/si-yuan-shu-api/">
+        </link>
+        <updated>2020-04-04T14:33:23.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class QuaternionAPI : MonoBehaviour<br>
+{<br>
+public Transform  tf;<br>
+public AnimationCurve a;<br>
+private float x;</p>
+<pre><code>private void OnGUI()
+{
+    if (GUILayout.Button (&quot;&quot;))
+    {
+        //1.欧拉角转换为四元数
+        //Quaternion.Euler(欧拉角);
+
+        //2/四元数转欧拉角
+        Quaternion qt = this.transform.rotation;
+        Vector3 auler = qt.eulerAngles;
+
+        //3.轴/角
+        //Quaternion.Euler(0, 50, 0);
+        this .transform .rotation = Quaternion.AngleAxis(50, Vector3.up);
+
+    }
+    
+    if (GUILayout.Button(&quot;LookRotation&quot;))
+    {
+        //4.注视旋转
+        //Z轴指向一个方向
+        //当前物体注视 tf 旋转
+        Vector3 dir = tf.position - this.transform.position;
+        this.transform.rotation  = Quaternion.LookRotation (dir);
+        //this.transform.LookAt(tf);//效果与上两行代码相同----下一帧立即执行
+
+    }
+
+    if (GUILayout.RepeatButton(&quot;LookRotationLerp&quot;))
+    {
+        //5.插值旋转
+        x += Time.deltaTime;
+        Quaternion dir = Quaternion.LookRotation(tf.position - this.transform.position);            
+        this .transform .rotation = Quaternion.Lerp(this.transform.rotation, dir, a.Evaluate (x));
+
+        //6.匀速旋转
+        //this.transform.rotation = Quaternion.RotateTowards(this.transform.rotation, dir, 0.1f);//匀速朝向旋转
+    }
+
+    if (GUILayout.RepeatButton(&quot;AngleR90&quot;))
+    {
+        Quaternion dir = Quaternion.Euler(0, 90, 0);
+        this.transform.rotation =
+            Quaternion.Lerp(this.transform.rotation, dir, 0.1f);
+        //7.如果当前旋转角度 接近目标旋转角度
+        if (Quaternion .Angle (this .transform .rotation ,dir )&lt;10)
+        {
+            this.transform.rotation = dir;
+        }
+    }
+
+    if (GUILayout.RepeatButton(&quot;Right&quot;))
+    {
+        //8.x轴注视旋转 t1
+        //this.transform.right = tf.position - this.transform.position;
+        //x正方向---注视目标物体方向
+        Quaternion dir = Quaternion.FromToRotation(Vector3 .right  , tf.position - this.transform.position);
+        //this.transform.rotation = dir;
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, dir, 0.1f);
+
+
+    }
 }
 
 // Update is called once per frame
 void Update()
 {
-    if (Input .GetButtonDown (&quot;Jump&quot;)&amp;&amp;grounded )
+    
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[向量API]]></title>
+        <id>https://Wei715547.github.io/post/xiang-liang-api/</id>
+        <link href="https://Wei715547.github.io/post/xiang-liang-api/">
+        </link>
+        <updated>2020-04-04T14:33:02.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class VectorAPI : MonoBehaviour<br>
+{<br>
+public AnimationCurve cuver;<br>
+private float x;<br>
+public  float psTime=3;<br>
+private Vector3 targetPoint = new Vector3 (0, 0, 10);<br>
+private void OnGUI()<br>
+{<br>
+if (GUILayout.RepeatButton (&quot;Move&quot;))<br>
+{<br>
+//将物体移动至（0，0,10）<br>
+//匀速移动<br>
+this.transform.position = Vector3.MoveTowards(this.transform.position,targetPoint , 2);<br>
+//先快后慢--终点与比例固定<br>
+this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2 );</p>
+<pre><code>    }
+    if (GUILayout.RepeatButton(&quot;Lerp&quot;))
     {
-        jumpRequest = true;
+        x += Time.deltaTime/psTime ;
+        //自然变化，起点，终点固定，比例根据曲线变化
+        this.transform.position =
+            Vector3.LerpUnclamped (Vector3.zero, targetPoint, cuver.Evaluate(x));
     }
 }
-private void FixedUpdate()
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[第一人称镜头旋转]]></title>
+        <id>https://Wei715547.github.io/post/di-yi-ren-cheng-jing-tou-xuan-zhuan/</id>
+        <link href="https://Wei715547.github.io/post/di-yi-ren-cheng-jing-tou-xuan-zhuan/">
+        </link>
+        <updated>2020-04-04T14:31:08.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 控制摄像机随鼠标旋转<br>
+/// </summary><br>
+public class DoRotation : MonoBehaviour<br>
+{<br>
+public float rotateSpeed = 1;<br>
+private void FixedUpdate()<br>
+{<br>
+float x = Input.GetAxis(&quot;Mouse X&quot;);<br>
+float y = Input.GetAxis(&quot;Mouse Y&quot;);</p>
+<pre><code>    if (x!=0||y!=0)
+    RotateView(x, y);
+}
+
+private void RotateView(float x, float y)
 {
-    if (jumpRequest )
+    x *= rotateSpeed;
+    y *= rotateSpeed;
+
+    this.transform.Rotate(0, x, 0, Space.World);//左右旋转按照世界坐标
+    //this.transform.Rotate(-y, 0, 0, Space.Self);//上下旋转按自身坐标
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[镜头缩放]]></title>
+        <id>https://Wei715547.github.io/post/jing-tou-suo-fang/</id>
+        <link href="https://Wei715547.github.io/post/jing-tou-suo-fang/">
+        </link>
+        <updated>2020-04-04T14:30:16.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 镜头缩放<br>
+/// </summary><br>
+public class CareamZoom : MonoBehaviour<br>
+{<br>
+public bool isDown;<br>
+public bool keyDown;<br>
+public bool cvDown;<br>
+public Transform l1;</p>
+<pre><code>public bool isFar = true;
+private Camera camera;
+
+public int[] zoomLevel;
+private int index;
+private Vector3 lo;
+private Quaternion ro;
+
+
+
+private void Start()
+{
+    camera = GetComponent&lt;Camera&gt;();
+    lo = this.transform.position;
+    ro = this.transform.rotation;
+}
+
+private void Update()
+{
+    isDown = Input.GetMouseButton(0);//左键
+
+    keyDown = Input.GetKey(KeyCode.Q);
+
+    CamerPosition();
+
+    if (keyDown)
+        Zoom4();
+
+
+    cvDown = Input.GetKey(KeyCode.C) &amp;&amp; Input.GetKey(KeyCode.V);
+
+
+}
+
+private void CamerPosition()
+{
+
+    if (keyDown)
     {
-        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
-        jumpRequest = false ;
-        grounded = false;
+        this.transform.position = this.transform.parent.position;
+        this.transform.rotation = this.transform.parent.rotation;
     }
     else
     {
-        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
-        if (Physics2D .OverlapBox (boxCenter ,boxSize ,0,mask )!=null )
+        this.transform.position = l1.position;
+        this.transform.rotation = l1.rotation;
+        index = 0;
+        camera.fieldOfView = zoomLevel[index ];
+    }
+}
+
+private void Zoom1()
+{
+    if (Input.GetMouseButtonDown(1))
+    {
+        //拉近：10
+        isFar = !isFar;
+
+        if (isFar)
         {
-            grounded = true;
+            camera.fieldOfView = 50;
+            //拉远：50
         }
         else
         {
-            grounded = false ;
+            camera.fieldOfView = 10;
         }
+
     }
 }
-private void OnDrawGizmos()
+
+private void Zoom2()
 {
-    if (grounded )
+    if (Input.GetMouseButtonDown(1))
     {
-        Gizmos.color =Color.red;
+        isFar = !isFar;
+    }
+    if (isFar)
+    {
+        if (camera.fieldOfView &lt; 50)
+            camera.fieldOfView += 2;
+        //拉远：10--&gt;50
     }
     else
     {
-        Gizmos.color=Color.green;
+        //拉近：50--&gt;10
+        if (camera.fieldOfView &gt; 10)
+            camera.fieldOfView -= 2;
+    }
+}
+
+private void Zoom3()//先快后慢 Lerp (起点，终点，比例0.1)第一次返回起点到终点0.1的值
+{
+    if (Input.GetMouseButtonDown(1))
+    {
+        isFar = !isFar;
+    }
+    if (isFar)
+    {
+        //拉远：10--&gt;50
+        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, 50, 0.1f);//无限接近50，不等于
+        if (Mathf.Abs(camera.fieldOfView - 50) &lt; 0.1) camera.fieldOfView = 50;//使无限接近时，等于
+    }
+    else
+    {
+        //拉近：50--&gt;10
+        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, 10, 0.1f);
+        if (Mathf.Abs(camera.fieldOfView - 10) &lt; 0.1) camera.fieldOfView = 10;
+    }
+}
+
+private void Zoom4()//
+{
+    if (Input.GetMouseButtonDown(1))
+    {
+        //index = index &lt; zoomLevel.Length - 1 ? index + 1 : 0;
+        index = (index + 1) % zoomLevel.Length;
+        //index++;
+        //if (index &gt;= zoomLevel.Length)
+        //index = 0;
     }
 
-    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
-    Gizmos.DrawWireCube(boxCenter, boxSize);
+    camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomLevel[index], 0.1f);//无限接近50，不等于
+    if (Mathf.Abs(camera.fieldOfView - zoomLevel[index]) &lt; 0.1) camera.fieldOfView = zoomLevel[index];//使无限接近时，等于
+
 }
 </code></pre>
 <p>}</p>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[2D-LR-MOVE]]></title>
-        <id>https://Wei715547.github.io/post/2d-lr-move/</id>
-        <link href="https://Wei715547.github.io/post/2d-lr-move/">
+        <title type="html"><![CDATA[Time类]]></title>
+        <id>https://Wei715547.github.io/post/time-lei/</id>
+        <link href="https://Wei715547.github.io/post/time-lei/">
         </link>
-        <updated>2020-03-08T10:08:16.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1583662256843.PNG" alt="" loading="lazy"><br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class Move : MonoBehaviour<br>
-{<br>
-public float moveSpeed = 3;<br>
-public Animator animator;</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    
-}
-
-// Update is called once per frame
-void Update()
-{
-    
-}
-private void FixedUpdate()
-{
-
-    move();
-
-
-}
-
-private void move()//移动方法
-{
-    float h = Input.GetAxisRaw(&quot;Horizontal&quot;);
-    transform.Translate(Vector3.right * h * moveSpeed * Time.deltaTime, Space.World);
-    animator.SetFloat(&quot;Horizontal&quot;, Input.GetAxis(&quot;Horizontal&quot;));
-
-}
-}
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Controller]]></title>
-        <id>https://Wei715547.github.io/post/controller/</id>
-        <link href="https://Wei715547.github.io/post/controller/">
-        </link>
-        <updated>2020-03-06T04:48:14.000Z</updated>
-        <content type="html"><![CDATA[<p>using UnityEngine;<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using MoreMountains.Tools;</p>
-<p>namespace MoreMountains.CorgiEngine<br>
-{	<br>
-[RequireComponent(typeof(BoxCollider2D))]</p>
-<pre><code>// DISCLAIMER : this controller's been built from the ground up for the Corgi Engine. It takes clues and inspirations from various methods and articles freely 
-// available online. Special thanks to @prime31 for his talent and patience, Yoann Pignole, Mysteriosum and Sebastian Lague, among others for their great articles
-// and tutorials on raycasting. If you have questions or suggestions, feel free to contact me at unitysupport@reuno.net
-
-/// &lt;summary&gt;
-/// The character controller that handles the character's gravity and collisions.
-/// It requires a Collider2D and a rigidbody to function.
-/// &lt;/summary&gt;
-public class CorgiController : MonoBehaviour 
-{
-	/// the various states of our character
-	public CorgiControllerState State { get; protected set; }
-	/// the initial parameters
-	public CorgiControllerParameters DefaultParameters;
-	/// the current parameters
-	public CorgiControllerParameters Parameters{get{return _overrideParameters ?? DefaultParameters;}}
-	
-	[Space(10)]	
-	[Header(&quot;Collision Masks&quot;)]
-	/// The layer mask the platforms are on
-	public LayerMask PlatformMask=0;
-	/// The layer mask the moving platforms are on
-	public LayerMask MovingPlatformMask=0;
-	/// The layer mask the one way platforms are on
-	public LayerMask OneWayPlatformMask=0;
-	/// The layer mask the moving one way platforms are on
-	public LayerMask MovingOneWayPlatformMask=0;
-	/// gives you the object the character is standing on
-	public GameObject StandingOn { get; protected set; }	
-	/// the current velocity of the character
-	public Vector2 Speed { get{ return _speed; } }
-	/// the value of the forces applied at one point in time 
-	public Vector2 ForcesApplied { get; protected set; }
-	
-	[Space(10)]	
-	[Header(&quot;Raycasting&quot;)]
-	/// the number of rays cast horizontally
-	public int NumberOfHorizontalRays = 8;
-	/// the number of rays cast vertically
-	public int NumberOfVerticalRays = 8;
-	/// a small value added to all raycasts to accomodate for edge cases	
-	public float RayOffset=0.05f; 
-	
-	public Vector3 ColliderCenter {get
-		{
-			Vector3 colliderCenter = Vector3.Scale(transform.localScale, _boxCollider.offset);
-			return colliderCenter;
-		}}
-	public Vector3 ColliderPosition {get
-		{
-			Vector3 colliderPosition = transform.position + ColliderCenter;
-			return colliderPosition;
-		}}
-	public Vector3 ColliderSize {get
-		{
-			Vector3 colliderSize = Vector3.Scale(transform.localScale, _boxCollider.size);
-			return colliderSize;
-		}}
-	public Vector3 BottomPosition {get
-		{
-			Vector3 colliderBottom = new Vector3(ColliderPosition.x,ColliderPosition.y - (ColliderSize.y / 2),ColliderPosition.z);
-			return colliderBottom;
-		}}
-	public float Friction { get
-		{
-			return _friction;
-		}}
-
-    // parameters override storage
-    protected CorgiControllerParameters _overrideParameters;
-    // private local references			
-    protected Vector2 _speed;
-    protected float _friction=0;
-    protected float _fallSlowFactor;
-    protected Vector2 _externalForce;
-    protected Vector2 _newPosition;
-    protected Transform _transform;
-    protected BoxCollider2D _boxCollider;
-    protected GameObject _lastStandingOn;
-    protected LayerMask _platformMaskSave;
-	protected PathMovement _movingPlatform=null;
-    protected float _movingPlatformCurrentGravity;
-	protected bool _gravityActive=true;
-
-    protected const float _largeValue=500000f;
-    protected const float _smallValue=0.0001f;
-    protected const float _obstacleHeightTolerance=0.05f;
-	protected const float _movingPlatformsGravity=-500;
-
-    protected Vector2 _originalColliderSize;
-    protected Vector2 _originalColliderOffset;
-
-    // rays parameters
-    protected Rect _rayBoundsRectangle;
-
-    protected List&lt;RaycastHit2D&gt; _contactList;
-
-    /// &lt;summary&gt;
-    /// initialization
-    /// &lt;/summary&gt;
-    protected virtual void Awake()
-	{
-		// we get the various components
-		_transform=transform;
-		_boxCollider = (BoxCollider2D)GetComponent&lt;BoxCollider2D&gt;();
-		_originalColliderSize = _boxCollider.size;
-		_originalColliderOffset = _boxCollider.offset;
-		
-		// we test the boxcollider's x offset. If it's not null we trigger a warning.
-		if (_boxCollider.offset.x!=0)
-		{
-			Debug.LogWarning(&quot;The boxcollider for &quot;+gameObject.name+&quot; should have an x offset set to zero. Right now this may cause issues when you change direction close to a wall.&quot;);
-		}
-
-		// raycast list and state init
-		_contactList = new List&lt;RaycastHit2D&gt;();
-		State = new CorgiControllerState();
-		
-		// we add the edge collider platform and moving platform masks to our initial platform mask so they can be walked on	
-		_platformMaskSave = PlatformMask;	
-		PlatformMask |= OneWayPlatformMask;
-		PlatformMask |= MovingPlatformMask;
-		PlatformMask |= MovingOneWayPlatformMask;
-		
-		State.Reset();
-		SetRaysParameters();
-	}
-
-    /// &lt;summary&gt;
-    /// Use this to add force to the character
-    /// &lt;/summary&gt;
-    /// &lt;param name=&quot;force&quot;&gt;Force to add to the character.&lt;/param&gt;
-    public virtual void AddForce(Vector2 force)
-	{
-		_speed += force;	
-		_externalForce += force;
-	}
-	
-	/// &lt;summary&gt;
-	///  use this to set the horizontal force applied to the character
-	/// &lt;/summary&gt;
-	/// &lt;param name=&quot;x&quot;&gt;The x value of the velocity.&lt;/param&gt;
-	public virtual void AddHorizontalForce(float x)
-	{
-		_speed.x += x;
-		_externalForce.x += x;
-	}
-	
-	/// &lt;summary&gt;
-	///  use this to set the vertical force applied to the character
-	/// &lt;/summary&gt;
-	/// &lt;param name=&quot;y&quot;&gt;The y value of the velocity.&lt;/param&gt;
-	public virtual void AddVerticalForce(float y)
-	{
-		_speed.y += y;
-		_externalForce.y += y;
-	}
-	
-	/// &lt;summary&gt;
-	/// Use this to set the force applied to the character
-	/// &lt;/summary&gt;
-	/// &lt;param name=&quot;force&quot;&gt;Force to apply to the character.&lt;/param&gt;
-	public virtual void SetForce(Vector2 force)
-	{
-		_speed = force;
-		_externalForce = force;	
-	}
-	
-	/// &lt;summary&gt;
-	///  use this to set the horizontal force applied to the character
-	/// &lt;/summary&gt;
-	/// &lt;param name=&quot;x&quot;&gt;The x value of the velocity.&lt;/param&gt;
-	public virtual void SetHorizontalForce (float x)
-	{
-		_speed.x = x;
-		_externalForce.x = x;
-	}
-	
-	/// &lt;summary&gt;
-	///  use this to set the vertical force applied to the character
-	/// &lt;/summary&gt;
-	/// &lt;param name=&quot;y&quot;&gt;The y value of the velocity.&lt;/param&gt;
-	public virtual void SetVerticalForce (float y)
-	{
-		_speed.y = y;
-		_externalForce.y = y;
-		
-	}
-
-    /// &lt;summary&gt;
-    /// This is called every frame
-    /// &lt;/summary&gt;
-    protected virtual void Update()
-	{	
-		EveryFrame();
-	}
-
-	/// &lt;summary&gt;
-	/// Every frame, we apply the gravity to our character, then check using raycasts if an object's been hit, and modify its new position 
-    /// accordingly. When all the checks have been done, we apply that new position. 
-	/// &lt;/summary&gt;
-	protected virtual void EveryFrame()
-	{
-		_contactList.Clear();
-
-		if (_gravityActive)
-		{
-			_speed.y += (Parameters.Gravity + _movingPlatformCurrentGravity) * Time.deltaTime;
-		}
-				
-		if (_fallSlowFactor!=0)
-		{
-			_speed.y*=_fallSlowFactor;
-		}
-
-		// we initialize our newposition, which we'll use in all the next computations			
-		_newPosition=Speed * Time.deltaTime;
-					
-		State.WasGroundedLastFrame = State.IsCollidingBelow;
-		State.WasTouchingTheCeilingLastFrame = State.IsCollidingAbove;
-		State.Reset(); 
-
-		// we initialize our rays
-		SetRaysParameters();
-
-		HandleMovingPlatforms();
-
-		// we store our current speed for use in moving platforms mostly
-		ForcesApplied = _speed;
-
-		// we cast rays on all sides to check for slopes and collisions
-		CastRaysToTheSides();
-		CastRaysBelow();	
-		CastRaysAbove();
-
-		// we move our transform to its next position
-		_transform.Translate(_newPosition,Space.World);			
-
-		SetRaysParameters();	
-
-		// we compute the new speed
-		if (Time.deltaTime &gt; 0)
-		{
-			_speed = _newPosition / Time.deltaTime;	
-		}	
-
-		// we apply our slope speed factor based on the slope's angle
-		if (State.IsGrounded)
-		{
-			_speed.x *= Parameters.SlopeAngleSpeedFactor.Evaluate(State.BelowSlopeAngle * Mathf.Sign(_speed.y));
-		}
-
-		if (!State.OnAMovingPlatform)				
-		{
-			// we make sure the velocity doesn't exceed the MaxVelocity specified in the parameters
-			_speed.x = Mathf.Clamp(_speed.x,-Parameters.MaxVelocity.x,Parameters.MaxVelocity.x);
-			_speed.y = Mathf.Clamp(_speed.y,-Parameters.MaxVelocity.y,Parameters.MaxVelocity.y);
-		}
-
-		
-		// we change states depending on the outcome of the movement
-		if( !State.WasGroundedLastFrame &amp;&amp; State.IsCollidingBelow )
-			State.JustGotGrounded=true;
-			
-		if (State.IsCollidingLeft || State.IsCollidingRight || State.IsCollidingBelow || State.IsCollidingRight)
-		{
-			OnCorgiColliderHit();
-		}		
-
-
-		
-		_externalForce.x=0;
-		_externalForce.y=0;
-	}
-
-	/// &lt;summary&gt;
-	/// If the CorgiController is standing on a moving platform, we match its speed
-	/// &lt;/summary&gt;
-	protected virtual void HandleMovingPlatforms()
-	{
-		if (_movingPlatform!=null)			
-		{
-
-			if (!float.IsNaN(_movingPlatform.CurrentSpeed.x) &amp;&amp; !float.IsNaN(_movingPlatform.CurrentSpeed.y) &amp;&amp; !float.IsNaN(_movingPlatform.CurrentSpeed.z))
-			{
-				_transform.Translate(_movingPlatform.CurrentSpeed*Time.deltaTime);
-			}
-
-			if ( (Time.timeScale==0) || float.IsNaN(_movingPlatform.CurrentSpeed.x) || float.IsNaN(_movingPlatform.CurrentSpeed.y) || float.IsNaN(_movingPlatform.CurrentSpeed.z) )
-			{
-				return;
-			}
-
-			if ((Time.deltaTime&lt;=0))
-			{
-				return;
-			}
-
-			State.OnAMovingPlatform=true;
-
-			GravityActive(false);
-
-			_movingPlatformCurrentGravity=_movingPlatformsGravity;
-
-			_newPosition.y = _movingPlatform.CurrentSpeed.y*Time.deltaTime;		
-
-			_speed = - _newPosition / Time.deltaTime;	
-			SetRaysParameters();
-		}
-	}
-
-	/// &lt;summary&gt;
-	/// Disconnects the CorgiController from its current moving platform.
-	/// &lt;/summary&gt;
-	public virtual void DetachFromMovingPlatform()
-	{
-		State.OnAMovingPlatform=false;
-		_movingPlatform=null;
-		_movingPlatformCurrentGravity=0;
-	}
-
-    /// &lt;summary&gt;
-    /// Casts rays to the sides of the character, from its center axis.
-    /// If we hit a wall/slope, we check its angle and move or not according to it.
-    /// &lt;/summary&gt;
-    protected virtual void CastRaysToTheSides() 
-	{			
-		float movementDirection=1;	
-		if ((_speed.x &lt; 0) || (_externalForce.x&lt;0))
-			movementDirection = -1;
-		
-		float horizontalRayLength = Mathf.Abs(_speed.x*Time.deltaTime) + _rayBoundsRectangle.width/2 + RayOffset*2;
-		
-		Vector2 horizontalRayCastFromBottom=new Vector2(_rayBoundsRectangle.center.x,
-		                                                _rayBoundsRectangle.yMin+_obstacleHeightTolerance);										
-		Vector2 horizontalRayCastToTop=new Vector2(	_rayBoundsRectangle.center.x,
-		                                           _rayBoundsRectangle.yMax-_obstacleHeightTolerance);				
-		
-		RaycastHit2D[] hitsStorage = new RaycastHit2D[NumberOfHorizontalRays];	
-				
-		for (int i=0; i&lt;NumberOfHorizontalRays;i++)
-		{	
-			Vector2 rayOriginPoint = Vector2.Lerp(horizontalRayCastFromBottom,horizontalRayCastToTop,(float)i/(float)(NumberOfHorizontalRays-1));
-			
-			if ( State.WasGroundedLastFrame &amp;&amp; i == 0 )			
-				hitsStorage[i] = MMDebug.RayCast (rayOriginPoint,movementDirection*(Vector2.right),horizontalRayLength,PlatformMask,Color.red,Parameters.DrawRaycastsGizmos);	
-			else
-				hitsStorage[i] = MMDebug.RayCast (rayOriginPoint,movementDirection*(Vector2.right),horizontalRayLength,PlatformMask &amp; ~OneWayPlatformMask &amp; ~MovingOneWayPlatformMask,Color.red,Parameters.DrawRaycastsGizmos);			
-			
-			if (hitsStorage[i].distance &gt;0)
-			{						
-				float hitAngle = Mathf.Abs(Vector2.Angle(hitsStorage[i].normal, Vector2.up));		
-				
-				State.LateralSlopeAngle = hitAngle	;					
-				
-				if (hitAngle &gt; Parameters.MaximumSlopeAngle)
-				{												
-					if (movementDirection &lt; 0)		
-						State.IsCollidingLeft=true;
-					else
-						State.IsCollidingRight=true;						
-					
-					State.SlopeAngleOK=false;
-					
-					if (movementDirection&lt;=0)
-					{
-						_newPosition.x = -Mathf.Abs(hitsStorage[i].point.x - horizontalRayCastFromBottom.x) 
-							+ _rayBoundsRectangle.width/2 
-								+ RayOffset*2;
-					}
-					else
-					{						
-						_newPosition.x = Mathf.Abs(hitsStorage[i].point.x - horizontalRayCastFromBottom.x) 
-							- _rayBoundsRectangle.width/2 
-								- RayOffset*2;						
-					}			
-
-					// if we're in the air, we prevent the character from being pushed back.
-					if (!State.IsGrounded)
-					{
-						_newPosition.x=0;
-					}		
-					
-					_contactList.Add(hitsStorage[i]);
-					_speed = new Vector2(0, _speed.y);
-					break;
-				}
-			}						
-		}
-		
-		
-	}
-
-    /// &lt;summary&gt;
-    /// Every frame, we cast a number of rays below our character to check for platform collisions
-    /// &lt;/summary&gt;
-    protected virtual void CastRaysBelow()
-	{
-		_friction=0;
-
-		if (_newPosition.y &lt; -_smallValue)
-		{
-			State.IsFalling=true;
-		}
-		else
-		{
-			State.IsFalling = false;
-		}
-		
-		if ((Parameters.Gravity &gt; 0) &amp;&amp; (!State.IsFalling))
-			return;
-		
-		float rayLength = _rayBoundsRectangle.height/2 + RayOffset ; 	
-
-		if (State.OnAMovingPlatform)
-		{
-			rayLength*=2;
-		}	
-
-		if (_newPosition.y&lt;0)
-		{
-			rayLength+=Mathf.Abs(_newPosition.y);
-		}			
-		
-		Vector2 verticalRayCastFromLeft=new Vector2(_rayBoundsRectangle.xMin+_newPosition.x,
-		                                            _rayBoundsRectangle.center.y+RayOffset);	
-		Vector2 verticalRayCastToRight=new Vector2(	_rayBoundsRectangle.xMax+_newPosition.x,
-		                                           _rayBoundsRectangle.center.y+RayOffset);					
-		
-		RaycastHit2D[] hitsStorage = new RaycastHit2D[NumberOfVerticalRays];
-		float smallestDistance=_largeValue; 
-		int smallestDistanceIndex=0; 						
-		bool hitConnected=false; 		
-		
-		for (int i=0; i&lt;NumberOfVerticalRays;i++)
-		{			
-			Vector2 rayOriginPoint = Vector2.Lerp(verticalRayCastFromLeft,verticalRayCastToRight,(float)i/(float)(NumberOfVerticalRays-1));
-			
-			if ((_newPosition.y&gt;0) &amp;&amp; (!State.WasGroundedLastFrame))
-				hitsStorage[i] = MMDebug.RayCast (rayOriginPoint,-(Vector2.up),rayLength,PlatformMask &amp; ~OneWayPlatformMask &amp; ~MovingOneWayPlatformMask,Color.blue,Parameters.DrawRaycastsGizmos);	
-			else
-				hitsStorage[i] = MMDebug.RayCast (rayOriginPoint,-(Vector2.up),rayLength,PlatformMask,Color.blue,Parameters.DrawRaycastsGizmos);					
-			
-			if ((Mathf.Abs(hitsStorage[smallestDistanceIndex].point.y - verticalRayCastFromLeft.y)) &lt;  _smallValue)
-			{
-				break;
-			}		
-			
-			if (hitsStorage[i])
-			{
-				hitConnected=true;
-				State.BelowSlopeAngle = Vector2.Angle( hitsStorage[i].normal, Vector2.up )  ;
-				if (hitsStorage[i].distance&lt;smallestDistance)
-				{
-					smallestDistanceIndex=i;
-					smallestDistance = hitsStorage[i].distance;
-				}
-			}								
-		}
-		if (hitConnected)
-		{
-			
-			StandingOn=hitsStorage[smallestDistanceIndex].collider.gameObject;
-		
-			// if the character is jumping onto a (1-way) platform but not high enough, we do nothing
-			if (
-				!State.WasGroundedLastFrame 
-				&amp;&amp; (smallestDistance&lt;_rayBoundsRectangle.size.y/2) 
-				&amp;&amp; (
-					StandingOn.layer==LayerMask.NameToLayer(&quot;OneWayPlatforms&quot;)  
-					||
-					StandingOn.layer==LayerMask.NameToLayer(&quot;MovingOneWayPlatforms&quot;) 
-					) 
-				)
-			{
-				State.IsCollidingBelow=false;
-				return;
-			}
-		
-			State.IsFalling=false;			
-			State.IsCollidingBelow=true;
-										
-
-			// if we're applying an external force (jumping, jetpack...) we only apply that
-			if (_externalForce.y&gt;0)
-			{
-				_newPosition.y = _speed.y * Time.deltaTime;
-				State.IsCollidingBelow = false;
-			}
-			// if not, we just adjust the position based on the raycast hit
-			else
-			{
-				_newPosition.y = -Mathf.Abs(hitsStorage[smallestDistanceIndex].point.y - verticalRayCastFromLeft.y) 
-				+ _rayBoundsRectangle.height/2 
-					+ RayOffset;
-			}
-			
-			if (!State.WasGroundedLastFrame &amp;&amp; _speed.y&gt;0)
-			{
-				_newPosition.y += _speed.y * Time.deltaTime;
-			}				
-			
-			if (Mathf.Abs(_newPosition.y)&lt;_smallValue)
-				_newPosition.y = 0;
-
-			// we check if whatever we're standing on applies a friction change
-			if (hitsStorage[smallestDistanceIndex].collider.GetComponent&lt;SurfaceModifier&gt;()!=null)
-			{
-				_friction=hitsStorage[smallestDistanceIndex].collider.GetComponent&lt;SurfaceModifier&gt;().Friction;
-			}
-			
-			// we check if the character is standing on a moving platform
-			PathMovement movingPlatform = hitsStorage[smallestDistanceIndex].collider.GetComponent&lt;PathMovement&gt;();
-
-			if (movingPlatform!=null &amp;&amp; State.IsGrounded)
-			{
-				_movingPlatform=movingPlatform;
-			}
-		}
-		else
-		{
-			State.IsCollidingBelow=false;
-			if(State.OnAMovingPlatform)
-			{
-				DetachFromMovingPlatform();
-			}
-		}	
-	}
-
-    /// &lt;summary&gt;
-    /// If we're in the air and moving up, we cast rays above the character's head to check for collisions
-    /// &lt;/summary&gt;
-    protected virtual void CastRaysAbove()
-	{			
-		if (_newPosition.y&lt;0)
-			return;
-		
-		float rayLength = State.IsGrounded?RayOffset : _newPosition.y*Time.deltaTime;
-		rayLength+=_rayBoundsRectangle.height/2;
-		
-		bool hitConnected=false; 
-		
-		Vector2 verticalRayCastStart=new Vector2(_rayBoundsRectangle.xMin+_newPosition.x,
-		                                         _rayBoundsRectangle.center.y);	
-		Vector2 verticalRayCastEnd=new Vector2(	_rayBoundsRectangle.xMax+_newPosition.x,
-		                                       _rayBoundsRectangle.center.y);	
-		
-		RaycastHit2D[] hitsStorage = new RaycastHit2D[NumberOfVerticalRays];
-		float smallestDistance=_largeValue; 
-		
-		for (int i=0; i&lt;NumberOfVerticalRays;i++)
-		{							
-			Vector2 rayOriginPoint = Vector2.Lerp(verticalRayCastStart,verticalRayCastEnd,(float)i/(float)(NumberOfVerticalRays-1));
-			hitsStorage[i] = MMDebug.RayCast (rayOriginPoint,(Vector2.up),rayLength,PlatformMask &amp; ~OneWayPlatformMask &amp; ~MovingOneWayPlatformMask,Color.green,Parameters.DrawRaycastsGizmos);	
-
-			if (hitsStorage[i])
-			{
-				hitConnected=true;
-				if (hitsStorage[i].distance&lt;smallestDistance)
-				{
-					smallestDistance = hitsStorage[i].distance;
-				}
-			}					
-		}	
-
-		if (hitConnected)
-		{
-			_newPosition.y = smallestDistance - _rayBoundsRectangle.height/2   ;
-			
-			if ( (State.IsGrounded) &amp;&amp; (_newPosition.y&lt;0) )
-			{
-				_newPosition.y=0;
-			}
-						
-			State.IsCollidingAbove=true;
-			
-			if (!State.WasTouchingTheCeilingLastFrame)
-			{
-				_newPosition.x = 0;
-				_newPosition.y = -0.02f;
-				_speed = Vector2.zero;
-			}
-		}	
-	}
-
-    /// &lt;summary&gt;
-    /// Creates a rectangle with the boxcollider's size for ease of use and draws debug lines along the different raycast origin axis
-    /// &lt;/summary&gt;
-    public virtual void SetRaysParameters() 
-	{		
-		
-		_rayBoundsRectangle = new Rect(_boxCollider.bounds.min.x,
-		                               _boxCollider.bounds.min.y,
-		                               _boxCollider.bounds.size.x,
-		                               _boxCollider.bounds.size.y);	
-
-
-		Debug.DrawLine(new Vector2(_rayBoundsRectangle.center.x,_rayBoundsRectangle.yMin),new Vector2(_rayBoundsRectangle.center.x,_rayBoundsRectangle.yMax),Color.yellow);  
-		Debug.DrawLine(new Vector2(_rayBoundsRectangle.xMin,_rayBoundsRectangle.center.y),new Vector2(_rayBoundsRectangle.xMax,_rayBoundsRectangle.center.y),Color.yellow);
-		
-		
-		
-	}
-	
-	
-	/// &lt;summary&gt;
-	/// Disables the collisions for the specified duration
-	/// &lt;/summary&gt;
-	/// &lt;param name=&quot;duration&quot;&gt;the duration for which the collisions must be disabled&lt;/param&gt;
-	public virtual IEnumerator DisableCollisions(float duration)
-	{
-		// we turn the collisions off
-		CollisionsOff();
-		// we wait for a few seconds
-		yield return new WaitForSeconds (duration);
-		// we turn them on again
-		CollisionsOn();
-	}
-
-	/// &lt;summary&gt;
-	/// Disables the collisions with one way platforms for the specified duration
-	/// &lt;/summary&gt;
-	/// &lt;param name=&quot;duration&quot;&gt;the duration for which the collisions must be disabled&lt;/param&gt;
-	public virtual IEnumerator DisableCollisionsWithOneWayPlatforms(float duration)
-	{
-		// we turn the collisions off
-		CollisionsOffWithOneWayPlatforms ();
-		// we wait for a few seconds
-		yield return new WaitForSeconds (duration);
-		// we turn them on again
-		CollisionsOn();
-	}
-
-	/// &lt;summary&gt;
-	/// Disables the collisions with moving platforms for the specified duration
-	/// &lt;/summary&gt;
-	/// &lt;param name=&quot;duration&quot;&gt;the duration for which the collisions must be disabled&lt;/param&gt;
-	public virtual IEnumerator DisableCollisionsWithMovingPlatforms(float duration)
-	{
-		// we turn the collisions off
-		CollisionsOffWithMovingPlatforms ();
-		// we wait for a few seconds
-		yield return new WaitForSeconds (duration);
-		// we turn them on again
-		CollisionsOn();
-	}
-
-
-
-	/// &lt;summary&gt;
-	/// Resets the collision mask with the default settings
-	/// &lt;/summary&gt;
-	public virtual void CollisionsOn()
-	{
-		PlatformMask=_platformMaskSave;
-		PlatformMask |= OneWayPlatformMask;
-		PlatformMask |= MovingPlatformMask;
-		PlatformMask |= MovingOneWayPlatformMask;
-	}
-
-	/// &lt;summary&gt;
-	/// Turns all collisions off
-	/// &lt;/summary&gt;
-	public virtual void CollisionsOff()
-	{
-		PlatformMask=0;
-	}
-
-	/// &lt;summary&gt;
-	/// Disables collisions only with the one way platform layers
-	/// &lt;/summary&gt;
-	public virtual void CollisionsOffWithOneWayPlatforms()
-	{
-
-		PlatformMask -= OneWayPlatformMask;
-		PlatformMask -= MovingOneWayPlatformMask;
-	}
-
-	/// &lt;summary&gt;
-	/// Disables collisions only with moving platform layers
-	/// &lt;/summary&gt;
-	public virtual void CollisionsOffWithMovingPlatforms()
-	{
-		PlatformMask -= MovingPlatformMask;
-		PlatformMask -= MovingOneWayPlatformMask;
-	}
-
-	/// &lt;summary&gt;
-	/// Resets all overridden parameters.
-	/// &lt;/summary&gt;
-	public virtual void ResetParameters()
-	{
-		_overrideParameters = DefaultParameters;
-	}
-
-	/// &lt;summary&gt;
-	/// Slows the character's fall by the specified factor.
-	/// &lt;/summary&gt;
-	/// &lt;param name=&quot;factor&quot;&gt;Factor.&lt;/param&gt;
-	public virtual void SlowFall(float factor)
-	{
-		_fallSlowFactor=factor;
-	}
-
-	/// &lt;summary&gt;
-    /// Activates or desactivates the gravity for this character only.
-    /// &lt;/summary&gt;
-    /// &lt;param name=&quot;state&quot;&gt;If set to &lt;c&gt;true&lt;/c&gt;, activates the gravity. If set to &lt;c&gt;false&lt;/c&gt;, turns it off.&lt;/param&gt;	   
-	public virtual void GravityActive(bool state)
-	{
-		if (state)
-		{
-			_gravityActive = true;
-		}
-		else
-		{
-			_gravityActive = false;
-		}
-	}
-
-	public virtual void ResizeCollider(Vector2 newSize)
-	{
-		float newYOffset =_originalColliderOffset.y -  (_originalColliderSize.y - newSize.y)/2 ;
-
-		_boxCollider.size = newSize;
-		_boxCollider.offset = newYOffset*Vector3.up;
-		SetRaysParameters();
-	}
-
-	public virtual void ResetColliderSize()
-	{
-		_boxCollider.size = _originalColliderSize;
-		_boxCollider.offset = _originalColliderOffset;
-		SetRaysParameters();
-	}
-
-	public virtual bool CanGoBackToOriginalSize()
-	{
-		// if we're already at original size, we return true
-		if (_boxCollider.size == _originalColliderSize)
-		{
-			return true;
-		}
-		float headCheckDistance = _originalColliderSize.y*transform.localScale.y ;
-		bool headCheck = MMDebug.RayCast(_boxCollider.bounds.min+(Vector3.up*_smallValue),Vector2.up,headCheckDistance,PlatformMask,Color.cyan,true);
-		return headCheck;
-	}
-
-    // Events
-
-
-    /// &lt;summary&gt;
-    /// triggered when the character's raycasts collide with something 
-    /// &lt;/summary&gt;
-    protected virtual void OnCorgiColliderHit() 
-	{
-		foreach (RaycastHit2D hit in _contactList )
-		{			
-			Rigidbody2D body = hit.collider.attachedRigidbody;
-			if (body == null || body.isKinematic)
-				return;
-						
-			Vector3 pushDir = new Vector3(_externalForce.x, 0, 0);
-						
-			body.velocity = pushDir.normalized * Parameters.Physics2DPushForce;		
-		}		
-	}
-
-    /// &lt;summary&gt;
-    /// triggered when the character enters a collider
-    /// &lt;/summary&gt;
-    /// &lt;param name=&quot;collider&quot;&gt;the object we're colliding with.&lt;/param&gt;
-    protected virtual void OnTriggerEnter2D(Collider2D collider)
-	{
-		
-		CorgiControllerPhysicsVolume2D parameters = collider.gameObject.GetComponent&lt;CorgiControllerPhysicsVolume2D&gt;();
-		if (parameters == null)
-			return;
-		// if the object we're colliding with has parameters, we apply them to our character.
-		_overrideParameters = parameters.ControllerParameters;
-	}
-
-    /// &lt;summary&gt;
-    /// triggered while the character stays inside another collider
-    /// &lt;/summary&gt;
-    /// &lt;param name=&quot;collider&quot;&gt;the object we're colliding with.&lt;/param&gt;
-    protected virtual void OnTriggerStay2D( Collider2D collider )
-	{
-	}
-
-    /// &lt;summary&gt;
-    /// triggered when the character exits a collider
-    /// &lt;/summary&gt;
-    /// &lt;param name=&quot;collider&quot;&gt;the object we're colliding with.&lt;/param&gt;
-    protected virtual void OnTriggerExit2D(Collider2D collider)
-	{		
-		CorgiControllerPhysicsVolume2D parameters = collider.gameObject.GetComponent&lt;CorgiControllerPhysicsVolume2D&gt;();
-		if (parameters == null)
-			return;
-		
-		// if the object we were colliding with had parameters, we reset our character's parameters
-		_overrideParameters = null;
-	}				
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[top move]]></title>
-        <id>https://Wei715547.github.io/post/top-move/</id>
-        <link href="https://Wei715547.github.io/post/top-move/">
-        </link>
-        <updated>2020-03-05T10:10:18.000Z</updated>
-        <summary type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class Player : MonoBehaviour<br>
-{<br>
-public float moveSpeed = 3;//属性值<br>
-private SpriteRenderer sr;//引用<br>
-private void Awake()<br>
-{<br>
-sr = GetComponent<SpriteRenderer>();<br>
-}<br>
-public Sprite[] tankSprite;//上，右，下，左。</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    
-}
-
-// Update is called once per frame
-void Update()
-{
-
-}
-private void FixedUpdate()
-{
-</code></pre>
-]]></summary>
+        <updated>2020-04-04T14:29:07.000Z</updated>
         <content type="html"><![CDATA[<p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;</p>
-<p>public class Player : MonoBehaviour<br>
+<p>public class TimeDemo : MonoBehaviour<br>
 {<br>
-public float moveSpeed = 3;//属性值<br>
-private SpriteRenderer sr;//引用<br>
-private void Awake()<br>
+public float deltatime;<br>
+public float unscaledeltatime;<br>
+public float time;<br>
+public float unscaledtime;<br>
+public float c;<br>
+public float speed = 100;<br>
+private void Update()<br>
 {<br>
-sr = GetComponent<SpriteRenderer>();<br>
-}<br>
-public Sprite[] tankSprite;//上，右，下，左。</p>
-<pre><code>// Start is called before the first frame update
-void Start()
+deltatime = Time.deltaTime;//受TimeScale影响的每帧间隔时间<br>
+unscaledeltatime = Time.unscaledDeltaTime;//不受TimeScale影响每帧间隔时间</p>
+<pre><code>    time = Time.time;//受TimeScale影响的游戏运行时间
+    unscaledtime = Time.unscaledTime;//不受TimeScale影响的游戏运行时间
+    c = Time.realtimeSinceStartup;//实际的游戏运行时间
+
+    //每渲染帧 执行1次，旋转1度
+    //this.transform.Rotate(0, 1, 0);
+    //1秒旋转 ？度
+    //帧多 1秒旋转速度快        希望1帧旋转量小
+    //少     慢                     大
+    //this.transform.Rotate(0, speed *Time .deltaTime, 0);
+    //当旋移动/转速度*每帧消耗时间，可以保证旋转速度不受机器性能，及渲染影响。
+
+    //个别物体不受影响 代码要放到updata中 spee * Time.unscaledDeltaTime 不受缩放影响的每帧间隔
+    this.transform.Rotate(0, speed * Time.unscaledDeltaTime , 0);
+
+}
+//固定0.02s 执行一次，与渲染无关，受TimeScale影响
+public void FixedUpdate()
 {
-    
+    //this.transform.Rotate(0, speed, 0);
 }
 
-// Update is called once per frame
-void Update()
+//游戏暂停  个别物体不受影响  代码要放到updata中
+
+private void OnGUI()
 {
-
-}
-private void FixedUpdate()
-{
-</code></pre>
-<!-- more -->
-<pre><code>    Move();
-
-   
-}//移动方法
-
-private void Move()
-{
-    float v = Input.GetAxisRaw(&quot;Vertical&quot;);
-    transform.Translate(Vector3.up * v * moveSpeed * Time.deltaTime, Space.World);
-    if (v &lt; 0)
+    if (GUILayout .Button (&quot;暂停游戏&quot;))
     {
-        sr.sprite = tankSprite[2];
-    }
-    else if (v &gt; 0)
-    {
-        sr.sprite = tankSprite[0];
-    }
-    if (v != 0)
-    {
-        return;
+        Time.timeScale = 0;
     }
 
-
-    float h = Input.GetAxisRaw(&quot;Horizontal&quot;);
-    transform.Translate(Vector3.right * h * moveSpeed * Time.deltaTime, Space.World);
-    if (h &lt; 0)
+    if(GUILayout.Button(&quot;继续游戏&quot;))
     {
-        sr.sprite = tankSprite[3];
-    }
-    else if (h &gt; 0)
-    {
-        sr.sprite = tankSprite[1];
+        Time.timeScale = 1;
     }
 }
 </code></pre>
@@ -1049,35 +444,316 @@ private void Move()
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://Wei715547.github.io/post/hello-gridea/</id>
-        <link href="https://Wei715547.github.io/post/hello-gridea/">
+        <title type="html"><![CDATA[获取同类物体]]></title>
+        <id>https://Wei715547.github.io/post/huo-qu-tong-lei-wu-ti/</id>
+        <link href="https://Wei715547.github.io/post/huo-qu-tong-lei-wu-ti/">
         </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+        <updated>2020-04-04T14:28:03.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class FindEnemyDeom : MonoBehaviour<br>
+{</p>
+<pre><code>private void OnGUI()
+{
+    if (GUILayout .Button (&quot;查找血量最低的敌人&quot;))
+    {
+        //查找场景中所有Enemy类型的引用
+        Enemy[] allEnemy = Object.FindObjectsOfType&lt;Enemy&gt;();
+        //获取血量最低的对象的引用
+        Enemy min = FindEnemyByMinHp(allEnemy);
+        //根据Enemy类型的引用 获取其他组件类型引用
+        min.GetComponent&lt;MeshRenderer&gt;().material.color = Color.blue;
+    }
+    if (GUILayout.Button (&quot;层级位置获取子物体&quot;))
+    {
+        var childTF = TransformHelper.GetChild(this.transform , &quot;Cube3&quot;);
+        childTF.GetComponent&lt;MeshRenderer&gt;().material.color = Color.blue;
+        //print(childTF.name);
+        
+    }
+}
+
+public Enemy FindEnemyByMinHp(Enemy [] allEnemy)
+{
+    Enemy min = allEnemy[0];
+
+    for (int i = 1; i &lt; allEnemy .Length ; i++)
+    {
+        if (min.Hp &gt; allEnemy[i].Hp)
+            min = allEnemy[i];
+    }
+    return min;
+
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[点击+/-播放动画]]></title>
+        <id>https://Wei715547.github.io/post/dian-ji-bo-fang-dong-hua/</id>
+        <link href="https://Wei715547.github.io/post/dian-ji-bo-fang-dong-hua/">
+        </link>
+        <updated>2020-04-04T14:25:03.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 门<br>
+/// </summary><br>
+public class Door : MonoBehaviour<br>
+{</p>
+<pre><code>public bool doorStart = false ;
+
+public string animName = &quot;Door&quot;;
+
+private Animation anim;
+
+private void Start()
+{
+    anim = GetComponent&lt;Animation&gt;();
+}
+
+//点击当前物体是调用
+private void OnMouseDown()
+{
+    //如果开门状态
+    if (doorStart)
+    {
+        //关门
+        if (anim.isPlaying == false)
+        {
+            anim[animName].time = anim[animName].length;//从最后开始播
+        }
+
+        anim[animName].speed = -1;//倒叙播放
+    }
+    else
+    {          
+        //开门
+        anim[animName].speed = 1;
+    }
+    //播放动画
+    anim.Play(animName);
+    doorStart =! doorStart;
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[倒计时-每隔固定时间重复执行]]></title>
+        <id>https://Wei715547.github.io/post/dao-ji-shi-mei-ge-gu-ding-shi-jian-chong-fu-zhi-xing/</id>
+        <link href="https://Wei715547.github.io/post/dao-ji-shi-mei-ge-gu-ding-shi-jian-chong-fu-zhi-xing/">
+        </link>
+        <updated>2020-04-04T14:23:32.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+/// <summary><br>
+/// 倒计时<br>
+/// </summary><br>
+public class CountdownTimer : MonoBehaviour<br>
+{<br>
+//需求：1秒修改1次Text文本内容<br>
+//1.查找组件引用<br>
+//2.定义变量秒second<br>
+//3.120 --&gt;  02:00<br>
+//4.修改文本</p>
+<pre><code>private Text textTimer;
+public int second = 120;
+private void Start()
+{
+    textTimer = GetComponent&lt;Text&gt;();
+    //Time3
+    //重复调用（被执行的方法名称，第一次执行时机，每次执行间隔）
+    InvokeRepeating(&quot;Timer3&quot;, 1, 1);
+    //invoke(被执行的方法，开始调用时机);
+
+}
+
+
+
+private void Update()
+{
+    //Timer2();
+}
+
+private float nextTime = 1;//下次修改时间
+//方法1：Time.time
+//先做 再等
+private void Timer1()
+{
+    //如果到了修改时间
+    if (Time.time &gt; nextTime)
+    {
+        second--;
+        textTimer.text = string.Format(&quot;{0:d2}:{1:d2}&quot;, second / 60, second % 60);
+
+        if (second &lt;= 10)
+        {
+            this.textTimer.color = Color.red;
+        }
+
+        //设置下次修改时间
+        nextTime = Time.time + 1;
+    }
+}
+
+private float totalTime;
+//方法2：Time.deltatime
+//先等 再做
+private void Timer2()
+{
+    //累加每帧间隔
+    totalTime += Time.deltaTime;
+
+    if (totalTime &gt;= 1)
+    {
+        second--;
+        textTimer.text = string.Format(&quot;{0:d2}:{1:d2}&quot;, second / 60, second % 60);
+
+        if (second &lt;= 10)
+        {
+            this.textTimer.color = Color.red;
+        }
+
+        totalTime = 0;
+    }
+   
+
+}
+
+//方法3：invoke()
+//每隔固定时间，重复执行
+private void Timer3()
+{
+
+    second--;
+    textTimer.text = string.Format(&quot;{0:d2}:{1:d2}&quot;, second / 60, second % 60);
+
+    if (second &lt;= 10)
+    {
+        this.textTimer.color = Color.red;
+    }
+
+    if (second &lt;=0)
+    {
+        //print(&quot;stop&quot;);
+        CancelInvoke(&quot;Timer3&quot; );//取消方法调用
+    }
+
+}
+
+//5.如何一秒修改一次
+//重点：在Updata每帧执行的方法中，个别语句实现制定间隔执行一次
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[TransformDemo]]></title>
+        <id>https://Wei715547.github.io/post/transformdemo/</id>
+        <link href="https://Wei715547.github.io/post/transformdemo/">
+        </link>
+        <updated>2020-04-04T14:22:27.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// Transform提供了 查找（父，根，子（索引/名称））变换组件功能， 改变位置，角度，大小功能<br>
+/// </summary><br>
+public class TransformDemo : MonoBehaviour<br>
+{<br>
+public Transform tf;<br>
+private void OnGUI()<br>
+{<br>
+//<strong><strong><strong><strong><strong><strong><strong>查找变换组件</strong></strong></strong></strong></strong></strong></strong>****<br>
+if (GUILayout .Button (&quot;foreach - transform&quot;))<br>
+{</p>
+<pre><code>        foreach (Transform  child in transform )
+        {
+            //child 为 每个子物体的组件
+            print(child.name);
+        }
+    }
+    if (GUILayout.Button(&quot;root&quot;))
+    {
+        //获取根物体变换组件
+        Transform rootTF = this.transform.root;
+    }
+    if (GUILayout.Button(&quot;parent&quot;))
+    {
+        //获取父物体变换组件
+        Transform parentTF = this.transform.parent ;
+    }
+    if (GUILayout.Button(&quot;Setparent&quot;))
+    {
+        //设置父物体
+        //当前物体视为WordPosition
+        //this.transform.SetParent(tf,ture);
+
+        //当前物体的位置视为localPosition
+        this.transform.SetParent(tf,false );
+    }
+    if (GUILayout.Button(&quot;Find-child&quot;))
+    {
+        //根据名称获取子物体
+        //Transform childTF = this.transform.Find(&quot;子物体名称&quot;);
+        Transform childTF = this.transform.Find(&quot;子物体名称/子物体名称&quot;);
+    }
+    if (GUILayout.Button(&quot;Find-child-indexl&quot;))
+    {
+        int count = this.transform.childCount;
+        //根据索引获取子物体
+        for (int i = 0; i &lt; count ; i++)
+        {
+            Transform childTF = this.transform.GetChild(i);
+        }           
+    }
+
+    //**************改变位置 角度******************
+    if (GUILayout.Button(&quot;pos/scale&quot;))
+    {
+        //物体相对与世界坐标系原点的位置
+        //this.transform .position 
+
+        //物体相对于父物体轴心点的位置
+        //this.transform .localPosition 
+
+        //相对于父物体缩放比例
+        //this.transform .localScale 
+
+        //理解为：物体与模型缩放比例（自身缩放比例*父物体缩放比例）
+        //this .transform .localScale 
+        //如：父物体LocalScale为3 当前物体localScale为2
+        //    localScale 则为6          
+    }
+    if (GUILayout.Button(&quot;Translate&quot;))
+    {
+        //向 自身坐标系 Z轴移动1米
+        //this.transform.Translate(0, 0, 1);
+
+        //向 世界坐标系 Z轴移动1米
+        this.transform.Translate(0, 0, 1,Space .World );
+    }
+    if (GUILayout.Button(&quot;Rotate&quot;))
+    {
+        //向 自身坐标系 Yz轴旋转10度
+        //this.transform.Rotate(0, 10, 0);
+
+        //向 世界坐标系 Y轴旋转10度
+        this.transform.Rotate (0, 10, 0, Space.World);
+    }
+    if (GUILayout.RepeatButton(&quot;RotateAround&quot;))
+    {
+        this.transform.RotateAround(Vector3.zero, Vector3.forward , 1);
+    }
+}
+</code></pre>
+<p>}</p>
 ]]></content>
     </entry>
 </feed>

@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>jump&amp;落地检测 | Weiwei的个人网站</title>
+<title>Boom向量/三角函数应用 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1586010991156">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="jump&amp;落地检测 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Boom向量/三角函数应用 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -14,9 +14,9 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class JumpBox : MonoBehaviour
+public class Boom : MonoBehaviour
 {
-[R..." />
+publi..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,14 +79,14 @@ public class JumpBox : MonoBehaviour
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              jump&amp;落地检测
+              Boom向量/三角函数应用
             </h2>
             <div class="post-info">
               <span>
-                2020-03-14
+                2020-04-04
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
@@ -96,67 +96,57 @@ public class JumpBox : MonoBehaviour
                 <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;</p>
-<p>public class JumpBox : MonoBehaviour<br>
+<p>public class Boom : MonoBehaviour<br>
 {<br>
-[Range(0, 10)] public float jumpVelocity = 5f;<br>
-public LayerMask mask;<br>
-public float boxHeight;<br>
-private Vector2 playerSize;<br>
-private Vector2 boxSize;<br>
-private bool jumpRequest;<br>
-private bool grounded;<br>
-private Rigidbody2D _rigidbody2D;</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
-    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
-    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight );
-
-}
-
-// Update is called once per frame
+public GameObject player;<br>
+private Vector3 dp;<br>
+//private Vector3 ldp;<br>
+private Vector3 liftdp;<br>
+private Vector3 rightdp;<br>
+private float dt;<br>
+private float sin;<br>
+private float rd;<br>
+// Start is called before the first frame update<br>
+void Start()<br>
+{<br>
+rd = player.GetComponent<CapsuleCollider>().radius ;<br>
+}</p>
+<pre><code>// Update is called once per frame
 void Update()
 {
-    if (Input .GetButtonDown (&quot;Jump&quot;)&amp;&amp;grounded )
-    {
-        jumpRequest = true;
-    }
+    Draw();
 }
-private void FixedUpdate()
-{
-    if (jumpRequest )
-    {
-        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
-        jumpRequest = false ;
-        grounded = false;
-    }
-    else
-    {
-        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
-        if (Physics2D .OverlapBox (boxCenter ,boxSize ,0,mask )!=null )
-        {
-            grounded = true;
-        }
-        else
-        {
-            grounded = false ;
-        }
-    }
-}
-private void OnDrawGizmos()
-{
-    if (grounded )
-    {
-        Gizmos.color =Color.red;
-    }
-    else
-    {
-        Gizmos.color=Color.green;
-    }
 
-    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
-    Gizmos.DrawWireCube(boxCenter, boxSize);
+private void VectorCt()
+{
+    
+    dp = player.transform.position - this.transform.position;
+    dt = dp.magnitude;
+    sin = Mathf.Rad2Deg * Mathf.Asin(rd / dt);
+    //ldp = Quaternion.Euler(0, sin, 0) *dp.normalized * dt * Mathf.Cos(sin);
+    liftdp = this.transform.position + Quaternion.Euler(0, sin, 0) * dp;
+   
+    rightdp = this.transform.position + Quaternion.Euler(0, -sin, 0) * dp;
+    
+}
+
+private void CalculateTangent()
+{
+    Vector3 playerToBoom = this.transform.position - player.transform.position;
+    Vector3 playerToExplpsionDirection = playerToBoom.normalized * rd;
+    float angle = Mathf.Acos(rd / playerToBoom.magnitude) * Mathf.Rad2Deg;
+    liftdp = player.transform.position + Quaternion.Euler(0, -angle , 0) * playerToExplpsionDirection;
+    rightdp = player.transform.position + Quaternion.Euler(0, angle, 0) * playerToExplpsionDirection;
+
+}
+
+private void Draw()
+{
+    //VectorCt();
+    CalculateTangent();
+    Debug.DrawLine(this.transform.position, player.transform.position);
+    Debug.DrawLine(this.transform.position, liftdp,Color .blue );
+    Debug.DrawLine(this.transform.position, rightdp,Color .red );
 }
 </code></pre>
 <p>}</p>
@@ -172,9 +162,9 @@ private void OnDrawGizmos()
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/2d-lr-move/">
+            <a href="https://Wei715547.github.io/post/si-yuan-shu-api/">
               <h3 class="post-title">
-                2D-LR-MOVE
+                四元数API
               </h3>
             </a>
           </div>

@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>jump&amp;落地检测 | Weiwei的个人网站</title>
+<title>TransformDemo | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1586010991156">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="jump&amp;落地检测 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="TransformDemo | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -14,9 +14,8 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class JumpBox : MonoBehaviour
-{
-[R..." />
+/// 
+/// Transform提供了 查找（父，根，子（索引/名称））变换组..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,14 +78,14 @@ public class JumpBox : MonoBehaviour
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              jump&amp;落地检测
+              TransformDemo
             </h2>
             <div class="post-info">
               <span>
-                2020-03-14
+                2020-04-04
               </span>
               <span>
-                1 min read
+                3 min read
               </span>
               
             </div>
@@ -95,68 +94,96 @@ public class JumpBox : MonoBehaviour
               <div class="post-content">
                 <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class JumpBox : MonoBehaviour<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// Transform提供了 查找（父，根，子（索引/名称））变换组件功能， 改变位置，角度，大小功能<br>
+/// </summary><br>
+public class TransformDemo : MonoBehaviour<br>
 {<br>
-[Range(0, 10)] public float jumpVelocity = 5f;<br>
-public LayerMask mask;<br>
-public float boxHeight;<br>
-private Vector2 playerSize;<br>
-private Vector2 boxSize;<br>
-private bool jumpRequest;<br>
-private bool grounded;<br>
-private Rigidbody2D _rigidbody2D;</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
-    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
-    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight );
-
-}
-
-// Update is called once per frame
-void Update()
-{
-    if (Input .GetButtonDown (&quot;Jump&quot;)&amp;&amp;grounded )
-    {
-        jumpRequest = true;
-    }
-}
-private void FixedUpdate()
-{
-    if (jumpRequest )
-    {
-        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
-        jumpRequest = false ;
-        grounded = false;
-    }
-    else
-    {
-        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
-        if (Physics2D .OverlapBox (boxCenter ,boxSize ,0,mask )!=null )
+public Transform tf;<br>
+private void OnGUI()<br>
+{<br>
+//<strong><strong><strong><strong><strong><strong><strong>查找变换组件</strong></strong></strong></strong></strong></strong></strong>****<br>
+if (GUILayout .Button (&quot;foreach - transform&quot;))<br>
+{</p>
+<pre><code>        foreach (Transform  child in transform )
         {
-            grounded = true;
-        }
-        else
-        {
-            grounded = false ;
+            //child 为 每个子物体的组件
+            print(child.name);
         }
     }
-}
-private void OnDrawGizmos()
-{
-    if (grounded )
+    if (GUILayout.Button(&quot;root&quot;))
     {
-        Gizmos.color =Color.red;
+        //获取根物体变换组件
+        Transform rootTF = this.transform.root;
     }
-    else
+    if (GUILayout.Button(&quot;parent&quot;))
     {
-        Gizmos.color=Color.green;
+        //获取父物体变换组件
+        Transform parentTF = this.transform.parent ;
+    }
+    if (GUILayout.Button(&quot;Setparent&quot;))
+    {
+        //设置父物体
+        //当前物体视为WordPosition
+        //this.transform.SetParent(tf,ture);
+
+        //当前物体的位置视为localPosition
+        this.transform.SetParent(tf,false );
+    }
+    if (GUILayout.Button(&quot;Find-child&quot;))
+    {
+        //根据名称获取子物体
+        //Transform childTF = this.transform.Find(&quot;子物体名称&quot;);
+        Transform childTF = this.transform.Find(&quot;子物体名称/子物体名称&quot;);
+    }
+    if (GUILayout.Button(&quot;Find-child-indexl&quot;))
+    {
+        int count = this.transform.childCount;
+        //根据索引获取子物体
+        for (int i = 0; i &lt; count ; i++)
+        {
+            Transform childTF = this.transform.GetChild(i);
+        }           
     }
 
-    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
-    Gizmos.DrawWireCube(boxCenter, boxSize);
+    //**************改变位置 角度******************
+    if (GUILayout.Button(&quot;pos/scale&quot;))
+    {
+        //物体相对与世界坐标系原点的位置
+        //this.transform .position 
+
+        //物体相对于父物体轴心点的位置
+        //this.transform .localPosition 
+
+        //相对于父物体缩放比例
+        //this.transform .localScale 
+
+        //理解为：物体与模型缩放比例（自身缩放比例*父物体缩放比例）
+        //this .transform .localScale 
+        //如：父物体LocalScale为3 当前物体localScale为2
+        //    localScale 则为6          
+    }
+    if (GUILayout.Button(&quot;Translate&quot;))
+    {
+        //向 自身坐标系 Z轴移动1米
+        //this.transform.Translate(0, 0, 1);
+
+        //向 世界坐标系 Z轴移动1米
+        this.transform.Translate(0, 0, 1,Space .World );
+    }
+    if (GUILayout.Button(&quot;Rotate&quot;))
+    {
+        //向 自身坐标系 Yz轴旋转10度
+        //this.transform.Rotate(0, 10, 0);
+
+        //向 世界坐标系 Y轴旋转10度
+        this.transform.Rotate (0, 10, 0, Space.World);
+    }
+    if (GUILayout.RepeatButton(&quot;RotateAround&quot;))
+    {
+        this.transform.RotateAround(Vector3.zero, Vector3.forward , 1);
+    }
 }
 </code></pre>
 <p>}</p>
@@ -172,9 +199,9 @@ private void OnDrawGizmos()
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/2d-lr-move/">
+            <a href="https://Wei715547.github.io/post/lifeceyle/">
               <h3 class="post-title">
-                2D-LR-MOVE
+                LifeCeyle
               </h3>
             </a>
           </div>

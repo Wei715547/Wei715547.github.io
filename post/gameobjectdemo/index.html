@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>jump&amp;落地检测 | Weiwei的个人网站</title>
+<title>GameObjectDemo | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1586010991156">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="jump&amp;落地检测 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="GameObjectDemo | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -14,9 +14,9 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class JumpBox : MonoBehaviour
-{
-[R..." />
+/// 
+/// 禁用物体，启用物体，创建物体，添加组件，查找物体，销毁物体
+//..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,11 +79,11 @@ public class JumpBox : MonoBehaviour
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              jump&amp;落地检测
+              GameObjectDemo
             </h2>
             <div class="post-info">
               <span>
-                2020-03-14
+                2020-04-04
               </span>
               <span>
                 1 min read
@@ -95,68 +95,44 @@ public class JumpBox : MonoBehaviour
               <div class="post-content">
                 <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class JumpBox : MonoBehaviour<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 禁用物体，启用物体，创建物体，添加组件，查找物体，销毁物体<br>
+/// </summary><br>
+public class GameObjectDemo : MonoBehaviour<br>
 {<br>
-[Range(0, 10)] public float jumpVelocity = 5f;<br>
-public LayerMask mask;<br>
-public float boxHeight;<br>
-private Vector2 playerSize;<br>
-private Vector2 boxSize;<br>
-private bool jumpRequest;<br>
-private bool grounded;<br>
-private Rigidbody2D _rigidbody2D;</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
-    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
-    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight );
-
-}
-
-// Update is called once per frame
-void Update()
-{
-    if (Input .GetButtonDown (&quot;Jump&quot;)&amp;&amp;grounded )
+private void OnGUI()<br>
+{<br>
+//在场景中物体激活状态（物体实际激活状态）<br>
+//this.gameObject.activeInHierarchy;<br>
+//物体自身激活状态（物体在Inspector面板中的状态）<br>
+//this.gameObject.activeSelf;<br>
+//设置物体启用/禁用<br>
+//this.gameObject.SetActive();</p>
+<pre><code>    if (GUILayout.Button(&quot;添加光源&quot;))
     {
-        jumpRequest = true;
-    }
-}
-private void FixedUpdate()
-{
-    if (jumpRequest )
-    {
-        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
-        jumpRequest = false ;
-        grounded = false;
-    }
-    else
-    {
-        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
-        if (Physics2D .OverlapBox (boxCenter ,boxSize ,0,mask )!=null )
-        {
-            grounded = true;
-        }
-        else
-        {
-            grounded = false ;
-        }
-    }
-}
-private void OnDrawGizmos()
-{
-    if (grounded )
-    {
-        Gizmos.color =Color.red;
-    }
-    else
-    {
-        Gizmos.color=Color.green;
+        //创建物体
+        GameObject LightGO = new GameObject();
+        //添加组件
+        Light light = this.gameObject.AddComponent&lt;Light&gt;();
+        light.color = Color.green;
+        light.type = LightType.Point;
     }
 
-    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down  * playerSize.y * 0.5f);
-    Gizmos.DrawWireCube(boxCenter, boxSize);
+    //在场景中根据名称查找物体（慎用）
+    //GameObject.Find(&quot;游戏对象名&quot;);
+
+    //获取所有使用改标签的物体
+    GameObject [] allEnemy = GameObject .FindGameObjectsWithTag (&quot;Enemy&quot;);
+    //获取使用改标签的物体（单个）
+    GameObject playerGO = GameObject.FindWithTag(&quot;Player&quot;);
+
+    //object
+    //根据类型查找对象
+    //Object. FindObjectOfType&lt;MeshRenderer&gt;();
+    //FindObjectsOfType&lt;MeshRenderer&gt;();
+    //销毁对象
+    //Object.Destroy(this.gameObject ,5);//5秒后销毁
 }
 </code></pre>
 <p>}</p>
@@ -172,9 +148,9 @@ private void OnDrawGizmos()
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/2d-lr-move/">
+            <a href="https://Wei715547.github.io/post/componendemo/">
               <h3 class="post-title">
-                2D-LR-MOVE
+                ComponenDemo
               </h3>
             </a>
           </div>
