@@ -2,22 +2,21 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>2D-LR-MOVE | Weiwei的个人网站</title>
+<title>俯视较移动旋转 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1586066291158">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="2D-LR-MOVE | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="俯视较移动旋转 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="
-using System.Collections;
+    <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class Move : MonoBehaviour
 {
-publ..." />
+publi..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -80,11 +79,11 @@ publ..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              2D-LR-MOVE
+              俯视较移动旋转
             </h2>
             <div class="post-info">
               <span>
-                2020-03-08
+                2020-04-05
               </span>
               <span>
                 1 min read
@@ -94,42 +93,27 @@ publ..." />
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p><img src="https://Wei715547.github.io/post-images/1583662256843.PNG" alt="" loading="lazy"><br>
-using System.Collections;<br>
+                <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;</p>
 <p>public class Move : MonoBehaviour<br>
 {<br>
-public float moveSpeed = 3;<br>
-public Animator animator;</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    
-}
-
-// Update is called once per frame
-void Update()
-{
-    
-}
-private void FixedUpdate()
-{
-
-    move();
-
-
-}
-
-private void move()//移动方法
-{
-    float h = Input.GetAxisRaw(&quot;Horizontal&quot;);
-    transform.Translate(Vector3.right * h * moveSpeed * Time.deltaTime, Space.World);
-    animator.SetFloat(&quot;Horizontal&quot;, Input.GetAxis(&quot;Horizontal&quot;));
-
-}
-}
-</code></pre>
+public float speed = 5;<br>
+private void Update()<br>
+{<br>
+float v = Input.GetAxis(&quot;Vertical&quot;);<br>
+float h = Input.GetAxis(&quot;Horizontal&quot;);<br>
+if (v != 0 || h != 0)<br>
+Movement(v, h);<br>
+}<br>
+private void Movement(float v, float h)<br>
+{<br>
+this.transform.Translate(0, 0, speed*Time .deltaTime );<br>
+Quaternion dir = Quaternion.LookRotation(new Vector3(h, 0, v));<br>
+this.transform.rotation =<br>
+Quaternion.Lerp(this.transform.rotation, dir, 0.1f);<br>
+}<br>
+}</p>
 
               </div>
               <div class="toc-container">
@@ -142,9 +126,9 @@ private void move()//移动方法
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/controller/">
+            <a href="https://Wei715547.github.io/post/boom-xiang-liang-san-jiao-han-shu-ying-yong/">
               <h3 class="post-title">
-                Controller
+                Boom向量/三角函数应用
               </h3>
             </a>
           </div>

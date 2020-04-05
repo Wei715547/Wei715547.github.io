@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-04-04T14:36:36.447Z</updated>
+    <updated>2020-04-05T05:58:18.822Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,35 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[俯视较移动旋转]]></title>
+        <id>https://Wei715547.github.io/post/fu-shi-jiao-yi-dong-xuan-zhuan/</id>
+        <link href="https://Wei715547.github.io/post/fu-shi-jiao-yi-dong-xuan-zhuan/">
+        </link>
+        <updated>2020-04-05T05:57:42.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class Move : MonoBehaviour<br>
+{<br>
+public float speed = 5;<br>
+private void Update()<br>
+{<br>
+float v = Input.GetAxis(&quot;Vertical&quot;);<br>
+float h = Input.GetAxis(&quot;Horizontal&quot;);<br>
+if (v != 0 || h != 0)<br>
+Movement(v, h);<br>
+}<br>
+private void Movement(float v, float h)<br>
+{<br>
+this.transform.Translate(0, 0, speed*Time .deltaTime );<br>
+Quaternion dir = Quaternion.LookRotation(new Vector3(h, 0, v));<br>
+this.transform.rotation =<br>
+Quaternion.Lerp(this.transform.rotation, dir, 0.1f);<br>
+}<br>
+}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Boom向量/三角函数应用]]></title>
         <id>https://Wei715547.github.io/post/boom-xiang-liang-san-jiao-han-shu-ying-yong/</id>
@@ -649,109 +678,6 @@ private void Timer3()
 
 //5.如何一秒修改一次
 //重点：在Updata每帧执行的方法中，个别语句实现制定间隔执行一次
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[TransformDemo]]></title>
-        <id>https://Wei715547.github.io/post/transformdemo/</id>
-        <link href="https://Wei715547.github.io/post/transformdemo/">
-        </link>
-        <updated>2020-04-04T14:22:27.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// Transform提供了 查找（父，根，子（索引/名称））变换组件功能， 改变位置，角度，大小功能<br>
-/// </summary><br>
-public class TransformDemo : MonoBehaviour<br>
-{<br>
-public Transform tf;<br>
-private void OnGUI()<br>
-{<br>
-//<strong><strong><strong><strong><strong><strong><strong>查找变换组件</strong></strong></strong></strong></strong></strong></strong>****<br>
-if (GUILayout .Button (&quot;foreach - transform&quot;))<br>
-{</p>
-<pre><code>        foreach (Transform  child in transform )
-        {
-            //child 为 每个子物体的组件
-            print(child.name);
-        }
-    }
-    if (GUILayout.Button(&quot;root&quot;))
-    {
-        //获取根物体变换组件
-        Transform rootTF = this.transform.root;
-    }
-    if (GUILayout.Button(&quot;parent&quot;))
-    {
-        //获取父物体变换组件
-        Transform parentTF = this.transform.parent ;
-    }
-    if (GUILayout.Button(&quot;Setparent&quot;))
-    {
-        //设置父物体
-        //当前物体视为WordPosition
-        //this.transform.SetParent(tf,ture);
-
-        //当前物体的位置视为localPosition
-        this.transform.SetParent(tf,false );
-    }
-    if (GUILayout.Button(&quot;Find-child&quot;))
-    {
-        //根据名称获取子物体
-        //Transform childTF = this.transform.Find(&quot;子物体名称&quot;);
-        Transform childTF = this.transform.Find(&quot;子物体名称/子物体名称&quot;);
-    }
-    if (GUILayout.Button(&quot;Find-child-indexl&quot;))
-    {
-        int count = this.transform.childCount;
-        //根据索引获取子物体
-        for (int i = 0; i &lt; count ; i++)
-        {
-            Transform childTF = this.transform.GetChild(i);
-        }           
-    }
-
-    //**************改变位置 角度******************
-    if (GUILayout.Button(&quot;pos/scale&quot;))
-    {
-        //物体相对与世界坐标系原点的位置
-        //this.transform .position 
-
-        //物体相对于父物体轴心点的位置
-        //this.transform .localPosition 
-
-        //相对于父物体缩放比例
-        //this.transform .localScale 
-
-        //理解为：物体与模型缩放比例（自身缩放比例*父物体缩放比例）
-        //this .transform .localScale 
-        //如：父物体LocalScale为3 当前物体localScale为2
-        //    localScale 则为6          
-    }
-    if (GUILayout.Button(&quot;Translate&quot;))
-    {
-        //向 自身坐标系 Z轴移动1米
-        //this.transform.Translate(0, 0, 1);
-
-        //向 世界坐标系 Z轴移动1米
-        this.transform.Translate(0, 0, 1,Space .World );
-    }
-    if (GUILayout.Button(&quot;Rotate&quot;))
-    {
-        //向 自身坐标系 Yz轴旋转10度
-        //this.transform.Rotate(0, 10, 0);
-
-        //向 世界坐标系 Y轴旋转10度
-        this.transform.Rotate (0, 10, 0, Space.World);
-    }
-    if (GUILayout.RepeatButton(&quot;RotateAround&quot;))
-    {
-        this.transform.RotateAround(Vector3.zero, Vector3.forward , 1);
-    }
-}
 </code></pre>
 <p>}</p>
 ]]></content>
