@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-04-05T05:58:18.822Z</updated>
+    <updated>2020-04-07T10:05:24.755Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,109 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[HP-Attack-Shell]]></title>
+        <id>https://Wei715547.github.io/post/hp-attack-shell/</id>
+        <link href="https://Wei715547.github.io/post/hp-attack-shell/">
+        </link>
+        <updated>2020-04-07T09:57:39.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+/// <summary><br>
+/// HP，HP受损方法<br>
+/// </summary><br>
+public class TankHealth : MonoBehaviour<br>
+{<br>
+public int hp = 100;<br>
+public GameObject tankExplosion;<br>
+public AudioClip tankExplositionAudio;<br>
+public Slider hpSlider;<br>
+private int hpTotal;<br>
+// Use this for initialization<br>
+void Start()<br>
+{<br>
+hpTotal = hp;<br>
+}</p>
+<pre><code>// Update is called once per frame
+void Update()
+{
+
+}
+void TankDamage()
+{
+    if (hp &lt;= 0) return;
+    hp -= Random.Range(10, 20);
+    hpSlider.value = (float)hp / hpTotal;
+    if (hp &lt;= 0)
+    {
+        AudioSource.PlayClipAtPoint(tankExplositionAudio, transform.position);
+        GameObject.Instantiate(tankExplosion, transform.position + Vector3.up, transform.rotation);
+        GameObject.Destroy(this.gameObject);
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 按下攻击，发射子弹向FirePoint前方飞进<br>
+/// </summary><br>
+public class TankAttack : MonoBehaviour<br>
+{</p>
+<pre><code>public GameObject shellPrefab;
+public KeyCode fireKey = KeyCode.Space;
+private Transform firePosition;
+public float shellSpeed = 10;
+public AudioClip shoutAudio;
+// Use this for initialization
+void Start()
+{
+    firePosition = transform.Find(&quot;FirePosition&quot;);
+}
+
+// Update is called once per frame
+void Update()
+{
+    if (Input.GetKeyDown(fireKey))
+    {
+        AudioSource.PlayClipAtPoint(shoutAudio, transform.position);
+        GameObject go = GameObject.Instantiate(shellPrefab, firePosition.position, firePosition.rotation)as GameObject;
+        go.GetComponent&lt;Rigidbody&gt;().velocity = go.transform.forward * shellSpeed;
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 子弹出发检测，（两物体都有触发器，其中一个有刚体组件，其中一个触发器勾选Is Tirgger）<br>
+///打中目标，调用目标受损方法<br>
+/// </summary><br>
+public class Shell : MonoBehaviour<br>
+{</p>
+<pre><code>public GameObject shellExplosionPrefab;
+public  AudioClip shellExplosionAudio;
+
+
+public void OnTriggerEnter(Collider collider)
+{
+    AudioSource.PlayClipAtPoint(shellExplosionAudio,transform.position);
+    GameObject.Instantiate(shellExplosionPrefab, transform.position, transform.rotation);
+    GameObject.Destroy(this.gameObject);
+    if (collider.tag == &quot;Tank&quot;)
+    {
+        collider.SendMessage(&quot;TankDamage&quot;);
+    }
+
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[俯视较移动旋转]]></title>
         <id>https://Wei715547.github.io/post/fu-shi-jiao-yi-dong-xuan-zhuan/</id>
@@ -567,117 +670,6 @@ private void OnMouseDown()
     anim.Play(animName);
     doorStart =! doorStart;
 }
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[倒计时-每隔固定时间重复执行]]></title>
-        <id>https://Wei715547.github.io/post/dao-ji-shi-mei-ge-gu-ding-shi-jian-chong-fu-zhi-xing/</id>
-        <link href="https://Wei715547.github.io/post/dao-ji-shi-mei-ge-gu-ding-shi-jian-chong-fu-zhi-xing/">
-        </link>
-        <updated>2020-04-04T14:23:32.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.UI;<br>
-/// <summary><br>
-/// 倒计时<br>
-/// </summary><br>
-public class CountdownTimer : MonoBehaviour<br>
-{<br>
-//需求：1秒修改1次Text文本内容<br>
-//1.查找组件引用<br>
-//2.定义变量秒second<br>
-//3.120 --&gt;  02:00<br>
-//4.修改文本</p>
-<pre><code>private Text textTimer;
-public int second = 120;
-private void Start()
-{
-    textTimer = GetComponent&lt;Text&gt;();
-    //Time3
-    //重复调用（被执行的方法名称，第一次执行时机，每次执行间隔）
-    InvokeRepeating(&quot;Timer3&quot;, 1, 1);
-    //invoke(被执行的方法，开始调用时机);
-
-}
-
-
-
-private void Update()
-{
-    //Timer2();
-}
-
-private float nextTime = 1;//下次修改时间
-//方法1：Time.time
-//先做 再等
-private void Timer1()
-{
-    //如果到了修改时间
-    if (Time.time &gt; nextTime)
-    {
-        second--;
-        textTimer.text = string.Format(&quot;{0:d2}:{1:d2}&quot;, second / 60, second % 60);
-
-        if (second &lt;= 10)
-        {
-            this.textTimer.color = Color.red;
-        }
-
-        //设置下次修改时间
-        nextTime = Time.time + 1;
-    }
-}
-
-private float totalTime;
-//方法2：Time.deltatime
-//先等 再做
-private void Timer2()
-{
-    //累加每帧间隔
-    totalTime += Time.deltaTime;
-
-    if (totalTime &gt;= 1)
-    {
-        second--;
-        textTimer.text = string.Format(&quot;{0:d2}:{1:d2}&quot;, second / 60, second % 60);
-
-        if (second &lt;= 10)
-        {
-            this.textTimer.color = Color.red;
-        }
-
-        totalTime = 0;
-    }
-   
-
-}
-
-//方法3：invoke()
-//每隔固定时间，重复执行
-private void Timer3()
-{
-
-    second--;
-    textTimer.text = string.Format(&quot;{0:d2}:{1:d2}&quot;, second / 60, second % 60);
-
-    if (second &lt;= 10)
-    {
-        this.textTimer.color = Color.red;
-    }
-
-    if (second &lt;=0)
-    {
-        //print(&quot;stop&quot;);
-        CancelInvoke(&quot;Timer3&quot; );//取消方法调用
-    }
-
-}
-
-//5.如何一秒修改一次
-//重点：在Updata每帧执行的方法中，个别语句实现制定间隔执行一次
 </code></pre>
 <p>}</p>
 ]]></content>
