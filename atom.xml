@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-04-12T04:30:55.578Z</updated>
+    <updated>2020-04-12T05:00:27.839Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,103 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[2D Jump]]></title>
+        <id>https://Wei715547.github.io/post/2d-jump/</id>
+        <link href="https://Wei715547.github.io/post/2d-jump/">
+        </link>
+        <updated>2020-04-12T05:00:07.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class JumpBox : MonoBehaviour<br>
+{<br>
+[Range(0, 10)] public float jumpVelocity = 5f;<br>
+public LayerMask mask;<br>
+public float boxHeight;<br>
+private Vector2 playerSize;<br>
+private Vector2 boxSize;<br>
+private bool jumpRequest;<br>
+private bool grounded;<br>
+public float fallMultiplier = 2.5f;<br>
+public float LowJumpMultiplier = 2f;<br>
+private Rigidbody2D _rigidbody2D;</p>
+<pre><code>// Start is called before the first frame update
+void Start()
+{
+    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
+    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
+    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight);
+
+}
+
+// Update is called once per frame
+void Update()
+{
+    if (Input.GetButtonDown(&quot;Jump&quot;) &amp;&amp; grounded)
+    {
+        jumpRequest = true;
+    }
+}
+private void FixedUpdate()
+{
+    //自然重力
+    Gud();
+
+    if (jumpRequest)
+    {
+        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+        jumpRequest = false;
+        grounded = false;
+    }
+    else
+    {
+        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
+        if (Physics2D.OverlapBox(boxCenter, boxSize, 0, mask) != null)
+        {
+            grounded = true;
+        }
+        else
+        {
+            grounded = false;
+        }
+    }
+}
+
+private void Gud()
+{
+    if (_rigidbody2D.velocity.y &lt; 0)
+    {
+        _rigidbody2D.gravityScale = fallMultiplier;
+    }
+    else if (_rigidbody2D.velocity.y &gt; 0 &amp;&amp; !Input.GetButton(&quot;Jump&quot;))
+    {
+        _rigidbody2D.gravityScale = LowJumpMultiplier;
+    }
+    else
+    {
+        _rigidbody2D.gravityScale = 1f;
+    }
+}
+
+private void OnDrawGizmos()
+{
+    if (grounded)
+    {
+        Gizmos.color = Color.red;
+    }
+    else
+    {
+        Gizmos.color = Color.green;
+    }
+
+    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
+    Gizmos.DrawWireCube(boxCenter, boxSize);
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[EventSystems]]></title>
         <id>https://Wei715547.github.io/post/eventsystems/</id>
@@ -623,53 +720,6 @@ private void OnGUI()
     {
         Time.timeScale = 1;
     }
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[获取同类物体]]></title>
-        <id>https://Wei715547.github.io/post/huo-qu-tong-lei-wu-ti/</id>
-        <link href="https://Wei715547.github.io/post/huo-qu-tong-lei-wu-ti/">
-        </link>
-        <updated>2020-04-04T14:28:03.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class FindEnemyDeom : MonoBehaviour<br>
-{</p>
-<pre><code>private void OnGUI()
-{
-    if (GUILayout .Button (&quot;查找血量最低的敌人&quot;))
-    {
-        //查找场景中所有Enemy类型的引用
-        Enemy[] allEnemy = Object.FindObjectsOfType&lt;Enemy&gt;();
-        //获取血量最低的对象的引用
-        Enemy min = FindEnemyByMinHp(allEnemy);
-        //根据Enemy类型的引用 获取其他组件类型引用
-        min.GetComponent&lt;MeshRenderer&gt;().material.color = Color.blue;
-    }
-    if (GUILayout.Button (&quot;层级位置获取子物体&quot;))
-    {
-        var childTF = TransformHelper.GetChild(this.transform , &quot;Cube3&quot;);
-        childTF.GetComponent&lt;MeshRenderer&gt;().material.color = Color.blue;
-        //print(childTF.name);
-        
-    }
-}
-
-public Enemy FindEnemyByMinHp(Enemy [] allEnemy)
-{
-    Enemy min = allEnemy[0];
-
-    for (int i = 1; i &lt; allEnemy .Length ; i++)
-    {
-        if (min.Hp &gt; allEnemy[i].Hp)
-            min = allEnemy[i];
-    }
-    return min;
-
 }
 </code></pre>
 <p>}</p>

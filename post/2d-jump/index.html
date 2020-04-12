@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>第一人称镜头旋转 | Weiwei的个人网站</title>
+<title>2D Jump | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1586667623490">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="第一人称镜头旋转 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="2D Jump | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -14,10 +14,9 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-/// 
-/// 控制摄像机随鼠标旋转
-/// 
-public class DoR..." />
+public class JumpBox : MonoBehaviour
+{
+[R..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -80,14 +79,14 @@ public class DoR..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              第一人称镜头旋转
+              2D Jump
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-04-12
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
@@ -96,28 +95,90 @@ public class DoR..." />
               <div class="post-content">
                 <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// 控制摄像机随鼠标旋转<br>
-/// </summary><br>
-public class DoRotation : MonoBehaviour<br>
+using UnityEngine;</p>
+<p>public class JumpBox : MonoBehaviour<br>
 {<br>
-public float rotateSpeed = 1;<br>
-private void FixedUpdate()<br>
-{<br>
-float x = Input.GetAxis(&quot;Mouse X&quot;);<br>
-float y = Input.GetAxis(&quot;Mouse Y&quot;);</p>
-<pre><code>    if (x!=0||y!=0)
-    RotateView(x, y);
+[Range(0, 10)] public float jumpVelocity = 5f;<br>
+public LayerMask mask;<br>
+public float boxHeight;<br>
+private Vector2 playerSize;<br>
+private Vector2 boxSize;<br>
+private bool jumpRequest;<br>
+private bool grounded;<br>
+public float fallMultiplier = 2.5f;<br>
+public float LowJumpMultiplier = 2f;<br>
+private Rigidbody2D _rigidbody2D;</p>
+<pre><code>// Start is called before the first frame update
+void Start()
+{
+    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
+    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
+    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight);
+
 }
 
-private void RotateView(float x, float y)
+// Update is called once per frame
+void Update()
 {
-    x *= rotateSpeed;
-    y *= rotateSpeed;
+    if (Input.GetButtonDown(&quot;Jump&quot;) &amp;&amp; grounded)
+    {
+        jumpRequest = true;
+    }
+}
+private void FixedUpdate()
+{
+    //自然重力
+    Gud();
 
-    this.transform.Rotate(0, x, 0, Space.World);//左右旋转按照世界坐标
-    //this.transform.Rotate(-y, 0, 0, Space.Self);//上下旋转按自身坐标
+    if (jumpRequest)
+    {
+        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
+        jumpRequest = false;
+        grounded = false;
+    }
+    else
+    {
+        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
+        if (Physics2D.OverlapBox(boxCenter, boxSize, 0, mask) != null)
+        {
+            grounded = true;
+        }
+        else
+        {
+            grounded = false;
+        }
+    }
+}
+
+private void Gud()
+{
+    if (_rigidbody2D.velocity.y &lt; 0)
+    {
+        _rigidbody2D.gravityScale = fallMultiplier;
+    }
+    else if (_rigidbody2D.velocity.y &gt; 0 &amp;&amp; !Input.GetButton(&quot;Jump&quot;))
+    {
+        _rigidbody2D.gravityScale = LowJumpMultiplier;
+    }
+    else
+    {
+        _rigidbody2D.gravityScale = 1f;
+    }
+}
+
+private void OnDrawGizmos()
+{
+    if (grounded)
+    {
+        Gizmos.color = Color.red;
+    }
+    else
+    {
+        Gizmos.color = Color.green;
+    }
+
+    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
+    Gizmos.DrawWireCube(boxCenter, boxSize);
 }
 </code></pre>
 <p>}</p>
@@ -133,9 +194,9 @@ private void RotateView(float x, float y)
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/jing-tou-suo-fang/">
+            <a href="https://Wei715547.github.io/post/eventsystems/">
               <h3 class="post-title">
-                镜头缩放
+                EventSystems
               </h3>
             </a>
           </div>
