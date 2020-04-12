@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>倒计时-每隔固定时间重复执行 | Weiwei的个人网站</title>
+<title>EventSystems | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1586665846285">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="倒计时-每隔固定时间重复执行 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="EventSystems | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -14,11 +14,8 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-/// 
-/// 倒计时
-/// 
-p..." />
+using UnityEngine.EventSystems;
+public cl..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -81,14 +78,14 @@ p..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              倒计时-每隔固定时间重复执行
+              EventSystems
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-04-12
               </span>
               <span>
-                2 min read
+                1 min read
               </span>
               
             </div>
@@ -98,104 +95,46 @@ p..." />
                 <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;<br>
-using UnityEngine.UI;<br>
-/// <summary><br>
-/// 倒计时<br>
-/// </summary><br>
-public class CountdownTimer : MonoBehaviour<br>
+using UnityEngine.EventSystems;<br>
+public class DIalogDrag : MonoBehaviour, IPointerDownHandler,IDragHandler,IPointerClickHandler<br>
 {<br>
-//需求：1秒修改1次Text文本内容<br>
-//1.查找组件引用<br>
-//2.定义变量秒second<br>
-//3.120 --&gt;  02:00<br>
-//4.修改文本</p>
-<pre><code>private Text textTimer;
-public int second = 120;
-private void Start()
+private RectTransform parentRTF;<br>
+private void Start()<br>
+{<br>
+//设置UI长宽<br>
+RectTransform rtf = GetComponent<RectTransform>();<br>
+rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 700);<br>
+rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 400);</p>
+<pre><code>    parentRTF = this.transform.parent as RectTransform;
+}
+private Vector3 siftVector;
+//按下时执行
+public void OnPointerDown(PointerEventData eventData)
 {
-    textTimer = GetComponent&lt;Text&gt;();
-    //Time3
-    //重复调用（被执行的方法名称，第一次执行时机，每次执行间隔）
-    InvokeRepeating(&quot;Timer3&quot;, 1, 1);
-    //invoke(被执行的方法，开始调用时机);
+    //记录按下点到中心点偏移量
 
+    Vector3 wordPoint;
+    //屏幕坐标--&gt;世界坐标
+    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
+    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
+    siftVector = this.transform.position - wordPoint;
+}
+//拖拽时执行
+public void OnDrag(PointerEventData eventData)
+{
+    Vector3 wordPoint;
+    //屏幕坐标--&gt;世界坐标
+    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
+    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
+    this.transform.position = wordPoint + siftVector ;
+    
 }
 
-
-
-private void Update()
+public void OnPointerClick(PointerEventData eventData)
 {
-    //Timer2();
+    if (eventData.clickCount == 2)
+        Destroy (this .gameObject );
 }
-
-private float nextTime = 1;//下次修改时间
-//方法1：Time.time
-//先做 再等
-private void Timer1()
-{
-    //如果到了修改时间
-    if (Time.time &gt; nextTime)
-    {
-        second--;
-        textTimer.text = string.Format(&quot;{0:d2}:{1:d2}&quot;, second / 60, second % 60);
-
-        if (second &lt;= 10)
-        {
-            this.textTimer.color = Color.red;
-        }
-
-        //设置下次修改时间
-        nextTime = Time.time + 1;
-    }
-}
-
-private float totalTime;
-//方法2：Time.deltatime
-//先等 再做
-private void Timer2()
-{
-    //累加每帧间隔
-    totalTime += Time.deltaTime;
-
-    if (totalTime &gt;= 1)
-    {
-        second--;
-        textTimer.text = string.Format(&quot;{0:d2}:{1:d2}&quot;, second / 60, second % 60);
-
-        if (second &lt;= 10)
-        {
-            this.textTimer.color = Color.red;
-        }
-
-        totalTime = 0;
-    }
-   
-
-}
-
-//方法3：invoke()
-//每隔固定时间，重复执行
-private void Timer3()
-{
-
-    second--;
-    textTimer.text = string.Format(&quot;{0:d2}:{1:d2}&quot;, second / 60, second % 60);
-
-    if (second &lt;= 10)
-    {
-        this.textTimer.color = Color.red;
-    }
-
-    if (second &lt;=0)
-    {
-        //print(&quot;stop&quot;);
-        CancelInvoke(&quot;Timer3&quot; );//取消方法调用
-    }
-
-}
-
-//5.如何一秒修改一次
-//重点：在Updata每帧执行的方法中，个别语句实现制定间隔执行一次
 </code></pre>
 <p>}</p>
 
@@ -210,9 +149,9 @@ private void Timer3()
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/transformdemo/">
+            <a href="https://Wei715547.github.io/post/hp-attack-shell/">
               <h3 class="post-title">
-                TransformDemo
+                HP-Attack-Shell
               </h3>
             </a>
           </div>
