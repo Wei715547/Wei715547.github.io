@@ -2,20 +2,25 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>EventSystems | Weiwei的个人网站</title>
+<title>碰撞，触发 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1586752204086">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="EventSystems | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="碰撞，触发 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
-public cl..." />
+    <meta name="description" content="//都有碰撞器组件
+//运动的物体有刚体组件
+private void OnCollisionEnter(Collision other )
+{
+    print(other.collider.name);
+    
+}
+
+
+//都有碰撞..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -78,11 +83,11 @@ public cl..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              EventSystems
+              碰撞，触发
             </h2>
             <div class="post-info">
               <span>
-                2020-04-12
+                2020-04-13
               </span>
               <span>
                 1 min read
@@ -92,51 +97,39 @@ public cl..." />
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.EventSystems;<br>
-public class DIalogDrag : MonoBehaviour, IPointerDownHandler,IDragHandler,IPointerClickHandler<br>
-{<br>
-private RectTransform parentRTF;<br>
-private void Start()<br>
-{<br>
-//设置UI长宽<br>
-RectTransform rtf = GetComponent<RectTransform>();<br>
-rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 700);<br>
-rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 400);</p>
-<pre><code>    parentRTF = this.transform.parent as RectTransform;
-}
-private Vector3 siftVector;
-//按下时执行
-public void OnPointerDown(PointerEventData eventData)
+                <pre><code>//都有碰撞器组件
+//运动的物体有刚体组件
+private void OnCollisionEnter(Collision other )
 {
-    //记录按下点到中心点偏移量
-
-    Vector3 wordPoint;
-    //屏幕坐标--&gt;世界坐标
-    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
-    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
-    siftVector = this.transform.position - wordPoint;
-}
-//拖拽时执行
-public void OnDrag(PointerEventData eventData)
-{
-    Vector3 wordPoint;
-    //屏幕坐标--&gt;世界坐标
-    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
-    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
-    this.transform.position = wordPoint + siftVector ;
+    print(other.collider.name);
     
 }
 
-public void OnPointerClick(PointerEventData eventData)
+
+//都有碰撞器组件
+//其中一个勾选IsTriggger
+//其中一个有刚体组件
+private void OnTriggerEnter(Collider other)//触发开始执行 other碰撞到的物体
 {
-    if (eventData.clickCount == 2)
-        Destroy (this .gameObject );
+    
+    float a = other.GetComponent&lt;Enemy&gt;().Hp;
+    print(other.name+a);
+    other.GetComponent&lt;Enemy&gt;().Hp -= Random .Range (5,10);
+    print(other.name + other.GetComponent&lt;Enemy&gt;().Hp);
+    
 }
-</code></pre>
-<p>}</p>
+
+private void OnTriggerStay(Collider other)//触发后每帧执行
+{
+    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.red;
+    if (other.GetComponent&lt;Enemy&gt;().Hp &lt;= 0)
+        Destroy(other.gameObject);
+}
+
+private void OnTriggerExit(Collider other)//触发结束时执行
+{
+    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.white;
+}</code></pre>
 
               </div>
               <div class="toc-container">
@@ -149,9 +142,9 @@ public void OnPointerClick(PointerEventData eventData)
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/hp-attack-shell/">
+            <a href="https://Wei715547.github.io/post/2d-jump/">
               <h3 class="post-title">
-                HP-Attack-Shell
+                2D Jump
               </h3>
             </a>
           </div>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-04-12T05:00:27.839Z</updated>
+    <updated>2020-04-13T04:30:10.695Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,47 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[碰撞，触发]]></title>
+        <id>https://Wei715547.github.io/post/peng-zhuang-hong-fa/</id>
+        <link href="https://Wei715547.github.io/post/peng-zhuang-hong-fa/">
+        </link>
+        <updated>2020-04-13T04:29:47.000Z</updated>
+        <content type="html"><![CDATA[<pre><code>//都有碰撞器组件
+//运动的物体有刚体组件
+private void OnCollisionEnter(Collision other )
+{
+    print(other.collider.name);
+    
+}
+
+
+//都有碰撞器组件
+//其中一个勾选IsTriggger
+//其中一个有刚体组件
+private void OnTriggerEnter(Collider other)//触发开始执行 other碰撞到的物体
+{
+    
+    float a = other.GetComponent&lt;Enemy&gt;().Hp;
+    print(other.name+a);
+    other.GetComponent&lt;Enemy&gt;().Hp -= Random .Range (5,10);
+    print(other.name + other.GetComponent&lt;Enemy&gt;().Hp);
+    
+}
+
+private void OnTriggerStay(Collider other)//触发后每帧执行
+{
+    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.red;
+    if (other.GetComponent&lt;Enemy&gt;().Hp &lt;= 0)
+        Destroy(other.gameObject);
+}
+
+private void OnTriggerExit(Collider other)//触发结束时执行
+{
+    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.white;
+}</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[2D Jump]]></title>
         <id>https://Wei715547.github.io/post/2d-jump/</id>
@@ -659,67 +700,6 @@ private void Zoom4()//
     camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomLevel[index], 0.1f);//无限接近50，不等于
     if (Mathf.Abs(camera.fieldOfView - zoomLevel[index]) &lt; 0.1) camera.fieldOfView = zoomLevel[index];//使无限接近时，等于
 
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Time类]]></title>
-        <id>https://Wei715547.github.io/post/time-lei/</id>
-        <link href="https://Wei715547.github.io/post/time-lei/">
-        </link>
-        <updated>2020-04-04T14:29:07.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class TimeDemo : MonoBehaviour<br>
-{<br>
-public float deltatime;<br>
-public float unscaledeltatime;<br>
-public float time;<br>
-public float unscaledtime;<br>
-public float c;<br>
-public float speed = 100;<br>
-private void Update()<br>
-{<br>
-deltatime = Time.deltaTime;//受TimeScale影响的每帧间隔时间<br>
-unscaledeltatime = Time.unscaledDeltaTime;//不受TimeScale影响每帧间隔时间</p>
-<pre><code>    time = Time.time;//受TimeScale影响的游戏运行时间
-    unscaledtime = Time.unscaledTime;//不受TimeScale影响的游戏运行时间
-    c = Time.realtimeSinceStartup;//实际的游戏运行时间
-
-    //每渲染帧 执行1次，旋转1度
-    //this.transform.Rotate(0, 1, 0);
-    //1秒旋转 ？度
-    //帧多 1秒旋转速度快        希望1帧旋转量小
-    //少     慢                     大
-    //this.transform.Rotate(0, speed *Time .deltaTime, 0);
-    //当旋移动/转速度*每帧消耗时间，可以保证旋转速度不受机器性能，及渲染影响。
-
-    //个别物体不受影响 代码要放到updata中 spee * Time.unscaledDeltaTime 不受缩放影响的每帧间隔
-    this.transform.Rotate(0, speed * Time.unscaledDeltaTime , 0);
-
-}
-//固定0.02s 执行一次，与渲染无关，受TimeScale影响
-public void FixedUpdate()
-{
-    //this.transform.Rotate(0, speed, 0);
-}
-
-//游戏暂停  个别物体不受影响  代码要放到updata中
-
-private void OnGUI()
-{
-    if (GUILayout .Button (&quot;暂停游戏&quot;))
-    {
-        Time.timeScale = 0;
-    }
-
-    if(GUILayout.Button(&quot;继续游戏&quot;))
-    {
-        Time.timeScale = 1;
-    }
 }
 </code></pre>
 <p>}</p>
