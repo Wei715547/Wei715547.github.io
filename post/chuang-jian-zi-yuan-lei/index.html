@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>向量API | Weiwei的个人网站</title>
+<title>创建资源类 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1586954570223">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="向量API | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="创建资源类 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -14,9 +14,7 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class VectorAPI : MonoBehaviour
-{
-..." />
+//[CreateAssetMenu (menuName = &quot;Crea..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,11 +77,11 @@ public class VectorAPI : MonoBehaviour
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              向量API
+              创建资源类
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-04-15
               </span>
               <span>
                 1 min read
@@ -96,32 +94,24 @@ public class VectorAPI : MonoBehaviour
                 <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;</p>
-<p>public class VectorAPI : MonoBehaviour<br>
+<p>//[CreateAssetMenu (menuName = &quot;CreatManagerVarsContainer&quot;)]<br>
+public class ManagerVars : ScriptableObject<br>
 {<br>
-public AnimationCurve cuver;<br>
-private float x;<br>
-public  float psTime=3;<br>
-private Vector3 targetPoint = new Vector3 (0, 0, 10);<br>
-private void OnGUI()<br>
+public static ManagerVars GetManagerVars()<br>
 {<br>
-if (GUILayout.RepeatButton (&quot;Move&quot;))<br>
+return Resources.Load<ManagerVars>(&quot;ManageVarContain&quot;);<br>
+}<br>
+public List<Sprite> BGThemSpriteList = new List<Sprite>();<br>
+public GameObject noamlPlatform;<br>
+public GameObject characterPre;<br>
+public float nettXPos = 0.554f, nextYPos = 0.645f;<br>
+}</p>
+<p>调用方法<br>
+private ManagerVars vars;<br>
+private void Start()<br>
 {<br>
-//将物体移动至（0，0,10）<br>
-//匀速移动<br>
-this.transform.position = Vector3.MoveTowards(this.transform.position,targetPoint , 2);<br>
-//先快后慢--终点与比例固定<br>
-this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2 );</p>
-<pre><code>    }
-    if (GUILayout.RepeatButton(&quot;Lerp&quot;))
-    {
-        x += Time.deltaTime/psTime ;
-        //自然变化，起点，终点固定，比例根据曲线变化
-        this.transform.position =
-            Vector3.LerpUnclamped (Vector3.zero, targetPoint, cuver.Evaluate(x));
-    }
-}
-</code></pre>
-<p>}</p>
+vars = ManagerVars.GetManagerVars();<br>
+}</p>
 
               </div>
               <div class="toc-container">
@@ -134,9 +124,9 @@ this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/di-yi-ren-cheng-jing-tou-xuan-zhuan/">
+            <a href="https://Wei715547.github.io/post/peng-zhuang-hong-fa/">
               <h3 class="post-title">
-                第一人称镜头旋转
+                碰撞，触发
               </h3>
             </a>
           </div>

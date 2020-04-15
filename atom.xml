@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-04-13T04:30:10.695Z</updated>
+    <updated>2020-04-15T12:42:57.463Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,35 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[创建资源类]]></title>
+        <id>https://Wei715547.github.io/post/chuang-jian-zi-yuan-lei/</id>
+        <link href="https://Wei715547.github.io/post/chuang-jian-zi-yuan-lei/">
+        </link>
+        <updated>2020-04-15T12:34:57.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>//[CreateAssetMenu (menuName = &quot;CreatManagerVarsContainer&quot;)]<br>
+public class ManagerVars : ScriptableObject<br>
+{<br>
+public static ManagerVars GetManagerVars()<br>
+{<br>
+return Resources.Load<ManagerVars>(&quot;ManageVarContain&quot;);<br>
+}<br>
+public List<Sprite> BGThemSpriteList = new List<Sprite>();<br>
+public GameObject noamlPlatform;<br>
+public GameObject characterPre;<br>
+public float nettXPos = 0.554f, nextYPos = 0.645f;<br>
+}</p>
+<p>调用方法<br>
+private ManagerVars vars;<br>
+private void Start()<br>
+{<br>
+vars = ManagerVars.GetManagerVars();<br>
+}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[碰撞，触发]]></title>
         <id>https://Wei715547.github.io/post/peng-zhuang-hong-fa/</id>
@@ -552,154 +581,6 @@ private void RotateView(float x, float y)
 
     this.transform.Rotate(0, x, 0, Space.World);//左右旋转按照世界坐标
     //this.transform.Rotate(-y, 0, 0, Space.Self);//上下旋转按自身坐标
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[镜头缩放]]></title>
-        <id>https://Wei715547.github.io/post/jing-tou-suo-fang/</id>
-        <link href="https://Wei715547.github.io/post/jing-tou-suo-fang/">
-        </link>
-        <updated>2020-04-04T14:30:16.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// 镜头缩放<br>
-/// </summary><br>
-public class CareamZoom : MonoBehaviour<br>
-{<br>
-public bool isDown;<br>
-public bool keyDown;<br>
-public bool cvDown;<br>
-public Transform l1;</p>
-<pre><code>public bool isFar = true;
-private Camera camera;
-
-public int[] zoomLevel;
-private int index;
-private Vector3 lo;
-private Quaternion ro;
-
-
-
-private void Start()
-{
-    camera = GetComponent&lt;Camera&gt;();
-    lo = this.transform.position;
-    ro = this.transform.rotation;
-}
-
-private void Update()
-{
-    isDown = Input.GetMouseButton(0);//左键
-
-    keyDown = Input.GetKey(KeyCode.Q);
-
-    CamerPosition();
-
-    if (keyDown)
-        Zoom4();
-
-
-    cvDown = Input.GetKey(KeyCode.C) &amp;&amp; Input.GetKey(KeyCode.V);
-
-
-}
-
-private void CamerPosition()
-{
-
-    if (keyDown)
-    {
-        this.transform.position = this.transform.parent.position;
-        this.transform.rotation = this.transform.parent.rotation;
-    }
-    else
-    {
-        this.transform.position = l1.position;
-        this.transform.rotation = l1.rotation;
-        index = 0;
-        camera.fieldOfView = zoomLevel[index ];
-    }
-}
-
-private void Zoom1()
-{
-    if (Input.GetMouseButtonDown(1))
-    {
-        //拉近：10
-        isFar = !isFar;
-
-        if (isFar)
-        {
-            camera.fieldOfView = 50;
-            //拉远：50
-        }
-        else
-        {
-            camera.fieldOfView = 10;
-        }
-
-    }
-}
-
-private void Zoom2()
-{
-    if (Input.GetMouseButtonDown(1))
-    {
-        isFar = !isFar;
-    }
-    if (isFar)
-    {
-        if (camera.fieldOfView &lt; 50)
-            camera.fieldOfView += 2;
-        //拉远：10--&gt;50
-    }
-    else
-    {
-        //拉近：50--&gt;10
-        if (camera.fieldOfView &gt; 10)
-            camera.fieldOfView -= 2;
-    }
-}
-
-private void Zoom3()//先快后慢 Lerp (起点，终点，比例0.1)第一次返回起点到终点0.1的值
-{
-    if (Input.GetMouseButtonDown(1))
-    {
-        isFar = !isFar;
-    }
-    if (isFar)
-    {
-        //拉远：10--&gt;50
-        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, 50, 0.1f);//无限接近50，不等于
-        if (Mathf.Abs(camera.fieldOfView - 50) &lt; 0.1) camera.fieldOfView = 50;//使无限接近时，等于
-    }
-    else
-    {
-        //拉近：50--&gt;10
-        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, 10, 0.1f);
-        if (Mathf.Abs(camera.fieldOfView - 10) &lt; 0.1) camera.fieldOfView = 10;
-    }
-}
-
-private void Zoom4()//
-{
-    if (Input.GetMouseButtonDown(1))
-    {
-        //index = index &lt; zoomLevel.Length - 1 ? index + 1 : 0;
-        index = (index + 1) % zoomLevel.Length;
-        //index++;
-        //if (index &gt;= zoomLevel.Length)
-        //index = 0;
-    }
-
-    camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomLevel[index], 0.1f);//无限接近50，不等于
-    if (Mathf.Abs(camera.fieldOfView - zoomLevel[index]) &lt; 0.1) camera.fieldOfView = zoomLevel[index];//使无限接近时，等于
-
 }
 </code></pre>
 <p>}</p>
