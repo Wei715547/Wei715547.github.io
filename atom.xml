@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-01T03:49:08.354Z</updated>
+    <updated>2020-05-01T09:35:22.888Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,100 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[静态]]></title>
+        <id>https://Wei715547.github.io/post/jing-tai/</id>
+        <link href="https://Wei715547.github.io/post/jing-tai/">
+        </link>
+        <updated>2020-05-01T09:34:55.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 继承_static_结构体_2048核心类<br>
+{<br>
+class Student : Person<br>
+{<br>
+//prop +tab +tab 自动属性快捷生成<br>
+/// <summary><br>
+/// 成绩<br>
+/// </summary></p>
+<pre><code>    // 实例成员属于   对象    静态成员属于   类
+
+    public int Score { get; set; }
+
+    //每个对象都存储一份
+    public int InstanceCount;
+
+    
+
+    //静态字段 仅仅存储一份 所有对象共享 常驻内存中
+    public static int StaticCount;
+
+    private Random random;
+    private int[] arr;
+
+    //实例构造函数：提供创建对象的方式，初始化类的实例数据成员
+    //
+    public Student()
+    {
+        random = new Random();
+        arr = new int[5];
+        InstanceCount++;
+        StaticCount++;
+    }
+
+    //静态构造函数 不需要访问修饰符 都可以访问
+    //作用：初始化类的静态数据成员
+    //执行时机：类加载时调用一次
+    static Student()
+    {
+        //InstanceCount++;//”非静态字段 要求 对象引用 ”  静态代码块只能访问静态成员
+        StaticCount++;
+    }
+
+    //静态方法 
+    public static void Fun1()
+    {
+        //Console.WriteLine(InstanceCount);//静态方法只能访问静态成员
+    }
+
+    public  void Fun2()
+    {
+        Console.WriteLine(InstanceCount);// 通过引用(对象 / 实例)调用实例方法，都会自动传递(对象 / 实例的)引用   
+        //Console.WriteLine(this.InstanceCount);//所以可以访问 InstanceCount 实例成员
+        Console.WriteLine(StaticCount );//但实例（对象）方法可以访问静态成员（类）
+    }
+
+    //静态类
+    /*不能实例化，只能包含静态成员
+     * 静态类不能被继承，但非静态类的方法，属性都可以被继承
+     */
+
+
+    /* 静态适用
+    * 利：单独空间存储，所有对象共享，可直接被类名调用
+    * 弊：静态方法中只能访问静态成员，共享数据被多个对象访问时会出现并发。
+    * 适用场合：
+    * 1.所有对象需要共享的数据。
+    * 2.在没有对象是就要访问成员。
+    * 3.工具类适合做静态类（常用，不需要过多数据）。
+    * 如类 Math.方法
+    *      unuty中有静态类Random
+    *      Random.randuoRange(1,101); （randomRange()静态类Random的静态方法。
+    *      简易与.Net中
+    *      Random r = new Random();
+    *      random.Next(1,101);（Next()实例（对象）方法。
+    *      
+    */
+    //
+
+
+
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[DoTweening完成后执行]]></title>
         <id>https://Wei715547.github.io/post/dotweening-wan-cheng-hou-zhi-xing/</id>
@@ -789,35 +883,6 @@ public void OnTriggerEnter(Collider collider)
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[俯视较移动旋转]]></title>
-        <id>https://Wei715547.github.io/post/fu-shi-jiao-yi-dong-xuan-zhuan/</id>
-        <link href="https://Wei715547.github.io/post/fu-shi-jiao-yi-dong-xuan-zhuan/">
-        </link>
-        <updated>2020-04-05T05:57:42.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class Move : MonoBehaviour<br>
-{<br>
-public float speed = 5;<br>
-private void Update()<br>
-{<br>
-float v = Input.GetAxis(&quot;Vertical&quot;);<br>
-float h = Input.GetAxis(&quot;Horizontal&quot;);<br>
-if (v != 0 || h != 0)<br>
-Movement(v, h);<br>
-}<br>
-private void Movement(float v, float h)<br>
-{<br>
-this.transform.Translate(0, 0, speed*Time .deltaTime );<br>
-Quaternion dir = Quaternion.LookRotation(new Vector3(h, 0, v));<br>
-this.transform.rotation =<br>
-Quaternion.Lerp(this.transform.rotation, dir, 0.1f);<br>
-}<br>
-}</p>
 ]]></content>
     </entry>
 </feed>

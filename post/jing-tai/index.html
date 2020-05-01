@@ -2,22 +2,21 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>HP-Attack-Shell | Weiwei的个人网站</title>
+<title>静态 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1588325713958">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="HP-Attack-Shell | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="静态 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
+    <meta name="description" content="using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-/// 
-/// HP，HP受损方法
-..." />
+using System.Text;
+namespace 继承_static_结构体_2048核心类
+{
+class Student : Per..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -80,11 +79,11 @@ using UnityEngine.UI;
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              HP-Attack-Shell
+              静态
             </h2>
             <div class="post-info">
               <span>
-                2020-04-07
+                2020-05-01
               </span>
               <span>
                 2 min read
@@ -94,97 +93,88 @@ using UnityEngine.UI;
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
+                <p>using System;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.UI;<br>
-/// <summary><br>
-/// HP，HP受损方法<br>
-/// </summary><br>
-public class TankHealth : MonoBehaviour<br>
+using System.Text;</p>
+<p>namespace 继承_static_结构体_2048核心类<br>
 {<br>
-public int hp = 100;<br>
-public GameObject tankExplosion;<br>
-public AudioClip tankExplositionAudio;<br>
-public Slider hpSlider;<br>
-private int hpTotal;<br>
-// Use this for initialization<br>
-void Start()<br>
+class Student : Person<br>
 {<br>
-hpTotal = hp;<br>
-}</p>
-<pre><code>// Update is called once per frame
-void Update()
-{
-
-}
-void TankDamage()
-{
-    if (hp &lt;= 0) return;
-    hp -= Random.Range(10, 20);
-    hpSlider.value = (float)hp / hpTotal;
-    if (hp &lt;= 0)
-    {
-        AudioSource.PlayClipAtPoint(tankExplositionAudio, transform.position);
-        GameObject.Instantiate(tankExplosion, transform.position + Vector3.up, transform.rotation);
-        GameObject.Destroy(this.gameObject);
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
+//prop +tab +tab 自动属性快捷生成<br>
 /// <summary><br>
-/// 按下攻击，发射子弹向FirePoint前方飞进<br>
-/// </summary><br>
-public class TankAttack : MonoBehaviour<br>
-{</p>
-<pre><code>public GameObject shellPrefab;
-public KeyCode fireKey = KeyCode.Space;
-private Transform firePosition;
-public float shellSpeed = 10;
-public AudioClip shoutAudio;
-// Use this for initialization
-void Start()
-{
-    firePosition = transform.Find(&quot;FirePosition&quot;);
-}
+/// 成绩<br>
+/// </summary></p>
+<pre><code>    // 实例成员属于   对象    静态成员属于   类
 
-// Update is called once per frame
-void Update()
-{
-    if (Input.GetKeyDown(fireKey))
+    public int Score { get; set; }
+
+    //每个对象都存储一份
+    public int InstanceCount;
+
+    
+
+    //静态字段 仅仅存储一份 所有对象共享 常驻内存中
+    public static int StaticCount;
+
+    private Random random;
+    private int[] arr;
+
+    //实例构造函数：提供创建对象的方式，初始化类的实例数据成员
+    //
+    public Student()
     {
-        AudioSource.PlayClipAtPoint(shoutAudio, transform.position);
-        GameObject go = GameObject.Instantiate(shellPrefab, firePosition.position, firePosition.rotation)as GameObject;
-        go.GetComponent&lt;Rigidbody&gt;().velocity = go.transform.forward * shellSpeed;
+        random = new Random();
+        arr = new int[5];
+        InstanceCount++;
+        StaticCount++;
     }
-}
-</code></pre>
-<p>}</p>
-<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// 子弹出发检测，（两物体都有触发器，其中一个有刚体组件，其中一个触发器勾选Is Tirgger）<br>
-///打中目标，调用目标受损方法<br>
-/// </summary><br>
-public class Shell : MonoBehaviour<br>
-{</p>
-<pre><code>public GameObject shellExplosionPrefab;
-public  AudioClip shellExplosionAudio;
 
-
-public void OnTriggerEnter(Collider collider)
-{
-    AudioSource.PlayClipAtPoint(shellExplosionAudio,transform.position);
-    GameObject.Instantiate(shellExplosionPrefab, transform.position, transform.rotation);
-    GameObject.Destroy(this.gameObject);
-    if (collider.tag == &quot;Tank&quot;)
+    //静态构造函数 不需要访问修饰符 都可以访问
+    //作用：初始化类的静态数据成员
+    //执行时机：类加载时调用一次
+    static Student()
     {
-        collider.SendMessage(&quot;TankDamage&quot;);
+        //InstanceCount++;//”非静态字段 要求 对象引用 ”  静态代码块只能访问静态成员
+        StaticCount++;
     }
+
+    //静态方法 
+    public static void Fun1()
+    {
+        //Console.WriteLine(InstanceCount);//静态方法只能访问静态成员
+    }
+
+    public  void Fun2()
+    {
+        Console.WriteLine(InstanceCount);// 通过引用(对象 / 实例)调用实例方法，都会自动传递(对象 / 实例的)引用   
+        //Console.WriteLine(this.InstanceCount);//所以可以访问 InstanceCount 实例成员
+        Console.WriteLine(StaticCount );//但实例（对象）方法可以访问静态成员（类）
+    }
+
+    //静态类
+    /*不能实例化，只能包含静态成员
+     * 静态类不能被继承，但非静态类的方法，属性都可以被继承
+     */
+
+
+    /* 静态适用
+    * 利：单独空间存储，所有对象共享，可直接被类名调用
+    * 弊：静态方法中只能访问静态成员，共享数据被多个对象访问时会出现并发。
+    * 适用场合：
+    * 1.所有对象需要共享的数据。
+    * 2.在没有对象是就要访问成员。
+    * 3.工具类适合做静态类（常用，不需要过多数据）。
+    * 如类 Math.方法
+    *      unuty中有静态类Random
+    *      Random.randuoRange(1,101); （randomRange()静态类Random的静态方法。
+    *      简易与.Net中
+    *      Random r = new Random();
+    *      random.Next(1,101);（Next()实例（对象）方法。
+    *      
+    */
+    //
+
+
 
 }
 </code></pre>
@@ -201,9 +191,9 @@ public void OnTriggerEnter(Collider collider)
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/fu-shi-jiao-yi-dong-xuan-zhuan/">
+            <a href="https://Wei715547.github.io/post/dotweening-wan-cheng-hou-zhi-xing/">
               <h3 class="post-title">
-                俯视较移动旋转
+                DoTweening完成后执行
               </h3>
             </a>
           </div>
