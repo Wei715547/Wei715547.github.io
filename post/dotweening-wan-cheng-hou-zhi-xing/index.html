@@ -2,21 +2,19 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Time类 | Weiwei的个人网站</title>
+<title>DoTweening完成后执行 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1588304929485">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Time类 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="DoTweening完成后执行 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class TimeDemo : MonoBehaviour
+    <meta name="description" content="private void Close()
 {
-p..." />
+EventCenter.Broadcast(EventDefine.PlayBuyyonSound);
+bg.GetComponent().DOColor(new Color(bg.GetCom..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,73 +77,29 @@ p..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Time类
+              DoTweening完成后执行
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-01
               </span>
               <span>
-                2 min read
+                1 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class TimeDemo : MonoBehaviour<br>
+                <p>private void Close()<br>
 {<br>
-public float deltatime;<br>
-public float unscaledeltatime;<br>
-public float time;<br>
-public float unscaledtime;<br>
-public float c;<br>
-public float speed = 100;<br>
-private void Update()<br>
+EventCenter.Broadcast(EventDefine.PlayBuyyonSound);<br>
+bg.GetComponent<Image>().DOColor(new Color(bg.GetComponent<Image>().color.r, bg.GetComponent<Image>().color.g, bg.GetComponent<Image>().color.b, 0), 0.3f);<br>
+rankt.transform.DOScale(Vector3.zero, 0.3f).OnComplete(() =&gt;<br>
 {<br>
-deltatime = Time.deltaTime;//受TimeScale影响的每帧间隔时间<br>
-unscaledeltatime = Time.unscaledDeltaTime;//不受TimeScale影响每帧间隔时间</p>
-<pre><code>    time = Time.time;//受TimeScale影响的游戏运行时间
-    unscaledtime = Time.unscaledTime;//不受TimeScale影响的游戏运行时间
-    c = Time.realtimeSinceStartup;//实际的游戏运行时间
-
-    //每渲染帧 执行1次，旋转1度
-    //this.transform.Rotate(0, 1, 0);
-    //1秒旋转 ？度
-    //帧多 1秒旋转速度快        希望1帧旋转量小
-    //少     慢                     大
-    //this.transform.Rotate(0, speed *Time .deltaTime, 0);
-    //当旋移动/转速度*每帧消耗时间，可以保证旋转速度不受机器性能，及渲染影响。
-
-    //个别物体不受影响 代码要放到updata中 spee * Time.unscaledDeltaTime 不受缩放影响的每帧间隔
-    this.transform.Rotate(0, speed * Time.unscaledDeltaTime , 0);
-
-}
-//固定0.02s 执行一次，与渲染无关，受TimeScale影响
-public void FixedUpdate()
-{
-    //this.transform.Rotate(0, speed, 0);
-}
-
-//游戏暂停  个别物体不受影响  代码要放到updata中
-
-private void OnGUI()
-{
-    if (GUILayout .Button (&quot;暂停游戏&quot;))
-    {
-        Time.timeScale = 0;
-    }
-
-    if(GUILayout.Button(&quot;继续游戏&quot;))
-    {
-        Time.timeScale = 1;
-    }
-}
-</code></pre>
-<p>}</p>
+gameObject.SetActive(false);<br>
+});<br>
+}</p>
 
               </div>
               <div class="toc-container">
@@ -158,9 +112,9 @@ private void OnGUI()
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/huo-qu-tong-lei-wu-ti/">
+            <a href="https://Wei715547.github.io/post/eventsystemsping-mu-tuo-zhuai/">
               <h3 class="post-title">
-                获取同类物体
+                EventSystems，屏幕拖拽
               </h3>
             </a>
           </div>

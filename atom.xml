@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-04-24T03:47:48.221Z</updated>
+    <updated>2020-05-01T03:49:08.354Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,76 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[DoTweening完成后执行]]></title>
+        <id>https://Wei715547.github.io/post/dotweening-wan-cheng-hou-zhi-xing/</id>
+        <link href="https://Wei715547.github.io/post/dotweening-wan-cheng-hou-zhi-xing/">
+        </link>
+        <updated>2020-05-01T03:46:49.000Z</updated>
+        <content type="html"><![CDATA[<p>private void Close()<br>
+{<br>
+EventCenter.Broadcast(EventDefine.PlayBuyyonSound);<br>
+bg.GetComponent<Image>().DOColor(new Color(bg.GetComponent<Image>().color.r, bg.GetComponent<Image>().color.g, bg.GetComponent<Image>().color.b, 0), 0.3f);<br>
+rankt.transform.DOScale(Vector3.zero, 0.3f).OnComplete(() =&gt;<br>
+{<br>
+gameObject.SetActive(false);<br>
+});<br>
+}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[EventSystems，屏幕拖拽]]></title>
+        <id>https://Wei715547.github.io/post/eventsystemsping-mu-tuo-zhuai/</id>
+        <link href="https://Wei715547.github.io/post/eventsystemsping-mu-tuo-zhuai/">
+        </link>
+        <updated>2020-05-01T03:22:17.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.EventSystems;<br>
+public class DIalogDrag : MonoBehaviour, IPointerDownHandler,IDragHandler,IPointerClickHandler<br>
+{<br>
+private RectTransform parentRTF;<br>
+private void Start()<br>
+{<br>
+//设置UI长宽<br>
+RectTransform rtf = GetComponent<RectTransform>();<br>
+rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 700);<br>
+rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 400);</p>
+<pre><code>    parentRTF = this.transform.parent as RectTransform;
+}
+private Vector3 siftVector;
+//按下时执行
+public void OnPointerDown(PointerEventData eventData)
+{
+    //记录按下点到中心点偏移量
+
+    Vector3 wordPoint;
+    //屏幕坐标--&gt;世界坐标
+    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
+    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
+    siftVector = this.transform.position - wordPoint;
+}
+//拖拽时执行
+public void OnDrag(PointerEventData eventData)
+{
+    Vector3 wordPoint;
+    //屏幕坐标--&gt;世界坐标
+    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
+    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
+    this.transform.position = wordPoint + siftVector ;
+    
+}
+
+public void OnPointerClick(PointerEventData eventData)
+{
+    if (eventData.clickCount == 2)
+        Destroy (this .gameObject );
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[游戏数据类创建，储存、读取]]></title>
         <id>https://Wei715547.github.io/post/you-xi-shu-ju-lei-chuang-jian-chu-cun-du-qu/</id>
@@ -748,158 +818,6 @@ this.transform.rotation =<br>
 Quaternion.Lerp(this.transform.rotation, dir, 0.1f);<br>
 }<br>
 }</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Boom向量/三角函数应用]]></title>
-        <id>https://Wei715547.github.io/post/boom-xiang-liang-san-jiao-han-shu-ying-yong/</id>
-        <link href="https://Wei715547.github.io/post/boom-xiang-liang-san-jiao-han-shu-ying-yong/">
-        </link>
-        <updated>2020-04-04T14:34:23.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class Boom : MonoBehaviour<br>
-{<br>
-public GameObject player;<br>
-private Vector3 dp;<br>
-//private Vector3 ldp;<br>
-private Vector3 liftdp;<br>
-private Vector3 rightdp;<br>
-private float dt;<br>
-private float sin;<br>
-private float rd;<br>
-// Start is called before the first frame update<br>
-void Start()<br>
-{<br>
-rd = player.GetComponent<CapsuleCollider>().radius ;<br>
-}</p>
-<pre><code>// Update is called once per frame
-void Update()
-{
-    Draw();
-}
-
-private void VectorCt()
-{
-    
-    dp = player.transform.position - this.transform.position;
-    dt = dp.magnitude;
-    sin = Mathf.Rad2Deg * Mathf.Asin(rd / dt);
-    //ldp = Quaternion.Euler(0, sin, 0) *dp.normalized * dt * Mathf.Cos(sin);
-    liftdp = this.transform.position + Quaternion.Euler(0, sin, 0) * dp;
-   
-    rightdp = this.transform.position + Quaternion.Euler(0, -sin, 0) * dp;
-    
-}
-
-private void CalculateTangent()
-{
-    Vector3 playerToBoom = this.transform.position - player.transform.position;
-    Vector3 playerToExplpsionDirection = playerToBoom.normalized * rd;
-    float angle = Mathf.Acos(rd / playerToBoom.magnitude) * Mathf.Rad2Deg;
-    liftdp = player.transform.position + Quaternion.Euler(0, -angle , 0) * playerToExplpsionDirection;
-    rightdp = player.transform.position + Quaternion.Euler(0, angle, 0) * playerToExplpsionDirection;
-
-}
-
-private void Draw()
-{
-    //VectorCt();
-    CalculateTangent();
-    Debug.DrawLine(this.transform.position, player.transform.position);
-    Debug.DrawLine(this.transform.position, liftdp,Color .blue );
-    Debug.DrawLine(this.transform.position, rightdp,Color .red );
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[四元数API]]></title>
-        <id>https://Wei715547.github.io/post/si-yuan-shu-api/</id>
-        <link href="https://Wei715547.github.io/post/si-yuan-shu-api/">
-        </link>
-        <updated>2020-04-04T14:33:23.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class QuaternionAPI : MonoBehaviour<br>
-{<br>
-public Transform  tf;<br>
-public AnimationCurve a;<br>
-private float x;</p>
-<pre><code>private void OnGUI()
-{
-    if (GUILayout.Button (&quot;&quot;))
-    {
-        //1.欧拉角转换为四元数
-        //Quaternion.Euler(欧拉角);
-
-        //2/四元数转欧拉角
-        Quaternion qt = this.transform.rotation;
-        Vector3 auler = qt.eulerAngles;
-
-        //3.轴/角
-        //Quaternion.Euler(0, 50, 0);
-        this .transform .rotation = Quaternion.AngleAxis(50, Vector3.up);
-
-    }
-    
-    if (GUILayout.Button(&quot;LookRotation&quot;))
-    {
-        //4.注视旋转
-        //Z轴指向一个方向
-        //当前物体注视 tf 旋转
-        Vector3 dir = tf.position - this.transform.position;
-        this.transform.rotation  = Quaternion.LookRotation (dir);
-        //this.transform.LookAt(tf);//效果与上两行代码相同----下一帧立即执行
-
-    }
-
-    if (GUILayout.RepeatButton(&quot;LookRotationLerp&quot;))
-    {
-        //5.插值旋转
-        x += Time.deltaTime;
-        Quaternion dir = Quaternion.LookRotation(tf.position - this.transform.position);            
-        this .transform .rotation = Quaternion.Lerp(this.transform.rotation, dir, a.Evaluate (x));
-
-        //6.匀速旋转
-        //this.transform.rotation = Quaternion.RotateTowards(this.transform.rotation, dir, 0.1f);//匀速朝向旋转
-    }
-
-    if (GUILayout.RepeatButton(&quot;AngleR90&quot;))
-    {
-        Quaternion dir = Quaternion.Euler(0, 90, 0);
-        this.transform.rotation =
-            Quaternion.Lerp(this.transform.rotation, dir, 0.1f);
-        //7.如果当前旋转角度 接近目标旋转角度
-        if (Quaternion .Angle (this .transform .rotation ,dir )&lt;10)
-        {
-            this.transform.rotation = dir;
-        }
-    }
-
-    if (GUILayout.RepeatButton(&quot;Right&quot;))
-    {
-        //8.x轴注视旋转 t1
-        //this.transform.right = tf.position - this.transform.position;
-        //x正方向---注视目标物体方向
-        Quaternion dir = Quaternion.FromToRotation(Vector3 .right  , tf.position - this.transform.position);
-        //this.transform.rotation = dir;
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, dir, 0.1f);
-
-
-    }
-}
-
-// Update is called once per frame
-void Update()
-{
-    
-}
-</code></pre>
-<p>}</p>
 ]]></content>
     </entry>
 </feed>
