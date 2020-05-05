@@ -2,21 +2,22 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>向量API | Weiwei的个人网站</title>
+<title>数据存储-序列化/反序列化 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1588674148914">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="向量API | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="数据存储-序列化/反序列化 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class VectorAPI : MonoBehaviour
+    <meta name="description" content="using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+//二进制
+private void SaveByBin()
 {
-..." />
+//要储存的类
+Save sav..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,49 +80,95 @@ public class VectorAPI : MonoBehaviour
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              向量API
+              数据存储-序列化/反序列化
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-05
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class VectorAPI : MonoBehaviour<br>
+                <p>using System.Runtime.Serialization.Formatters.Binary;<br>
+using System.IO;<br>
+//二进制<br>
+private void SaveByBin()<br>
 {<br>
-public AnimationCurve cuver;<br>
-private float x;<br>
-public  float psTime=3;<br>
-private Vector3 targetPoint = new Vector3 (0, 0, 10);<br>
-private void OnGUI()<br>
+//要储存的类<br>
+Save save = SaveDate();<br>
+//创建二进制序列化程序<br>
+BinaryFormatter bf = new BinaryFormatter();<br>
+//创建文件流<br>
+FileStream filestream = File.Create(Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;);<br>
+//用二进制序列化程序的序列化方法来序列化Save类对象，参数（文件流，需要序列化的类对象）<br>
+bf.Serialize(filestream, save);<br>
+//关闭流<br>
+filestream.Close();<br>
+if (File .Exists (Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;))<br>
 {<br>
-if (GUILayout.RepeatButton (&quot;Move&quot;))<br>
-{<br>
-//将物体移动至（0，0,10）<br>
-//匀速移动<br>
-this.transform.position = Vector3.MoveTowards(this.transform.position,targetPoint , 2);<br>
-//先快后慢--终点与比例固定<br>
-this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2 );</p>
-<pre><code>    }
-    if (GUILayout.RepeatButton(&quot;Lerp&quot;))
+UIManage.Instance . ShowMessage(&quot;保存成功&quot;);<br>
+}</p>
+<pre><code>}
+
+private void  LoadByBin()
+{
+    if (File.Exists(Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;))
     {
-        x += Time.deltaTime/psTime ;
-        //自然变化，起点，终点固定，比例根据曲线变化
-        this.transform.position =
-            Vector3.LerpUnclamped (Vector3.zero, targetPoint, cuver.Evaluate(x));
+        Save save = new Save();
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream fs = File.Open(Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;, FileMode.Open);
+        save = (Save)bf.Deserialize(fs);
+        fs.Close();
+        LoadDate(save);
+        //UIManage.Instance.ShowMessage(&quot;加载成功&quot;);
+        UIPanle.Instance.OnStartButtonDown();
     }
+    else
+        UIManage.Instance.ShowMessage(&quot;无存档记录&quot;);
 }
 </code></pre>
-<p>}</p>
+<p>using LitJson;<br>
+//Json<br>
+private void SaveByJson()<br>
+{<br>
+Save save = SaveDate();<br>
+//路径<br>
+string filePath = Application.dataPath + &quot;/Savemaster&quot; + &quot;/ByJson.json&quot;;<br>
+//利用JsonMapper将save对象转换为Json字符串<br>
+string saveJsonMapper = JsonMapper.ToJson(save);<br>
+//创建StreamWriter,并将字符串写入文件<br>
+StreamWriter sw = new StreamWriter(filePath);<br>
+sw.Write(saveJsonMapper);<br>
+//关闭StreamWriter<br>
+sw.Close();</p>
+<pre><code>    UIManage.Instance.ShowMessage(&quot;保存成功&quot;);
+}
+
+private void LoadByJson()
+{
+    string filePath = Application.dataPath + &quot;/Savemaster&quot; + &quot;/ByJson.json&quot;;
+    if(File .Exists (filePath ))
+    {
+        //创建StreamReader，读取流
+        StreamReader sr = new StreamReader(filePath);
+        //读取流赋值给jsonStr，并关闭流
+        string jsonStr = sr.ReadToEnd();
+        sr.Close();
+        //将jsonStr转换为对象
+        Save save = JsonMapper.ToObject&lt;Save&gt;(jsonStr);
+        LoadDate(save);
+        UIPanle.Instance.OnStartButtonDown();
+    }
+    else
+    {
+        UIManage.Instance.ShowMessage(&quot;无存档记录&quot;);
+    }
+}</code></pre>
 
               </div>
               <div class="toc-container">
@@ -134,9 +181,9 @@ this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/di-yi-ren-cheng-jing-tou-xuan-zhuan/">
+            <a href="https://Wei715547.github.io/post/jing-tai/">
               <h3 class="post-title">
-                第一人称镜头旋转
+                静态
               </h3>
             </a>
           </div>

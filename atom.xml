@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-01T09:35:22.888Z</updated>
+    <updated>2020-05-05T10:22:33.892Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,89 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[数据存储-序列化/反序列化]]></title>
+        <id>https://Wei715547.github.io/post/shu-ju-cun-chu-xu-lie-hua-fan-xu-lie-hua/</id>
+        <link href="https://Wei715547.github.io/post/shu-ju-cun-chu-xu-lie-hua-fan-xu-lie-hua/">
+        </link>
+        <updated>2020-05-05T10:16:03.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Runtime.Serialization.Formatters.Binary;<br>
+using System.IO;<br>
+//二进制<br>
+private void SaveByBin()<br>
+{<br>
+//要储存的类<br>
+Save save = SaveDate();<br>
+//创建二进制序列化程序<br>
+BinaryFormatter bf = new BinaryFormatter();<br>
+//创建文件流<br>
+FileStream filestream = File.Create(Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;);<br>
+//用二进制序列化程序的序列化方法来序列化Save类对象，参数（文件流，需要序列化的类对象）<br>
+bf.Serialize(filestream, save);<br>
+//关闭流<br>
+filestream.Close();<br>
+if (File .Exists (Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;))<br>
+{<br>
+UIManage.Instance . ShowMessage(&quot;保存成功&quot;);<br>
+}</p>
+<pre><code>}
+
+private void  LoadByBin()
+{
+    if (File.Exists(Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;))
+    {
+        Save save = new Save();
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream fs = File.Open(Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;, FileMode.Open);
+        save = (Save)bf.Deserialize(fs);
+        fs.Close();
+        LoadDate(save);
+        //UIManage.Instance.ShowMessage(&quot;加载成功&quot;);
+        UIPanle.Instance.OnStartButtonDown();
+    }
+    else
+        UIManage.Instance.ShowMessage(&quot;无存档记录&quot;);
+}
+</code></pre>
+<p>using LitJson;<br>
+//Json<br>
+private void SaveByJson()<br>
+{<br>
+Save save = SaveDate();<br>
+//路径<br>
+string filePath = Application.dataPath + &quot;/Savemaster&quot; + &quot;/ByJson.json&quot;;<br>
+//利用JsonMapper将save对象转换为Json字符串<br>
+string saveJsonMapper = JsonMapper.ToJson(save);<br>
+//创建StreamWriter,并将字符串写入文件<br>
+StreamWriter sw = new StreamWriter(filePath);<br>
+sw.Write(saveJsonMapper);<br>
+//关闭StreamWriter<br>
+sw.Close();</p>
+<pre><code>    UIManage.Instance.ShowMessage(&quot;保存成功&quot;);
+}
+
+private void LoadByJson()
+{
+    string filePath = Application.dataPath + &quot;/Savemaster&quot; + &quot;/ByJson.json&quot;;
+    if(File .Exists (filePath ))
+    {
+        //创建StreamReader，读取流
+        StreamReader sr = new StreamReader(filePath);
+        //读取流赋值给jsonStr，并关闭流
+        string jsonStr = sr.ReadToEnd();
+        sr.Close();
+        //将jsonStr转换为对象
+        Save save = JsonMapper.ToObject&lt;Save&gt;(jsonStr);
+        LoadDate(save);
+        UIPanle.Instance.OnStartButtonDown();
+    }
+    else
+    {
+        UIManage.Instance.ShowMessage(&quot;无存档记录&quot;);
+    }
+}</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[静态]]></title>
         <id>https://Wei715547.github.io/post/jing-tai/</id>
@@ -777,109 +860,6 @@ public void OnPointerClick(PointerEventData eventData)
 {
     if (eventData.clickCount == 2)
         Destroy (this .gameObject );
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[HP-Attack-Shell]]></title>
-        <id>https://Wei715547.github.io/post/hp-attack-shell/</id>
-        <link href="https://Wei715547.github.io/post/hp-attack-shell/">
-        </link>
-        <updated>2020-04-07T09:57:39.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.UI;<br>
-/// <summary><br>
-/// HP，HP受损方法<br>
-/// </summary><br>
-public class TankHealth : MonoBehaviour<br>
-{<br>
-public int hp = 100;<br>
-public GameObject tankExplosion;<br>
-public AudioClip tankExplositionAudio;<br>
-public Slider hpSlider;<br>
-private int hpTotal;<br>
-// Use this for initialization<br>
-void Start()<br>
-{<br>
-hpTotal = hp;<br>
-}</p>
-<pre><code>// Update is called once per frame
-void Update()
-{
-
-}
-void TankDamage()
-{
-    if (hp &lt;= 0) return;
-    hp -= Random.Range(10, 20);
-    hpSlider.value = (float)hp / hpTotal;
-    if (hp &lt;= 0)
-    {
-        AudioSource.PlayClipAtPoint(tankExplositionAudio, transform.position);
-        GameObject.Instantiate(tankExplosion, transform.position + Vector3.up, transform.rotation);
-        GameObject.Destroy(this.gameObject);
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// 按下攻击，发射子弹向FirePoint前方飞进<br>
-/// </summary><br>
-public class TankAttack : MonoBehaviour<br>
-{</p>
-<pre><code>public GameObject shellPrefab;
-public KeyCode fireKey = KeyCode.Space;
-private Transform firePosition;
-public float shellSpeed = 10;
-public AudioClip shoutAudio;
-// Use this for initialization
-void Start()
-{
-    firePosition = transform.Find(&quot;FirePosition&quot;);
-}
-
-// Update is called once per frame
-void Update()
-{
-    if (Input.GetKeyDown(fireKey))
-    {
-        AudioSource.PlayClipAtPoint(shoutAudio, transform.position);
-        GameObject go = GameObject.Instantiate(shellPrefab, firePosition.position, firePosition.rotation)as GameObject;
-        go.GetComponent&lt;Rigidbody&gt;().velocity = go.transform.forward * shellSpeed;
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// 子弹出发检测，（两物体都有触发器，其中一个有刚体组件，其中一个触发器勾选Is Tirgger）<br>
-///打中目标，调用目标受损方法<br>
-/// </summary><br>
-public class Shell : MonoBehaviour<br>
-{</p>
-<pre><code>public GameObject shellExplosionPrefab;
-public  AudioClip shellExplosionAudio;
-
-
-public void OnTriggerEnter(Collider collider)
-{
-    AudioSource.PlayClipAtPoint(shellExplosionAudio,transform.position);
-    GameObject.Instantiate(shellExplosionPrefab, transform.position, transform.rotation);
-    GameObject.Destroy(this.gameObject);
-    if (collider.tag == &quot;Tank&quot;)
-    {
-        collider.SendMessage(&quot;TankDamage&quot;);
-    }
-
 }
 </code></pre>
 <p>}</p>
