@@ -2,21 +2,25 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>向量API | Weiwei的个人网站</title>
+<title>接口-简单案例 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1588766560161">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="向量API | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="接口-简单案例 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
+    <meta name="description" content="using System;
 using System.Collections.Generic;
-using UnityEngine;
-public class VectorAPI : MonoBehaviour
+using System.Text;
+namespace 接口
 {
-..." />
+class UDisk : IUSB
+{
+/// 
+/// 存储内容
+///..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,11 +83,11 @@ public class VectorAPI : MonoBehaviour
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              向量API
+              接口-简单案例
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-06
               </span>
               <span>
                 1 min read
@@ -93,31 +97,87 @@ public class VectorAPI : MonoBehaviour
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
+                <p>using System;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class VectorAPI : MonoBehaviour<br>
+using System.Text;</p>
+<p>namespace 接口<br>
 {<br>
-public AnimationCurve cuver;<br>
-private float x;<br>
-public  float psTime=3;<br>
-private Vector3 targetPoint = new Vector3 (0, 0, 10);<br>
-private void OnGUI()<br>
+class UDisk : IUSB<br>
 {<br>
-if (GUILayout.RepeatButton (&quot;Move&quot;))<br>
-{<br>
-//将物体移动至（0，0,10）<br>
-//匀速移动<br>
-this.transform.position = Vector3.MoveTowards(this.transform.position,targetPoint , 2);<br>
-//先快后慢--终点与比例固定<br>
-this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2 );</p>
-<pre><code>    }
-    if (GUILayout.RepeatButton(&quot;Lerp&quot;))
+/// <summary><br>
+/// 存储内容<br>
+/// </summary><br>
+private string content;</p>
+<pre><code>    public void Read()
     {
-        x += Time.deltaTime/psTime ;
-        //自然变化，起点，终点固定，比例根据曲线变化
-        this.transform.position =
-            Vector3.LerpUnclamped (Vector3.zero, targetPoint, cuver.Evaluate(x));
+        Console.WriteLine(content);
+    }
+
+    public void Write(string s)
+    {
+        content = s;
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 接口<br>
+{<br>
+class UDisk : IUSB<br>
+{<br>
+/// <summary><br>
+/// 存储内容<br>
+/// </summary><br>
+private string content;</p>
+<pre><code>    public void Read()
+    {
+        Console.WriteLine(content);
+    }
+
+    public void Write(string s)
+    {
+        content = s;
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 接口<br>
+{<br>
+class HardDisk:IUSB<br>
+{<br>
+private string content;</p>
+<pre><code>    public void Read()
+    {
+        Console.WriteLine(content);
+    }
+
+    public void Write(string s)
+    {
+        content = s;
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//程序<br>
+using System;</p>
+<p>namespace 接口<br>
+{</p>
+<pre><code>class Program
+{
+    static void Main(string[] args)
+    {
+        UDisk u1 = new UDisk();
+        u1.Write(&quot;Wei的U盘&quot;);
+        u1.Read();
+
+        HardDisk h = new HardDisk();
+        h.Write(&quot;Wei的硬盘&quot;);
+        h.Read();
     }
 }
 </code></pre>
@@ -134,9 +194,9 @@ this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/di-yi-ren-cheng-jing-tou-xuan-zhuan/">
+            <a href="https://Wei715547.github.io/post/duo-tai-3jie-kou-duo-ji-cheng-jie-kou-ti-gong-te-shu-gong-neng/">
               <h3 class="post-title">
-                第一人称镜头旋转
+                多态（3）接口（多继承接口，提供“大量”特殊功能）
               </h3>
             </a>
           </div>

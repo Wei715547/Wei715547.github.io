@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-05T10:22:33.892Z</updated>
+    <updated>2020-05-06T12:02:52.512Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,507 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[接口-简单案例]]></title>
+        <id>https://Wei715547.github.io/post/jie-kou-jian-dan-an-li/</id>
+        <link href="https://Wei715547.github.io/post/jie-kou-jian-dan-an-li/">
+        </link>
+        <updated>2020-05-06T12:01:05.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 接口<br>
+{<br>
+class UDisk : IUSB<br>
+{<br>
+/// <summary><br>
+/// 存储内容<br>
+/// </summary><br>
+private string content;</p>
+<pre><code>    public void Read()
+    {
+        Console.WriteLine(content);
+    }
+
+    public void Write(string s)
+    {
+        content = s;
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 接口<br>
+{<br>
+class UDisk : IUSB<br>
+{<br>
+/// <summary><br>
+/// 存储内容<br>
+/// </summary><br>
+private string content;</p>
+<pre><code>    public void Read()
+    {
+        Console.WriteLine(content);
+    }
+
+    public void Write(string s)
+    {
+        content = s;
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 接口<br>
+{<br>
+class HardDisk:IUSB<br>
+{<br>
+private string content;</p>
+<pre><code>    public void Read()
+    {
+        Console.WriteLine(content);
+    }
+
+    public void Write(string s)
+    {
+        content = s;
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//程序<br>
+using System;</p>
+<p>namespace 接口<br>
+{</p>
+<pre><code>class Program
+{
+    static void Main(string[] args)
+    {
+        UDisk u1 = new UDisk();
+        u1.Write(&quot;Wei的U盘&quot;);
+        u1.Read();
+
+        HardDisk h = new HardDisk();
+        h.Write(&quot;Wei的硬盘&quot;);
+        h.Read();
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[多态（3）接口（多继承接口，提供“大量”特殊功能）]]></title>
+        <id>https://Wei715547.github.io/post/duo-tai-3jie-kou-duo-ji-cheng-jie-kou-ti-gong-te-shu-gong-neng/</id>
+        <link href="https://Wei715547.github.io/post/duo-tai-3jie-kou-duo-ji-cheng-jie-kou-ti-gong-te-shu-gong-neng/">
+        </link>
+        <updated>2020-05-06T11:54:33.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 接口<br>
+{<br>
+//Interface 没有class关键字 一般使用&quot;IXxxx&quot;命名书写</p>
+<pre><code>/// &lt;summary&gt;
+/// 注意事项
+/// 1.接口中所有方法都是抽象方法，所有接口不能被实例化
+/// 2.一个类可以实现多个接口，被实现的接口之间用”逗号，“隔开
+/// 3.一个接口可以继承多个接口（类只能单继承），接口之间也用逗号分隔
+/// &lt;/summary&gt;
+
+interface IFly
+{
+    //接口中不能包含“字段”
+    //private string s;
+
+    //但可以包含属性--(自动属性）
+    //public string Id { get; set; }
+    //string Id { get; set; }
+
+    //接口中的方法不能有“方法体”，全部都是抽象方法，但不需要abstract修饰。
+    void Fly();
+
+    //public void Hello();
+    //接口中的成员不允许添加访问修饰符，默认全是public。
+
+
+
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 接口<br>
+{<br>
+class Car<br>
+{<br>
+private string brand;</p>
+<pre><code>    public string Brand
+    {
+        get { return brand; }
+        set { brand = value; }
+    }
+
+    /*public Car()
+    {
+
+    }*/
+
+    public Car (string brand)
+    {
+        this.brand = brand;
+    }
+
+    public void Run()
+    {
+        Console.WriteLine(&quot;{0}品牌的汽车在奔跑&quot;, brand );
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 接口<br>
+{</p>
+<pre><code>class Batmobile:Car ,IFly   //接口（为子类提供父类没有的“附加功能”。
+{
+    public Batmobile(string brand) : base(brand)
+    {
+
+    }
+
+    public void Fly()
+    {
+        Console.WriteLine(&quot;{0}正在飞行&quot;, base.Brand);
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//程序<br>
+using System;</p>
+<p>namespace 接口<br>
+{</p>
+<pre><code>class Program
+{
+    static void Main(string[] args)
+    {
+        BMWCar c1 = new BMWCar(&quot;750&quot;);
+        c1.Run();
+
+        Batmobile bat = new Batmobile(&quot;BatMan&quot;);
+        bat.Run();
+        bat.Fly();
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[多态（2）抽象类（在子类中复写所继承的抽象类中的抽象方法）]]></title>
+        <id>https://Wei715547.github.io/post/duo-tai-2chou-xiang-lei-zai-zi-lei-zhong-fu-xie-suo-ji-cheng-de-chou-xiang-lei-zhong-de-chou-xiang-fang-fa/</id>
+        <link href="https://Wei715547.github.io/post/duo-tai-2chou-xiang-lei-zai-zi-lei-zhong-fu-xie-suo-ji-cheng-de-chou-xiang-lei-zhong-de-chou-xiang-fang-fa/">
+        </link>
+        <updated>2020-05-06T11:44:13.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 抽象类应用<br>
+{<br>
+/// <summary><br>
+/// NPC类型枚举<br>
+/// </summary><br>
+public enum NPCType<br>
+{<br>
+Task,<br>
+Shop,<br>
+Fod<br>
+}<br>
+/// <summary><br>
+/// 定义一个抽象类<br>
+/// </summary><br>
+/// 抽象类不能被实例化，因为抽象类中有抽象方法（无方法体），<br>
+/// 如果真能实例化抽象对象，调用这些方法体的方法无任何意义。<br>
+abstract class NPCs<br>
+{<br>
+private string name;<br>
+private NPCType type;</p>
+<pre><code>    public string Name { get { return name; } set { name = value; } }
+    public NPCType  Type { get { return type ; } set { type  = value; } }
+
+    public NPCs (string name ,NPCType type)
+    {
+        Name = name;
+        Type = type;
+    }
+
+    /// 抽象类中不一定要有抽象方法，但抽象方法必须要定义在抽象类中
+    /// 抽象方法的方法体为空
+    public abstract void Speek();
+    
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 抽象类应用<br>
+{<br>
+class TaskNPC : NPCs<br>
+{<br>
+private string taskInfo;</p>
+<pre><code>    public TaskNPC (string taskInfo,string name,NPCType type)
+        :base (name ,type )
+    {
+        this.taskInfo = taskInfo;
+    }
+
+    //继承抽象类，“必须”实现抽象类中的抽象方法。否则程序无法运行。
+    public override void Speek()
+    {
+        Console .WriteLine (&quot;NPC:{0},任务：{1}&quot; ,Name,taskInfo );
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 抽象类应用<br>
+{<br>
+class ShopNPC : NPCs<br>
+{<br>
+private string item;</p>
+<pre><code>    public ShopNPC (string item, string name, NPCType type)
+       : base(name, type)
+    {
+        this.item  = item ;
+    }
+
+    public override void Speek()
+    {
+        Console.WriteLine(&quot;NPC:{0},贩卖{1}产品&quot;, base.Name, item);
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//程序实现<br>
+using System;</p>
+<p>namespace 抽象类应用<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+//NPCs n = new NPCs(&quot;灰太狼&quot;, NPCType.Shop);//抽象类不能被实例化，</p>
+<pre><code>        TaskNPC t1 = new TaskNPC(&quot;让你去挖大头菜&quot;,&quot;老八&quot;, NPCType.Task);
+        t1.Speek();
+
+        ShopNPC s1 = new ShopNPC(&quot;喜洋洋&quot;, &quot;灰太狼&quot;, NPCType.Shop);
+        s1.Speek();   
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[多态（1）虚函数(复写所继承类中的虚方法）]]></title>
+        <id>https://Wei715547.github.io/post/duo-tai-1xu-han-shu/</id>
+        <link href="https://Wei715547.github.io/post/duo-tai-1xu-han-shu/">
+        </link>
+        <updated>2020-05-06T11:28:12.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 多态<br>
+{<br>
+class TrafficTool<br>
+{<br>
+public virtual void Run()<br>
+{<br>
+Console.WriteLine(&quot;启动&quot;);<br>
+}<br>
+public virtual void Stop()<br>
+{<br>
+Console.WriteLine(&quot;停止&quot;);<br>
+}</p>
+<pre><code>    public void Break()
+    {
+        Console.WriteLine(&quot;抛锚&quot;);
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 多态<br>
+{<br>
+class Car:TrafficTool<br>
+{<br>
+public override void Run()<br>
+{<br>
+base.Run();<br>
+Console.WriteLine(&quot;汽车启动&quot;);</p>
+<pre><code>    }
+
+    public override void Stop()
+    {
+        base.Stop();
+        Console.WriteLine(&quot;汽车停下&quot;);
+    }
+    public void Break()
+    {
+        Console.WriteLine(&quot;刹车&quot;);
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 多态<br>
+{<br>
+class AipPlan:TrafficTool<br>
+{<br>
+public override void Run()<br>
+{<br>
+base.Run();<br>
+Console.WriteLine(&quot;飞机启动&quot;);</p>
+<pre><code>    }
+
+    public override void Stop()
+    {
+        base.Stop();
+        Console.WriteLine(&quot;飞机停下&quot;);
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//程序实现<br>
+using System;</p>
+<p>namespace 多态<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+/*Car s = new Car();<br>
+AipPlan a = new AipPlan();<br>
+Driver d1 = new Driver();<br>
+d1.Drive(s);</p>
+<pre><code>        d1.Drive(a);*/
+
+        TrafficTool t3 = new Car();
+        TrafficTool t4 = new AipPlan();
+        //基于“虚方法”的多态
+        t3.Run();//启动汽车启动
+        t4.Run();//启动飞机启动
+
+        //里式转换
+        TrafficTool t1 = new TrafficTool();
+        TrafficTool t2 = new Car();//父类引用指向子类对象，
+        t1.Break();//父类方法
+        t2.Break();//父类方法
+
+        //父类需要调用子类方法时，将父类转为子类（
+        //父类引用指向子类对象时才能够转换）
+        //ar c1 = (Car )t2;//强转
+        bool r = t2 is Car;//可以转换返回真/不能转返回假
+        Car c1 = t2 as Car;//可以转返回子类对象/不能转返回Null
+
+        t1.Break();//父类方法
+        c1.Break();//子类方法
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[C#基础-类/结构]]></title>
+        <id>https://Wei715547.github.io/post/cji-chu-lei-jie-gou/</id>
+        <link href="https://Wei715547.github.io/post/cji-chu-lei-jie-gou/">
+        </link>
+        <updated>2020-05-06T11:20:46.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 类_对象<br>
+{<br>
+class Person<br>
+{<br>
+//字段<br>
+private  string   name;//外部都可访问</p>
+<pre><code>    /*private int age;//本身内可以访问
+    protected bool sx;//本身/子类可以访问*/
+    
+    //手写属性------保护字段
+    public string Name
+    {               //属性实质---两个方法-对字段进行读取写入
+        get
+        { return name; }
+        set
+        { this.name = value ; }
+    }
+    //手写属性-两个“方法”的特殊封装
+
+
+    //自动属性------同时创建字段与属性（C#编译器字段提供一个对应的字段）
+    public int Ft { get; set; }
+    private int Age { get; set; }
+    protected bool Sx{get ;set;}
+
+
+    //构建函数 创建类的方法（类被加载时调用）  可重载        
+    public Person () //public确保类在外部可被创建
+    {
+        Name = &quot;人&quot;;
+        Ft = 2333;
+        Age = 18;
+        Sx = true;
+    }
+
+
+    //方法
+    public virtual void Say()
+    {
+        Console.WriteLine(&quot;A person&quot; );
+    }
+
+    protected  void Ag()
+    {
+        Console.WriteLine(&quot;Ag&quot;+Age  );
+    }
+    public void Solid()
+    {
+        Console.WriteLine(&quot;Im&quot; + Ft + name);
+    }
+
+    private int  Core()
+    {
+        return 1;
+
+    }
+
+    //析构方法--对应构建方法（创建类），用于GC回收类。
+    /*~Person ()
+    {
+
+    }*/
+
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[数据存储-序列化/反序列化]]></title>
         <id>https://Wei715547.github.io/post/shu-ju-cun-chu-xu-lie-hua-fan-xu-lie-hua/</id>
@@ -402,464 +903,6 @@ diamondCount = 10;</p>
 <pre><code>    data = new GameDate();//初始化时读取
 
     Save();
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[EvenCenter(监听/移除监听/广播）]]></title>
-        <id>https://Wei715547.github.io/post/evencenterjian-ting-yi-chu-jian-ting-guang-bo/</id>
-        <link href="https://Wei715547.github.io/post/evencenterjian-ting-yi-chu-jian-ting-guang-bo/">
-        </link>
-        <updated>2020-04-21T04:27:13.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class EventCenter<br>
-{<br>
-private static Dictionary&lt;EventDefine, Delegate&gt; m_EventTable = new Dictionary&lt;EventDefine, Delegate&gt;();</p>
-<pre><code>private static void OnListenerAdding(EventDefine eventType, Delegate callBack)
-{
-    if (!m_EventTable.ContainsKey(eventType))
-    {
-        m_EventTable.Add(eventType, null);
-    }
-    Delegate d = m_EventTable[eventType];
-    if (d != null &amp;&amp; d.GetType() != callBack.GetType())
-    {
-        throw new Exception(string.Format(&quot;尝试为事件{0}添加不同类型的委托，当前事件所对应的委托是{1}，要添加的委托类型为{2}&quot;, eventType, d.GetType(), callBack.GetType()));
-    }
-}
-private static void OnListenerRemoving(EventDefine eventType, Delegate callBack)
-{
-    if (m_EventTable.ContainsKey(eventType))
-    {
-        Delegate d = m_EventTable[eventType];
-        if (d == null)
-        {
-            throw new Exception(string.Format(&quot;移除监听错误：事件{0}没有对应的委托&quot;, eventType));
-        }
-        else if (d.GetType() != callBack.GetType())
-        {
-            throw new Exception(string.Format(&quot;移除监听错误：尝试为事件{0}移除不同类型的委托，当前委托类型为{1}，要移除的委托类型为{2}&quot;, eventType, d.GetType(), callBack.GetType()));
-        }
-    }
-    else
-    {
-        throw new Exception(string.Format(&quot;移除监听错误：没有事件码{0}&quot;, eventType));
-    }
-}
-private static void OnListenerRemoved(EventDefine eventType)
-{
-    if (m_EventTable[eventType] == null)
-    {
-        m_EventTable.Remove(eventType);
-    }
-}
-//no parameters
-public static void AddListener(EventDefine eventType, CallBack callBack)
-{
-    OnListenerAdding(eventType, callBack);
-    m_EventTable[eventType] = (CallBack)m_EventTable[eventType] + callBack;
-}
-//Single parameters
-public static void AddListener&lt;T&gt;(EventDefine eventType, CallBack&lt;T&gt; callBack)
-{
-    OnListenerAdding(eventType, callBack);
-    m_EventTable[eventType] = (CallBack&lt;T&gt;)m_EventTable[eventType] + callBack;
-}
-//two parameters
-public static void AddListener&lt;T, X&gt;(EventDefine eventType, CallBack&lt;T, X&gt; callBack)
-{
-    OnListenerAdding(eventType, callBack);
-    m_EventTable[eventType] = (CallBack&lt;T, X&gt;)m_EventTable[eventType] + callBack;
-}
-//three parameters
-public static void AddListener&lt;T, X, Y&gt;(EventDefine eventType, CallBack&lt;T, X, Y&gt; callBack)
-{
-    OnListenerAdding(eventType, callBack);
-    m_EventTable[eventType] = (CallBack&lt;T, X, Y&gt;)m_EventTable[eventType] + callBack;
-}
-//four parameters
-public static void AddListener&lt;T, X, Y, Z&gt;(EventDefine eventType, CallBack&lt;T, X, Y, Z&gt; callBack)
-{
-    OnListenerAdding(eventType, callBack);
-    m_EventTable[eventType] = (CallBack&lt;T, X, Y, Z&gt;)m_EventTable[eventType] + callBack;
-}
-//five parameters
-public static void AddListener&lt;T, X, Y, Z, W&gt;(EventDefine eventType, CallBack&lt;T, X, Y, Z, W&gt; callBack)
-{
-    OnListenerAdding(eventType, callBack);
-    m_EventTable[eventType] = (CallBack&lt;T, X, Y, Z, W&gt;)m_EventTable[eventType] + callBack;
-}
-
-//no parameters
-public static void RemoveListener(EventDefine eventType, CallBack callBack)
-{
-    OnListenerRemoving(eventType, callBack);
-    m_EventTable[eventType] = (CallBack)m_EventTable[eventType] - callBack;
-    OnListenerRemoved(eventType);
-}
-//single parameters
-public static void RemoveListener&lt;T&gt;(EventDefine eventType, CallBack&lt;T&gt; callBack)
-{
-    OnListenerRemoving(eventType, callBack);
-    m_EventTable[eventType] = (CallBack&lt;T&gt;)m_EventTable[eventType] - callBack;
-    OnListenerRemoved(eventType);
-}
-//two parameters
-public static void RemoveListener&lt;T, X&gt;(EventDefine eventType, CallBack&lt;T, X&gt; callBack)
-{
-    OnListenerRemoving(eventType, callBack);
-    m_EventTable[eventType] = (CallBack&lt;T, X&gt;)m_EventTable[eventType] - callBack;
-    OnListenerRemoved(eventType);
-}
-//three parameters
-public static void RemoveListener&lt;T, X, Y&gt;(EventDefine eventType, CallBack&lt;T, X, Y&gt; callBack)
-{
-    OnListenerRemoving(eventType, callBack);
-    m_EventTable[eventType] = (CallBack&lt;T, X, Y&gt;)m_EventTable[eventType] - callBack;
-    OnListenerRemoved(eventType);
-}
-//four parameters
-public static void RemoveListener&lt;T, X, Y, Z&gt;(EventDefine eventType, CallBack&lt;T, X, Y, Z&gt; callBack)
-{
-    OnListenerRemoving(eventType, callBack);
-    m_EventTable[eventType] = (CallBack&lt;T, X, Y, Z&gt;)m_EventTable[eventType] - callBack;
-    OnListenerRemoved(eventType);
-}
-//five parameters
-public static void RemoveListener&lt;T, X, Y, Z, W&gt;(EventDefine eventType, CallBack&lt;T, X, Y, Z, W&gt; callBack)
-{
-    OnListenerRemoving(eventType, callBack);
-    m_EventTable[eventType] = (CallBack&lt;T, X, Y, Z, W&gt;)m_EventTable[eventType] - callBack;
-    OnListenerRemoved(eventType);
-}
-
-
-//no parameters
-public static void Broadcast(EventDefine eventType)
-{
-    Delegate d;
-    if (m_EventTable.TryGetValue(eventType, out d))
-    {
-        CallBack callBack = d as CallBack;
-        if (callBack != null)
-        {
-            callBack();
-        }
-        else
-        {
-            throw new Exception(string.Format(&quot;广播事件错误：事件{0}对应委托具有不同的类型&quot;, eventType));
-        }
-    }
-}
-//single parameters
-public static void Broadcast&lt;T&gt;(EventDefine eventType, T arg)
-{
-    Delegate d;
-    if (m_EventTable.TryGetValue(eventType, out d))
-    {
-        CallBack&lt;T&gt; callBack = d as CallBack&lt;T&gt;;
-        if (callBack != null)
-        {
-            callBack(arg);
-        }
-        else
-        {
-            throw new Exception(string.Format(&quot;广播事件错误：事件{0}对应委托具有不同的类型&quot;, eventType));
-        }
-    }
-}
-//two parameters
-public static void Broadcast&lt;T, X&gt;(EventDefine eventType, T arg1, X arg2)
-{
-    Delegate d;
-    if (m_EventTable.TryGetValue(eventType, out d))
-    {
-        CallBack&lt;T, X&gt; callBack = d as CallBack&lt;T, X&gt;;
-        if (callBack != null)
-        {
-            callBack(arg1, arg2);
-        }
-        else
-        {
-            throw new Exception(string.Format(&quot;广播事件错误：事件{0}对应委托具有不同的类型&quot;, eventType));
-        }
-    }
-}
-//three parameters
-public static void Broadcast&lt;T, X, Y&gt;(EventDefine eventType, T arg1, X arg2, Y arg3)
-{
-    Delegate d;
-    if (m_EventTable.TryGetValue(eventType, out d))
-    {
-        CallBack&lt;T, X, Y&gt; callBack = d as CallBack&lt;T, X, Y&gt;;
-        if (callBack != null)
-        {
-            callBack(arg1, arg2, arg3);
-        }
-        else
-        {
-            throw new Exception(string.Format(&quot;广播事件错误：事件{0}对应委托具有不同的类型&quot;, eventType));
-        }
-    }
-}
-//four parameters
-public static void Broadcast&lt;T, X, Y, Z&gt;(EventDefine eventType, T arg1, X arg2, Y arg3, Z arg4)
-{
-    Delegate d;
-    if (m_EventTable.TryGetValue(eventType, out d))
-    {
-        CallBack&lt;T, X, Y, Z&gt; callBack = d as CallBack&lt;T, X, Y, Z&gt;;
-        if (callBack != null)
-        {
-            callBack(arg1, arg2, arg3, arg4);
-        }
-        else
-        {
-            throw new Exception(string.Format(&quot;广播事件错误：事件{0}对应委托具有不同的类型&quot;, eventType));
-        }
-    }
-}
-//five parameters
-public static void Broadcast&lt;T, X, Y, Z, W&gt;(EventDefine eventType, T arg1, X arg2, Y arg3, Z arg4, W arg5)
-{
-    Delegate d;
-    if (m_EventTable.TryGetValue(eventType, out d))
-    {
-        CallBack&lt;T, X, Y, Z, W&gt; callBack = d as CallBack&lt;T, X, Y, Z, W&gt;;
-        if (callBack != null)
-        {
-            callBack(arg1, arg2, arg3, arg4, arg5);
-        }
-        else
-        {
-            throw new Exception(string.Format(&quot;广播事件错误：事件{0}对应委托具有不同的类型&quot;, eventType));
-        }
-    }
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[创建资源类]]></title>
-        <id>https://Wei715547.github.io/post/chuang-jian-zi-yuan-lei/</id>
-        <link href="https://Wei715547.github.io/post/chuang-jian-zi-yuan-lei/">
-        </link>
-        <updated>2020-04-15T12:34:57.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>//[CreateAssetMenu (menuName = &quot;CreatManagerVarsContainer&quot;)]<br>
-public class ManagerVars : ScriptableObject<br>
-{<br>
-public static ManagerVars GetManagerVars()<br>
-{<br>
-return Resources.Load<ManagerVars>(&quot;ManageVarContain&quot;);<br>
-}<br>
-public List<Sprite> BGThemSpriteList = new List<Sprite>();<br>
-public GameObject noamlPlatform;<br>
-public GameObject characterPre;<br>
-public float nettXPos = 0.554f, nextYPos = 0.645f;<br>
-}</p>
-<p>调用方法<br>
-private ManagerVars vars;<br>
-private void Start()<br>
-{<br>
-vars = ManagerVars.GetManagerVars();<br>
-}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[碰撞，触发]]></title>
-        <id>https://Wei715547.github.io/post/peng-zhuang-hong-fa/</id>
-        <link href="https://Wei715547.github.io/post/peng-zhuang-hong-fa/">
-        </link>
-        <updated>2020-04-13T04:29:47.000Z</updated>
-        <content type="html"><![CDATA[<pre><code>//都有碰撞器组件
-//运动的物体有刚体组件
-private void OnCollisionEnter(Collision other )
-{
-    print(other.collider.name);
-    
-}
-
-
-//都有碰撞器组件
-//其中一个勾选IsTriggger
-//其中一个有刚体组件
-private void OnTriggerEnter(Collider other)//触发开始执行 other碰撞到的物体
-{
-    
-    float a = other.GetComponent&lt;Enemy&gt;().Hp;
-    print(other.name+a);
-    other.GetComponent&lt;Enemy&gt;().Hp -= Random .Range (5,10);
-    print(other.name + other.GetComponent&lt;Enemy&gt;().Hp);
-    
-}
-
-private void OnTriggerStay(Collider other)//触发后每帧执行
-{
-    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.red;
-    if (other.GetComponent&lt;Enemy&gt;().Hp &lt;= 0)
-        Destroy(other.gameObject);
-}
-
-private void OnTriggerExit(Collider other)//触发结束时执行
-{
-    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.white;
-}</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[2D Jump]]></title>
-        <id>https://Wei715547.github.io/post/2d-jump/</id>
-        <link href="https://Wei715547.github.io/post/2d-jump/">
-        </link>
-        <updated>2020-04-12T05:00:07.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class JumpBox : MonoBehaviour<br>
-{<br>
-[Range(0, 10)] public float jumpVelocity = 5f;<br>
-public LayerMask mask;<br>
-public float boxHeight;<br>
-private Vector2 playerSize;<br>
-private Vector2 boxSize;<br>
-private bool jumpRequest;<br>
-private bool grounded;<br>
-public float fallMultiplier = 2.5f;<br>
-public float LowJumpMultiplier = 2f;<br>
-private Rigidbody2D _rigidbody2D;</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
-    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
-    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight);
-
-}
-
-// Update is called once per frame
-void Update()
-{
-    if (Input.GetButtonDown(&quot;Jump&quot;) &amp;&amp; grounded)
-    {
-        jumpRequest = true;
-    }
-}
-private void FixedUpdate()
-{
-    //自然重力
-    Gud();
-
-    if (jumpRequest)
-    {
-        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
-        jumpRequest = false;
-        grounded = false;
-    }
-    else
-    {
-        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
-        if (Physics2D.OverlapBox(boxCenter, boxSize, 0, mask) != null)
-        {
-            grounded = true;
-        }
-        else
-        {
-            grounded = false;
-        }
-    }
-}
-
-private void Gud()
-{
-    if (_rigidbody2D.velocity.y &lt; 0)
-    {
-        _rigidbody2D.gravityScale = fallMultiplier;
-    }
-    else if (_rigidbody2D.velocity.y &gt; 0 &amp;&amp; !Input.GetButton(&quot;Jump&quot;))
-    {
-        _rigidbody2D.gravityScale = LowJumpMultiplier;
-    }
-    else
-    {
-        _rigidbody2D.gravityScale = 1f;
-    }
-}
-
-private void OnDrawGizmos()
-{
-    if (grounded)
-    {
-        Gizmos.color = Color.red;
-    }
-    else
-    {
-        Gizmos.color = Color.green;
-    }
-
-    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
-    Gizmos.DrawWireCube(boxCenter, boxSize);
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[EventSystems]]></title>
-        <id>https://Wei715547.github.io/post/eventsystems/</id>
-        <link href="https://Wei715547.github.io/post/eventsystems/">
-        </link>
-        <updated>2020-04-12T04:17:55.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.EventSystems;<br>
-public class DIalogDrag : MonoBehaviour, IPointerDownHandler,IDragHandler,IPointerClickHandler<br>
-{<br>
-private RectTransform parentRTF;<br>
-private void Start()<br>
-{<br>
-//设置UI长宽<br>
-RectTransform rtf = GetComponent<RectTransform>();<br>
-rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 700);<br>
-rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 400);</p>
-<pre><code>    parentRTF = this.transform.parent as RectTransform;
-}
-private Vector3 siftVector;
-//按下时执行
-public void OnPointerDown(PointerEventData eventData)
-{
-    //记录按下点到中心点偏移量
-
-    Vector3 wordPoint;
-    //屏幕坐标--&gt;世界坐标
-    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
-    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
-    siftVector = this.transform.position - wordPoint;
-}
-//拖拽时执行
-public void OnDrag(PointerEventData eventData)
-{
-    Vector3 wordPoint;
-    //屏幕坐标--&gt;世界坐标
-    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
-    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
-    this.transform.position = wordPoint + siftVector ;
-    
-}
-
-public void OnPointerClick(PointerEventData eventData)
-{
-    if (eventData.clickCount == 2)
-        Destroy (this .gameObject );
 }
 </code></pre>
 <p>}</p>

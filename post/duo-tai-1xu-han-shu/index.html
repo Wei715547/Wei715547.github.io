@@ -2,21 +2,23 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>向量API | Weiwei的个人网站</title>
+<title>多态（1）虚函数(复写所继承类中的虚方法） | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1588766560161">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="向量API | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="多态（1）虚函数(复写所继承类中的虚方法） | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
+    <meta name="description" content="using System;
 using System.Collections.Generic;
-using UnityEngine;
-public class VectorAPI : MonoBehaviour
+using System.Text;
+namespace 多态
 {
-..." />
+class TrafficTool
+{
+public virtual voi..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,45 +81,122 @@ public class VectorAPI : MonoBehaviour
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              向量API
+              多态（1）虚函数(复写所继承类中的虚方法）
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-06
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
+                <p>using System;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class VectorAPI : MonoBehaviour<br>
+using System.Text;</p>
+<p>namespace 多态<br>
 {<br>
-public AnimationCurve cuver;<br>
-private float x;<br>
-public  float psTime=3;<br>
-private Vector3 targetPoint = new Vector3 (0, 0, 10);<br>
-private void OnGUI()<br>
+class TrafficTool<br>
 {<br>
-if (GUILayout.RepeatButton (&quot;Move&quot;))<br>
+public virtual void Run()<br>
 {<br>
-//将物体移动至（0，0,10）<br>
-//匀速移动<br>
-this.transform.position = Vector3.MoveTowards(this.transform.position,targetPoint , 2);<br>
-//先快后慢--终点与比例固定<br>
-this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2 );</p>
-<pre><code>    }
-    if (GUILayout.RepeatButton(&quot;Lerp&quot;))
+Console.WriteLine(&quot;启动&quot;);<br>
+}<br>
+public virtual void Stop()<br>
+{<br>
+Console.WriteLine(&quot;停止&quot;);<br>
+}</p>
+<pre><code>    public void Break()
     {
-        x += Time.deltaTime/psTime ;
-        //自然变化，起点，终点固定，比例根据曲线变化
-        this.transform.position =
-            Vector3.LerpUnclamped (Vector3.zero, targetPoint, cuver.Evaluate(x));
+        Console.WriteLine(&quot;抛锚&quot;);
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 多态<br>
+{<br>
+class Car:TrafficTool<br>
+{<br>
+public override void Run()<br>
+{<br>
+base.Run();<br>
+Console.WriteLine(&quot;汽车启动&quot;);</p>
+<pre><code>    }
+
+    public override void Stop()
+    {
+        base.Stop();
+        Console.WriteLine(&quot;汽车停下&quot;);
+    }
+    public void Break()
+    {
+        Console.WriteLine(&quot;刹车&quot;);
+    }
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 多态<br>
+{<br>
+class AipPlan:TrafficTool<br>
+{<br>
+public override void Run()<br>
+{<br>
+base.Run();<br>
+Console.WriteLine(&quot;飞机启动&quot;);</p>
+<pre><code>    }
+
+    public override void Stop()
+    {
+        base.Stop();
+        Console.WriteLine(&quot;飞机停下&quot;);
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//程序实现<br>
+using System;</p>
+<p>namespace 多态<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+/*Car s = new Car();<br>
+AipPlan a = new AipPlan();<br>
+Driver d1 = new Driver();<br>
+d1.Drive(s);</p>
+<pre><code>        d1.Drive(a);*/
+
+        TrafficTool t3 = new Car();
+        TrafficTool t4 = new AipPlan();
+        //基于“虚方法”的多态
+        t3.Run();//启动汽车启动
+        t4.Run();//启动飞机启动
+
+        //里式转换
+        TrafficTool t1 = new TrafficTool();
+        TrafficTool t2 = new Car();//父类引用指向子类对象，
+        t1.Break();//父类方法
+        t2.Break();//父类方法
+
+        //父类需要调用子类方法时，将父类转为子类（
+        //父类引用指向子类对象时才能够转换）
+        //ar c1 = (Car )t2;//强转
+        bool r = t2 is Car;//可以转换返回真/不能转返回假
+        Car c1 = t2 as Car;//可以转返回子类对象/不能转返回Null
+
+        t1.Break();//父类方法
+        c1.Break();//子类方法
     }
 }
 </code></pre>
@@ -134,9 +213,9 @@ this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/di-yi-ren-cheng-jing-tou-xuan-zhuan/">
+            <a href="https://Wei715547.github.io/post/cji-chu-lei-jie-gou/">
               <h3 class="post-title">
-                第一人称镜头旋转
+                C#基础-类/结构
               </h3>
             </a>
           </div>

@@ -2,21 +2,24 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>向量API | Weiwei的个人网站</title>
+<title>C#基础-类/结构 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1588766560161">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="向量API | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="C#基础-类/结构 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
+    <meta name="description" content="using System;
 using System.Collections.Generic;
-using UnityEngine;
-public class VectorAPI : MonoBehaviour
+using System.Text;
+namespace 类_对象
 {
-..." />
+class Person
+{
+//字段
+private  string ..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,46 +82,86 @@ public class VectorAPI : MonoBehaviour
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              向量API
+              C#基础-类/结构
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-06
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
+                <p>using System;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class VectorAPI : MonoBehaviour<br>
+using System.Text;</p>
+<p>namespace 类_对象<br>
 {<br>
-public AnimationCurve cuver;<br>
-private float x;<br>
-public  float psTime=3;<br>
-private Vector3 targetPoint = new Vector3 (0, 0, 10);<br>
-private void OnGUI()<br>
+class Person<br>
 {<br>
-if (GUILayout.RepeatButton (&quot;Move&quot;))<br>
-{<br>
-//将物体移动至（0，0,10）<br>
-//匀速移动<br>
-this.transform.position = Vector3.MoveTowards(this.transform.position,targetPoint , 2);<br>
-//先快后慢--终点与比例固定<br>
-this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2 );</p>
-<pre><code>    }
-    if (GUILayout.RepeatButton(&quot;Lerp&quot;))
-    {
-        x += Time.deltaTime/psTime ;
-        //自然变化，起点，终点固定，比例根据曲线变化
-        this.transform.position =
-            Vector3.LerpUnclamped (Vector3.zero, targetPoint, cuver.Evaluate(x));
+//字段<br>
+private  string   name;//外部都可访问</p>
+<pre><code>    /*private int age;//本身内可以访问
+    protected bool sx;//本身/子类可以访问*/
+    
+    //手写属性------保护字段
+    public string Name
+    {               //属性实质---两个方法-对字段进行读取写入
+        get
+        { return name; }
+        set
+        { this.name = value ; }
     }
+    //手写属性-两个“方法”的特殊封装
+
+
+    //自动属性------同时创建字段与属性（C#编译器字段提供一个对应的字段）
+    public int Ft { get; set; }
+    private int Age { get; set; }
+    protected bool Sx{get ;set;}
+
+
+    //构建函数 创建类的方法（类被加载时调用）  可重载        
+    public Person () //public确保类在外部可被创建
+    {
+        Name = &quot;人&quot;;
+        Ft = 2333;
+        Age = 18;
+        Sx = true;
+    }
+
+
+    //方法
+    public virtual void Say()
+    {
+        Console.WriteLine(&quot;A person&quot; );
+    }
+
+    protected  void Ag()
+    {
+        Console.WriteLine(&quot;Ag&quot;+Age  );
+    }
+    public void Solid()
+    {
+        Console.WriteLine(&quot;Im&quot; + Ft + name);
+    }
+
+    private int  Core()
+    {
+        return 1;
+
+    }
+
+    //析构方法--对应构建方法（创建类），用于GC回收类。
+    /*~Person ()
+    {
+
+    }*/
+
 }
 </code></pre>
 <p>}</p>
@@ -134,9 +177,9 @@ this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/di-yi-ren-cheng-jing-tou-xuan-zhuan/">
+            <a href="https://Wei715547.github.io/post/shu-ju-cun-chu-xu-lie-hua-fan-xu-lie-hua/">
               <h3 class="post-title">
-                第一人称镜头旋转
+                数据存储-序列化/反序列化
               </h3>
             </a>
           </div>
