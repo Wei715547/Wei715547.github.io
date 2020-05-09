@@ -2,21 +2,17 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>多态（3）接口（多继承接口，提供“大量”特殊功能） | Weiwei的个人网站</title>
+<title>Unity面试易考题 - C#相关 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589000920606">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="多态（3）接口（多继承接口，提供“大量”特殊功能） | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Unity面试易考题 - C#相关 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System;
-using System.Collections.Generic;
-using System.Text;
-namespace 接口
-{
-//Interface 没有class关键字 一般使用&quot;IXxxx..." />
+    <meta name="description" content="
+..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,121 +75,21 @@ namespace 接口
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              多态（3）接口（多继承接口，提供“大量”特殊功能）
+              Unity面试易考题 - C#相关
             </h2>
             <div class="post-info">
               <span>
-                2020-05-06
+                2020-05-09
               </span>
               <span>
-                2 min read
+                0 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
-{<br>
-//Interface 没有class关键字 一般使用&quot;IXxxx&quot;命名书写</p>
-<pre><code>/// &lt;summary&gt;
-/// 注意事项
-/// 1.接口中所有方法都是抽象方法，所有接口不能被实例化
-/// 2.一个类可以实现多个接口，被实现的接口之间用”逗号，“隔开
-/// 3.一个接口可以继承多个接口（类只能单继承），接口之间也用逗号分隔
-/// &lt;/summary&gt;
-
-interface IFly
-{
-    //接口中不能包含“字段”
-    //private string s;
-
-    //但可以包含属性--(自动属性）
-    //public string Id { get; set; }
-    //string Id { get; set; }
-
-    //接口中的方法不能有“方法体”，全部都是抽象方法，但不需要abstract修饰。
-    void Fly();
-
-    //public void Hello();
-    //接口中的成员不允许添加访问修饰符，默认全是public。
-
-
-
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
-{<br>
-class Car<br>
-{<br>
-private string brand;</p>
-<pre><code>    public string Brand
-    {
-        get { return brand; }
-        set { brand = value; }
-    }
-
-    /*public Car()
-    {
-
-    }*/
-
-    public Car (string brand)
-    {
-        this.brand = brand;
-    }
-
-    public void Run()
-    {
-        Console.WriteLine(&quot;{0}品牌的汽车在奔跑&quot;, brand );
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
-{</p>
-<pre><code>class Batmobile:Car ,IFly   //接口（为子类提供父类没有的“附加功能”。
-{
-    public Batmobile(string brand) : base(brand)
-    {
-
-    }
-
-    public void Fly()
-    {
-        Console.WriteLine(&quot;{0}正在飞行&quot;, base.Brand);
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//程序<br>
-using System;</p>
-<p>namespace 接口<br>
-{</p>
-<pre><code>class Program
-{
-    static void Main(string[] args)
-    {
-        BMWCar c1 = new BMWCar(&quot;750&quot;);
-        c1.Run();
-
-        Batmobile bat = new Batmobile(&quot;BatMan&quot;);
-        bat.Run();
-        bat.Fly();
-    }
-}
-</code></pre>
-<p>}</p>
+                <figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589000914635.jpg" alt="" loading="lazy"></figure>
 
               </div>
               <div class="toc-container">
@@ -206,9 +102,9 @@ using System;</p>
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/duo-tai-2chou-xiang-lei-zai-zi-lei-zhong-fu-xie-suo-ji-cheng-de-chou-xiang-lei-zhong-de-chou-xiang-fang-fa/">
+            <a href="https://Wei715547.github.io/post/ti-qu-gong-you-shu-xing-fang-fa/">
               <h3 class="post-title">
-                多态（2）抽象类（在子类中复写所继承的抽象类中的抽象方法）
+                提取共有属性/方法
               </h3>
             </a>
           </div>

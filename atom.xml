@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-06T12:02:52.512Z</updated>
+    <updated>2020-05-09T05:08:46.947Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,103 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[Unity面试易考题 - C#相关]]></title>
+        <id>https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-cxiang-guan/</id>
+        <link href="https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-cxiang-guan/">
+        </link>
+        <updated>2020-05-09T04:56:31.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589000914635.jpg" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[提取共有属性/方法]]></title>
+        <id>https://Wei715547.github.io/post/ti-qu-gong-you-shu-xing-fang-fa/</id>
+        <link href="https://Wei715547.github.io/post/ti-qu-gong-you-shu-xing-fang-fa/">
+        </link>
+        <updated>2020-05-08T14:42:30.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class Enemis : MonoBehaviour<br>
+{<br>
+protected Animator ani;<br>
+protected CircleCollider2D cl;<br>
+// Start is called before the first frame update<br>
+protected virtual void Start()<br>
+{<br>
+ani = GetComponent<Animator>();<br>
+cl = GetComponent<CircleCollider2D>();<br>
+}</p>
+<pre><code>public void Died()
+{
+    ani.SetTrigger(&quot;Died&quot;);
+    cl.enabled = false;
+}
+
+public void D()
+{
+    Destroy(gameObject);
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[刚体-Add-Force]]></title>
+        <id>https://Wei715547.github.io/post/gang-ti-add-force/</id>
+        <link href="https://Wei715547.github.io/post/gang-ti-add-force/">
+        </link>
+        <updated>2020-05-08T04:56:47.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class AddForce : MonoBehaviour<br>
+{<br>
+public ForceMode f;<br>
+private Rigidbody r;<br>
+public float Rtspeed = 1000;<br>
+private void OnMouseDown()<br>
+{<br>
+r.AddForce(Vector3 .right  * 500, f );//世界坐标系添加力，给世界方向 =&gt; 世界方向<br>
+//r.AddForce(transform .right * 500, f);//世界坐标系添加力，给自身方向 =&gt; 自身方向<br>
+//r.AddRelativeForce(Vector3.right * 500,f);//自身坐标系添加力，给世界方向 =&gt; 自身方向<br>
+//r.AddRelativeForce(transform .right * 500, f);//无效果的错误使用<br>
+r.useGravity = true;<br>
+}</p>
+<pre><code>// Start is called before the first frame update
+void Start()
+{
+    r = transform.GetComponent&lt;Rigidbody&gt;();
+}
+
+// Update is called once per frame
+void FixedUpdate()
+{
+    float h = Input.GetAxis(&quot;Horizontal&quot;);
+    float v = Input.GetAxis(&quot;Vertical&quot;);
+
+    r.AddTorque(transform.up * v*Rtspeed );
+    r.AddTorque(Vector3 .right * h*100);
+    
+    //使用刚体组件移动
+   if (Input.GetKey(KeyCode.Z))
+    {
+        //每帧移动固定距离
+        r.MovePosition(transform.position + Vector3 .left *0.2f);
+
+        //添加在方向上（自身/世界）添加固定加速度
+        //r.velocity = new Vector3(h*speed*Time.deltaTime,0 ,0);
+        //r.velocity = transform .forward  * 3;
+    }
+
+
+
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[接口-简单案例]]></title>
         <id>https://Wei715547.github.io/post/jie-kou-jian-dan-an-li/</id>
@@ -326,7 +423,8 @@ static void Main(string[] args)<br>
         <link href="https://Wei715547.github.io/post/duo-tai-1xu-han-shu/">
         </link>
         <updated>2020-05-06T11:28:12.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
+        <content type="html"><![CDATA[<p>//多态概念：在继承关系前提下，实例化出的不同对象，，这些对象调用相同的方法，但表现出不同的行为，就叫做多态。</p>
+<p>using System;<br>
 using System.Collections.Generic;<br>
 using System.Text;</p>
 <p>namespace 多态<br>
@@ -683,226 +781,6 @@ class Student : Person<br>
 
 
 
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[DoTweening完成后执行]]></title>
-        <id>https://Wei715547.github.io/post/dotweening-wan-cheng-hou-zhi-xing/</id>
-        <link href="https://Wei715547.github.io/post/dotweening-wan-cheng-hou-zhi-xing/">
-        </link>
-        <updated>2020-05-01T03:46:49.000Z</updated>
-        <content type="html"><![CDATA[<p>private void Close()<br>
-{<br>
-EventCenter.Broadcast(EventDefine.PlayBuyyonSound);<br>
-bg.GetComponent<Image>().DOColor(new Color(bg.GetComponent<Image>().color.r, bg.GetComponent<Image>().color.g, bg.GetComponent<Image>().color.b, 0), 0.3f);<br>
-rankt.transform.DOScale(Vector3.zero, 0.3f).OnComplete(() =&gt;<br>
-{<br>
-gameObject.SetActive(false);<br>
-});<br>
-}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[EventSystems，屏幕拖拽]]></title>
-        <id>https://Wei715547.github.io/post/eventsystemsping-mu-tuo-zhuai/</id>
-        <link href="https://Wei715547.github.io/post/eventsystemsping-mu-tuo-zhuai/">
-        </link>
-        <updated>2020-05-01T03:22:17.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.EventSystems;<br>
-public class DIalogDrag : MonoBehaviour, IPointerDownHandler,IDragHandler,IPointerClickHandler<br>
-{<br>
-private RectTransform parentRTF;<br>
-private void Start()<br>
-{<br>
-//设置UI长宽<br>
-RectTransform rtf = GetComponent<RectTransform>();<br>
-rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 700);<br>
-rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 400);</p>
-<pre><code>    parentRTF = this.transform.parent as RectTransform;
-}
-private Vector3 siftVector;
-//按下时执行
-public void OnPointerDown(PointerEventData eventData)
-{
-    //记录按下点到中心点偏移量
-
-    Vector3 wordPoint;
-    //屏幕坐标--&gt;世界坐标
-    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
-    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
-    siftVector = this.transform.position - wordPoint;
-}
-//拖拽时执行
-public void OnDrag(PointerEventData eventData)
-{
-    Vector3 wordPoint;
-    //屏幕坐标--&gt;世界坐标
-    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
-    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
-    this.transform.position = wordPoint + siftVector ;
-    
-}
-
-public void OnPointerClick(PointerEventData eventData)
-{
-    if (eventData.clickCount == 2)
-        Destroy (this .gameObject );
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[游戏数据类创建，储存、读取]]></title>
-        <id>https://Wei715547.github.io/post/you-xi-shu-ju-lei-chuang-jian-chu-cun-du-qu/</id>
-        <link href="https://Wei715547.github.io/post/you-xi-shu-ju-lei-chuang-jian-chu-cun-du-qu/">
-        </link>
-        <updated>2020-04-24T03:45:01.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>[System .Serializable]<br>
-public class GameDate<br>
-{<br>
-public  static bool IsAgainGame =false ;</p>
-<pre><code>private bool isFirstGame;
-private bool isMusicOn;
-
-private int[] bestScoreArr;
-
-private int selectSkin;
-private bool[] skinUnlocked;
-private int diamondCount;
-
-
-public void SetIsFirstGame(bool isFirstGame)
-{
-    this.isFirstGame = isFirstGame;
-}
-
-public void SetMusicOn(bool isMusicOn)
-{
-    this.isMusicOn = isMusicOn;
-}
-
-public void SetBestScoreArr(int[] bestScoreArr)
-{
-    this.bestScoreArr = bestScoreArr;
-}
-
-public void SetSelectSkin(int  selectSkin)
-{
-    this.selectSkin = selectSkin;
-}
-
-public void SetSkinUnlocked(bool [] skinUnlocked)
-{
-    this.skinUnlocked = skinUnlocked;
-}
-
-public void SetDiamondCount (int diamondCount)
-{
-    this.diamondCount = diamondCount;
-}
-
-
-
-public bool  GetIsFirstGame()
-{
-    return isFirstGame;
-}
-
-public bool GetMusicOn()
-{
-    return isMusicOn ;
-}
-
-public int [] GetBestScoreArr()
-{
-    return bestScoreArr;
-}
-
-public int GetSelectSkin()
-{
-    return selectSkin;
-}
-
-public bool [] GetUnlockedSkin()
-{
-    return skinUnlocked;
-}
-
-public int GetDiamongCount()
-{
-    return diamondCount;
-}
-</code></pre>
-<p>}</p>
-<pre><code>/// &lt;summary&gt;
-/// 储存数据
-/// &lt;/summary&gt;
-private void Save()
-{
-    try
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File.Create(Application.persistentDataPath + &quot;/DameData.data&quot;))
-
-        {
-            data.SetBestScoreArr(bestScoreArr);
-            data.SetDiamondCount(diamondCount);
-            data.SetIsFirstGame(isFirstGame);
-            data.SetMusicOn(isMusicOn);
-            data.SetSelectSkin(selectSkin);
-            data.SetSkinUnlocked(skinUnlocked);
-            bf.Serialize(fs, data);
-
-        }
-    }
-    catch (System.Exception e)
-    {
-        Debug.Log(e.Message);
-
-    }
-}
-/// &lt;summary&gt;
-/// 读取数据
-/// &lt;/summary&gt;
-private void Read()
-{
-    try
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File .Open (Application.persistentDataPath + &quot;/DameData.data&quot;,FileMode.Open ))
-        {
-            data = (GameDate )bf.Deserialize(fs);
-        }
-    }
-    catch (System.Exception e)
-    {
-        Debug.Log(e.Message);
-    }
-}
-</code></pre>
-<p>//初始化<br>
-public void ResetData()<br>
-{<br>
-isFirstGame = false;<br>
-isMusicOn = true;<br>
-bestScoreArr = new int[3];<br>
-selectSkin = 0;<br>
-skinUnlocked = new bool[vars.skinSpriteList.Count];<br>
-skinUnlocked[0] = true;<br>
-diamondCount = 10;</p>
-<pre><code>    data = new GameDate();//初始化时读取
-
-    Save();
 }
 </code></pre>
 <p>}</p>
