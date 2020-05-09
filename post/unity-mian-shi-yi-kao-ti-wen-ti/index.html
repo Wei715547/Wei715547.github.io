@@ -2,25 +2,17 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>碰撞，触发 | Weiwei的个人网站</title>
+<title>Unity面试易考题-问题 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589001746568">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="碰撞，触发 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Unity面试易考题-问题 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="//都有碰撞器组件
-//运动的物体有刚体组件
-private void OnCollisionEnter(Collision other )
-{
-    print(other.collider.name);
-    
-}
-
-
-//都有碰撞..." />
+    <meta name="description" content="
+..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -83,53 +75,21 @@ private void OnCollisionEnter(Collision other )
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              碰撞，触发
+              Unity面试易考题-问题
             </h2>
             <div class="post-info">
               <span>
-                2020-04-13
+                2020-05-09
               </span>
               <span>
-                1 min read
+                0 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <pre><code>//都有碰撞器组件
-//运动的物体有刚体组件
-private void OnCollisionEnter(Collision other )
-{
-    print(other.collider.name);
-    
-}
-
-
-//都有碰撞器组件
-//其中一个勾选IsTriggger
-//其中一个有刚体组件
-private void OnTriggerEnter(Collider other)//触发开始执行 other碰撞到的物体
-{
-    
-    float a = other.GetComponent&lt;Enemy&gt;().Hp;
-    print(other.name+a);
-    other.GetComponent&lt;Enemy&gt;().Hp -= Random .Range (5,10);
-    print(other.name + other.GetComponent&lt;Enemy&gt;().Hp);
-    
-}
-
-private void OnTriggerStay(Collider other)//触发后每帧执行
-{
-    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.red;
-    if (other.GetComponent&lt;Enemy&gt;().Hp &lt;= 0)
-        Destroy(other.gameObject);
-}
-
-private void OnTriggerExit(Collider other)//触发结束时执行
-{
-    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.white;
-}</code></pre>
+                <figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589001744941.jpg" alt="" loading="lazy"></figure>
 
               </div>
               <div class="toc-container">
@@ -142,9 +102,9 @@ private void OnTriggerExit(Collider other)//触发结束时执行
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/2d-jump/">
+            <a href="https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-ji-ben-kuang-jia/">
               <h3 class="post-title">
-                2D Jump
+                Unity面试易考题-基本框架
               </h3>
             </a>
           </div>

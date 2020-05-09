@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-09T05:08:46.947Z</updated>
+    <updated>2020-05-09T05:22:29.132Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,42 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[Unity面试易考题-问题]]></title>
+        <id>https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-wen-ti/</id>
+        <link href="https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-wen-ti/">
+        </link>
+        <updated>2020-05-09T05:22:15.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589001744941.jpg" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Unity面试易考题-基本框架]]></title>
+        <id>https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-ji-ben-kuang-jia/</id>
+        <link href="https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-ji-ben-kuang-jia/">
+        </link>
+        <updated>2020-05-09T05:17:15.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589001472730.jpg" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Unity面试易考题-数据结构]]></title>
+        <id>https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-shu-ju-jie-gou/</id>
+        <link href="https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-shu-ju-jie-gou/">
+        </link>
+        <updated>2020-05-09T05:14:10.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589001324001.jpg" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Unity面试易考题-排序]]></title>
+        <id>https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-pai-xu/</id>
+        <link href="https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-pai-xu/">
+        </link>
+        <updated>2020-05-09T05:11:43.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589001203393.jpg" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Unity面试易考题 - C#相关]]></title>
         <id>https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-cxiang-guan/</id>
@@ -412,375 +448,6 @@ static void Main(string[] args)<br>
         ShopNPC s1 = new ShopNPC(&quot;喜洋洋&quot;, &quot;灰太狼&quot;, NPCType.Shop);
         s1.Speek();   
     }
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[多态（1）虚函数(复写所继承类中的虚方法）]]></title>
-        <id>https://Wei715547.github.io/post/duo-tai-1xu-han-shu/</id>
-        <link href="https://Wei715547.github.io/post/duo-tai-1xu-han-shu/">
-        </link>
-        <updated>2020-05-06T11:28:12.000Z</updated>
-        <content type="html"><![CDATA[<p>//多态概念：在继承关系前提下，实例化出的不同对象，，这些对象调用相同的方法，但表现出不同的行为，就叫做多态。</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 多态<br>
-{<br>
-class TrafficTool<br>
-{<br>
-public virtual void Run()<br>
-{<br>
-Console.WriteLine(&quot;启动&quot;);<br>
-}<br>
-public virtual void Stop()<br>
-{<br>
-Console.WriteLine(&quot;停止&quot;);<br>
-}</p>
-<pre><code>    public void Break()
-    {
-        Console.WriteLine(&quot;抛锚&quot;);
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 多态<br>
-{<br>
-class Car:TrafficTool<br>
-{<br>
-public override void Run()<br>
-{<br>
-base.Run();<br>
-Console.WriteLine(&quot;汽车启动&quot;);</p>
-<pre><code>    }
-
-    public override void Stop()
-    {
-        base.Stop();
-        Console.WriteLine(&quot;汽车停下&quot;);
-    }
-    public void Break()
-    {
-        Console.WriteLine(&quot;刹车&quot;);
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 多态<br>
-{<br>
-class AipPlan:TrafficTool<br>
-{<br>
-public override void Run()<br>
-{<br>
-base.Run();<br>
-Console.WriteLine(&quot;飞机启动&quot;);</p>
-<pre><code>    }
-
-    public override void Stop()
-    {
-        base.Stop();
-        Console.WriteLine(&quot;飞机停下&quot;);
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//程序实现<br>
-using System;</p>
-<p>namespace 多态<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-/*Car s = new Car();<br>
-AipPlan a = new AipPlan();<br>
-Driver d1 = new Driver();<br>
-d1.Drive(s);</p>
-<pre><code>        d1.Drive(a);*/
-
-        TrafficTool t3 = new Car();
-        TrafficTool t4 = new AipPlan();
-        //基于“虚方法”的多态
-        t3.Run();//启动汽车启动
-        t4.Run();//启动飞机启动
-
-        //里式转换
-        TrafficTool t1 = new TrafficTool();
-        TrafficTool t2 = new Car();//父类引用指向子类对象，
-        t1.Break();//父类方法
-        t2.Break();//父类方法
-
-        //父类需要调用子类方法时，将父类转为子类（
-        //父类引用指向子类对象时才能够转换）
-        //ar c1 = (Car )t2;//强转
-        bool r = t2 is Car;//可以转换返回真/不能转返回假
-        Car c1 = t2 as Car;//可以转返回子类对象/不能转返回Null
-
-        t1.Break();//父类方法
-        c1.Break();//子类方法
-    }
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[C#基础-类/结构]]></title>
-        <id>https://Wei715547.github.io/post/cji-chu-lei-jie-gou/</id>
-        <link href="https://Wei715547.github.io/post/cji-chu-lei-jie-gou/">
-        </link>
-        <updated>2020-05-06T11:20:46.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 类_对象<br>
-{<br>
-class Person<br>
-{<br>
-//字段<br>
-private  string   name;//外部都可访问</p>
-<pre><code>    /*private int age;//本身内可以访问
-    protected bool sx;//本身/子类可以访问*/
-    
-    //手写属性------保护字段
-    public string Name
-    {               //属性实质---两个方法-对字段进行读取写入
-        get
-        { return name; }
-        set
-        { this.name = value ; }
-    }
-    //手写属性-两个“方法”的特殊封装
-
-
-    //自动属性------同时创建字段与属性（C#编译器字段提供一个对应的字段）
-    public int Ft { get; set; }
-    private int Age { get; set; }
-    protected bool Sx{get ;set;}
-
-
-    //构建函数 创建类的方法（类被加载时调用）  可重载        
-    public Person () //public确保类在外部可被创建
-    {
-        Name = &quot;人&quot;;
-        Ft = 2333;
-        Age = 18;
-        Sx = true;
-    }
-
-
-    //方法
-    public virtual void Say()
-    {
-        Console.WriteLine(&quot;A person&quot; );
-    }
-
-    protected  void Ag()
-    {
-        Console.WriteLine(&quot;Ag&quot;+Age  );
-    }
-    public void Solid()
-    {
-        Console.WriteLine(&quot;Im&quot; + Ft + name);
-    }
-
-    private int  Core()
-    {
-        return 1;
-
-    }
-
-    //析构方法--对应构建方法（创建类），用于GC回收类。
-    /*~Person ()
-    {
-
-    }*/
-
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[数据存储-序列化/反序列化]]></title>
-        <id>https://Wei715547.github.io/post/shu-ju-cun-chu-xu-lie-hua-fan-xu-lie-hua/</id>
-        <link href="https://Wei715547.github.io/post/shu-ju-cun-chu-xu-lie-hua-fan-xu-lie-hua/">
-        </link>
-        <updated>2020-05-05T10:16:03.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Runtime.Serialization.Formatters.Binary;<br>
-using System.IO;<br>
-//二进制<br>
-private void SaveByBin()<br>
-{<br>
-//要储存的类<br>
-Save save = SaveDate();<br>
-//创建二进制序列化程序<br>
-BinaryFormatter bf = new BinaryFormatter();<br>
-//创建文件流<br>
-FileStream filestream = File.Create(Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;);<br>
-//用二进制序列化程序的序列化方法来序列化Save类对象，参数（文件流，需要序列化的类对象）<br>
-bf.Serialize(filestream, save);<br>
-//关闭流<br>
-filestream.Close();<br>
-if (File .Exists (Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;))<br>
-{<br>
-UIManage.Instance . ShowMessage(&quot;保存成功&quot;);<br>
-}</p>
-<pre><code>}
-
-private void  LoadByBin()
-{
-    if (File.Exists(Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;))
-    {
-        Save save = new Save();
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream fs = File.Open(Application.dataPath + &quot;/Savemaster&quot; + &quot;/Bin.txt&quot;, FileMode.Open);
-        save = (Save)bf.Deserialize(fs);
-        fs.Close();
-        LoadDate(save);
-        //UIManage.Instance.ShowMessage(&quot;加载成功&quot;);
-        UIPanle.Instance.OnStartButtonDown();
-    }
-    else
-        UIManage.Instance.ShowMessage(&quot;无存档记录&quot;);
-}
-</code></pre>
-<p>using LitJson;<br>
-//Json<br>
-private void SaveByJson()<br>
-{<br>
-Save save = SaveDate();<br>
-//路径<br>
-string filePath = Application.dataPath + &quot;/Savemaster&quot; + &quot;/ByJson.json&quot;;<br>
-//利用JsonMapper将save对象转换为Json字符串<br>
-string saveJsonMapper = JsonMapper.ToJson(save);<br>
-//创建StreamWriter,并将字符串写入文件<br>
-StreamWriter sw = new StreamWriter(filePath);<br>
-sw.Write(saveJsonMapper);<br>
-//关闭StreamWriter<br>
-sw.Close();</p>
-<pre><code>    UIManage.Instance.ShowMessage(&quot;保存成功&quot;);
-}
-
-private void LoadByJson()
-{
-    string filePath = Application.dataPath + &quot;/Savemaster&quot; + &quot;/ByJson.json&quot;;
-    if(File .Exists (filePath ))
-    {
-        //创建StreamReader，读取流
-        StreamReader sr = new StreamReader(filePath);
-        //读取流赋值给jsonStr，并关闭流
-        string jsonStr = sr.ReadToEnd();
-        sr.Close();
-        //将jsonStr转换为对象
-        Save save = JsonMapper.ToObject&lt;Save&gt;(jsonStr);
-        LoadDate(save);
-        UIPanle.Instance.OnStartButtonDown();
-    }
-    else
-    {
-        UIManage.Instance.ShowMessage(&quot;无存档记录&quot;);
-    }
-}</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[静态]]></title>
-        <id>https://Wei715547.github.io/post/jing-tai/</id>
-        <link href="https://Wei715547.github.io/post/jing-tai/">
-        </link>
-        <updated>2020-05-01T09:34:55.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 继承_static_结构体_2048核心类<br>
-{<br>
-class Student : Person<br>
-{<br>
-//prop +tab +tab 自动属性快捷生成<br>
-/// <summary><br>
-/// 成绩<br>
-/// </summary></p>
-<pre><code>    // 实例成员属于   对象    静态成员属于   类
-
-    public int Score { get; set; }
-
-    //每个对象都存储一份
-    public int InstanceCount;
-
-    
-
-    //静态字段 仅仅存储一份 所有对象共享 常驻内存中
-    public static int StaticCount;
-
-    private Random random;
-    private int[] arr;
-
-    //实例构造函数：提供创建对象的方式，初始化类的实例数据成员
-    //
-    public Student()
-    {
-        random = new Random();
-        arr = new int[5];
-        InstanceCount++;
-        StaticCount++;
-    }
-
-    //静态构造函数 不需要访问修饰符 都可以访问
-    //作用：初始化类的静态数据成员
-    //执行时机：类加载时调用一次
-    static Student()
-    {
-        //InstanceCount++;//”非静态字段 要求 对象引用 ”  静态代码块只能访问静态成员
-        StaticCount++;
-    }
-
-    //静态方法 
-    public static void Fun1()
-    {
-        //Console.WriteLine(InstanceCount);//静态方法只能访问静态成员
-    }
-
-    public  void Fun2()
-    {
-        Console.WriteLine(InstanceCount);// 通过引用(对象 / 实例)调用实例方法，都会自动传递(对象 / 实例的)引用   
-        //Console.WriteLine(this.InstanceCount);//所以可以访问 InstanceCount 实例成员
-        Console.WriteLine(StaticCount );//但实例（对象）方法可以访问静态成员（类）
-    }
-
-    //静态类
-    /*不能实例化，只能包含静态成员
-     * 静态类不能被继承，但非静态类的方法，属性都可以被继承
-     */
-
-
-    /* 静态适用
-    * 利：单独空间存储，所有对象共享，可直接被类名调用
-    * 弊：静态方法中只能访问静态成员，共享数据被多个对象访问时会出现并发。
-    * 适用场合：
-    * 1.所有对象需要共享的数据。
-    * 2.在没有对象是就要访问成员。
-    * 3.工具类适合做静态类（常用，不需要过多数据）。
-    * 如类 Math.方法
-    *      unuty中有静态类Random
-    *      Random.randuoRange(1,101); （randomRange()静态类Random的静态方法。
-    *      简易与.Net中
-    *      Random r = new Random();
-    *      random.Next(1,101);（Next()实例（对象）方法。
-    *      
-    */
-    //
-
-
-
 }
 </code></pre>
 <p>}</p>
