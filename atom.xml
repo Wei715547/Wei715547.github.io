@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-09T05:22:29.132Z</updated>
+    <updated>2020-05-09T08:18:47.144Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,29 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[SendMessage]]></title>
+        <id>https://Wei715547.github.io/post/sendmessage/</id>
+        <link href="https://Wei715547.github.io/post/sendmessage/">
+        </link>
+        <updated>2020-05-09T08:16:59.000Z</updated>
+        <content type="html"><![CDATA[<p>private void OnCollisionEnter2D(Collision2D collision)<br>
+{<br>
+if (collision.gameObject.tag == &quot;Enm&quot;)<br>
+{<br>
+Enemis eni = collision.gameObject.GetComponent<Enemis>();<br>
+if (ani.GetBool(&quot;Down&quot;))<br>
+{<br>
+eni.Died();</p>
+<pre><code>            //collision.gameObject.SendMessage(&quot;Dide&quot;);
+
+            /*FrogRangAI frog =                        collision.gameObject.GetComponent&lt;FrogRangAI&gt;();
+            frog.Died();*/
+            
+            AddUpForce();
+        }</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Unity面试易考题-问题]]></title>
         <id>https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-wen-ti/</id>
@@ -339,114 +362,6 @@ using System;</p>
         Batmobile bat = new Batmobile(&quot;BatMan&quot;);
         bat.Run();
         bat.Fly();
-    }
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[多态（2）抽象类（在子类中复写所继承的抽象类中的抽象方法）]]></title>
-        <id>https://Wei715547.github.io/post/duo-tai-2chou-xiang-lei-zai-zi-lei-zhong-fu-xie-suo-ji-cheng-de-chou-xiang-lei-zhong-de-chou-xiang-fang-fa/</id>
-        <link href="https://Wei715547.github.io/post/duo-tai-2chou-xiang-lei-zai-zi-lei-zhong-fu-xie-suo-ji-cheng-de-chou-xiang-lei-zhong-de-chou-xiang-fang-fa/">
-        </link>
-        <updated>2020-05-06T11:44:13.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 抽象类应用<br>
-{<br>
-/// <summary><br>
-/// NPC类型枚举<br>
-/// </summary><br>
-public enum NPCType<br>
-{<br>
-Task,<br>
-Shop,<br>
-Fod<br>
-}<br>
-/// <summary><br>
-/// 定义一个抽象类<br>
-/// </summary><br>
-/// 抽象类不能被实例化，因为抽象类中有抽象方法（无方法体），<br>
-/// 如果真能实例化抽象对象，调用这些方法体的方法无任何意义。<br>
-abstract class NPCs<br>
-{<br>
-private string name;<br>
-private NPCType type;</p>
-<pre><code>    public string Name { get { return name; } set { name = value; } }
-    public NPCType  Type { get { return type ; } set { type  = value; } }
-
-    public NPCs (string name ,NPCType type)
-    {
-        Name = name;
-        Type = type;
-    }
-
-    /// 抽象类中不一定要有抽象方法，但抽象方法必须要定义在抽象类中
-    /// 抽象方法的方法体为空
-    public abstract void Speek();
-    
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 抽象类应用<br>
-{<br>
-class TaskNPC : NPCs<br>
-{<br>
-private string taskInfo;</p>
-<pre><code>    public TaskNPC (string taskInfo,string name,NPCType type)
-        :base (name ,type )
-    {
-        this.taskInfo = taskInfo;
-    }
-
-    //继承抽象类，“必须”实现抽象类中的抽象方法。否则程序无法运行。
-    public override void Speek()
-    {
-        Console .WriteLine (&quot;NPC:{0},任务：{1}&quot; ,Name,taskInfo );
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 抽象类应用<br>
-{<br>
-class ShopNPC : NPCs<br>
-{<br>
-private string item;</p>
-<pre><code>    public ShopNPC (string item, string name, NPCType type)
-       : base(name, type)
-    {
-        this.item  = item ;
-    }
-
-    public override void Speek()
-    {
-        Console.WriteLine(&quot;NPC:{0},贩卖{1}产品&quot;, base.Name, item);
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//程序实现<br>
-using System;</p>
-<p>namespace 抽象类应用<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-//NPCs n = new NPCs(&quot;灰太狼&quot;, NPCType.Shop);//抽象类不能被实例化，</p>
-<pre><code>        TaskNPC t1 = new TaskNPC(&quot;让你去挖大头菜&quot;,&quot;老八&quot;, NPCType.Task);
-        t1.Speek();
-
-        ShopNPC s1 = new ShopNPC(&quot;喜洋洋&quot;, &quot;灰太狼&quot;, NPCType.Shop);
-        s1.Speek();   
     }
 }
 </code></pre>
