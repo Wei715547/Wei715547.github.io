@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-09T08:18:47.144Z</updated>
+    <updated>2020-05-10T04:46:56.894Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,154 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[最高分排序]]></title>
+        <id>https://Wei715547.github.io/post/zui-gao-fen-pai-xu/</id>
+        <link href="https://Wei715547.github.io/post/zui-gao-fen-pai-xu/">
+        </link>
+        <updated>2020-05-10T04:36:59.000Z</updated>
+        <content type="html"><![CDATA[<p>public  void SaveScore (int score)<br>
+{<br>
+List<int> list = bestScoreArr.ToList();//先将数组转化为List<br>
+//系统:Linq方法(using System.Linq;)<br>
+list.Sort((x, y) =&gt; (-x.CompareTo(y)));//调用List的Sort方法，从大到小对list进行排序[（-x）(从小到大改为x<br>
+bestScoreArr = list.ToArray();//将排好序的list转给数组</p>
+<pre><code>    //50  20  10 加入传score为60，则将60排在低 bestScoreArr[0]
+
+    int index = -1;
+    for (int i = 0; i &lt; bestScoreArr .Count() ; i++)
+    {
+        if (score &gt;bestScoreArr [i])//score依次与数组中的数进行对比，当比一个数大时，记录这个数的索引将后面的数都向后移。
+        {
+            index = i;
+        }
+    }
+    if (index == -1) return;//score比数组中的值都小，不需保存，退出方法。
+
+    for (int i = bestScoreArr .Length -1; i &gt;index ; i--)//从后向前将index之后的数据依次向后移
+    {
+        bestScoreArr[i] = bestScoreArr[i - 1];
+
+    }
+    bestScoreArr[index] = score;//将score填入空出位。
+    Save();//保存。
+}
+</code></pre>
+<p>//要存储的游戏数据类<br>
+public class GameDate<br>
+{<br>
+public  static bool IsAgainGame =false ;</p>
+<pre><code>private bool isFirstGame;
+private bool isMusicOn;
+
+private int[] bestScoreArr;
+public void SetBestScoreArr(int[] bestScoreArr)
+{
+    this.bestScoreArr = bestScoreArr;
+}
+ public int [] GetBestScoreArr()
+{
+    return bestScoreArr;
+}
+//（其他......get;set方法省略）
+
+private int selectSkin;
+private bool[] skinUnlocked;
+private int diamondCount;
+</code></pre>
+<p>}</p>
+<pre><code>/// &lt;summary&gt;
+/// 储存数据
+/// &lt;/summary&gt;
+private void Save()
+{
+    try
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        using (FileStream fs = File.Create(Application.persistentDataPath + &quot;/DameData.data&quot;))
+
+        {
+            data.SetBestScoreArr(bestScoreArr);
+            data.SetDiamondCount(diamondCount);
+            data.SetIsFirstGame(isFirstGame);
+            data.SetMusicOn(isMusicOn);
+            data.SetSelectSkin(selectSkin);
+            data.SetSkinUnlocked(skinUnlocked);
+            bf.Serialize(fs, data);
+
+        }
+    }
+    catch (System.Exception e)
+    {
+        Debug.Log(e.Message);
+
+    }
+}
+/// &lt;summary&gt;
+/// 读取数据
+///using System.Runtime.Serialization.Formatters.Binary;
+///using System.IO;
+/// &lt;/summary&gt;
+private void Read()
+{
+    try
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        using (FileStream fs = File .Open (Application.persistentDataPath + &quot;/DameData.data&quot;,FileMode.Open ))
+        {
+            data = (GameDate )bf.Deserialize(fs);
+        }
+    }
+    catch (System.Exception e)
+    {
+        Debug.Log(e.Message);
+    }
+}</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Ray]]></title>
+        <id>https://Wei715547.github.io/post/ray/</id>
+        <link href="https://Wei715547.github.io/post/ray/">
+        </link>
+        <updated>2020-05-09T11:48:20.000Z</updated>
+        <content type="html"><![CDATA[<p>void Update()<br>
+{<br>
+if (Input.GetMouseButtonDown(1))<br>
+{<br>
+Ray ray = Camera .main .ScreenPointToRay ( Input.mousePosition);<br>
+RaycastHit hit;<br>
+if (!Physics.Raycast(ray, out hit))<br>
+{<br>
+//hit.collider .gameObject //射线打到的物体<br>
+return;<br>
+}<br>
+navMeshAgent.destination = hit.point ;//碰撞点<br>
+}</p>
+<pre><code>}
+![](https://Wei715547.github.io/post-images/1589025091557.jpg)
+![](https://Wei715547.github.io/post-images/1589025123139.jpg)</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[插值/自定义曲线]]></title>
+        <id>https://Wei715547.github.io/post/cha-zhi/</id>
+        <link href="https://Wei715547.github.io/post/cha-zhi/">
+        </link>
+        <updated>2020-05-09T11:40:43.000Z</updated>
+        <content type="html"><![CDATA[<pre><code>public AnimationCurve sp;
+private float x;//带入曲线x+=Time.deltaTime/psTime
+public float pstime;//越大移动“y”(sp.Evaluate(x))增长越慢
+
+if (Input.GetKey(KeyCode.L))
+    {
+    x += Time.deltaTime / pstime;
+    transform.position = Vector3.Lerp(transform.position, Vector3.up * 5, sp.Evaluate(x));
+        //Lerp(a,b,f)---f:0~1, 0时返回a,1时返回b，0.5时返回a,b中间值
+    }
+    else x = 0;</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[SendMessage]]></title>
         <id>https://Wei715547.github.io/post/sendmessage/</id>
@@ -79,7 +227,7 @@ eni.Died();</p>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[提取共有属性/方法]]></title>
+        <title type="html"><![CDATA[(敌人类）提取共有属性/方法]]></title>
         <id>https://Wei715547.github.io/post/ti-qu-gong-you-shu-xing-fang-fa/</id>
         <link href="https://Wei715547.github.io/post/ti-qu-gong-you-shu-xing-fang-fa/">
         </link>
@@ -109,263 +257,38 @@ public void D()
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[刚体-Add-Force]]></title>
-        <id>https://Wei715547.github.io/post/gang-ti-add-force/</id>
-        <link href="https://Wei715547.github.io/post/gang-ti-add-force/">
-        </link>
-        <updated>2020-05-08T04:56:47.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class AddForce : MonoBehaviour<br>
+<p>//应用-所有敌人继承Enemis<br>
+private void OnCollisionEnter2D(Collision2D collision)         //(Player内代码)<br>
 {<br>
-public ForceMode f;<br>
-private Rigidbody r;<br>
-public float Rtspeed = 1000;<br>
-private void OnMouseDown()<br>
+if (collision.gameObject.tag == &quot;Enm&quot;)<br>
 {<br>
-r.AddForce(Vector3 .right  * 500, f );//世界坐标系添加力，给世界方向 =&gt; 世界方向<br>
-//r.AddForce(transform .right * 500, f);//世界坐标系添加力，给自身方向 =&gt; 自身方向<br>
-//r.AddRelativeForce(Vector3.right * 500,f);//自身坐标系添加力，给世界方向 =&gt; 自身方向<br>
-//r.AddRelativeForce(transform .right * 500, f);//无效果的错误使用<br>
-r.useGravity = true;<br>
-}</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    r = transform.GetComponent&lt;Rigidbody&gt;();
-}
+//Enemis eni = collision.gameObject.GetComponent<Enemis>();//子类对象赋给父类引用(由于各子类不同)/(通过子类获取子类中父类实例--便于调用父类方法)👌</p>
+<pre><code>        if (ani.GetBool(&quot;Down&quot;))
+        {
+            //eni.Died();//直接调用父类中所有子类共有行为👌
 
-// Update is called once per frame
-void FixedUpdate()
-{
-    float h = Input.GetAxis(&quot;Horizontal&quot;);
-    float v = Input.GetAxis(&quot;Vertical&quot;);
+            collision.gameObject.SendMessage(&quot;Died&quot;);//或者不需声明父类直接在子类中调用父类方法👍👍👍
 
-    r.AddTorque(transform.up * v*Rtspeed );
-    r.AddTorque(Vector3 .right * h*100);
-    
-    //使用刚体组件移动
-   if (Input.GetKey(KeyCode.Z))
-    {
-        //每帧移动固定距离
-        r.MovePosition(transform.position + Vector3 .left *0.2f);
+            //collision.gameObject.transform.GetComponent&lt;Eagle&gt;().Died();
+            //FrogRangAI frog = collision.gameObject.GetComponent&lt;FrogRangAI&gt;();
+            //frog.Died();
+//由于敌人种类不确定(Eagle,FrogRangAI)，所以不能获取子类来调用父类中共有行为。🖕🖕🖕
 
-        //添加在方向上（自身/世界）添加固定加速度
-        //r.velocity = new Vector3(h*speed*Time.deltaTime,0 ,0);
-        //r.velocity = transform .forward  * 3;
+            AddUpForce();
+        }
+        else if (transform.position.x &lt; collision.gameObject.transform.position.x)
+        {
+            playerR.velocity = new Vector2(-3, playerR.velocity.y);
+            IsHaert = true;
+        }
+        else if (transform.position.x &gt; collision.gameObject.transform.position.x)
+        {
+            playerR.velocity = new Vector2(3, playerR.velocity.y);
+            IsHaert = true;
+        }
+        GamePanel.Intence.Damage();
     }
-
-
-
-}
 </code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[接口-简单案例]]></title>
-        <id>https://Wei715547.github.io/post/jie-kou-jian-dan-an-li/</id>
-        <link href="https://Wei715547.github.io/post/jie-kou-jian-dan-an-li/">
-        </link>
-        <updated>2020-05-06T12:01:05.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
-{<br>
-class UDisk : IUSB<br>
-{<br>
-/// <summary><br>
-/// 存储内容<br>
-/// </summary><br>
-private string content;</p>
-<pre><code>    public void Read()
-    {
-        Console.WriteLine(content);
-    }
-
-    public void Write(string s)
-    {
-        content = s;
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
-{<br>
-class UDisk : IUSB<br>
-{<br>
-/// <summary><br>
-/// 存储内容<br>
-/// </summary><br>
-private string content;</p>
-<pre><code>    public void Read()
-    {
-        Console.WriteLine(content);
-    }
-
-    public void Write(string s)
-    {
-        content = s;
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
-{<br>
-class HardDisk:IUSB<br>
-{<br>
-private string content;</p>
-<pre><code>    public void Read()
-    {
-        Console.WriteLine(content);
-    }
-
-    public void Write(string s)
-    {
-        content = s;
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//程序<br>
-using System;</p>
-<p>namespace 接口<br>
-{</p>
-<pre><code>class Program
-{
-    static void Main(string[] args)
-    {
-        UDisk u1 = new UDisk();
-        u1.Write(&quot;Wei的U盘&quot;);
-        u1.Read();
-
-        HardDisk h = new HardDisk();
-        h.Write(&quot;Wei的硬盘&quot;);
-        h.Read();
-    }
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[多态（3）接口（多继承接口，提供“大量”特殊功能）]]></title>
-        <id>https://Wei715547.github.io/post/duo-tai-3jie-kou-duo-ji-cheng-jie-kou-ti-gong-te-shu-gong-neng/</id>
-        <link href="https://Wei715547.github.io/post/duo-tai-3jie-kou-duo-ji-cheng-jie-kou-ti-gong-te-shu-gong-neng/">
-        </link>
-        <updated>2020-05-06T11:54:33.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
-{<br>
-//Interface 没有class关键字 一般使用&quot;IXxxx&quot;命名书写</p>
-<pre><code>/// &lt;summary&gt;
-/// 注意事项
-/// 1.接口中所有方法都是抽象方法，所有接口不能被实例化
-/// 2.一个类可以实现多个接口，被实现的接口之间用”逗号，“隔开
-/// 3.一个接口可以继承多个接口（类只能单继承），接口之间也用逗号分隔
-/// &lt;/summary&gt;
-
-interface IFly
-{
-    //接口中不能包含“字段”
-    //private string s;
-
-    //但可以包含属性--(自动属性）
-    //public string Id { get; set; }
-    //string Id { get; set; }
-
-    //接口中的方法不能有“方法体”，全部都是抽象方法，但不需要abstract修饰。
-    void Fly();
-
-    //public void Hello();
-    //接口中的成员不允许添加访问修饰符，默认全是public。
-
-
-
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
-{<br>
-class Car<br>
-{<br>
-private string brand;</p>
-<pre><code>    public string Brand
-    {
-        get { return brand; }
-        set { brand = value; }
-    }
-
-    /*public Car()
-    {
-
-    }*/
-
-    public Car (string brand)
-    {
-        this.brand = brand;
-    }
-
-    public void Run()
-    {
-        Console.WriteLine(&quot;{0}品牌的汽车在奔跑&quot;, brand );
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
-{</p>
-<pre><code>class Batmobile:Car ,IFly   //接口（为子类提供父类没有的“附加功能”。
-{
-    public Batmobile(string brand) : base(brand)
-    {
-
-    }
-
-    public void Fly()
-    {
-        Console.WriteLine(&quot;{0}正在飞行&quot;, base.Brand);
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//程序<br>
-using System;</p>
-<p>namespace 接口<br>
-{</p>
-<pre><code>class Program
-{
-    static void Main(string[] args)
-    {
-        BMWCar c1 = new BMWCar(&quot;750&quot;);
-        c1.Run();
-
-        Batmobile bat = new Batmobile(&quot;BatMan&quot;);
-        bat.Run();
-        bat.Fly();
-    }
-}
-</code></pre>
-<p>}</p>
 ]]></content>
     </entry>
 </feed>

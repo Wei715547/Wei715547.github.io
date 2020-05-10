@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>数据存储-序列化/反序列化 | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589012323467">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589086012850">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="数据存储-序列化/反序列化 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
@@ -11,13 +11,10 @@
 
 
 
-    <meta name="description" content="using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-//二进制
-private void SaveByBin()
-{
-//要储存的类
-Save sav..." />
+    <meta name="description" content="二进制方法（Binary Formatter）
+序列化：新建或打开一个二进制文件，通过二进制格式器将对象写入该二进制文件。
+反序列化：打开待反序列化的二进制文件，通过二进制格式器将文件解析成对象。
+XML：扩展标记语言，用于标记电子文件使其..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -27,7 +24,7 @@ Save sav..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589012323467" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589086012850" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -87,14 +84,28 @@ Save sav..." />
                 2020-05-05
               </span>
               <span>
-                2 min read
+                3 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Runtime.Serialization.Formatters.Binary;<br>
+                <p>二进制方法（Binary Formatter）<br>
+序列化：新建或打开一个二进制文件，通过二进制格式器将对象写入该二进制文件。<br>
+反序列化：打开待反序列化的二进制文件，通过二进制格式器将文件解析成对象。</p>
+<p>XML：扩展标记语言，用于标记电子文件使其具有结构性的标记语言。<br>
+可以用来标记数据、定义数据类型。<br>
+序列化与反序列化的方式与二进制方法十分类似。<br>
+http://blog.csdn.net/y1196645376/article/details/52541882</p>
+<p>JSON：是一种语言无关的发送和接收数据的常用格式。可以使用它来跨平台的传输数据。<br>
+JSON序列化：对象           JSON<br>
+JSON反序列化：JSON           对象</p>
+<p>对比<br>
+二进制方法：简单，但可读性差。<br>
+XML：可读性强，但是文件庞大，冗余信息多。<br>
+JSON：数据格式比较简单，易于读写，但是不直观，可读性比XML差</p>
+<p>using System.Runtime.Serialization.Formatters.Binary;<br>
 using System.IO;<br>
 //二进制<br>
 private void SaveByBin()<br>
@@ -168,7 +179,8 @@ private void LoadByJson()
     {
         UIManage.Instance.ShowMessage(&quot;无存档记录&quot;);
     }
-}</code></pre>
+}
+</code></pre>
 
               </div>
               <div class="toc-container">

@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>提取共有属性/方法 | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589012323467">
+<title>(敌人类）提取共有属性/方法 | Weiwei的个人网站</title>
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589086012850">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="提取共有属性/方法 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="(敌人类）提取共有属性/方法 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -26,7 +26,7 @@ pro..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589012323467" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589086012850" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -79,14 +79,14 @@ pro..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              提取共有属性/方法
+              (敌人类）提取共有属性/方法
             </h2>
             <div class="post-info">
               <span>
                 2020-05-08
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
@@ -118,6 +118,38 @@ public void D()
 }
 </code></pre>
 <p>}</p>
+<p>//应用-所有敌人继承Enemis<br>
+private void OnCollisionEnter2D(Collision2D collision)         //(Player内代码)<br>
+{<br>
+if (collision.gameObject.tag == &quot;Enm&quot;)<br>
+{<br>
+//Enemis eni = collision.gameObject.GetComponent<Enemis>();//子类对象赋给父类引用(由于各子类不同)/(通过子类获取子类中父类实例--便于调用父类方法)👌</p>
+<pre><code>        if (ani.GetBool(&quot;Down&quot;))
+        {
+            //eni.Died();//直接调用父类中所有子类共有行为👌
+
+            collision.gameObject.SendMessage(&quot;Died&quot;);//或者不需声明父类直接在子类中调用父类方法👍👍👍
+
+            //collision.gameObject.transform.GetComponent&lt;Eagle&gt;().Died();
+            //FrogRangAI frog = collision.gameObject.GetComponent&lt;FrogRangAI&gt;();
+            //frog.Died();
+//由于敌人种类不确定(Eagle,FrogRangAI)，所以不能获取子类来调用父类中共有行为。🖕🖕🖕
+
+            AddUpForce();
+        }
+        else if (transform.position.x &lt; collision.gameObject.transform.position.x)
+        {
+            playerR.velocity = new Vector2(-3, playerR.velocity.y);
+            IsHaert = true;
+        }
+        else if (transform.position.x &gt; collision.gameObject.transform.position.x)
+        {
+            playerR.velocity = new Vector2(3, playerR.velocity.y);
+            IsHaert = true;
+        }
+        GamePanel.Intence.Damage();
+    }
+</code></pre>
 
               </div>
               <div class="toc-container">

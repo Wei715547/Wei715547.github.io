@@ -2,22 +2,21 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>第一人称镜头旋转 | Weiwei的个人网站</title>
+<title>Ray | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589086012850">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="第一人称镜头旋转 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Ray | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-/// 
-/// 控制摄像机随鼠标旋转
-/// 
-public class DoR..." />
+    <meta name="description" content="void Update()
+{
+if (Input.GetMouseButtonDown(1))
+{
+Ray ray = Camera .main .ScreenPointToRay ( Input.mousePosition);
+Rayc..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -80,11 +79,11 @@ public class DoR..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              第一人称镜头旋转
+              Ray
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-09
               </span>
               <span>
                 1 min read
@@ -94,33 +93,22 @@ public class DoR..." />
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// 控制摄像机随鼠标旋转<br>
-/// </summary><br>
-public class DoRotation : MonoBehaviour<br>
+                <p>void Update()<br>
 {<br>
-public float rotateSpeed = 1;<br>
-private void FixedUpdate()<br>
+if (Input.GetMouseButtonDown(1))<br>
 {<br>
-float x = Input.GetAxis(&quot;Mouse X&quot;);<br>
-float y = Input.GetAxis(&quot;Mouse Y&quot;);</p>
-<pre><code>    if (x!=0||y!=0)
-    RotateView(x, y);
-}
-
-private void RotateView(float x, float y)
-{
-    x *= rotateSpeed;
-    y *= rotateSpeed;
-
-    this.transform.Rotate(0, x, 0, Space.World);//左右旋转按照世界坐标
-    //this.transform.Rotate(-y, 0, 0, Space.Self);//上下旋转按自身坐标
-}
-</code></pre>
-<p>}</p>
+Ray ray = Camera .main .ScreenPointToRay ( Input.mousePosition);<br>
+RaycastHit hit;<br>
+if (!Physics.Raycast(ray, out hit))<br>
+{<br>
+//hit.collider .gameObject //射线打到的物体<br>
+return;<br>
+}<br>
+navMeshAgent.destination = hit.point ;//碰撞点<br>
+}</p>
+<pre><code>}
+![](https://Wei715547.github.io/post-images/1589025091557.jpg)
+![](https://Wei715547.github.io/post-images/1589025123139.jpg)</code></pre>
 
               </div>
               <div class="toc-container">
@@ -133,9 +121,9 @@ private void RotateView(float x, float y)
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/jing-tou-suo-fang/">
+            <a href="https://Wei715547.github.io/post/cha-zhi/">
               <h3 class="post-title">
-                镜头缩放
+                插值/自定义曲线
               </h3>
             </a>
           </div>
