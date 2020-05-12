@@ -2,24 +2,23 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>C#基础-类/结构 | Weiwei的个人网站</title>
+<title>委托，事件，Lamda表达式（对方法的传递/调用） | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589272121981">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="C#基础-类/结构 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="委托，事件，Lamda表达式（对方法的传递/调用） | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
     <meta name="description" content="using System;
-using System.Collections.Generic;
-using System.Text;
-namespace 类_对象
+namespace 委托
 {
-class Person
+class Program
 {
-//字段
-private  string ..." />
+//委托类型：定义了委托实例可以调用哪类方法，
+//具体来说，委托类型定义了方法的返回值类型了参数
+//delegate 要调用方法的返回值类型 委托..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -82,11 +81,11 @@ private  string ..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              C#基础-类/结构
+              委托，事件，Lamda表达式（对方法的传递/调用）
             </h2>
             <div class="post-info">
               <span>
-                2020-05-06
+                2020-05-12
               </span>
               <span>
                 2 min read
@@ -96,75 +95,100 @@ private  string ..." />
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 类_对象<br>
+                <p>using System;</p>
+<p>namespace 委托<br>
 {<br>
-class Person<br>
+class Program<br>
 {<br>
-//字段<br>
-private  string   name;//外部都可访问</p>
-<pre><code>    /*private int age;//本身内可以访问
-    protected bool sx;//本身/子类可以访问*/
-    
-    //手写属性------保护字段
-    public string Name
-    {               //属性实质---两个方法-对字段进行读取写入
-        get
-        { return name; }
-        set
-        { this.name = value ; }
-    }
-    //手写属性-两个“方法”的特殊封装
+//委托类型：定义了委托实例可以调用哪类方法，<br>
+//具体来说，委托类型定义了方法的返回值类型了参数<br>
+//delegate 要调用方法的返回值类型 委托类型名 (参数)</p>
+<pre><code>    //例：定义一个带参数，无返回值的委托
+    //（创建的委托必须与索要传递的方法，返回值/参数类型相同）
+    public delegate void SayHelloDlg(string content);
+
+    //SayHelloDlg类型的事件
+    public static event SayHelloDlg SayHelloEvent;
 
 
-    //自动属性------同时创建字段与属性（C#编译器字段提供一个对应的字段）
-    public int Ft { get; set; }
-    private int Age { get; set; }
-    protected bool Sx{get ;set;}
-
-
-    //构建函数 创建类的方法（类被加载时调用）  可重载        
-    public Person () //public确保类在外部可被创建
+    //主函数
+    static void Main(string[] args)
     {
-        Name = &quot;人&quot;;
-        Ft = 2333;
-        Age = 18;
-        Sx = true;
+        //委托的声明
+        //委托类型名 = 目标方法
+        SayHelloDlg dlg = SayHello;
+        //委托的使用方法
+        //dlg.Invoke(&quot;老王&quot;);
+        dlg(&quot;老王&quot;);            
+        //委托的解释：将方法以变量形式传递，并以方法形式执行。(以委托来调用方法，解耦)
+        //SayHelloDlg dlg = new SayHelloDlg(SayHello);
+
+        //(多播委托)委托链
+        dlg += SayBay;//添加
+        dlg(&quot;老八&quot;);  //（实际+,-,+=,-+编译成 System.Delegate的Combine和Remove两个静态方法）
+        dlg -= SayBay;//注销
+        dlg(&quot;老八&quot;);
+        //如果调用的方法有返回值，那么接收的返回值是调用的最后一个方法的返回值，前面调用的方法返回值就被舍弃了。
+
+
+        //匿名函数
+        SayHelloDlg dlg1 = delegate (string name)
+        {
+            Console.WriteLine(&quot;{0},是匿名函数&quot;, name);
+        };
+
+        dlg1(&quot;老七&quot;);
+
+
+        //lamda语句
+        SayHelloDlg dlg2 = (name) =&gt;
+         {
+             Console.WriteLine(&quot;{0},是lamda语句&quot;, name);
+         };
+
+        dlg2(&quot;老四&quot;);
+
+        //事件
+
+        //注册事件
+        SayHelloEvent += Program_SayHelloEvent;
+        //SayHelloEvent -= Program_SayHelloEvent; 
+
+        if (SayHelloEvent != null)
+        {
+            SayHelloEvent(&quot;小八&quot;);//调用事件
+        }
+    }
+
+    private static void Program_SayHelloEvent(string content)
+    {
+        Console.WriteLine(&quot;{0},是事件&quot;, content);
     }
 
 
-    //方法
-    public virtual void Say()
+
+    public static void SayHello(string name)
     {
-        Console.WriteLine(&quot;A person&quot; );
+        Console.WriteLine(&quot;{0},你好啊&quot;, name);
     }
 
-    protected  void Ag()
+    //表达式形式
+    //public static void SayHello(string name) =&gt; Console.WriteLine(&quot;{0},你好啊&quot;, name);
+
+
+    public static void SayBay(string name)
     {
-        Console.WriteLine(&quot;Ag&quot;+Age  );
+        Console.WriteLine(&quot;{0},再见啊&quot;,name);
     }
-    public void Solid()
-    {
-        Console.WriteLine(&quot;Im&quot; + Ft + name);
-    }
-
-    private int  Core()
-    {
-        return 1;
-
-    }
-
-    //析构方法--对应构建方法（创建类），用于GC回收类。
-    /*~Person ()
-    {
-
-    }*/
-
 }
 </code></pre>
 <p>}</p>
+<p><img src="https://Wei715547.github.io/post-images/1589257645974.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589257654429.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589257662607.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589257671087.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589257676945.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589257683327.PNG" alt="" loading="lazy"></p>
 
               </div>
               <div class="toc-container">
@@ -177,9 +201,9 @@ private  string   name;//外部都可访问</p>
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/shu-ju-cun-chu-xu-lie-hua-fan-xu-lie-hua/">
+            <a href="https://Wei715547.github.io/post/dg-tweening/">
               <h3 class="post-title">
-                数据存储-序列化/反序列化
+                DG Tweening
               </h3>
             </a>
           </div>

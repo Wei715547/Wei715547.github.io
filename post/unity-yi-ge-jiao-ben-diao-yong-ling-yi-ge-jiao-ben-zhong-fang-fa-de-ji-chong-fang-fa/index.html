@@ -2,24 +2,21 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>C#基础-类/结构 | Weiwei的个人网站</title>
+<title>Unity---一个脚本调用另一个脚本中方法的几种方法 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589272121981">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="C#基础-类/结构 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Unity---一个脚本调用另一个脚本中方法的几种方法 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System;
-using System.Collections.Generic;
-using System.Text;
-namespace 类_对象
-{
-class Person
-{
-//字段
-private  string ..." />
+    <meta name="description" content="1.将要被调用的脚本对象，直接拖到调用者脚本上
+之后通过GetComponent&lt;被调用脚本名&gt;().方法名();
+直接获取对象上挂载的脚本来调用目标方法。
+
+2.在Hierarchy面板查找目标脚本
+FindObjectOfT..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -82,89 +79,40 @@ private  string ..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              C#基础-类/结构
+              Unity---一个脚本调用另一个脚本中方法的几种方法
             </h2>
             <div class="post-info">
               <span>
-                2020-05-06
+                2020-05-12
               </span>
               <span>
-                2 min read
+                1 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 类_对象<br>
-{<br>
-class Person<br>
-{<br>
-//字段<br>
-private  string   name;//外部都可访问</p>
-<pre><code>    /*private int age;//本身内可以访问
-    protected bool sx;//本身/子类可以访问*/
-    
-    //手写属性------保护字段
-    public string Name
-    {               //属性实质---两个方法-对字段进行读取写入
-        get
-        { return name; }
-        set
-        { this.name = value ; }
-    }
-    //手写属性-两个“方法”的特殊封装
-
-
-    //自动属性------同时创建字段与属性（C#编译器字段提供一个对应的字段）
-    public int Ft { get; set; }
-    private int Age { get; set; }
-    protected bool Sx{get ;set;}
-
-
-    //构建函数 创建类的方法（类被加载时调用）  可重载        
-    public Person () //public确保类在外部可被创建
-    {
-        Name = &quot;人&quot;;
-        Ft = 2333;
-        Age = 18;
-        Sx = true;
-    }
-
-
-    //方法
-    public virtual void Say()
-    {
-        Console.WriteLine(&quot;A person&quot; );
-    }
-
-    protected  void Ag()
-    {
-        Console.WriteLine(&quot;Ag&quot;+Age  );
-    }
-    public void Solid()
-    {
-        Console.WriteLine(&quot;Im&quot; + Ft + name);
-    }
-
-    private int  Core()
-    {
-        return 1;
-
-    }
-
-    //析构方法--对应构建方法（创建类），用于GC回收类。
-    /*~Person ()
-    {
-
-    }*/
-
-}
-</code></pre>
-<p>}</p>
+                <p>1.将要被调用的脚本对象，直接拖到调用者脚本上<br>
+之后通过GetComponent&lt;被调用脚本名&gt;().方法名();<br>
+直接获取对象上挂载的脚本来调用目标方法。<br>
+<img src="https://Wei715547.github.io/post-images/1589269952547.PNG" alt="" loading="lazy"></p>
+<p>2.在Hierarchy面板查找目标脚本<br>
+FindObjectOfType&lt;脚本名&gt;().方法名();---返回第一个被加载目标脚本</p>
+<p>FindObjectsOfType&lt;脚本名&gt;().方法名();---返回所有被加载目标脚本数组<br>
+<img src="https://Wei715547.github.io/post-images/1589270757762.PNG" alt="" loading="lazy"></p>
+<p>3.单例模式---在被调用的脚本中，公开声明一个静态的该脚本实例，在初始化时使&quot;实例=this&quot;<br>
+便于在其他脚本中直接调用该脚本与其中的方法。<br>
+<img src="https://Wei715547.github.io/post-images/1589271341241.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589271396945.PNG" alt="" loading="lazy"></p>
+<p>两脚本有碰撞，触发关系时可直接利用<br>
+(碰撞)collsion.gameObject.GetComponent&lt;被调用脚本名&gt;().方法名();<br>
+(触发)collsion.GetComponent&lt;被调用脚本名&gt;().方法名();<br>
+或SendMessage（以”方法名“调用物体中继承 MonoBehaviour 脚本的方法.）<br>
+(碰撞)collision.gameObject.SendMessage(&quot;方法名&quot;);<br>
+(触发)collsion..SendMessage(&quot;方法名&quot;);<br>
+调用对方脚本中的方法<br>
+<img src="https://Wei715547.github.io/post-images/1589272112653.PNG" alt="" loading="lazy"></p>
 
               </div>
               <div class="toc-container">
@@ -177,9 +125,9 @@ private  string   name;//外部都可访问</p>
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/shu-ju-cun-chu-xu-lie-hua-fan-xu-lie-hua/">
+            <a href="https://Wei715547.github.io/post/wei-tuo-shi-jian-lamda-biao-da-shi-dui-fang-fa-de-chuan-di-diao-yong/">
               <h3 class="post-title">
-                数据存储-序列化/反序列化
+                委托，事件，Lamda表达式（对方法的传递/调用）
               </h3>
             </a>
           </div>
