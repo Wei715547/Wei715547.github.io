@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>接口-简单案例 | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589086012850">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589250168445">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="接口-简单案例 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
@@ -16,11 +16,10 @@ using System.Collections.Generic;
 using System.Text;
 namespace 接口
 {
-class UDisk : IUSB
+interface IUSB
 {
-/// 
-/// 存储内容
-///..." />
+void Read();
+    void..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -30,7 +29,7 @@ class UDisk : IUSB
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589086012850" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589250168445" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -102,21 +101,10 @@ using System.Collections.Generic;<br>
 using System.Text;</p>
 <p>namespace 接口<br>
 {<br>
-class UDisk : IUSB<br>
+interface IUSB<br>
 {<br>
-/// <summary><br>
-/// 存储内容<br>
-/// </summary><br>
-private string content;</p>
-<pre><code>    public void Read()
-    {
-        Console.WriteLine(content);
-    }
-
-    public void Write(string s)
-    {
-        content = s;
-    }
+void Read();</p>
+<pre><code>    void Write(string s);
 }
 </code></pre>
 <p>}</p>

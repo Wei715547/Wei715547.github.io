@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>最高分排序 | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589086012850">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589250168445">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="最高分排序 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
@@ -25,7 +25,7 @@ lis..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589086012850" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589250168445" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -117,6 +117,11 @@ bestScoreArr = list.ToArray();//将排好序的list转给数组</p>
     }
     bestScoreArr[index] = score;//将score填入空出位。
     Save();//保存。
+}
+//获取最大值方法(Linq)
+public int GetBestScore()
+{
+    return bestScoreArr.Max();
 }
 </code></pre>
 <p>//要存储的游戏数据类<br>

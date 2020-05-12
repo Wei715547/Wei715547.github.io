@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-10T04:46:56.894Z</updated>
+    <updated>2020-05-12T02:22:52.043Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,57 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[DG Tweening]]></title>
+        <id>https://Wei715547.github.io/post/dg-tweening/</id>
+        <link href="https://Wei715547.github.io/post/dg-tweening/">
+        </link>
+        <updated>2020-05-11T12:17:14.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using DG.Tweening;<br>
+using UnityEngine.UI;<br>
+public class InDoor : MonoBehaviour<br>
+{</p>
+<pre><code>public GameObject InDoorPanel;
+
+private void Start()
+{
+    InDoorPanel.GetComponent&lt;Image&gt;().color = new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
+        InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0);
+    InDoorPanel.transform.position = new Vector3(InDoorPanel.transform.position.x,
+        -100, InDoorPanel.transform.position.z);
+    //InDoorPanel.transform.localScale= Vector3.zero;
+    InDoorPanel.SetActive(false);
+}
+
+private void OnTriggerEnter2D(Collider2D collision)
+{
+    if (collision.tag == &quot;Player&quot;)
+    {
+        InDoorPanel.SetActive(true);
+        InDoorPanel.GetComponent&lt;Image&gt;().DOColor(new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
+            InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0.7f), 0.3f);
+        InDoorPanel.transform.DOMoveY(110, 0.3f);
+        //InDoorPanel.transform.DOScale(Vector3.one, 0.3f);
+    }
+}
+
+private void OnTriggerExit2D(Collider2D collision)
+{
+    if (collision.tag == &quot;Player&quot;)
+    {
+        InDoorPanel.GetComponent&lt;Image&gt;().DOColor(new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
+            InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0), 0.3f);
+        InDoorPanel.transform.DOMoveY(-100, 0.3f).OnComplete(() =&gt; InDoorPanel.SetActive(false));
+        //InDoorPanel.transform.DOScale(Vector3.zero, 0.3f);
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[最高分排序]]></title>
         <id>https://Wei715547.github.io/post/zui-gao-fen-pai-xu/</id>
@@ -41,6 +92,11 @@ bestScoreArr = list.ToArray();//将排好序的list转给数组</p>
     }
     bestScoreArr[index] = score;//将score填入空出位。
     Save();//保存。
+}
+//获取最大值方法(Linq)
+public int GetBestScore()
+{
+    return bestScoreArr.Max();
 }
 </code></pre>
 <p>//要存储的游戏数据类<br>
@@ -224,71 +280,6 @@ eni.Died();</p>
         </link>
         <updated>2020-05-09T04:56:31.000Z</updated>
         <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589000914635.jpg" alt="" loading="lazy"></figure>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[(敌人类）提取共有属性/方法]]></title>
-        <id>https://Wei715547.github.io/post/ti-qu-gong-you-shu-xing-fang-fa/</id>
-        <link href="https://Wei715547.github.io/post/ti-qu-gong-you-shu-xing-fang-fa/">
-        </link>
-        <updated>2020-05-08T14:42:30.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class Enemis : MonoBehaviour<br>
-{<br>
-protected Animator ani;<br>
-protected CircleCollider2D cl;<br>
-// Start is called before the first frame update<br>
-protected virtual void Start()<br>
-{<br>
-ani = GetComponent<Animator>();<br>
-cl = GetComponent<CircleCollider2D>();<br>
-}</p>
-<pre><code>public void Died()
-{
-    ani.SetTrigger(&quot;Died&quot;);
-    cl.enabled = false;
-}
-
-public void D()
-{
-    Destroy(gameObject);
-}
-</code></pre>
-<p>}</p>
-<p>//应用-所有敌人继承Enemis<br>
-private void OnCollisionEnter2D(Collision2D collision)         //(Player内代码)<br>
-{<br>
-if (collision.gameObject.tag == &quot;Enm&quot;)<br>
-{<br>
-//Enemis eni = collision.gameObject.GetComponent<Enemis>();//子类对象赋给父类引用(由于各子类不同)/(通过子类获取子类中父类实例--便于调用父类方法)👌</p>
-<pre><code>        if (ani.GetBool(&quot;Down&quot;))
-        {
-            //eni.Died();//直接调用父类中所有子类共有行为👌
-
-            collision.gameObject.SendMessage(&quot;Died&quot;);//或者不需声明父类直接在子类中调用父类方法👍👍👍
-
-            //collision.gameObject.transform.GetComponent&lt;Eagle&gt;().Died();
-            //FrogRangAI frog = collision.gameObject.GetComponent&lt;FrogRangAI&gt;();
-            //frog.Died();
-//由于敌人种类不确定(Eagle,FrogRangAI)，所以不能获取子类来调用父类中共有行为。🖕🖕🖕
-
-            AddUpForce();
-        }
-        else if (transform.position.x &lt; collision.gameObject.transform.position.x)
-        {
-            playerR.velocity = new Vector2(-3, playerR.velocity.y);
-            IsHaert = true;
-        }
-        else if (transform.position.x &gt; collision.gameObject.transform.position.x)
-        {
-            playerR.velocity = new Vector2(3, playerR.velocity.y);
-            IsHaert = true;
-        }
-        GamePanel.Intence.Damage();
-    }
-</code></pre>
 ]]></content>
     </entry>
 </feed>

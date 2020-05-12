@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ComponenDemo | Weiwei的个人网站</title>
+<title>DG Tweening | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589250168445">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="ComponenDemo | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="DG Tweening | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -14,8 +14,9 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-/// 
-/// Component类提供了查找（当前物体，子类，父类）组件的功能..." />
+using DG.Tweening;
+using UnityEngine.UI;
+..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -78,14 +79,14 @@ using UnityEngine;
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              ComponenDemo
+              DG Tweening
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-11
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
@@ -95,41 +96,46 @@ using UnityEngine;
                 <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;<br>
-/// <summary><br>
-/// Component类提供了查找（当前物体，子类，父类）组件的功能。<br>
-/// </summary><br>
-public class ComponentDemo : MonoBehaviour<br>
-{<br>
-private void OnGUI()<br>
-{<br>
-if (GUILayout.Button(&quot;Transtorm&quot;))<br>
-{<br>
-this.transform.position = new Vector3(0, 0, 10);<br>
-}<br>
-if (GUILayout .Button (&quot;GetComponent&quot;))<br>
-{<br>
-this.GetComponent<MeshRenderer>().material.color = Color.red;<br>
-}<br>
-if(GUILayout.Button (&quot;GetComponents&quot;))<br>
-{<br>
-var allConmponent = this.GetComponents<Component>();<br>
-foreach (var item in allConmponent )<br>
-{<br>
-print(item.GetType());<br>
-}<br>
-}<br>
-if (GUILayout.Button(&quot;GetComponentsInChildren&quot;))<br>
-{<br>
-//获取后代物体的指定类型组件（从自身开始）<br>
-//var sun = this.GetComponentInChildren<MeshRenderer>();//返回包含MeshRanderer组件的子对象<br>
-var allConmponent = this.GetComponentsInChildren<MeshRenderer>();//返回所有包含MeshRanderer组件的子对象<br>
-foreach (var item in allConmponent)<br>
-{<br>
-item.material.color = Color.blue;<br>
-}<br>
-}<br>
-}<br>
-}</p>
+using DG.Tweening;<br>
+using UnityEngine.UI;<br>
+public class InDoor : MonoBehaviour<br>
+{</p>
+<pre><code>public GameObject InDoorPanel;
+
+private void Start()
+{
+    InDoorPanel.GetComponent&lt;Image&gt;().color = new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
+        InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0);
+    InDoorPanel.transform.position = new Vector3(InDoorPanel.transform.position.x,
+        -100, InDoorPanel.transform.position.z);
+    //InDoorPanel.transform.localScale= Vector3.zero;
+    InDoorPanel.SetActive(false);
+}
+
+private void OnTriggerEnter2D(Collider2D collision)
+{
+    if (collision.tag == &quot;Player&quot;)
+    {
+        InDoorPanel.SetActive(true);
+        InDoorPanel.GetComponent&lt;Image&gt;().DOColor(new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
+            InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0.7f), 0.3f);
+        InDoorPanel.transform.DOMoveY(110, 0.3f);
+        //InDoorPanel.transform.DOScale(Vector3.one, 0.3f);
+    }
+}
+
+private void OnTriggerExit2D(Collider2D collision)
+{
+    if (collision.tag == &quot;Player&quot;)
+    {
+        InDoorPanel.GetComponent&lt;Image&gt;().DOColor(new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
+            InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0), 0.3f);
+        InDoorPanel.transform.DOMoveY(-100, 0.3f).OnComplete(() =&gt; InDoorPanel.SetActive(false));
+        //InDoorPanel.transform.DOScale(Vector3.zero, 0.3f);
+    }
+}
+</code></pre>
+<p>}</p>
 
               </div>
               <div class="toc-container">
@@ -142,9 +148,9 @@ item.material.color = Color.blue;<br>
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/jumpandluo-di-jian-ce/">
+            <a href="https://Wei715547.github.io/post/zui-gao-fen-pai-xu/">
               <h3 class="post-title">
-                jump&amp;落地检测
+                最高分排序
               </h3>
             </a>
           </div>

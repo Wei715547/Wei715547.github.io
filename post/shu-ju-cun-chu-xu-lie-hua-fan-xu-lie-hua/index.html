@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>数据存储-序列化/反序列化 | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589086012850">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589250168445">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="数据存储-序列化/反序列化 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
@@ -24,7 +24,7 @@ XML：扩展标记语言，用于标记电子文件使其..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589086012850" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589250168445" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -84,7 +84,7 @@ XML：扩展标记语言，用于标记电子文件使其..." />
                 2020-05-05
               </span>
               <span>
-                3 min read
+                6 min read
               </span>
               
             </div>
@@ -137,6 +137,107 @@ private void  LoadByBin()
         fs.Close();
         LoadDate(save);
         //UIManage.Instance.ShowMessage(&quot;加载成功&quot;);
+        UIPanle.Instance.OnStartButtonDown();
+    }
+    else
+        UIManage.Instance.ShowMessage(&quot;无存档记录&quot;);
+}
+</code></pre>
+<p>private void SaveByXML()<br>
+{<br>
+Save save = SaveDate();<br>
+//创建Xml文件存储路径<br>
+string filePath = Application .dataPath + &quot;/Savemaster&quot; + &quot;/byXml.txt&quot;;<br>
+//创建Xml文档<br>
+XmlDocument xmlDoc = new XmlDocument();<br>
+//创建根节点<br>
+XmlElement root = xmlDoc.CreateElement(&quot;save&quot;);<br>
+//设置根节点中的值<br>
+root.SetAttribute(&quot;name&quot;, &quot;saveFile1&quot;);</p>
+<pre><code>    //创建XmlElement
+    XmlElement target;
+    XmlElement targetPosition;
+    XmlElement monsterType;
+
+    //通过遍历save中存储的数据，将数据转换正Xml格式。
+    for (int i = 0; i &lt; save .livingTargetPos .Count ; i++)
+    {
+        target = xmlDoc.CreateElement(&quot;target&quot;);
+        targetPosition = xmlDoc.CreateElement(&quot;targetPosition&quot;);
+        //设置节点的值
+        targetPosition.InnerText = save.livingTargetPos[i].ToString();
+        monsterType = xmlDoc.CreateElement(&quot;monsterType&quot;);
+        monsterType.InnerText = save.monsterType[i].ToString();
+
+        //设置节点中的层级关系 root -- target -- (targetPosition,monsterType)
+        target.AppendChild(targetPosition);
+        target.AppendChild(monsterType);
+        root.AppendChild(target);
+    }
+
+    //设置射击数和分数节点，并设置成绩关系。root -- （target(targetPosition,monsterType) -- shootNum -- scoreNum）
+    XmlElement shootNum = xmlDoc.CreateElement(&quot;shootNum&quot;);
+    shootNum.InnerText = save.shootNum.ToString ();
+    root.AppendChild(shootNum);
+
+    XmlElement scoreNum = xmlDoc.CreateElement(&quot;scoreNum&quot;);
+    scoreNum.InnerText = save.scoreNum.ToString();
+    root.AppendChild(scoreNum);
+
+    //根目录添加的Xml文档
+    xmlDoc.AppendChild(root);
+    //保存Xml文档
+    xmlDoc.Save(filePath);
+
+    if (File.Exists(Application.dataPath + &quot;/Savemaster&quot; + &quot;/byXml.txt&quot;))
+    {
+        UIManage.Instance.ShowMessage(&quot;保存成功&quot;);
+    }
+
+}
+</code></pre>
+<p>//Xml<br>
+using System.Xml;<br>
+private void LoadByXML()<br>
+{</p>
+<pre><code>    //创建Xml文件存储路径
+    string filePath = Application.dataPath + &quot;/Savemaster&quot; + &quot;/byXml.txt&quot;;
+    if (File.Exists(filePath))
+    {
+        Save save = SaveDate();
+        //加载Xml文档
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.Load(filePath);
+        //通过节点名称获取元素，结果为XmlNodeList类型
+        XmlNodeList targets = xmlDoc.GetElementsByTagName(&quot;target&quot;);
+        //遍历所有的target节点，并获得子节点和节点的InnerText
+        if (targets!=null)
+        {
+            foreach (XmlNode target in targets )
+            {
+                XmlNode targetPosition = target.ChildNodes[0];
+                int targetPositionIndex =int.Parse ( targetPosition.InnerText);
+                //把得到的值存到save中
+                save.livingTargetPos.Add(targetPositionIndex);
+
+                XmlNode monsterType = target.ChildNodes[1];
+                int monsterTypeIndex = int.Parse(monsterType.InnerText);
+                //把得到的值存到save中
+                save.monsterType.Add(monsterTypeIndex);
+            }
+        }
+
+        //得到存储的射击数和分数。
+        XmlNodeList shootNum = xmlDoc.GetElementsByTagName(&quot;shootNum&quot;);
+        int shootNumCount = int.Parse (shootNum[0].InnerText);
+        save.shootNum = shootNumCount;
+
+        XmlNodeList scoreNum = xmlDoc.GetElementsByTagName(&quot;scoreNum&quot;);
+        int scoreNumCount = int.Parse(scoreNum[0].InnerText);
+        save.scoreNum = scoreNumCount;
+
+        LoadDate(save);
+
         UIPanle.Instance.OnStartButtonDown();
     }
     else
