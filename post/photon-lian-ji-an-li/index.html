@@ -2,17 +2,22 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Unity面试易考题-基本框架 | Weiwei的个人网站</title>
+<title>Photon联机案例 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589455469597">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Unity面试易考题-基本框架 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Photon联机案例 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="
-..." />
+    <meta name="description" content="导入Photon2插件......
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Photon.Pun;
+usin..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -75,21 +80,97 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Unity面试易考题-基本框架
+              Photon联机案例
             </h2>
             <div class="post-info">
               <span>
-                2020-05-09
+                2020-05-14
               </span>
               <span>
-                0 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589001472730.jpg" alt="" loading="lazy"></figure>
+                <p>导入Photon2插件......<br>
+<img src="https://Wei715547.github.io/post-images/1589454704733.PNG" alt="" loading="lazy"><br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using Photon.Pun;<br>
+using UnityEngine.UI;<br>
+using Photon.Realtime;</p>
+<p>public class NetworkLuncher : MonoBehaviourPunCallbacks//继承回调行为类<br>
+{<br>
+public GameObject nameUI;<br>
+public GameObject loginUI;<br>
+public InputField name;<br>
+public InputField roomName;</p>
+<pre><code>// Start is called before the first frame update
+void Start()
+{
+    //链接服务器
+    PhotonNetwork.ConnectUsingSettings();
+}
+
+//链接到服务器后执行
+public override void OnConnectedToMaster()
+{
+    nameUI.SetActive(true);
+}
+
+//输入名字的确认按钮
+public void PlayButton()
+{
+    nameUI.SetActive(false);
+    PhotonNetwork.NickName = name.text;
+    loginUI.SetActive(true);
+
+}
+
+//创建房间加入房间按钮
+public void JoinOrCreatButton()
+{
+    //如果没有输入=》退出方法在此输入
+    if (roomName .text .Length &lt;2)
+    {
+        return;
+    }
+
+    loginUI.SetActive(false);
+
+    //服务器房间设置：房间类型，最大玩家数
+    RoomOptions options = new RoomOptions { MaxPlayers = 4 };
+    //加入/创建房间
+    PhotonNetwork.JoinOrCreateRoom(roomName .text, options, default);
+}
+
+//进入到服务器房间后执行
+public override void OnJoinedRoom()
+{
+    //进入房间后进入下一场景
+    PhotonNetwork.LoadLevel(1);
+}
+</code></pre>
+<p>}</p>
+<p><img src="https://Wei715547.github.io/post-images/1589454961930.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589454980911.PNG" alt="" loading="lazy"></p>
+<pre><code>//按下准备开始按钮
+public void StrtPlay()
+{
+    readyPanel.SetActive(false);
+
+    //生成预制体玩家
+    PhotonNetwork.Instantiate(&quot;Player&quot;, new Vector3(1, 1, 0), Quaternion.identity, 0);
+}
+</code></pre>
+<p>//控制本地角色<br>
+using Photon.Pun;<br>
+public class PlayerCT : MonoBehaviourPun<br>
+<img src="https://Wei715547.github.io/post-images/1589455187033.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589455406349.PNG" alt="" loading="lazy"></p>
 
               </div>
               <div class="toc-container">
@@ -102,9 +183,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-shu-ju-jie-gou/">
+            <a href="https://Wei715547.github.io/post/hou-tai-chang-jing-jia-zai-jin-du-tiao/">
               <h3 class="post-title">
-                Unity面试易考题-数据结构
+                后台场景加载（进度条）
               </h3>
             </a>
           </div>
