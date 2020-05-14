@@ -2,21 +2,22 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>向量API | Weiwei的个人网站</title>
+<title>后台场景加载（进度条） | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589426527359">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="向量API | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="后台场景加载（进度条） | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
+    <meta name="description" content="
+
+using System.Collections;
 using UnityEngine;
-public class VectorAPI : MonoBehaviour
-{
-..." />
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+public class InP..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -79,11 +80,11 @@ public class VectorAPI : MonoBehaviour
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              向量API
+              后台场景加载（进度条）
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-14
               </span>
               <span>
                 1 min read
@@ -93,31 +94,58 @@ public class VectorAPI : MonoBehaviour
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class VectorAPI : MonoBehaviour<br>
+                <p><img src="https://Wei715547.github.io/post-images/1589426492371.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589426497960.PNG" alt="" loading="lazy"><br>
+using System.Collections;<br>
+using UnityEngine;<br>
+using UnityEngine.SceneManagement;<br>
+using UnityEngine.UI;<br>
+public class InPanel : MonoBehaviour<br>
 {<br>
-public AnimationCurve cuver;<br>
-private float x;<br>
-public  float psTime=3;<br>
-private Vector3 targetPoint = new Vector3 (0, 0, 10);<br>
-private void OnGUI()<br>
-{<br>
-if (GUILayout.RepeatButton (&quot;Move&quot;))<br>
-{<br>
-//将物体移动至（0，0,10）<br>
-//匀速移动<br>
-this.transform.position = Vector3.MoveTowards(this.transform.position,targetPoint , 2);<br>
-//先快后慢--终点与比例固定<br>
-this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2 );</p>
-<pre><code>    }
-    if (GUILayout.RepeatButton(&quot;Lerp&quot;))
+public GameObject Load;<br>
+public Slider sl;<br>
+public Text text,next;</p>
+<pre><code>private void Awake()
+{
+    Load.SetActive(false);
+
+}
+
+void Update()
+{
+    if (Input .GetKeyDown (KeyCode.E ))
     {
-        x += Time.deltaTime/psTime ;
-        //自然变化，起点，终点固定，比例根据曲线变化
-        this.transform.position =
-            Vector3.LerpUnclamped (Vector3.zero, targetPoint, cuver.Evaluate(x));
+
+        StartCoroutine(LoadLeve());
+       
+    }
+    
+}
+
+IEnumerator LoadLeve()
+{
+    Load.SetActive(true);
+
+    AsyncOperation operation = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+
+    operation.allowSceneActivation = false;
+
+    while (!operation.isDone )
+    {
+        sl.value = operation.progress;
+        text.text = operation.progress * 100 + &quot;%&quot;;
+
+        if (operation .progress &gt;=0.9f)
+        {
+            sl.value = 1;
+            text.text = &quot;100%&quot;;
+            next.text = &quot;Pass Any Ket To Next&quot;;
+            if (Input. anyKeyDown)
+            {
+                operation.allowSceneActivation = true;
+            }
+        }
+        yield return null;
     }
 }
 </code></pre>
@@ -134,9 +162,9 @@ this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/di-yi-ren-cheng-jing-tou-xuan-zhuan/">
+            <a href="https://Wei715547.github.io/post/unity-yi-ge-jiao-ben-diao-yong-ling-yi-ge-jiao-ben-zhong-fang-fa-de-ji-chong-fang-fa/">
               <h3 class="post-title">
-                第一人称镜头旋转
+                Unity---一个脚本调用另一个脚本中方法的几种方法
               </h3>
             </a>
           </div>

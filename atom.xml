@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-12T14:21:56.073Z</updated>
+    <updated>2020-05-14T03:42:53.840Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,70 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[后台场景加载（进度条）]]></title>
+        <id>https://Wei715547.github.io/post/hou-tai-chang-jing-jia-zai-jin-du-tiao/</id>
+        <link href="https://Wei715547.github.io/post/hou-tai-chang-jing-jia-zai-jin-du-tiao/">
+        </link>
+        <updated>2020-05-14T03:17:17.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1589426492371.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589426497960.PNG" alt="" loading="lazy"><br>
+using System.Collections;<br>
+using UnityEngine;<br>
+using UnityEngine.SceneManagement;<br>
+using UnityEngine.UI;<br>
+public class InPanel : MonoBehaviour<br>
+{<br>
+public GameObject Load;<br>
+public Slider sl;<br>
+public Text text,next;</p>
+<pre><code>private void Awake()
+{
+    Load.SetActive(false);
+
+}
+
+void Update()
+{
+    if (Input .GetKeyDown (KeyCode.E ))
+    {
+
+        StartCoroutine(LoadLeve());
+       
+    }
+    
+}
+
+IEnumerator LoadLeve()
+{
+    Load.SetActive(true);
+
+    AsyncOperation operation = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+
+    operation.allowSceneActivation = false;
+
+    while (!operation.isDone )
+    {
+        sl.value = operation.progress;
+        text.text = operation.progress * 100 + &quot;%&quot;;
+
+        if (operation .progress &gt;=0.9f)
+        {
+            sl.value = 1;
+            text.text = &quot;100%&quot;;
+            next.text = &quot;Pass Any Ket To Next&quot;;
+            if (Input. anyKeyDown)
+            {
+                operation.allowSceneActivation = true;
+            }
+        }
+        yield return null;
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Unity---一个脚本调用另一个脚本中方法的几种方法]]></title>
         <id>https://Wei715547.github.io/post/unity-yi-ge-jiao-ben-diao-yong-ling-yi-ge-jiao-ben-zhong-fang-fa-de-ji-chong-fang-fa/</id>
@@ -384,15 +448,6 @@ eni.Died();</p>
         </link>
         <updated>2020-05-09T05:17:15.000Z</updated>
         <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589001472730.jpg" alt="" loading="lazy"></figure>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Unity面试易考题-数据结构]]></title>
-        <id>https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-shu-ju-jie-gou/</id>
-        <link href="https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-shu-ju-jie-gou/">
-        </link>
-        <updated>2020-05-09T05:14:10.000Z</updated>
-        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589001324001.jpg" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
 </feed>
