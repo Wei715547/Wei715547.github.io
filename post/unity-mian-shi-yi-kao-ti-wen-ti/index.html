@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Unity面试易考题-问题 | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589518429515">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589544188908">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Unity面试易考题-问题 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
@@ -12,7 +12,12 @@
 
 
     <meta name="description" content="
-..." />
+array = {“Lua&quot;,&quot;C#&quot;,&quot;Java&quot;}
+for k,v in pairs(array) do
+print(k,v)
+end
+//遍历array中内容
+array[2]=ni..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -22,7 +27,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589518429515" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589544188908" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -82,7 +87,7 @@
                 2020-05-09
               </span>
               <span>
-                0 min read
+                1 min read
               </span>
               
             </div>
@@ -90,6 +95,16 @@
             <div class="post-content-wrapper">
               <div class="post-content">
                 <figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589001744941.jpg" alt="" loading="lazy"></figure>
+<p>array = {“Lua&quot;,&quot;C#&quot;,&quot;Java&quot;}<br>
+for k,v in pairs(array) do<br>
+print(k,v)<br>
+end<br>
+//遍历array中内容</p>
+<p>array[2]=nil<br>
+for k,v in ipairs(array) do//ipair:按照索引从1开始，递增遍历，遇到nil时即停止<br>
+print(k,v)<br>
+end<br>
+//只输出“Lua”</p>
 
               </div>
               <div class="toc-container">

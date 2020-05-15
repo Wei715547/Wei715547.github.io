@@ -2,17 +2,23 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Unity面试易考题 - C#相关 | Weiwei的个人网站</title>
+<title>泛型集合List,Dictionary | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589544188908">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Unity面试易考题 - C#相关 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="泛型集合List,Dictionary | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="
-..." />
+    <meta name="description" content="List userList = new List();
+//增删查改
+//增加数据
+public void AddDate(User user)
+{
+userList.Add(user);
+//Save();
+Console.WriteLi..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -75,21 +81,130 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Unity面试易考题 - C#相关
+              泛型集合List,Dictionary
             </h2>
             <div class="post-info">
               <span>
-                2020-05-09
+                2020-05-15
               </span>
               <span>
-                0 min read
+                3 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589000914635.jpg" alt="" loading="lazy"></figure>
+                <p>List<User> userList = new List<User>();</p>
+<p>//增删查改<br>
+//增加数据<br>
+public void AddDate(User user)<br>
+{<br>
+userList.Add(user);<br>
+//Save();<br>
+Console.WriteLine(&quot;添加用户成功！&quot;);<br>
+}<br>
+//删除数据<br>
+public void RemoveByName(string name)<br>
+{<br>
+for (int i = 0; i &lt; userList .Count ; i++)<br>
+{<br>
+if (userList [i].Name ==name)<br>
+{<br>
+userList.Remove(userList[i]);<br>
+}<br>
+}<br>
+}</p>
+<pre><code>    public void RemoveByAddress(string address)
+    {
+        for (int i = 0; i &lt; userList.Count; i++)
+        {
+            if (userList[i].Address  == address )
+            {
+                userList.Remove(userList[i]);
+            }
+        }
+    }
+
+    //修改数据
+    public void ChangeDate(string name)
+    {
+        bool ex = false;
+        for (int i = 0; i &lt; userList .Count ; i++)
+        {
+            if (userList[i].Name == name )
+            {
+                ex = true;
+            }
+        }
+        if (ex)
+        {
+            for (int i = 0; i &lt; userList.Count; i++)
+            {
+                if (userList[i].Name == name)
+                {
+                    Console.WriteLine(&quot;请重新输入用户名称：&quot;);
+                    string namec = Console.ReadLine();
+                    Console.WriteLine(&quot;请重新输入用户年龄：&quot;);
+                    int agec = int.Parse(Console.ReadLine());
+                    Console.WriteLine(&quot;请重新输入地址：&quot;);
+                    string addressc = Console.ReadLine();
+                    userList[i].Name = namec;
+                    userList[i].Age = agec;
+                    userList[i].Address = addressc;
+                    Console.WriteLine(&quot;修改成功&quot;);
+                }
+            } 
+        }
+        else
+        {
+            Console.WriteLine(&quot;不存在该用户！&quot;);
+        }
+    }
+    //查询数据
+    public void ShowAll()
+    {
+        if (userList.Count != 0)
+        {
+            for (int i = 0; i &lt; userList.Count; i++)
+            {
+                Console.WriteLine(userList[i]);
+            }
+        }
+        else Console.WriteLine(&quot;当前为空&quot;); 
+    }
+}
+
+
+static void Main(string[] args)
+    {
+        //创建字典泛型集合
+        Dictionary&lt;string, string&gt; dic = new Dictionary&lt;string, string&gt;();
+        //        键，值
+
+        //往集合中添加数据
+        dic.Add(&quot;baidu&quot;, &quot;百度网&quot;);
+        dic.Add(&quot;qq&quot;, &quot;腾讯网&quot;);
+        dic.Add(&quot;taobao&quot;, &quot;淘宝网&quot;);
+
+        //不可添加同键名的数据
+        //dic.Add(&quot;taobao&quot;, &quot;马云&quot;);
+
+        //查询数据---集合名[键名]
+        Console.WriteLine(dic[&quot;qq&quot;]);
+        Console.WriteLine(dic .Count );
+        //删除数据---集合名.Remove(键名);
+        dic.Remove(&quot;baidu&quot;);
+        //修改数据---集合名[键名] = 新值;
+        dic[&quot;qq&quot;] = &quot;马化腾&quot;;
+
+        //遍历字典集合
+        foreach (var item in dic .Keys )
+        {
+            Console.WriteLine(&quot;{0}:{1}&quot;,item ,dic[item]);
+        }
+        Console.ReadLine();
+    }</code></pre>
 
               </div>
               <div class="toc-container">
@@ -102,9 +217,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/ti-qu-gong-you-shu-xing-fang-fa/">
+            <a href="https://Wei715547.github.io/post/photon-lian-ji-an-li/">
               <h3 class="post-title">
-                (敌人类）提取共有属性/方法
+                Photon联机案例
               </h3>
             </a>
           </div>
