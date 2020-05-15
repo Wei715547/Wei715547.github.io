@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-14T11:24:41.118Z</updated>
+    <updated>2020-05-15T04:49:49.365Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -78,13 +78,13 @@ public override void OnJoinedRoom()
 </code></pre>
 <p>}</p>
 <p><img src="https://Wei715547.github.io/post-images/1589454961930.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1589454980911.PNG" alt="" loading="lazy"></p>
-<pre><code>//按下准备开始按钮
-public void StrtPlay()
-{
-    readyPanel.SetActive(false);
-
-    //生成预制体玩家
+<img src="https://Wei715547.github.io/post-images/1589454980911.PNG" alt="" loading="lazy"><br>
+（using Photon.Pun;)<br>
+//按下准备开始按钮<br>
+public void StrtPlay()<br>
+{<br>
+readyPanel.SetActive(false);</p>
+<pre><code>    //生成预制体玩家
     PhotonNetwork.Instantiate(&quot;Player&quot;, new Vector3(1, 1, 0), Quaternion.identity, 0);
 }
 </code></pre>
@@ -106,8 +106,8 @@ public class PlayerCT : MonoBehaviourPun<br>
 using System.Collections;<br>
 using UnityEngine;<br>
 using UnityEngine.SceneManagement;<br>
-using UnityEngine.UI;<br>
-public class InPanel : MonoBehaviour<br>
+using UnityEngine.UI;</p>
+<p>public class InPanel : MonoBehaviour<br>
 {<br>
 public GameObject Load;<br>
 public Slider sl;<br>
