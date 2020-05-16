@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-15T12:03:12.940Z</updated>
+    <updated>2020-05-16T08:05:02.739Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,171 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[ObjectPool(对象池)]]></title>
+        <id>https://Wei715547.github.io/post/objectpooldui-xiang-chi/</id>
+        <link href="https://Wei715547.github.io/post/objectpooldui-xiang-chi/">
+        </link>
+        <updated>2020-05-16T07:54:47.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1589615693691.PNG" alt="" loading="lazy"><br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class ObjectPool : MonoBehaviour<br>
+{<br>
+public static ObjectPool instence;//单例模式用于外部调用</p>
+<pre><code>public GameObject shado;//要生成的预制体（可通过资源管理类获取）
+
+//要生成的预制体集合
+private List&lt;GameObject&gt; playerShado = new List&lt;GameObject&gt;();
+
+private int InstentCount = 5;//在对象池中默认生成多少个
+
+private void Awake()
+{
+    instence = this;
+    Init();//初始生成
+}
+
+public void Init()
+{
+    for (int i = 0; i &lt; InstentCount ; i++)
+    {
+        //生成默认个数预制体(go.SetActive(false);，并添加到目标预制体List中
+        InstantceObject(shado,ref playerShado );
+    }
+}
+//生成与添加入集合的方法
+//（返回值GameObject便于外部调用时，如果对象池中同类物体都处于占用激活状态，则再生成新的预制体并添加到集合中）
+private GameObject InstantceObject(GameObject prefab, ref List&lt;GameObject &gt; addlist  )
+{
+    GameObject go = Instantiate(prefab, transform);
+    go.SetActive(false);
+    addlist.Add(go);
+    return go;
+}
+
+//外部调用方法
+public GameObject GetShado()
+{
+    //遍历集合中的物体知否激活/占用，没有则返回应用该物体。
+    for (int i = 0; i &lt; InstentCount ; i++)
+    {
+        if(playerShado [i].activeInHierarchy==false )
+        {
+            return playerShado[i];
+        }
+    }
+    //如List中的物体均处于占用状态，(对象池中同类物体不够)则生成新的对象返回并添加到List集合(对象池)中
+    return InstantceObject(shado ,ref playerShado );
+}
+
+//gameObject.SetActive(false)写在预制体/外部脚本上
+</code></pre>
+<p>}</p>
+<p>例：生成残影<br>
+<img src="https://Wei715547.github.io/post-images/1589616178256.PNG" alt="" loading="lazy"><br>
+残影预制体脚本<br>
+<img src="https://Wei715547.github.io/post-images/1589616264550.PNG" alt="" loading="lazy"><br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using DG.Tweening;</p>
+<p>public class PlayerShado : MonoBehaviour<br>
+{<br>
+[SerializeField]<br>
+private bool reset;</p>
+<pre><code>private void FixedUpdate()
+{
+    if (reset)
+    {
+        transform.GetComponent&lt;SpriteRenderer&gt;().DOColor(new Color(transform.GetComponent&lt;SpriteRenderer&gt;().color.r,
+          transform.GetComponent&lt;SpriteRenderer&gt;().color.g, transform.GetComponent&lt;SpriteRenderer&gt;().color.b, 0), 0.2f).OnComplete(() =&gt;
+          {
+              gameObject.SetActive(false);   
+          });
+        reset = false;
+        print(&quot;FixedUpdate&quot;);
+    }
+}
+//物体未启用时执行（在Update后执行）
+private void OnDisable()
+{
+    transform.GetComponent&lt;SpriteRenderer&gt;().color = new Color(transform.GetComponent&lt;SpriteRenderer&gt;().color.r,
+            transform.GetComponent&lt;SpriteRenderer&gt;().color.g, transform.GetComponent&lt;SpriteRenderer&gt;().color.b, 1);
+    reset = true;
+    print(&quot;Onsisable&quot;);
+
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2D多段跳]]></title>
+        <id>https://Wei715547.github.io/post/2d-duo-duan-tiao/</id>
+        <link href="https://Wei715547.github.io/post/2d-duo-duan-tiao/">
+        </link>
+        <updated>2020-05-16T03:32:18.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1589614659174.PNG" alt="" loading="lazy"><br>
+public int jumpForce;<br>
+public int jumptimes = 2;<br>
+private int jumpCount;</p>
+<pre><code>    public void JumpMax()
+{
+    if (ani.GetBool(&quot;Heart&quot;)) return;
+    
+    if (Physics2D.OverlapCircle(foot.position, 0.2f, ground))
+    {
+        jumpCount = jumptimes ;
+        ani.SetBool(&quot;Jumping&quot;, false);
+    }
+    if (Input.GetButtonDown(&quot;Jump&quot;) &amp;&amp; Physics2D.OverlapCircle(foot.position, 0.2f, ground))
+    {
+        au.PlayOneShot(jump, 1f);
+        playerR.velocity = new Vector2(playerR.velocity.x, jumpForce );
+        ani.SetBool(&quot;Jumping&quot;, true);
+        ani.SetBool(&quot;Idle&quot;, false);
+        ani.SetBool(&quot;Down&quot;, false);
+        jumpCount--;
+    }else if(Input.GetButtonDown(&quot;Jump&quot;)&amp;&amp; jumpCount &gt; 0&amp;&amp; !Physics2D.OverlapCircle(foot.position, 0.2f, ground))
+    {
+        au.PlayOneShot(jump, 1f);
+        playerR.velocity = new Vector2(playerR.velocity.x, jumpForce );
+        ani.SetBool(&quot;Jumping&quot;, true);
+        ani.SetBool(&quot;Idle&quot;, false);
+        ani.SetBool(&quot;Down&quot;, false);
+        jumpCount--;
+    }
+}    public void JumpMax()
+{
+    if (ani.GetBool(&quot;Heart&quot;)) return;
+    
+    if (Physics2D.OverlapCircle(foot.position, 0.2f, ground))
+    {
+        jumpCount = jumptimes ;
+        ani.SetBool(&quot;Jumping&quot;, false);
+    }
+    if (Input.GetButtonDown(&quot;Jump&quot;) &amp;&amp; Physics2D.OverlapCircle(foot.position, 0.2f, ground))
+    {
+        au.PlayOneShot(jump, 1f);
+        playerR.velocity = new Vector2(playerR.velocity.x, jumpForce );
+        ani.SetBool(&quot;Jumping&quot;, true);
+        ani.SetBool(&quot;Idle&quot;, false);
+        ani.SetBool(&quot;Down&quot;, false);
+        jumpCount--;
+    }else if(Input.GetButtonDown(&quot;Jump&quot;)&amp;&amp; jumpCount &gt; 0&amp;&amp; !Physics2D.OverlapCircle(foot.position, 0.2f, ground))
+    {
+        au.PlayOneShot(jump, 1f);
+        playerR.velocity = new Vector2(playerR.velocity.x, jumpForce );
+        ani.SetBool(&quot;Jumping&quot;, true);
+        ani.SetBool(&quot;Idle&quot;, false);
+        ani.SetBool(&quot;Down&quot;, false);
+        jumpCount--;
+    }
+}</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[泛型集合List,Dictionary]]></title>
         <id>https://Wei715547.github.io/post/fan-xing-ji-he-listdictionary/</id>
@@ -592,48 +757,6 @@ navMeshAgent.destination = hit.point ;//碰撞点<br>
 <pre><code>}
 ![](https://Wei715547.github.io/post-images/1589025091557.jpg)
 ![](https://Wei715547.github.io/post-images/1589025123139.jpg)</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[插值/自定义曲线]]></title>
-        <id>https://Wei715547.github.io/post/cha-zhi/</id>
-        <link href="https://Wei715547.github.io/post/cha-zhi/">
-        </link>
-        <updated>2020-05-09T11:40:43.000Z</updated>
-        <content type="html"><![CDATA[<pre><code>public AnimationCurve sp;
-private float x;//带入曲线x+=Time.deltaTime/psTime
-public float pstime;//越大移动“y”(sp.Evaluate(x))增长越慢
-
-if (Input.GetKey(KeyCode.L))
-    {
-    x += Time.deltaTime / pstime;
-    transform.position = Vector3.Lerp(transform.position, Vector3.up * 5, sp.Evaluate(x));
-        //Lerp(a,b,f)---f:0~1, 0时返回a,1时返回b，0.5时返回a,b中间值
-    }
-    else x = 0;</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[SendMessage]]></title>
-        <id>https://Wei715547.github.io/post/sendmessage/</id>
-        <link href="https://Wei715547.github.io/post/sendmessage/">
-        </link>
-        <updated>2020-05-09T08:16:59.000Z</updated>
-        <content type="html"><![CDATA[<p>private void OnCollisionEnter2D(Collision2D collision)<br>
-{<br>
-if (collision.gameObject.tag == &quot;Enm&quot;)<br>
-{<br>
-Enemis eni = collision.gameObject.GetComponent<Enemis>();<br>
-if (ani.GetBool(&quot;Down&quot;))<br>
-{<br>
-eni.Died();</p>
-<pre><code>            //collision.gameObject.SendMessage(&quot;Dide&quot;);
-
-            /*FrogRangAI frog =                        collision.gameObject.GetComponent&lt;FrogRangAI&gt;();
-            frog.Died();*/
-            
-            AddUpForce();
-        }</code></pre>
 ]]></content>
     </entry>
 </feed>

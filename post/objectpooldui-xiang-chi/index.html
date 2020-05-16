@@ -2,20 +2,21 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>最高分排序 | Weiwei的个人网站</title>
+<title>ObjectPool(对象池) | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589616298260">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="最高分排序 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="ObjectPool(对象池) | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="public  void SaveScore (int score)
-{
-List list = bestScoreArr.ToList();//先将数组转化为List
-//系统:Linq方法(using System.Linq;)
-lis..." />
+    <meta name="description" content="
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+public class ObjectPool : MonoBehaviour
+..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -78,122 +79,112 @@ lis..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              最高分排序
+              ObjectPool(对象池)
             </h2>
             <div class="post-info">
               <span>
-                2020-05-10
+                2020-05-16
               </span>
               <span>
-                2 min read
+                3 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>public  void SaveScore (int score)<br>
+                <p><img src="https://Wei715547.github.io/post-images/1589615693691.PNG" alt="" loading="lazy"><br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class ObjectPool : MonoBehaviour<br>
 {<br>
-List<int> list = bestScoreArr.ToList();//先将数组转化为List<br>
-//系统:Linq方法(using System.Linq;)<br>
-list.Sort((x, y) =&gt; (-x.CompareTo(y)));//调用List的Sort方法，从大到小对list进行排序[（-x）(从小到大改为x<br>
-bestScoreArr = list.ToArray();//将排好序的list转给数组</p>
-<pre><code>    //50  20  10 加入传score为60，则将60排在低 bestScoreArr[0]
+public static ObjectPool instence;//单例模式用于外部调用</p>
+<pre><code>public GameObject shado;//要生成的预制体（可通过资源管理类获取）
 
-    int index = -1;
-    for (int i = 0; i &lt; bestScoreArr .Count() ; i++)
+//要生成的预制体集合
+private List&lt;GameObject&gt; playerShado = new List&lt;GameObject&gt;();
+
+private int InstentCount = 5;//在对象池中默认生成多少个
+
+private void Awake()
+{
+    instence = this;
+    Init();//初始生成
+}
+
+public void Init()
+{
+    for (int i = 0; i &lt; InstentCount ; i++)
     {
-        if (score &gt;bestScoreArr [i])//score依次与数组中的数进行对比，当比一个数大时，记录这个数的索引将后面的数都向后移。
+        //生成默认个数预制体(go.SetActive(false);，并添加到目标预制体List中
+        InstantceObject(shado,ref playerShado );
+    }
+}
+//生成与添加入集合的方法
+//（返回值GameObject便于外部调用时，如果对象池中同类物体都处于占用激活状态，则再生成新的预制体并添加到集合中）
+private GameObject InstantceObject(GameObject prefab, ref List&lt;GameObject &gt; addlist  )
+{
+    GameObject go = Instantiate(prefab, transform);
+    go.SetActive(false);
+    addlist.Add(go);
+    return go;
+}
+
+//外部调用方法
+public GameObject GetShado()
+{
+    //遍历集合中的物体知否激活/占用，没有则返回应用该物体。
+    for (int i = 0; i &lt; InstentCount ; i++)
+    {
+        if(playerShado [i].activeInHierarchy==false )
         {
-            index = i;
+            return playerShado[i];
         }
     }
-    if (index == -1) return;//score比数组中的值都小，不需保存，退出方法。
-
-    for (int i = bestScoreArr .Length -1; i &gt;index ; i--)//从后向前将index之后的数据依次向后移
-    {
-        bestScoreArr[i] = bestScoreArr[i - 1];
-
-    }
-    bestScoreArr[index] = score;//将score填入空出位。
-    Save();//保存。
+    //如List中的物体均处于占用状态，(对象池中同类物体不够)则生成新的对象返回并添加到List集合(对象池)中
+    return InstantceObject(shado ,ref playerShado );
 }
-//获取最大值方法(Linq)
-public int GetBestScore()
-{
-    return bestScoreArr.Max();
-}
-</code></pre>
-<p>//要存储的游戏数据类<br>
-public class GameDate<br>
-{<br>
-public  static bool IsAgainGame =false ;</p>
-<pre><code>private bool isFirstGame;
-private bool isMusicOn;
 
-private int[] bestScoreArr;
-public void SetBestScoreArr(int[] bestScoreArr)
-{
-    this.bestScoreArr = bestScoreArr;
-}
- public int [] GetBestScoreArr()
-{
-    return bestScoreArr;
-}
-//（其他......get;set方法省略）
-
-private int selectSkin;
-private bool[] skinUnlocked;
-private int diamondCount;
+//gameObject.SetActive(false)写在预制体/外部脚本上
 </code></pre>
 <p>}</p>
-<pre><code>/// &lt;summary&gt;
-/// 储存数据
-/// &lt;/summary&gt;
-private void Save()
+<p>例：生成残影<br>
+<img src="https://Wei715547.github.io/post-images/1589616178256.PNG" alt="" loading="lazy"><br>
+残影预制体脚本<br>
+<img src="https://Wei715547.github.io/post-images/1589616264550.PNG" alt="" loading="lazy"><br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using DG.Tweening;</p>
+<p>public class PlayerShado : MonoBehaviour<br>
+{<br>
+[SerializeField]<br>
+private bool reset;</p>
+<pre><code>private void FixedUpdate()
 {
-    try
+    if (reset)
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File.Create(Application.persistentDataPath + &quot;/DameData.data&quot;))
-
-        {
-            data.SetBestScoreArr(bestScoreArr);
-            data.SetDiamondCount(diamondCount);
-            data.SetIsFirstGame(isFirstGame);
-            data.SetMusicOn(isMusicOn);
-            data.SetSelectSkin(selectSkin);
-            data.SetSkinUnlocked(skinUnlocked);
-            bf.Serialize(fs, data);
-
-        }
-    }
-    catch (System.Exception e)
-    {
-        Debug.Log(e.Message);
-
+        transform.GetComponent&lt;SpriteRenderer&gt;().DOColor(new Color(transform.GetComponent&lt;SpriteRenderer&gt;().color.r,
+          transform.GetComponent&lt;SpriteRenderer&gt;().color.g, transform.GetComponent&lt;SpriteRenderer&gt;().color.b, 0), 0.2f).OnComplete(() =&gt;
+          {
+              gameObject.SetActive(false);   
+          });
+        reset = false;
+        print(&quot;FixedUpdate&quot;);
     }
 }
-/// &lt;summary&gt;
-/// 读取数据
-///using System.Runtime.Serialization.Formatters.Binary;
-///using System.IO;
-/// &lt;/summary&gt;
-private void Read()
+//物体未启用时执行（在Update后执行）
+private void OnDisable()
 {
-    try
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File .Open (Application.persistentDataPath + &quot;/DameData.data&quot;,FileMode.Open ))
-        {
-            data = (GameDate )bf.Deserialize(fs);
-        }
-    }
-    catch (System.Exception e)
-    {
-        Debug.Log(e.Message);
-    }
-}</code></pre>
+    transform.GetComponent&lt;SpriteRenderer&gt;().color = new Color(transform.GetComponent&lt;SpriteRenderer&gt;().color.r,
+            transform.GetComponent&lt;SpriteRenderer&gt;().color.g, transform.GetComponent&lt;SpriteRenderer&gt;().color.b, 1);
+    reset = true;
+    print(&quot;Onsisable&quot;);
+
+}
+</code></pre>
+<p>}</p>
 
               </div>
               <div class="toc-container">
@@ -206,9 +197,9 @@ private void Read()
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/ray/">
+            <a href="https://Wei715547.github.io/post/2d-duo-duan-tiao/">
               <h3 class="post-title">
-                Ray
+                2D多段跳
               </h3>
             </a>
           </div>
