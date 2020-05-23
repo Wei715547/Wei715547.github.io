@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Unity---一个脚本调用另一个脚本中方法的几种方法 | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589616298260">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590222953602">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Unity---一个脚本调用另一个脚本中方法的几种方法 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
@@ -26,7 +26,7 @@ FindObjectOfT..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589616298260" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590222953602" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -101,16 +101,25 @@ FindObjectOfT..." />
 FindObjectOfType&lt;脚本名&gt;().方法名();---返回第一个被加载目标脚本</p>
 <p>FindObjectsOfType&lt;脚本名&gt;().方法名();---返回所有被加载目标脚本数组<br>
 <img src="https://Wei715547.github.io/post-images/1589270757762.PNG" alt="" loading="lazy"></p>
+<p>2.1通过标签查找<br>
+player = GameObject.FindGameObjectWithTag(&quot;Player&quot;).GetComponent<Player>();<br>
+<img src="https://Wei715547.github.io/post-images/1589963508091.PNG" alt="" loading="lazy"><br>
+2.3通过Hierarchy中命名<br>
+foodText = GameObject.Find(&quot;FoodText&quot;).GetComponent<Text>();<br>
+overText = GameObject.Find(&quot;OverText&quot;).GetComponent<Text>();<br>
+restart = GameObject.Find(&quot;RestartBtn&quot;).GetComponent<Button>();<br>
+<img src="https://Wei715547.github.io/post-images/1589963515517.PNG" alt="" loading="lazy"></p>
 <p>3.单例模式---在被调用的脚本中，公开声明一个静态的该脚本实例，在初始化时使&quot;实例=this&quot;<br>
 便于在其他脚本中直接调用该脚本与其中的方法。<br>
 <img src="https://Wei715547.github.io/post-images/1589271341241.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1589271396945.PNG" alt="" loading="lazy"></p>
+<img src="https://Wei715547.github.io/post-images/1589271396945.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589963622098.PNG" alt="" loading="lazy"></p>
 <p>两脚本有碰撞，触发关系时可直接利用<br>
 (碰撞)collsion.gameObject.GetComponent&lt;被调用脚本名&gt;().方法名();<br>
 (触发)collsion.GetComponent&lt;被调用脚本名&gt;().方法名();<br>
 或SendMessage（以”方法名“调用物体中继承 MonoBehaviour 脚本的方法.）<br>
 (碰撞)collision.gameObject.SendMessage(&quot;方法名&quot;);<br>
-(触发)collsion..SendMessage(&quot;方法名&quot;);<br>
+(触发)collsion.SendMessage(&quot;方法名&quot;);<br>
 调用对方脚本中的方法<br>
 <img src="https://Wei715547.github.io/post-images/1589272112653.PNG" alt="" loading="lazy"></p>
 <p>复杂时可使用事件的广播，监听</p>

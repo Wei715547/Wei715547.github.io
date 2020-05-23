@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>点击+/-播放动画 | Weiwei的个人网站</title>
+<title>GameManager重新加载后不销毁 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590222953602">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="点击+/-播放动画 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="GameManager重新加载后不销毁 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -14,10 +14,8 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-/// 
-/// 门
-/// 
-public class Door : MonoB..." />
+//在其他物体上调用
+public class Loder : MonoBehav..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -80,14 +78,14 @@ public class Door : MonoB..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              点击+/-播放动画
+              GameManager重新加载后不销毁
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-20
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
@@ -97,51 +95,90 @@ public class Door : MonoB..." />
                 <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;<br>
-/// <summary><br>
-/// 门<br>
-/// </summary><br>
-public class Door : MonoBehaviour<br>
-{</p>
-<pre><code>public bool doorStart = false ;
-
-public string animName = &quot;Door&quot;;
-
-private Animation anim;
-
-private void Start()
+//在其他物体上调用<br>
+public class Loder : MonoBehaviour<br>
+{<br>
+public GameObject gamemenager;</p>
+<pre><code>// Start is called before the first frame update
+void Awake()
 {
-    anim = GetComponent&lt;Animation&gt;();
-}
-
-//点击当前物体是调用
-private void OnMouseDown()
-{
-    //如果开门状态
-    if (doorStart)
-    {
-        //关门
-        if (anim.isPlaying == false)
-        {
-            anim[animName].time = anim[animName].length;//从最后开始播
-        }
-
-        anim[animName].speed = -1;//倒叙播放
-    }
-    else
-    {          
-        //开门
-        anim[animName].speed = 1;
-    }
-    //播放动画
-    anim.Play(animName);
-    doorStart =! doorStart;
+    if (Gamemanager.Instence == null)
+        GameObject.Instantiate(gamemenager);
 }
 </code></pre>
-<p>}</p>
+<h2 id="">}</h2>
+<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+using UnityEngine.SceneManagement;<br>
+public class Gamemanager : MonoBehaviour<br>
+{<br>
+//单例模式<br>
+private static Gamemanager _instence;</p>
+<pre><code>public static Gamemanager Instence 
+{
+    get { return _instence; }
+}
+
+private void Awake()
+{
+    _instence = this;
+    DontDestroyOnLoad(gameObject);//加载场景时不销毁
+    InitGame();
+}
+
+//bool交替执行
+private bool sleepStep = true;
+    public void OnplayerMove()
+{
+    if (sleepStep ==true )
+    {
+        sleepStep =false ;
+    }else
+    {
+        foreach (var enemy in enemyList )
+        {
+            enemy.Move();
+        }
+        sleepStep = true;
+    }
+
+    //角色移动后
+    if (player.targetpos.x == mapmanager.xc - 1.5f &amp;&amp; player.targetpos.y == mapmanager.yc - 1.5f)
+    {
+        IsEnd = true;
+        //加载下一关
+        SceneManager.LoadScene(SceneManager .GetActiveScene ().buildIndex );
+    }
+}
+
+
+    //场景加载后执行
+private void OnLevelWasLoaded(int SceneLevel)
+{
+    level++;
+    InitGame();
+}
+
+    //失败后重新开始游戏
+private void Restart()
+{
+    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    food = 100;
+    level -= level;
+}</code></pre>
 
               </div>
               <div class="toc-container">
-                
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#">}</a></li>
+</ul>
+</li>
+</ul>
+
               </div>
             </div>
           </article>
@@ -150,9 +187,9 @@ private void OnMouseDown()
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/dao-ji-shi-mei-ge-gu-ding-shi-jian-chong-fu-zhi-xing/">
+            <a href="https://Wei715547.github.io/post/2d-xian-jian-ce/">
               <h3 class="post-title">
-                倒计时-每隔固定时间重复执行
+                2D线检测
               </h3>
             </a>
           </div>

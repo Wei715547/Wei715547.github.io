@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Photon联机案例 | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1589616298260">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590222953602">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Photon联机案例 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
@@ -27,7 +27,7 @@ usin..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1589616298260" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590222953602" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -87,7 +87,7 @@ usin..." />
                 2020-05-14
               </span>
               <span>
-                2 min read
+                3 min read
               </span>
               
             </div>
@@ -172,6 +172,52 @@ using Photon.Pun;<br>
 public class PlayerCT : MonoBehaviourPun<br>
 <img src="https://Wei715547.github.io/post-images/1589455187033.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1589455406349.PNG" alt="" loading="lazy"></p>
+<p>//房间列表<br>
+1.初始脚本中链接服务器时，加入大厅<br>
+//链接到服务器后执行<br>
+public override void OnConnectedToMaster()<br>
+{<br>
+nameUI.SetActive(true);<br>
+PhotonNetwork.JoinLobby();<br>
+}</p>
+<pre><code>//程序
+using System.Collections;
+</code></pre>
+<p>using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+using Photon.Pun;<br>
+using Photon.Realtime;</p>
+<p>public class RoomManager : MonoBehaviourPunCallbacks<br>
+{<br>
+public GameObject roomNamePrefab;//显示列表的按钮<br>
+public Transform gridLayout;</p>
+<pre><code>public override void OnRoomListUpdate(List&lt;RoomInfo&gt; roomList)//房间列表更新是执行
+{
+    for (int i = 0; i &lt; gridLayout.childCount; i++)
+    {
+        if(gridLayout .GetChild (i).gameObject. GetComponentInChildren&lt;Text &gt;().text ==roomList [i].Name )
+        {
+            //以存在的房间发生变化时消除该房间
+            Destroy(gridLayout.GetChild(i).gameObject);
+
+            if (roomList [i].PlayerCount ==0)//房间中人数为0是移除该房间
+            {
+                roomList.Remove(roomList[i]);
+            }
+        }
+    }
+
+    foreach (var room in roomList )//生成已存在的房间
+    {
+        GameObject newRoom = Instantiate(roomNamePrefab, gridLayout.position, Quaternion.identity);
+        roomNamePrefab.GetComponentInChildren&lt;Text&gt;().text = room .Name ;
+        newRoom.transform.SetParent(gridLayout);
+    }
+    
+
+}  
+</code></pre>
 
               </div>
               <div class="toc-container">

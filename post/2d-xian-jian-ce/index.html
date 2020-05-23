@@ -2,22 +2,17 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>点击+/-播放动画 | Weiwei的个人网站</title>
+<title>2D线检测 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590222953602">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="点击+/-播放动画 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="2D线检测 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-/// 
-/// 门
-/// 
-public class Door : MonoB..." />
+    <meta name="description" content="        enemyCl.enabled = false;
+        RaycastHit2D hit = Physics2D.Linecast(targertPos , targertPos + new Vector2(x, ..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -80,11 +75,11 @@ public class Door : MonoB..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              点击+/-播放动画
+              2D线检测
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-19
               </span>
               <span>
                 1 min read
@@ -94,50 +89,11 @@ public class Door : MonoB..." />
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// 门<br>
-/// </summary><br>
-public class Door : MonoBehaviour<br>
-{</p>
-<pre><code>public bool doorStart = false ;
-
-public string animName = &quot;Door&quot;;
-
-private Animation anim;
-
-private void Start()
-{
-    anim = GetComponent&lt;Animation&gt;();
-}
-
-//点击当前物体是调用
-private void OnMouseDown()
-{
-    //如果开门状态
-    if (doorStart)
-    {
-        //关门
-        if (anim.isPlaying == false)
-        {
-            anim[animName].time = anim[animName].length;//从最后开始播
-        }
-
-        anim[animName].speed = -1;//倒叙播放
-    }
-    else
-    {          
-        //开门
-        anim[animName].speed = 1;
-    }
-    //播放动画
-    anim.Play(animName);
-    doorStart =! doorStart;
-}
-</code></pre>
-<p>}</p>
+                <pre><code>        enemyCl.enabled = false;
+        RaycastHit2D hit = Physics2D.Linecast(targertPos , targertPos + new Vector2(x, y));
+        enemyCl.enabled = true;
+        if (hit.transform == null || hit.collider.tag == &quot;Soda&quot; || hit.collider.tag == &quot;Food&quot;)
+            targertPos += new Vector2(x, y);</code></pre>
 
               </div>
               <div class="toc-container">
@@ -150,9 +106,9 @@ private void OnMouseDown()
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/dao-ji-shi-mei-ge-gu-ding-shi-jian-chong-fu-zhi-xing/">
+            <a href="https://Wei715547.github.io/post/duan-chi-xiao-hui-zi-lei/">
               <h3 class="post-title">
-                倒计时-每隔固定时间重复执行
+                断离销毁子类，状态机-动作融合
               </h3>
             </a>
           </div>

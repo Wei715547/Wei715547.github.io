@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-16T08:05:02.739Z</updated>
+    <updated>2020-05-23T08:40:02.516Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,141 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[线性表]]></title>
+        <id>https://Wei715547.github.io/post/xian-xing-biao/</id>
+        <link href="https://Wei715547.github.io/post/xian-xing-biao/">
+        </link>
+        <updated>2020-05-23T02:33:04.000Z</updated>
+        <content type="html"><![CDATA[<p>线性表：相同类型，有限，序列<br>
+顺序表：线性表的顺序存储（静态数组（以分配默认大小），动态数组）<br>
+单链表：线性表链式存储（链式指针，非顺序存储[数据，地址]对形式）<br>
+判断单链表是否为空1，头结点head是否为空。2，头结点的指针head-&gt;next 是否为空</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[GameManager重新加载后不销毁]]></title>
+        <id>https://Wei715547.github.io/post/gamemanager-chong-xin-jia-zai-hou-bu-xiao-hui/</id>
+        <link href="https://Wei715547.github.io/post/gamemanager-chong-xin-jia-zai-hou-bu-xiao-hui/">
+        </link>
+        <updated>2020-05-20T05:11:49.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+//在其他物体上调用<br>
+public class Loder : MonoBehaviour<br>
+{<br>
+public GameObject gamemenager;</p>
+<pre><code>// Start is called before the first frame update
+void Awake()
+{
+    if (Gamemanager.Instence == null)
+        GameObject.Instantiate(gamemenager);
+}
+</code></pre>
+<h2 id="">}</h2>
+<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+using UnityEngine.SceneManagement;<br>
+public class Gamemanager : MonoBehaviour<br>
+{<br>
+//单例模式<br>
+private static Gamemanager _instence;</p>
+<pre><code>public static Gamemanager Instence 
+{
+    get { return _instence; }
+}
+
+private void Awake()
+{
+    _instence = this;
+    DontDestroyOnLoad(gameObject);//加载场景时不销毁
+    InitGame();
+}
+
+//bool交替执行
+private bool sleepStep = true;
+    public void OnplayerMove()
+{
+    if (sleepStep ==true )
+    {
+        sleepStep =false ;
+    }else
+    {
+        foreach (var enemy in enemyList )
+        {
+            enemy.Move();
+        }
+        sleepStep = true;
+    }
+
+    //角色移动后
+    if (player.targetpos.x == mapmanager.xc - 1.5f &amp;&amp; player.targetpos.y == mapmanager.yc - 1.5f)
+    {
+        IsEnd = true;
+        //加载下一关
+        SceneManager.LoadScene(SceneManager .GetActiveScene ().buildIndex );
+    }
+}
+
+
+    //场景加载后执行
+private void OnLevelWasLoaded(int SceneLevel)
+{
+    level++;
+    InitGame();
+}
+
+    //失败后重新开始游戏
+private void Restart()
+{
+    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    food = 100;
+    level -= level;
+}</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2D线检测]]></title>
+        <id>https://Wei715547.github.io/post/2d-xian-jian-ce/</id>
+        <link href="https://Wei715547.github.io/post/2d-xian-jian-ce/">
+        </link>
+        <updated>2020-05-19T07:08:13.000Z</updated>
+        <content type="html"><![CDATA[<pre><code>        enemyCl.enabled = false;
+        RaycastHit2D hit = Physics2D.Linecast(targertPos , targertPos + new Vector2(x, y));
+        enemyCl.enabled = true;
+        if (hit.transform == null || hit.collider.tag == &quot;Soda&quot; || hit.collider.tag == &quot;Food&quot;)
+            targertPos += new Vector2(x, y);</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[断离销毁子类，状态机-动作融合]]></title>
+        <id>https://Wei715547.github.io/post/duan-chi-xiao-hui-zi-lei/</id>
+        <link href="https://Wei715547.github.io/post/duan-chi-xiao-hui-zi-lei/">
+        </link>
+        <updated>2020-05-19T01:18:53.000Z</updated>
+        <content type="html"><![CDATA[<pre><code>protected override void Start()
+{
+    base.Start();
+    fR = GetComponent&lt;Rigidbody2D&gt;();
+    //cl = GetComponent&lt;CircleCollider2D&gt;();
+    l = left.position.x;
+    r = right.position.x;
+    transform.DetachChildren();
+    Destroy(left.gameObject);
+    Destroy(right.gameObject);
+
+}
+
+Has Exit Time：当前状态是否播放完再进入下一状态
+Setting
+            Exit Time 1，(0~1+)当前状态播放一遍在进入下一状态
+            Transition Duratio 0，(0~1+)动作融合，2D不需要融合
+            Transition Offset 0，(0~1+)下一状态是否需要偏移</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[ObjectPool(对象池)]]></title>
         <id>https://Wei715547.github.io/post/objectpooldui-xiang-chi/</id>
@@ -24,11 +159,18 @@ using UnityEngine;</p>
 {<br>
 public static ObjectPool instence;//单例模式用于外部调用</p>
 <pre><code>public GameObject shado;//要生成的预制体（可通过资源管理类获取）
-
-//要生成的预制体集合
-private List&lt;GameObject&gt; playerShado = new List&lt;GameObject&gt;();
-
-private int InstentCount = 5;//在对象池中默认生成多少个
+/*[CreateAssetMenu(menuName =&quot;CreatManagerVarsContainer&quot;)]
+</code></pre>
+<p>public class ManagerVars : ScriptableObject<br>
+{<br>
+public static ManagerVars GetManagerVars()<br>
+{<br>
+return Resources.Load<ManagerVars>(&quot;ManagerVarsContainer&quot;);<br>
+}*/<br>
+<img src="https://Wei715547.github.io/post-images/1589616593470.PNG" alt="" loading="lazy"><br>
+//要生成的预制体集合<br>
+private List<GameObject> playerShado = new List<GameObject>();</p>
+<pre><code>private int InstentCount = 5;//在对象池中默认生成多少个
 
 private void Awake()
 {
@@ -76,6 +218,7 @@ public GameObject GetShado()
 <img src="https://Wei715547.github.io/post-images/1589616178256.PNG" alt="" loading="lazy"><br>
 残影预制体脚本<br>
 <img src="https://Wei715547.github.io/post-images/1589616264550.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589618003824.PNG" alt="" loading="lazy"><br>
 using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;<br>
@@ -88,6 +231,7 @@ private bool reset;</p>
 {
     if (reset)
     {
+        gameObject.GetComponent&lt;SpriteRenderer&gt;().sprite = GameObject.FindGameObjectWithTag(&quot;Player&quot;).GetComponent&lt;SpriteRenderer&gt;().sprite;//精灵动作保持一致
         transform.GetComponent&lt;SpriteRenderer&gt;().DOColor(new Color(transform.GetComponent&lt;SpriteRenderer&gt;().color.r,
           transform.GetComponent&lt;SpriteRenderer&gt;().color.g, transform.GetComponent&lt;SpriteRenderer&gt;().color.b, 0), 0.2f).OnComplete(() =&gt;
           {
@@ -108,6 +252,25 @@ private void OnDisable()
 }
 </code></pre>
 <p>}</p>
+<p>//物体启用时执行<br>
+private void OnEnable()<br>
+{<br>
+gameObject.GetComponent<SpriteRenderer>().sprite = GameObject.FindGameObjectWithTag(&quot;Player&quot;).GetComponent<SpriteRenderer>().sprite;<br>
+transform.GetComponent<SpriteRenderer>().DOColor(new Color(transform.GetComponent<SpriteRenderer>().color.r,<br>
+transform.GetComponent<SpriteRenderer>().color.g, transform.GetComponent<SpriteRenderer>().color.b, 0), 0.2f).OnComplete(() =&gt;<br>
+{<br>
+gameObject.SetActive(false);<br>
+});<br>
+}</p>
+<pre><code>//物体未启用时执行
+private void OnDisable()
+{
+    transform.GetComponent&lt;SpriteRenderer&gt;().color = new Color(transform.GetComponent&lt;SpriteRenderer&gt;().color.r,
+            transform.GetComponent&lt;SpriteRenderer&gt;().color.g, transform.GetComponent&lt;SpriteRenderer&gt;().color.b, 1);
+    //reset = true;
+    //print(&quot;Onsisable&quot;);
+
+}</code></pre>
 ]]></content>
     </entry>
     <entry>
@@ -377,6 +540,52 @@ using Photon.Pun;<br>
 public class PlayerCT : MonoBehaviourPun<br>
 <img src="https://Wei715547.github.io/post-images/1589455187033.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1589455406349.PNG" alt="" loading="lazy"></p>
+<p>//房间列表<br>
+1.初始脚本中链接服务器时，加入大厅<br>
+//链接到服务器后执行<br>
+public override void OnConnectedToMaster()<br>
+{<br>
+nameUI.SetActive(true);<br>
+PhotonNetwork.JoinLobby();<br>
+}</p>
+<pre><code>//程序
+using System.Collections;
+</code></pre>
+<p>using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+using Photon.Pun;<br>
+using Photon.Realtime;</p>
+<p>public class RoomManager : MonoBehaviourPunCallbacks<br>
+{<br>
+public GameObject roomNamePrefab;//显示列表的按钮<br>
+public Transform gridLayout;</p>
+<pre><code>public override void OnRoomListUpdate(List&lt;RoomInfo&gt; roomList)//房间列表更新是执行
+{
+    for (int i = 0; i &lt; gridLayout.childCount; i++)
+    {
+        if(gridLayout .GetChild (i).gameObject. GetComponentInChildren&lt;Text &gt;().text ==roomList [i].Name )
+        {
+            //以存在的房间发生变化时消除该房间
+            Destroy(gridLayout.GetChild(i).gameObject);
+
+            if (roomList [i].PlayerCount ==0)//房间中人数为0是移除该房间
+            {
+                roomList.Remove(roomList[i]);
+            }
+        }
+    }
+
+    foreach (var room in roomList )//生成已存在的房间
+    {
+        GameObject newRoom = Instantiate(roomNamePrefab, gridLayout.position, Quaternion.identity);
+        roomNamePrefab.GetComponentInChildren&lt;Text&gt;().text = room .Name ;
+        newRoom.transform.SetParent(gridLayout);
+    }
+    
+
+}  
+</code></pre>
 ]]></content>
     </entry>
     <entry>
@@ -457,306 +666,28 @@ IEnumerator LoadLeve()
 FindObjectOfType&lt;脚本名&gt;().方法名();---返回第一个被加载目标脚本</p>
 <p>FindObjectsOfType&lt;脚本名&gt;().方法名();---返回所有被加载目标脚本数组<br>
 <img src="https://Wei715547.github.io/post-images/1589270757762.PNG" alt="" loading="lazy"></p>
+<p>2.1通过标签查找<br>
+player = GameObject.FindGameObjectWithTag(&quot;Player&quot;).GetComponent<Player>();<br>
+<img src="https://Wei715547.github.io/post-images/1589963508091.PNG" alt="" loading="lazy"><br>
+2.3通过Hierarchy中命名<br>
+foodText = GameObject.Find(&quot;FoodText&quot;).GetComponent<Text>();<br>
+overText = GameObject.Find(&quot;OverText&quot;).GetComponent<Text>();<br>
+restart = GameObject.Find(&quot;RestartBtn&quot;).GetComponent<Button>();<br>
+<img src="https://Wei715547.github.io/post-images/1589963515517.PNG" alt="" loading="lazy"></p>
 <p>3.单例模式---在被调用的脚本中，公开声明一个静态的该脚本实例，在初始化时使&quot;实例=this&quot;<br>
 便于在其他脚本中直接调用该脚本与其中的方法。<br>
 <img src="https://Wei715547.github.io/post-images/1589271341241.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1589271396945.PNG" alt="" loading="lazy"></p>
+<img src="https://Wei715547.github.io/post-images/1589271396945.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589963622098.PNG" alt="" loading="lazy"></p>
 <p>两脚本有碰撞，触发关系时可直接利用<br>
 (碰撞)collsion.gameObject.GetComponent&lt;被调用脚本名&gt;().方法名();<br>
 (触发)collsion.GetComponent&lt;被调用脚本名&gt;().方法名();<br>
 或SendMessage（以”方法名“调用物体中继承 MonoBehaviour 脚本的方法.）<br>
 (碰撞)collision.gameObject.SendMessage(&quot;方法名&quot;);<br>
-(触发)collsion..SendMessage(&quot;方法名&quot;);<br>
+(触发)collsion.SendMessage(&quot;方法名&quot;);<br>
 调用对方脚本中的方法<br>
 <img src="https://Wei715547.github.io/post-images/1589272112653.PNG" alt="" loading="lazy"></p>
 <p>复杂时可使用事件的广播，监听</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[委托，事件，Lamda表达式（对方法的传递/调用）]]></title>
-        <id>https://Wei715547.github.io/post/wei-tuo-shi-jian-lamda-biao-da-shi-dui-fang-fa-de-chuan-di-diao-yong/</id>
-        <link href="https://Wei715547.github.io/post/wei-tuo-shi-jian-lamda-biao-da-shi-dui-fang-fa-de-chuan-di-diao-yong/">
-        </link>
-        <updated>2020-05-12T04:19:15.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;</p>
-<p>namespace 委托<br>
-{<br>
-class Program<br>
-{<br>
-//委托类型：定义了委托实例可以调用哪类方法，<br>
-//具体来说，委托类型定义了方法的返回值类型了参数<br>
-//delegate 要调用方法的返回值类型 委托类型名 (参数)</p>
-<pre><code>    //例：定义一个带参数，无返回值的委托
-    //（创建的委托必须与索要传递的方法，返回值/参数类型相同）
-    public delegate void SayHelloDlg(string content);
-
-    //SayHelloDlg类型的事件
-    public static event SayHelloDlg SayHelloEvent;
-
-
-    //主函数
-    static void Main(string[] args)
-    {
-        //委托的声明
-        //委托类型名 = 目标方法
-        SayHelloDlg dlg = SayHello;
-        //委托的使用方法
-        //dlg.Invoke(&quot;老王&quot;);
-        dlg(&quot;老王&quot;);            
-        //委托的解释：将方法以变量形式传递，并以方法形式执行。(以委托来调用方法，解耦)
-        //SayHelloDlg dlg = new SayHelloDlg(SayHello);
-
-        //(多播委托)委托链
-        dlg += SayBay;//添加
-        dlg(&quot;老八&quot;);  //（实际+,-,+=,-+编译成 System.Delegate的Combine和Remove两个静态方法）
-        dlg -= SayBay;//注销
-        dlg(&quot;老八&quot;);
-        //如果调用的方法有返回值，那么接收的返回值是调用的最后一个方法的返回值，前面调用的方法返回值就被舍弃了。
-
-
-        //匿名函数
-        SayHelloDlg dlg1 = delegate (string name)
-        {
-            Console.WriteLine(&quot;{0},是匿名函数&quot;, name);
-        };
-
-        dlg1(&quot;老七&quot;);
-
-
-        //lamda语句
-        SayHelloDlg dlg2 = (name) =&gt;
-         {
-             Console.WriteLine(&quot;{0},是lamda语句&quot;, name);
-         };
-
-        dlg2(&quot;老四&quot;);
-
-        //事件
-
-        //注册事件
-        SayHelloEvent += Program_SayHelloEvent;
-        //SayHelloEvent -= Program_SayHelloEvent; 
-
-        if (SayHelloEvent != null)
-        {
-            SayHelloEvent(&quot;小八&quot;);//调用事件
-        }
-    }
-
-    private static void Program_SayHelloEvent(string content)
-    {
-        Console.WriteLine(&quot;{0},是事件&quot;, content);
-    }
-
-
-
-    public static void SayHello(string name)
-    {
-        Console.WriteLine(&quot;{0},你好啊&quot;, name);
-    }
-
-    //表达式形式
-    //public static void SayHello(string name) =&gt; Console.WriteLine(&quot;{0},你好啊&quot;, name);
-
-
-    public static void SayBay(string name)
-    {
-        Console.WriteLine(&quot;{0},再见啊&quot;,name);
-    }
-}
-</code></pre>
-<p>}</p>
-<p><img src="https://Wei715547.github.io/post-images/1589257645974.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1589257654429.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1589257662607.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1589257671087.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1589257676945.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1589257683327.PNG" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[DG Tweening]]></title>
-        <id>https://Wei715547.github.io/post/dg-tweening/</id>
-        <link href="https://Wei715547.github.io/post/dg-tweening/">
-        </link>
-        <updated>2020-05-11T12:17:14.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using DG.Tweening;<br>
-using UnityEngine.UI;<br>
-public class InDoor : MonoBehaviour<br>
-{</p>
-<pre><code>public GameObject InDoorPanel;
-
-private void Start()
-{
-    InDoorPanel.GetComponent&lt;Image&gt;().color = new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
-        InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0);
-    InDoorPanel.transform.position = new Vector3(InDoorPanel.transform.position.x,
-        -100, InDoorPanel.transform.position.z);
-    //InDoorPanel.transform.localScale= Vector3.zero;
-    InDoorPanel.SetActive(false);
-}
-
-private void OnTriggerEnter2D(Collider2D collision)
-{
-    if (collision.tag == &quot;Player&quot;)
-    {
-        InDoorPanel.SetActive(true);
-        InDoorPanel.GetComponent&lt;Image&gt;().DOColor(new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
-            InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0.7f), 0.3f);
-        InDoorPanel.transform.DOMoveY(110, 0.3f);
-        //InDoorPanel.transform.DOScale(Vector3.one, 0.3f);
-    }
-}
-
-private void OnTriggerExit2D(Collider2D collision)
-{
-    if (collision.tag == &quot;Player&quot;)
-    {
-        InDoorPanel.GetComponent&lt;Image&gt;().DOColor(new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
-            InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0), 0.3f);
-        InDoorPanel.transform.DOMoveY(-100, 0.3f).OnComplete(() =&gt; InDoorPanel.SetActive(false));
-        //InDoorPanel.transform.DOScale(Vector3.zero, 0.3f);
-    }
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[最高分排序]]></title>
-        <id>https://Wei715547.github.io/post/zui-gao-fen-pai-xu/</id>
-        <link href="https://Wei715547.github.io/post/zui-gao-fen-pai-xu/">
-        </link>
-        <updated>2020-05-10T04:36:59.000Z</updated>
-        <content type="html"><![CDATA[<p>public  void SaveScore (int score)<br>
-{<br>
-List<int> list = bestScoreArr.ToList();//先将数组转化为List<br>
-//系统:Linq方法(using System.Linq;)<br>
-list.Sort((x, y) =&gt; (-x.CompareTo(y)));//调用List的Sort方法，从大到小对list进行排序[（-x）(从小到大改为x<br>
-bestScoreArr = list.ToArray();//将排好序的list转给数组</p>
-<pre><code>    //50  20  10 加入传score为60，则将60排在低 bestScoreArr[0]
-
-    int index = -1;
-    for (int i = 0; i &lt; bestScoreArr .Count() ; i++)
-    {
-        if (score &gt;bestScoreArr [i])//score依次与数组中的数进行对比，当比一个数大时，记录这个数的索引将后面的数都向后移。
-        {
-            index = i;
-        }
-    }
-    if (index == -1) return;//score比数组中的值都小，不需保存，退出方法。
-
-    for (int i = bestScoreArr .Length -1; i &gt;index ; i--)//从后向前将index之后的数据依次向后移
-    {
-        bestScoreArr[i] = bestScoreArr[i - 1];
-
-    }
-    bestScoreArr[index] = score;//将score填入空出位。
-    Save();//保存。
-}
-//获取最大值方法(Linq)
-public int GetBestScore()
-{
-    return bestScoreArr.Max();
-}
-</code></pre>
-<p>//要存储的游戏数据类<br>
-public class GameDate<br>
-{<br>
-public  static bool IsAgainGame =false ;</p>
-<pre><code>private bool isFirstGame;
-private bool isMusicOn;
-
-private int[] bestScoreArr;
-public void SetBestScoreArr(int[] bestScoreArr)
-{
-    this.bestScoreArr = bestScoreArr;
-}
- public int [] GetBestScoreArr()
-{
-    return bestScoreArr;
-}
-//（其他......get;set方法省略）
-
-private int selectSkin;
-private bool[] skinUnlocked;
-private int diamondCount;
-</code></pre>
-<p>}</p>
-<pre><code>/// &lt;summary&gt;
-/// 储存数据
-/// &lt;/summary&gt;
-private void Save()
-{
-    try
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File.Create(Application.persistentDataPath + &quot;/DameData.data&quot;))
-
-        {
-            data.SetBestScoreArr(bestScoreArr);
-            data.SetDiamondCount(diamondCount);
-            data.SetIsFirstGame(isFirstGame);
-            data.SetMusicOn(isMusicOn);
-            data.SetSelectSkin(selectSkin);
-            data.SetSkinUnlocked(skinUnlocked);
-            bf.Serialize(fs, data);
-
-        }
-    }
-    catch (System.Exception e)
-    {
-        Debug.Log(e.Message);
-
-    }
-}
-/// &lt;summary&gt;
-/// 读取数据
-///using System.Runtime.Serialization.Formatters.Binary;
-///using System.IO;
-/// &lt;/summary&gt;
-private void Read()
-{
-    try
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File .Open (Application.persistentDataPath + &quot;/DameData.data&quot;,FileMode.Open ))
-        {
-            data = (GameDate )bf.Deserialize(fs);
-        }
-    }
-    catch (System.Exception e)
-    {
-        Debug.Log(e.Message);
-    }
-}</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Ray]]></title>
-        <id>https://Wei715547.github.io/post/ray/</id>
-        <link href="https://Wei715547.github.io/post/ray/">
-        </link>
-        <updated>2020-05-09T11:48:20.000Z</updated>
-        <content type="html"><![CDATA[<p>void Update()<br>
-{<br>
-if (Input.GetMouseButtonDown(1))<br>
-{<br>
-Ray ray = Camera .main .ScreenPointToRay ( Input.mousePosition);<br>
-RaycastHit hit;<br>
-if (!Physics.Raycast(ray, out hit))<br>
-{<br>
-//hit.collider .gameObject //射线打到的物体<br>
-return;<br>
-}<br>
-navMeshAgent.destination = hit.point ;//碰撞点<br>
-}</p>
-<pre><code>}
-![](https://Wei715547.github.io/post-images/1589025091557.jpg)
-![](https://Wei715547.github.io/post-images/1589025123139.jpg)</code></pre>
 ]]></content>
     </entry>
 </feed>
