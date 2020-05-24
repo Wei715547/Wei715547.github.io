@@ -2,20 +2,21 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>游戏数据类创建，储存、读取 | Weiwei的个人网站</title>
+<title>自定义List集合 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590329505134">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="游戏数据类创建，储存、读取 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="自定义List集合 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
+    <meta name="description" content="using System;
 using System.Collections.Generic;
-using UnityEngine;
-[System .Serializable]
-public class GameD..." />
+using System.Text;
+namespace 自定义集合类MyList
+{
+class MyList where T :ICompa..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -78,159 +79,182 @@ public class GameD..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              游戏数据类创建，储存、读取
+              自定义List集合
             </h2>
             <div class="post-info">
               <span>
-                2020-04-24
+                2020-05-24
               </span>
               <span>
-                2 min read
+                3 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
+                <p>using System;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>[System .Serializable]<br>
-public class GameDate<br>
+using System.Text;</p>
+<p>namespace 自定义集合类MyList<br>
 {<br>
-public  static bool IsAgainGame =false ;</p>
-<pre><code>private bool isFirstGame;
-private bool isMusicOn;
-
-private int[] bestScoreArr;
-
-private int selectSkin;
-private bool[] skinUnlocked;
-private int diamondCount;
-
-
-public void SetIsFirstGame(bool isFirstGame)
-{
-    this.isFirstGame = isFirstGame;
-}
-
-public void SetMusicOn(bool isMusicOn)
-{
-    this.isMusicOn = isMusicOn;
-}
-
-public void SetBestScoreArr(int[] bestScoreArr)
-{
-    this.bestScoreArr = bestScoreArr;
-}
-
-public void SetSelectSkin(int  selectSkin)
-{
-    this.selectSkin = selectSkin;
-}
-
-public void SetSkinUnlocked(bool [] skinUnlocked)
-{
-    this.skinUnlocked = skinUnlocked;
-}
-
-public void SetDiamondCount (int diamondCount)
-{
-    this.diamondCount = diamondCount;
-}
-
-
-
-public bool  GetIsFirstGame()
-{
-    return isFirstGame;
-}
-
-public bool GetMusicOn()
-{
-    return isMusicOn ;
-}
-
-public int [] GetBestScoreArr()
-{
-    return bestScoreArr;
-}
-
-public int GetSelectSkin()
-{
-    return selectSkin;
-}
-
-public bool [] GetUnlockedSkin()
-{
-    return skinUnlocked;
-}
-
-public int GetDiamongCount()
-{
-    return diamondCount;
-}
-</code></pre>
-<p>}</p>
-<pre><code>/// &lt;summary&gt;
-/// 储存数据
-/// &lt;/summary&gt;
-private void Save()
-{
-    try
+class MyList<T> where T :IComparable<br>
+{<br>
+private T[] array;<br>
+private int count = 0;</p>
+<pre><code>    public MyList(int size)
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File.Create(Application.persistentDataPath + &quot;/DameData.data&quot;))
+        if (size &gt; 0)
+            array = new T[size];
+    }
 
+    public MyList()
+    {
+        array = new T[0];
+    }
+
+    public int Capecity
+    {
+        get { return array.Length; }
+    }
+
+    public int Count
+    {
+        get { return count; }
+    }
+
+    public void Add(T item)
+    {
+        if (Count == Capecity)//判断元素个数与数组容量
         {
-            data.SetBestScoreArr(bestScoreArr);
-            data.SetDiamondCount(diamondCount);
-            data.SetIsFirstGame(isFirstGame);
-            data.SetMusicOn(isMusicOn);
-            data.SetSelectSkin(selectSkin);
-            data.SetSkinUnlocked(skinUnlocked);
-            bf.Serialize(fs, data);
+            if (Capecity == 0)
+                array = new T[4];
+            else
+            {
+                var newarray = new T[Capecity * 2];
+                Array.Copy(array, newarray, Count);
+                array = newarray;
+            }
+        }
+        array[Count] = item;
+        count++;
+    }
 
+    public T GetItem(int index)
+    {
+        if (index &gt;= 0 &amp;&amp; index &lt;= count-1)
+        {
+            return array[index];
+        }
+        else
+        {
+            Console.WriteLine(&quot;Index outof range&quot;);
+            throw new Exception(&quot;索引超出范围&quot;);
+        }
+
+    }
+
+    //索引器，属性
+    public T this[int index]
+    {
+        get { return GetItem(index); }
+        set
+        {
+            if (index &gt;= 0 &amp;&amp; index &lt;= count-1)
+            {
+                array[index] = value;
+            }
+            else
+            {
+                Console.WriteLine(&quot;Index outof range&quot;);
+                throw new Exception(&quot;索引超出范围&quot;);
+            }
         }
     }
-    catch (System.Exception e)
+
+    public void Insert(int index, T item)
     {
-        Debug.Log(e.Message);
+        if (index &gt;= 0 &amp;&amp; index &lt;= count-1)
+        {
+            if (Count  == Capecity )//容量不足进行扩容
+            {
+                var newArray = new T[Capecity * 2];
+                Array.Copy(array, newArray, count);
+                array = newArray;
+            }
+            for (int i = count -1; i &gt;= index ; i--)
+            {
+                array[i+1] = array[i];
+            }
+            array[index] = item;
+            count++;
+        }
+        else
+        {
+            Console.WriteLine(&quot;Index outof range&quot;);
+            throw new Exception(&quot;索引超出范围&quot;);
+        }
 
     }
-}
-/// &lt;summary&gt;
-/// 读取数据
-/// &lt;/summary&gt;
-private void Read()
-{
-    try
+    
+    public void RemoveAt(int index)
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File .Open (Application.persistentDataPath + &quot;/DameData.data&quot;,FileMode.Open ))
+        if (index &gt;= 0 &amp;&amp; index &lt;= count-1)
         {
-            data = (GameDate )bf.Deserialize(fs);
+            for (int i = index +1; i &lt; count ; i++)
+            {
+                array[i - 1] = array[i];
+            }
+            count--;
+        }
+        else
+        {
+            throw new Exception(&quot;索引超出范围&quot;);
         }
     }
-    catch (System.Exception e)
-    {
-        Debug.Log(e.Message);
-    }
-}
-</code></pre>
-<p>//初始化<br>
-public void ResetData()<br>
-{<br>
-isFirstGame = false;<br>
-isMusicOn = true;<br>
-bestScoreArr = new int[3];<br>
-selectSkin = 0;<br>
-skinUnlocked = new bool[vars.skinSpriteList.Count];<br>
-skinUnlocked[0] = true;<br>
-diamondCount = 10;</p>
-<pre><code>    data = new GameDate();//初始化时读取
 
-    Save();
+    public int IndexOf(T item)
+    {
+        for (int i = 0; i &lt; count ; i++)
+        {
+            if (array[i].Equals(item))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int LastIndexOf(T item)
+    {
+        for (int i = count -1; i &gt;=0; i--)
+        {
+            if (array [i].Equals (item ))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void Sort()
+    {
+        for (int j = 0; j &lt; Count -1; j++)
+        {
+            for (int i = 0; i &lt; Count-1-j; i++)
+            {
+                if (array[i].CompareTo(array[i + 1]) &gt; 0)//返回值大于0是后面的铋前面的大
+                {
+                    //打的元素向后排
+                    T temp = array[i];
+                    array[i] = array[i + 1];
+                    array[i + 1] = temp;
+                }
+            }
+        }
+        
+    }
+
 }
 </code></pre>
 <p>}</p>
@@ -246,9 +270,9 @@ diamondCount = 10;</p>
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/evencenterjian-ting-yi-chu-jian-ting-guang-bo/">
+            <a href="https://Wei715547.github.io/post/xian-xing-biao/">
               <h3 class="post-title">
-                EvenCenter(监听/移除监听/广播）
+                线性表
               </h3>
             </a>
           </div>
