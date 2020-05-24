@@ -2,18 +2,24 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>插值/自定义曲线 | Weiwei的个人网站</title>
+<title>字符串方法 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590335737848">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="插值/自定义曲线 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="字符串方法 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="public AnimationCurve sp;
-private float x;//带入曲线x+=Time.deltaTime/psTime
-public float pstime;//越大移动“y”(sp.Evaluate(x))增长..." />
+    <meta name="description" content="using System;
+namespace 字符串方法
+{
+class Program
+{
+static void Main(string[] args)
+{
+//1.
+string s = &quot; wei715547&quot;..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -76,11 +82,11 @@ public float pstime;//越大移动“y”(sp.Evaluate(x))增长..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              插值/自定义曲线
+              字符串方法
             </h2>
             <div class="post-info">
               <span>
-                2020-05-09
+                2020-05-24
               </span>
               <span>
                 1 min read
@@ -90,17 +96,47 @@ public float pstime;//越大移动“y”(sp.Evaluate(x))增长..." />
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <pre><code>public AnimationCurve sp;
-private float x;//带入曲线x+=Time.deltaTime/psTime
-public float pstime;//越大移动“y”(sp.Evaluate(x))增长越慢
+                <p>using System;</p>
+<p>namespace 字符串方法<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+//1.<br>
+string s = &quot; wei715547&quot;;<br>
+int res = s.CompareTo(&quot;wei715547&quot;);//元素相等时，返回值为0，<br>
+//调用者字母排序靠后时返回值为1，靠前是返回值为-1<br>
+Console.WriteLine(res);</p>
+<pre><code>        //2
+        string newstring = s.Replace('w', 'z');//替换字符
+        Console.WriteLine(newstring );
+        //string newstring2 = s.Replace('1', '2');
 
-if (Input.GetKey(KeyCode.L))
-    {
-    x += Time.deltaTime / pstime;
-    transform.position = Vector3.Lerp(transform.position, Vector3.up * 5, sp.Evaluate(x));
-        //Lerp(a,b,f)---f:0~1, 0时返回a,1时返回b，0.5时返回a,b中间值
+        //3.字符串从指定字符位置拆分为数组
+        string[] stringArray = s.Split('1');
+        foreach (var item in stringArray )
+        {
+            Console.WriteLine(item );
+        }
+
+        //4.Substring.截取字符串
+        string newcut = s.Substring(2,5);
+        Console.WriteLine(newcut);
+
+        //5.清除字符串首尾空白
+        string clearspace = s.Trim();
+        Console.WriteLine(clearspace );
+
+        //6.返回指定字符的索引
+        int newindex = s.IndexOf('1');
+        Console.WriteLine(newindex );
+
+        //7.
     }
-    else x = 0;</code></pre>
+}
+</code></pre>
+<p>}</p>
 
               </div>
               <div class="toc-container">
@@ -113,9 +149,9 @@ if (Input.GetKey(KeyCode.L))
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/sendmessage/">
+            <a href="https://Wei715547.github.io/post/zi-ding-yi-list-ji-he/">
               <h3 class="post-title">
-                SendMessage
+                自定义List集合
               </h3>
             </a>
           </div>

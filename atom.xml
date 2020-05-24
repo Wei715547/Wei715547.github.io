@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-24T14:19:24.717Z</updated>
+    <updated>2020-05-24T15:55:47.519Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,55 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
+    <entry>
+        <title type="html"><![CDATA[字符串方法]]></title>
+        <id>https://Wei715547.github.io/post/zi-fu-chuan-fang-fa/</id>
+        <link href="https://Wei715547.github.io/post/zi-fu-chuan-fang-fa/">
+        </link>
+        <updated>2020-05-24T15:55:23.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;</p>
+<p>namespace 字符串方法<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+//1.<br>
+string s = &quot; wei715547&quot;;<br>
+int res = s.CompareTo(&quot;wei715547&quot;);//元素相等时，返回值为0，<br>
+//调用者字母排序靠后时返回值为1，靠前是返回值为-1<br>
+Console.WriteLine(res);</p>
+<pre><code>        //2
+        string newstring = s.Replace('w', 'z');//替换字符
+        Console.WriteLine(newstring );
+        //string newstring2 = s.Replace('1', '2');
+
+        //3.字符串从指定字符位置拆分为数组
+        string[] stringArray = s.Split('1');
+        foreach (var item in stringArray )
+        {
+            Console.WriteLine(item );
+        }
+
+        //4.Substring.截取字符串
+        string newcut = s.Substring(2,5);
+        Console.WriteLine(newcut);
+
+        //5.清除字符串首尾空白
+        string clearspace = s.Trim();
+        Console.WriteLine(clearspace );
+
+        //6.返回指定字符的索引
+        int newindex = s.IndexOf('1');
+        Console.WriteLine(newindex );
+
+        //7.
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[自定义List集合]]></title>
         <id>https://Wei715547.github.io/post/zi-ding-yi-list-ji-he/</id>
@@ -759,70 +808,6 @@ public Transform gridLayout;</p>
 
 }  
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[后台场景加载（进度条）]]></title>
-        <id>https://Wei715547.github.io/post/hou-tai-chang-jing-jia-zai-jin-du-tiao/</id>
-        <link href="https://Wei715547.github.io/post/hou-tai-chang-jing-jia-zai-jin-du-tiao/">
-        </link>
-        <updated>2020-05-14T03:17:17.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1589426492371.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1589426497960.PNG" alt="" loading="lazy"><br>
-using System.Collections;<br>
-using UnityEngine;<br>
-using UnityEngine.SceneManagement;<br>
-using UnityEngine.UI;</p>
-<p>public class InPanel : MonoBehaviour<br>
-{<br>
-public GameObject Load;<br>
-public Slider sl;<br>
-public Text text,next;</p>
-<pre><code>private void Awake()
-{
-    Load.SetActive(false);
-
-}
-
-void Update()
-{
-    if (Input .GetKeyDown (KeyCode.E ))
-    {
-
-        StartCoroutine(LoadLeve());
-       
-    }
-    
-}
-
-IEnumerator LoadLeve()
-{
-    Load.SetActive(true);
-
-    AsyncOperation operation = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
-
-    operation.allowSceneActivation = false;
-
-    while (!operation.isDone )
-    {
-        sl.value = operation.progress;
-        text.text = operation.progress * 100 + &quot;%&quot;;
-
-        if (operation .progress &gt;=0.9f)
-        {
-            sl.value = 1;
-            text.text = &quot;100%&quot;;
-            next.text = &quot;Pass Any Ket To Next&quot;;
-            if (Input. anyKeyDown)
-            {
-                operation.allowSceneActivation = true;
-            }
-        }
-        yield return null;
-    }
-}
-</code></pre>
-<p>}</p>
 ]]></content>
     </entry>
 </feed>
