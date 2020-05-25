@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Weiwei的个人网站</title>
-    <updated>2020-05-25T04:16:53.458Z</updated>
+    <updated>2020-05-25T05:25:52.058Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,12 +11,13 @@
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Weiwei的个人网站</rights>
     <entry>
-        <title type="html"><![CDATA[字符串方法]]></title>
+        <title type="html"><![CDATA[字符、可变字符串，方法]]></title>
         <id>https://Wei715547.github.io/post/zi-fu-chuan-fang-fa/</id>
         <link href="https://Wei715547.github.io/post/zi-fu-chuan-fang-fa/">
         </link>
         <updated>2020-05-24T15:55:23.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;</p>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Text;</p>
 <p>namespace 字符串方法<br>
 {<br>
 class Program<br>
@@ -52,7 +53,37 @@ Console.WriteLine(res);</p>
         int newindex = s.IndexOf('1');
         Console.WriteLine(newindex );
 
-        //7.
+        //-------------------------------------------------------------
+        //可变字符串StringBuilder 
+        //create1.通过构造函数进行构建
+        StringBuilder sb = new StringBuilder(&quot;www.wei7157.github.co&quot;);
+        Console.WriteLine(sb);
+        //create2.声明空间大小
+        StringBuilder sb2 = new StringBuilder(20);
+        sb2.Append(&quot;www.wei7157.github.co&quot;);
+        Console.WriteLine(sb2);
+        //creat3.赋值同时声明空间大小
+        StringBuilder sb3 = new StringBuilder(&quot;www.wei7157.github.co&quot;, 100);
+        Console.WriteLine(sb3);
+
+
+        //字符串修改与标准字符串对比
+        sb.Append(&quot;000000&quot;);//在空余空间链接字符
+        Console.WriteLine(sb);
+        //对比常规字符串操作，运行效率更高
+        string str = &quot;www.wei7157.github.co&quot;;
+        str += &quot;000000&quot;;//在堆中创建新的字符，str索引指向新的字符，原来的字符被CLR回收（效率低）
+        Console.WriteLine(str);
+
+        //可变字符串Insert()方法
+        sb.Insert(0, &quot;http//&quot;);
+        Console.WriteLine(sb);
+        sb.Remove(0, 6);//根据索引范围移除字符
+        Console.WriteLine(sb);
+        sb.Replace('w', 'z');//字符替换
+        Console.WriteLine(sb);
+        Console.WriteLine(sb.ToString());//ToString()转变为不可变字符
+
     }
 }
 </code></pre>

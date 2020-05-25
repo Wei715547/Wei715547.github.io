@@ -2,16 +2,17 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>字符串方法 | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590380191983">
+<title>字符、可变字符串，方法 | Weiwei的个人网站</title>
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590384311565">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="字符串方法 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="字符、可变字符串，方法 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
     <meta name="description" content="using System;
+using System.Text;
 namespace 字符串方法
 {
 class Program
@@ -19,7 +20,7 @@ class Program
 static void Main(string[] args)
 {
 //1.
-string s = &quot; wei715547&quot;..." />
+string s = &qu..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -29,7 +30,7 @@ string s = &quot; wei715547&quot;..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590380191983" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590384311565" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -82,21 +83,22 @@ string s = &quot; wei715547&quot;..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              字符串方法
+              字符、可变字符串，方法
             </h2>
             <div class="post-info">
               <span>
                 2020-05-24
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System;</p>
+                <p>using System;<br>
+using System.Text;</p>
 <p>namespace 字符串方法<br>
 {<br>
 class Program<br>
@@ -132,7 +134,37 @@ Console.WriteLine(res);</p>
         int newindex = s.IndexOf('1');
         Console.WriteLine(newindex );
 
-        //7.
+        //-------------------------------------------------------------
+        //可变字符串StringBuilder 
+        //create1.通过构造函数进行构建
+        StringBuilder sb = new StringBuilder(&quot;www.wei7157.github.co&quot;);
+        Console.WriteLine(sb);
+        //create2.声明空间大小
+        StringBuilder sb2 = new StringBuilder(20);
+        sb2.Append(&quot;www.wei7157.github.co&quot;);
+        Console.WriteLine(sb2);
+        //creat3.赋值同时声明空间大小
+        StringBuilder sb3 = new StringBuilder(&quot;www.wei7157.github.co&quot;, 100);
+        Console.WriteLine(sb3);
+
+
+        //字符串修改与标准字符串对比
+        sb.Append(&quot;000000&quot;);//在空余空间链接字符
+        Console.WriteLine(sb);
+        //对比常规字符串操作，运行效率更高
+        string str = &quot;www.wei7157.github.co&quot;;
+        str += &quot;000000&quot;;//在堆中创建新的字符，str索引指向新的字符，原来的字符被CLR回收（效率低）
+        Console.WriteLine(str);
+
+        //可变字符串Insert()方法
+        sb.Insert(0, &quot;http//&quot;);
+        Console.WriteLine(sb);
+        sb.Remove(0, 6);//根据索引范围移除字符
+        Console.WriteLine(sb);
+        sb.Replace('w', 'z');//字符替换
+        Console.WriteLine(sb);
+        Console.WriteLine(sb.ToString());//ToString()转变为不可变字符
+
     }
 }
 </code></pre>
