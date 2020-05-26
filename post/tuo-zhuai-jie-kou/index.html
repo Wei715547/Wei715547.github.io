@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ComponenDemo | Weiwei的个人网站</title>
+<title>拖拽接口 | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590506655174">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="ComponenDemo | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="拖拽接口 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -14,8 +14,8 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-/// 
-/// Component类提供了查找（当前物体，子类，父类）组件的功能..." />
+using UnityEngine.EventSystems;
+using Uni..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -78,14 +78,14 @@ using UnityEngine;
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              ComponenDemo
+              拖拽接口
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-26
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
@@ -95,41 +95,69 @@ using UnityEngine;
                 <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;<br>
-/// <summary><br>
-/// Component类提供了查找（当前物体，子类，父类）组件的功能。<br>
-/// </summary><br>
-public class ComponentDemo : MonoBehaviour<br>
+using UnityEngine.EventSystems;<br>
+using UnityEngine.UI;<br>
+public class ItemOnnDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler<br>
 {<br>
-private void OnGUI()<br>
-{<br>
-if (GUILayout.Button(&quot;Transtorm&quot;))<br>
-{<br>
-this.transform.position = new Vector3(0, 0, 10);<br>
-}<br>
-if (GUILayout .Button (&quot;GetComponent&quot;))<br>
-{<br>
-this.GetComponent<MeshRenderer>().material.color = Color.red;<br>
-}<br>
-if(GUILayout.Button (&quot;GetComponents&quot;))<br>
-{<br>
-var allConmponent = this.GetComponents<Component>();<br>
-foreach (var item in allConmponent )<br>
-{<br>
-print(item.GetType());<br>
-}<br>
-}<br>
-if (GUILayout.Button(&quot;GetComponentsInChildren&quot;))<br>
-{<br>
-//获取后代物体的指定类型组件（从自身开始）<br>
-//var sun = this.GetComponentInChildren<MeshRenderer>();//返回包含MeshRanderer组件的子对象<br>
-var allConmponent = this.GetComponentsInChildren<MeshRenderer>();//返回所有包含MeshRanderer组件的子对象<br>
-foreach (var item in allConmponent)<br>
-{<br>
-item.material.color = Color.blue;<br>
-}<br>
-}<br>
-}<br>
-}</p>
+public Transform originatParent;<br>
+public Inventory myBag;<br>
+private int currentItemID;</p>
+<pre><code>public void OnBeginDrag(PointerEventData eventData)
+{
+    originatParent = transform.parent;
+    currentItemID = originatParent.GetComponent&lt;Slot&gt;().slotID;
+    transform.SetParent(transform.parent.parent);
+    transform.position = eventData.position;
+    GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = false;
+}
+
+public void OnDrag(PointerEventData eventData)
+{
+    transform.position = eventData.position;
+    //print(eventData.pointerCurrentRaycast.gameObject.name);
+}
+
+public void OnEndDrag(PointerEventData eventData)
+{
+    if (eventData.pointerCurrentRaycast.gameObject != null)
+    {
+        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Item Image&quot;)//物品栏有物品时
+        {
+            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform.parent.parent);
+            transform.position = eventData.pointerCurrentRaycast.gameObject.transform.parent.parent.position;
+
+            //交换存储位置
+            var temp = myBag.itemList[currentItemID];
+            myBag.itemList[currentItemID] = myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID];
+            myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID] = temp;
+            //交换存储位置
+
+            eventData.pointerCurrentRaycast.gameObject.transform.parent.SetParent(originatParent);
+            eventData.pointerCurrentRaycast.gameObject.transform.parent.position = originatParent.position;
+            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
+            return;
+        }
+        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Slot(Clone)&quot;)
+        {
+            //物品栏为空时
+            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform);
+            transform.position = eventData.pointerCurrentRaycast.gameObject.transform.position;
+
+            myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID] = myBag.itemList[currentItemID];
+            if (eventData.pointerCurrentRaycast.gameObject.GetComponent&lt;Slot&gt;().slotID != currentItemID)
+                myBag.itemList[currentItemID] = null;
+
+            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
+            return;
+        }
+    }
+    //其他任何位置返回原位
+    transform.SetParent(originatParent);
+    transform.position = originatParent.position;
+    GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
+}
+</code></pre>
+<p>}</p>
 
               </div>
               <div class="toc-container">
@@ -142,9 +170,9 @@ item.material.color = Color.blue;<br>
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/jumpandluo-di-jian-ce/">
+            <a href="https://Wei715547.github.io/post/zi-fu-chuan-fang-fa/">
               <h3 class="post-title">
-                jump&amp;落地检测
+                字符、可变字符串，方法
               </h3>
             </a>
           </div>

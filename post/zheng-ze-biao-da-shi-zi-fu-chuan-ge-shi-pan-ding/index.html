@@ -2,20 +2,24 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ComponenDemo | Weiwei的个人网站</title>
+<title>正则表达式（字符串格式判定） | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590506655174">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="ComponenDemo | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="正则表达式（字符串格式判定） | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-/// 
-/// Component类提供了查找（当前物体，子类，父类）组件的功能..." />
+    <meta name="description" content="using System;
+using System.Text.RegularExpressions;
+namespace 正则表达式
+{
+class Program
+{
+static void Main(string[] args)
+{
+..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -78,11 +82,11 @@ using UnityEngine;
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              ComponenDemo
+              正则表达式（字符串格式判定）
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-26
               </span>
               <span>
                 1 min read
@@ -92,44 +96,46 @@ using UnityEngine;
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// Component类提供了查找（当前物体，子类，父类）组件的功能。<br>
-/// </summary><br>
-public class ComponentDemo : MonoBehaviour<br>
+                <p>using System;<br>
+using System.Text.RegularExpressions;</p>
+<p>namespace 正则表达式<br>
 {<br>
-private void OnGUI()<br>
+class Program<br>
 {<br>
-if (GUILayout.Button(&quot;Transtorm&quot;))<br>
+static void Main(string[] args)<br>
 {<br>
-this.transform.position = new Vector3(0, 0, 10);<br>
-}<br>
-if (GUILayout .Button (&quot;GetComponent&quot;))<br>
-{<br>
-this.GetComponent<MeshRenderer>().material.color = Color.red;<br>
-}<br>
-if(GUILayout.Button (&quot;GetComponents&quot;))<br>
-{<br>
-var allConmponent = this.GetComponents<Component>();<br>
-foreach (var item in allConmponent )<br>
-{<br>
-print(item.GetType());<br>
-}<br>
-}<br>
-if (GUILayout.Button(&quot;GetComponentsInChildren&quot;))<br>
-{<br>
-//获取后代物体的指定类型组件（从自身开始）<br>
-//var sun = this.GetComponentInChildren<MeshRenderer>();//返回包含MeshRanderer组件的子对象<br>
-var allConmponent = this.GetComponentsInChildren<MeshRenderer>();//返回所有包含MeshRanderer组件的子对象<br>
-foreach (var item in allConmponent)<br>
-{<br>
-item.material.color = Color.blue;<br>
-}<br>
-}<br>
-}<br>
-}</p>
+string s = &quot;I amwei&quot;;<br>
+string res = Regex.Replace(s,&quot;^&quot;, &quot;start&quot;);//&quot;^&quot;匹配开始字符串<br>
+Console.WriteLine(res);</p>
+<pre><code>        string res2 = Regex.Replace(s, &quot;$&quot;, &quot;end&quot;);//&quot;$&quot;匹配结尾
+        Console.WriteLine(res2);
+
+        string num = Console.ReadLine();
+        /*bool isMatch = true;
+        for (int i = 0; i &lt; num.Length ; i++)
+        {
+            if(num[i]&lt;'0'||num[i]&gt;'9')
+            {
+                isMatch = false;
+                break;
+            }
+        }
+        if (isMatch)
+        {
+            Console.WriteLine(&quot;密码合法&quot;);
+        }
+        else
+        {
+            Console.WriteLine( &quot;密码不合法&quot;);
+        }*/
+        string pattern = @&quot;^\d*$&quot;;//(数字字符串)以数字开头0个或多个，并以数字结尾
+        bool issMach = Regex.IsMatch(num, pattern);
+        Console.WriteLine(issMach);
+
+    }
+}
+</code></pre>
+<p>}</p>
 
               </div>
               <div class="toc-container">
@@ -142,9 +148,9 @@ item.material.color = Color.blue;<br>
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/jumpandluo-di-jian-ce/">
+            <a href="https://Wei715547.github.io/post/tuo-zhuai-jie-kou/">
               <h3 class="post-title">
-                jump&amp;落地检测
+                拖拽接口
               </h3>
             </a>
           </div>

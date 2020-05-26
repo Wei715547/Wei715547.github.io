@@ -2,20 +2,24 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ComponenDemo | Weiwei的个人网站</title>
+<title>委托事件实现广播/监听（底层实现） | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590506655174">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="ComponenDemo | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="委托事件实现广播/监听（底层实现） | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
+    <meta name="description" content="//广播者
+using System;
 using System.Collections.Generic;
-using UnityEngine;
-/// 
-/// Component类提供了查找（当前物体，子类，父类）组件的功能..." />
+using System.Text;
+namespace 事件__观察者设计模式
+{
+class Cat//被观察者（广播着）
+{
+..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -78,55 +82,87 @@ using UnityEngine;
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              ComponenDemo
+              委托事件实现广播/监听（底层实现）
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-05-26
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
+                <p>//广播者<br>
+using System;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// Component类提供了查找（当前物体，子类，父类）组件的功能。<br>
-/// </summary><br>
-public class ComponentDemo : MonoBehaviour<br>
+using System.Text;</p>
+<p>namespace 事件__观察者设计模式<br>
 {<br>
-private void OnGUI()<br>
+class Cat//被观察者（广播着）<br>
 {<br>
-if (GUILayout.Button(&quot;Transtorm&quot;))<br>
+public string name;<br>
+public string color;</p>
+<pre><code>    public Cat(string name,string color)
+    {
+        this.name = name;
+        this.color = color;
+    }
+
+    public void CatComing()
+    {
+        Console.WriteLine(&quot;发起广播&quot;);
+        if(catCome!=null)
+            catCome();
+    }
+
+    //public Action catCome;
+    public event Action catCome;//声明一个事件，发布一个消息
+}
+</code></pre>
+<p>}</p>
+<p>//监听者<br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 事件__观察者设计模式<br>
 {<br>
-this.transform.position = new Vector3(0, 0, 10);<br>
-}<br>
-if (GUILayout .Button (&quot;GetComponent&quot;))<br>
+class Moust//观察者（监听着）<br>
 {<br>
-this.GetComponent<MeshRenderer>().material.color = Color.red;<br>
-}<br>
-if(GUILayout.Button (&quot;GetComponents&quot;))<br>
+public string name;<br>
+public string color;</p>
+<pre><code>    public Moust(string name,string color,Cat c)
+    {
+        this.name = name;
+        this.color = color;
+        c.catCome += this.MsRuning;//将自身应对广播“某”事件的方法，注册进广播者的该事件中
+    }
+
+    public void MsRuning()
+    {
+        Console.WriteLine(&quot;监听着收到广播&quot;);
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//程序<br>
+using System;</p>
+<p>namespace 事件__观察者设计模式<br>
 {<br>
-var allConmponent = this.GetComponents<Component>();<br>
-foreach (var item in allConmponent )<br>
+class Program<br>
 {<br>
-print(item.GetType());<br>
-}<br>
-}<br>
-if (GUILayout.Button(&quot;GetComponentsInChildren&quot;))<br>
+static void Main(string[] args)<br>
 {<br>
-//获取后代物体的指定类型组件（从自身开始）<br>
-//var sun = this.GetComponentInChildren<MeshRenderer>();//返回包含MeshRanderer组件的子对象<br>
-var allConmponent = this.GetComponentsInChildren<MeshRenderer>();//返回所有包含MeshRanderer组件的子对象<br>
-foreach (var item in allConmponent)<br>
-{<br>
-item.material.color = Color.blue;<br>
-}<br>
+Cat c = new Cat(&quot;Super BuleCat&quot;,&quot;Blue&quot;);<br>
+Moust m1 = new Moust(&quot;Mk&quot;, &quot;Blake&quot;,c);//将广播者传入监听者，在监听者中注册委托<br>
+//c.catCome += m1.MsRuning;//注册委托<br>
+Moust m2 = new Moust(&quot;Bt&quot;, &quot;Blue&quot;,c);<br>
+//c.catCome += m2.MsRuning;//注册委托<br>
+//c.catCome();//事件不能在类的外部进行调用(委托可以)，但可在类的外部注册。<br>
+c.CatComing();<br>
 }<br>
 }<br>
 }</p>
@@ -142,9 +178,9 @@ item.material.color = Color.blue;<br>
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/jumpandluo-di-jian-ce/">
+            <a href="https://Wei715547.github.io/post/zheng-ze-biao-da-shi-zi-fu-chuan-ge-shi-pan-ding/">
               <h3 class="post-title">
-                jump&amp;落地检测
+                正则表达式（字符串格式判定）
               </h3>
             </a>
           </div>

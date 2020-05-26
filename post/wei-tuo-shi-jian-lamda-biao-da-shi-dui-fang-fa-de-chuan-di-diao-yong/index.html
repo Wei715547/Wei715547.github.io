@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>委托，事件，Lamda表达式（对方法的传递/调用） | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590478473989">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590506655174">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="委托，事件，Lamda表达式（对方法的传递/调用） | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
@@ -28,7 +28,7 @@ class Program
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590478473989" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590506655174" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -88,7 +88,7 @@ class Program
                 2020-05-12
               </span>
               <span>
-                2 min read
+                6 min read
               </span>
               
             </div>
@@ -107,7 +107,7 @@ class Program<br>
     //（创建的委托必须与索要传递的方法，返回值/参数类型相同）
     public delegate void SayHelloDlg(string content);
 
-    //SayHelloDlg类型的事件
+    //SayHelloDlg类型的事件，声明事件，public event 委托类型 事件名
     public static event SayHelloDlg SayHelloEvent;
 
 
@@ -189,9 +189,125 @@ class Program<br>
 <img src="https://Wei715547.github.io/post-images/1589257671087.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1589257676945.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1589257683327.PNG" alt="" loading="lazy"></p>
-<p>泛型委托，<br>
+<p>//Part2-----------------------------------------------------------------------<br>
+泛型委托，<br>
 Action，无返回值<br>
-Func,有返回值（返回值为最后一个泛型的参数）</p>
+using System;</p>
+<p>namespace System委托<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+Action a = PrintString;//系统预定义的无返回值的委托类型，可指向一个无参数，返回值的方法</p>
+<pre><code>        Action&lt;int&gt; b = PrintInt;//泛型Action定义了一个委托，可指向有一个int类型参数，无返回值方法
+        PrintInt(1);
+
+        Action&lt;string&gt; c = PrintString;//泛型Action定义了一个委托，可指向有一个string类型参数，无返回值方法,
+        //(存在重名方法时系统会自动匹配)合适的方法
+        PrintString(&quot;Get&quot;);
+
+        Action&lt;int, int&gt; d = PrintInt;//最多可附带16个参数，
+        PrintInt(2, 3);
+    }
+
+    static void PrintString()
+    {
+        Console.WriteLine(&quot;Action委托&quot;);
+    }
+    static void PrintString(string a)
+    {
+        Console.WriteLine(&quot;Action委托&quot; + a);
+    }
+    static void PrintInt(int a)
+    {
+        Console.WriteLine(a);
+    }
+    static void PrintInt(int a, int b)
+    {
+        Console.WriteLine(a + b);
+    }
+}
+</code></pre>
+<p>}</p>
+<p>Func,有返回值（返回值为最后一个泛型的参数）<br>
+static void Main(string[] args)<br>
+{<br>
+Func<int> a = Fun1;//系统预定义的有返回值的委托类型，<br>
+Console.WriteLine(a());</p>
+<pre><code>        Func&lt;int, int, string&gt; b = Fun2;//多个泛型时，最后一个泛型为返回值类型，
+        //前面的泛型与参数类型一一对应。
+        Console.WriteLine(b(2, 3));
+    }
+
+    static int Fun1()
+    {
+        return 1;
+    }
+    static string Fun2(int a,int b)
+    {
+        return (a + b).ToString();
+    }
+
+    多播委托-----又返回值时只返回最后一个方法的返回值，中间方法出现异常时，后面的方法将不会被调用
+            static void Text1()
+    {
+        Console.WriteLine(&quot;Text1&quot;);
+    }
+    static void Text2()
+    {
+        Console.WriteLine(&quot;Text2&quot;);
+    }
+    static void Main(string[] args)
+    {
+        Action a = Text1;
+        a += Text2;//多播委托(委托链)，可指向多个与委托同类型的方法
+        a();
+        a -=Text2;//注销一个委托链上的方法，当一个委托没有指向任何方法时注销会异常
+        if (a != null)
+            a();
+        //多播委托方法
+        Delegate[] delegates = a.GetInvocationList();//返回该委托中所有方法的单独委托（解耦）
+        foreach (var /*Action*/ d in delegates)
+        {
+            d.DynamicInvoke();//获取委托后单独执行//有参数时可填入括号
+        }
+    }
+</code></pre>
+<p>//匿名方法<br>
+static int Text1(int a,int b)<br>
+{<br>
+return a + b;<br>
+}</p>
+<pre><code>    static void Main(string[] args)
+    {
+        //Func&lt;int, int, int&gt; a = Text1;
+        Func&lt;int, int, int&gt; a = delegate (int a, int b)//delegate定义 匿名方法（只使用一次时，通常用于回调函数）
+          {
+              return a + b;
+          };
+          //Lambda表达式--用来代替匿名方法
+          Func&lt;int, int, int&gt; a = (a, b) =&gt;//不需在指定类型（委托中以指定类型）
+          {
+              return a + b;
+          };
+        Console.WriteLine(a(2, 3));
+        Func&lt;int, int&gt; text2 = a =&gt; a+= 1;//lambda表达式只有一个参数时参数可不加括号，当函数体只有一句时，也可不写大括号，
+        //需要也可不加上return语句，可自动取值。
+        /*Func&lt;int, int&gt; text3 = (a) =&gt;//text2完整形式
+         {
+             return a += 1;
+         };*/
+        Console.WriteLine(text2(2));
+
+        //Lambda表达式可访问外部变量（应用不安全，返回值不只有参数决定谨慎使用）
+        int someValue = 5;
+        Func&lt;int, int&gt; outValue = x =&gt; x += someValue;
+        Console.WriteLine(outValue(5));
+        someValue = 15;
+        Console.WriteLine(outValue(5));
+    }
+</code></pre>
 
               </div>
               <div class="toc-container">
