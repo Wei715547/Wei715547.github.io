@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>EventSystems，屏幕拖拽 | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590506655174">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590553304719">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="EventSystems，屏幕拖拽 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
@@ -11,11 +11,12 @@
 
 
 
-    <meta name="description" content="using System.Collections;
+    <meta name="description" content="//简单方式
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-public cl..." />
+us..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -25,7 +26,7 @@ public cl..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590506655174" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590553304719" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -85,14 +86,44 @@ public cl..." />
                 2020-05-01
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
+                <p>//简单方式<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.EventSystems;<br>
+using UnityEngine.UI;</p>
+<p>public class Drag : MonoBehaviour, /<em>IPointerDownHandler,</em>/ IDragHandler, IPointerClickHandler<br>
+{<br>
+private RectTransform self;</p>
+<pre><code>private void Awake()
+{
+    self = GetComponent&lt;RectTransform&gt;();
+}
+
+public void OnDrag(PointerEventData eventData)
+{
+    //锚点的位置加上鼠标移动
+    self.anchoredPosition += eventData.delta;
+}
+
+public void OnPointerClick(PointerEventData eventData)//点击是执行
+{
+    //双击是隐藏界面
+    if (eventData.clickCount == 2)
+    {
+        gameObject.SetActive(false);
+    }
+}
+</code></pre>
+<h2 id="">}</h2>
+<p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;<br>
 using UnityEngine.EventSystems;<br>
@@ -140,7 +171,14 @@ public void OnPointerClick(PointerEventData eventData)
 
               </div>
               <div class="toc-container">
-                
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#">}</a></li>
+</ul>
+</li>
+</ul>
+
               </div>
             </div>
           </article>

@@ -2,20 +2,20 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>拖拽接口 | Weiwei的个人网站</title>
+<title>2D Bag System | Weiwei的个人网站</title>
 <link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590553304719">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="拖拽接口 | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="2D Bag System | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="using System.Collections;
+    <meta name="description" content="以本地资源类(ScriptableObject)实现数据存储/读取
+//背包资源类
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using Uni..." />
+using UnityEngine;..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -78,21 +78,205 @@ using Uni..." />
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              拖拽接口
+              2D Bag System
             </h2>
             <div class="post-info">
               <span>
-                2020-05-26
+                2020-05-27
               </span>
               <span>
-                2 min read
+                6 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>using System.Collections;<br>
+                <p>以本地资源类(ScriptableObject)实现数据存储/读取<br>
+//背包资源类<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+[CreateAssetMenu(fileName = &quot;New Item&quot;, menuName = &quot;Inventory/Inventory&quot;)]<br>
+//背包类<br>
+public class Inventory : ScriptableObject<br>
+{<br>
+#region<br>
+/<em>public static Inventory GetInventory()<br>
+{<br>
+return Resources.Load<Inventory>(&quot;Mybag&quot;);<br>
+}</em>/<br>
+#endregion</p>
+<pre><code>//物品类列表
+public List&lt;Items&gt; itemList = new List&lt;Items&gt;();
+</code></pre>
+<p>}</p>
+<p>//物品类<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+[CreateAssetMenu(fileName = &quot;New Item&quot; ,menuName = &quot;Inventory/New Item&quot;)]<br>
+//物品类<br>
+public class Items : ScriptableObject<br>
+{<br>
+public string  itemName ;//物品名称<br>
+public Sprite ItemImage;//物品图标<br>
+public int ItemHild;//物品数量<br>
+[TextArea]//文本框，存储多字符串<br>
+public string ItemInfo;//物品信息<br>
+public bool equip;//可可装备属性<br>
+}<br>
+<img src="https://Wei715547.github.io/post-images/1590550667528.PNG" alt="" loading="lazy"></p>
+<p>//UI预制件<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;</p>
+<p>public class Slot : MonoBehaviour<br>
+{<br>
+public int slotID;//空格的ID<br>
+//public Items slotItem;<br>
+public Image slotImage;//物品图标<br>
+public Text slotNum;//物品数量<br>
+private Button itemButton;//可点击物体按钮<br>
+public GameObject itemInSlot;//物品整体UI<br>
+public string slotInfo;//物品信息</p>
+<pre><code>private void Awake()
+{
+    itemButton = this.gameObject.GetComponentInChildren&lt;Button&gt;();
+    itemButton.onClick.AddListener(ItemOnClecked);
+}
+
+public void ItemOnClecked()
+{
+    InventoryManager.UpdateItemInfo(slotInfo );//点击时显示物品信息，
+    //（物品位置交换后UI预制件中仍存储原来物品的信息，调用的也是创建时赋值的信息）场景重新加载 时UI预制件中的信息得到更新
+}
+
+public void SetupSlot (Items item)//刷新背包时传过来的本地资源中的物品对象
+{
+    if(item == null )//本地背包列表中物品为空时吟唱空白的物品对象，然后返回
+    {
+        itemInSlot.SetActive(false);
+        return;
+    }
+    //不为空时对UI预制件进行赋值
+    slotImage.sprite = item.ItemImage;//图标
+    slotNum.text = item.ItemHild.ToString();//数量
+    slotInfo = item.ItemInfo;//物品信息
+}
+</code></pre>
+<p>}<br>
+<img src="https://Wei715547.github.io/post-images/1590550908057.PNG" alt="" loading="lazy"></p>
+<p>//世界中的物品<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>//世界中的物品脚本<br>
+public class ItemOnWord : MonoBehaviour<br>
+{<br>
+public Items thisItem;//物品种类<br>
+public Inventory platerInventer;//要加入的背包</p>
+<pre><code>private void OnTriggerEnter2D(Collider2D collision)
+{
+    if (collision.gameObject .CompareTag (&quot;Player&quot;))//Tag相同时返回TRUE,
+    {
+        AddItems();
+    }
+    Destroy(this.gameObject);
+}
+
+public void AddItems()
+{
+    if (!platerInventer.itemList.Contains (thisItem ))//List方法包含此元素时返回TRUE,不包含返回FALSE
+    {
+        for (int i = 0; i &lt; platerInventer.itemList.Count; i++)//背包中没有该物品时遍历
+        {
+            if (platerInventer .itemList[i]==null) //将物品添加到第一个空位置
+            {
+                platerInventer.itemList[i] = thisItem;
+                break;//跳出循环
+            }
+        }
+    }else
+    {
+        thisItem.ItemHild += 1;//背包中有该物品时数量加一
+    }
+    InventoryManager.RefreshItem();//刷新背包
+}
+</code></pre>
+<p>}<br>
+<img src="https://Wei715547.github.io/post-images/1590552509280.PNG" alt="" loading="lazy"></p>
+<p>//背包管理脚本<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+//背包管理脚本<br>
+public class InventoryManager : MonoBehaviour<br>
+{<br>
+public static InventoryManager instance;</p>
+<pre><code>public Inventory myBag;
+public GameObject parentPanle;
+//public Slot slotPrefab;
+public GameObject prefab;
+public Text itemInfromation;
+
+//运行时的物品List,与本地数据保持一致
+public List&lt;GameObject&gt; slot = new List&lt;GameObject&gt;();
+
+
+private void Awake()//单例模式
+{
+    if (instance != null)
+        Destroy(this);
+    instance = this;
+}
+
+private void OnEnable()//启用时刷新一次
+{
+    //print(&quot;refs&quot;);
+    //print(parentPanle.transform.childCount);
+    RefreshItem();
+    instance.itemInfromation.text = &quot; &quot;;
+}
+
+public static void UpdateItemInfo(string ItemInfo)
+{
+    instance.itemInfromation.text = ItemInfo;
+}
+
+public static void RefreshItem()
+{
+    //清空背包
+    ClearBag();
+    //清空后，再根据本地资源类重新生成UI预制件设置其中的Items相关属性
+    for (int i=0;i&lt; instance.myBag.itemList.Count;i++)
+    {
+        //CreateNewItem(item);
+        instance.slot.Add(Instantiate(instance.prefab));
+        instance.slot[i].transform.SetParent(instance.parentPanle.transform);
+        instance.slot[i].GetComponent&lt;Slot&gt;().slotID = i;
+        instance.slot[i].GetComponent&lt;Slot&gt;().SetupSlot(instance.myBag.itemList[i]);
+
+    }
+}
+//清空UI中背包所有物品的方法
+public static void ClearBag()
+{
+    if (instance.parentPanle.transform.childCount == 0)
+        return;
+    for (int i = 0; i &lt; instance .parentPanle .transform .childCount ; i++)
+    {
+        Destroy(instance.parentPanle.transform.GetChild(i).gameObject);
+        instance.slot.Clear();
+    }
+}
+</code></pre>
+<p>}<br>
+<img src="https://Wei715547.github.io/post-images/1590552901698.PNG" alt="" loading="lazy"></p>
+<p>//------------------------物品拖拽/交换位置-----------------------------------//<br>
+using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;<br>
 using UnityEngine.EventSystems;<br>
@@ -157,7 +341,8 @@ public void OnEndDrag(PointerEventData eventData)
     GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
 }
 </code></pre>
-<p>}</p>
+<p>}<br>
+<img src="https://Wei715547.github.io/post-images/1590553039734.PNG" alt="" loading="lazy"></p>
 
               </div>
               <div class="toc-container">
@@ -170,9 +355,9 @@ public void OnEndDrag(PointerEventData eventData)
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://Wei715547.github.io/post/zi-fu-chuan-fang-fa/">
+            <a href="https://Wei715547.github.io/post/wei-tuo-shi-jian-shi-xian-guang-bo-jian-ting-di-ceng-shi-xian/">
               <h3 class="post-title">
-                字符、可变字符串，方法
+                委托事件实现广播/监听（底层实现）
               </h3>
             </a>
           </div>
