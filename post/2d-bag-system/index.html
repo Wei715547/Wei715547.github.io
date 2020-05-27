@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>2D Bag System | Weiwei的个人网站</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590553304719">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590557665266">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="2D Bag System | Weiwei的个人网站 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
@@ -25,7 +25,7 @@ using UnityEngine;..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590553304719" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590557665266" alt="">
   </a>
   <h1 class="site-title">
     Weiwei的个人网站
@@ -85,7 +85,7 @@ using UnityEngine;..." />
                 2020-05-27
               </span>
               <span>
-                6 min read
+                7 min read
               </span>
               
             </div>
@@ -281,61 +281,66 @@ using System.Collections.Generic;<br>
 using UnityEngine;<br>
 using UnityEngine.EventSystems;<br>
 using UnityEngine.UI;<br>
-public class ItemOnnDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler<br>
+public class ItemOnnDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler//拖拽接口<br>
 {<br>
 public Transform originatParent;<br>
 public Inventory myBag;<br>
 private int currentItemID;</p>
-<pre><code>public void OnBeginDrag(PointerEventData eventData)
+<pre><code>public void OnBeginDrag(PointerEventData eventData)//按下时
 {
-    originatParent = transform.parent;
-    currentItemID = originatParent.GetComponent&lt;Slot&gt;().slotID;
-    transform.SetParent(transform.parent.parent);
-    transform.position = eventData.position;
-    GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = false;
+    originatParent = transform.parent;//记录初始所在父物体
+    currentItemID = originatParent.GetComponent&lt;Slot&gt;().slotID;//记录初始父物体在界面/本地数据List中位置
+    transform.SetParent(transform.parent.parent);//点击后将物体UI的父物体设置为与抽屉的父物体同级，方便显示
+    transform.position = eventData.position;//物体UI位置跟随屏幕滚光标
+    GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = false;//隐藏物品图标屏幕射线检测，使射线可检测到下层父级物体
 }
 
-public void OnDrag(PointerEventData eventData)
+public void OnDrag(PointerEventData eventData)//拖拽时
 {
-    transform.position = eventData.position;
-    //print(eventData.pointerCurrentRaycast.gameObject.name);
+    transform.position = eventData.position;//拖拽时物体UI根数屏幕光标
+    print(eventData.pointerCurrentRaycast.gameObject.name);//屏幕射线检测到的物体名称
 }
 
-public void OnEndDrag(PointerEventData eventData)
+public void OnEndDrag(PointerEventData eventData)//拖拽结束时
 {
-    if (eventData.pointerCurrentRaycast.gameObject != null)
+    if (eventData.pointerCurrentRaycast.gameObject != null)//如果屏幕射线检测到的物体不为空时
     {
-        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Item Image&quot;)//物品栏有物品时
+        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Item Image&quot;)//物品栏有物品时，物品未隐藏可被检测到（物品UI的图标）
         {
-            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform.parent.parent);
+            //原物体UI移动到背包中目标物体UI位置
+            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform.parent.parent);//物品UI图标的父级的父级（Slot）
             transform.position = eventData.pointerCurrentRaycast.gameObject.transform.parent.parent.position;
+            //将目标物体UI移动到原物体UI位置
+            eventData.pointerCurrentRaycast.gameObject.transform.parent.SetParent(originatParent);
+            eventData.pointerCurrentRaycast.gameObject.transform.parent.position = originatParent.position;
 
-            //交换存储位置
-            var temp = myBag.itemList[currentItemID];
+            //交换本地数据中物体的存储位置
+            var temp = myBag.itemList[currentItemID];//本地数据中原物体保存为中间值
+            //本地数据中原物体移动到目标物体位置
             myBag.itemList[currentItemID] = myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID];
+            //本地数据中目标物体位置变为中间值（原物体）
             myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID] = temp;
             //交换存储位置
 
-            eventData.pointerCurrentRaycast.gameObject.transform.parent.SetParent(originatParent);
-            eventData.pointerCurrentRaycast.gameObject.transform.parent.position = originatParent.position;
-            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
-            return;
+            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;//交换完成开启屏幕射线检测，可再次拖拽
+            return;//目标栏有物体，交换完成退出方法
         }
-        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Slot(Clone)&quot;)
+        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Slot(Clone)&quot;)//目标栏为空时（检测到的是抽屉）
         {
-            //物品栏为空时
+            //原物体之间放入目标抽屉
             transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform);
             transform.position = eventData.pointerCurrentRaycast.gameObject.transform.position;
-
+            //将本地数据中的空物体赋值为，本地数据库中的目标物体
             myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID] = myBag.itemList[currentItemID];
+            //如果如表抽屉不是原来的抽屉时执行
             if (eventData.pointerCurrentRaycast.gameObject.GetComponent&lt;Slot&gt;().slotID != currentItemID)
-                myBag.itemList[currentItemID] = null;
+                myBag.itemList[currentItemID] = null;//之后本地数据中的目标物体设为空
 
-            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
-            return;
+            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;//交换完成开启屏幕射线检测，可再次拖拽
+            return;//目标栏有物体，交换完成退出方法
         }
     }
-    //其他任何位置返回原位
+    //其他任何位置返回原位(非UI元素时)
     transform.SetParent(originatParent);
     transform.position = originatParent.position;
     GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
