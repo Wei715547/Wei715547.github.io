@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>委托事件实现广播/监听（底层实现） | Wei开发日志</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590583085567">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590682192433">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="委托事件实现广播/监听（底层实现） | Wei开发日志 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
@@ -29,7 +29,7 @@ class Cat//被观察者（广播着）
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590583085567" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590682192433" alt="">
   </a>
   <h1 class="site-title">
     Wei开发日志
@@ -120,7 +120,7 @@ public string color;</p>
     }
 
     //public Action catCome;
-    public event Action catCome;//声明一个事件，发布一个消息
+    public event Action catCome;//声明一个事件，发布一个消息（不能在类的外部被调用）
 }
 </code></pre>
 <p>}</p>
@@ -138,7 +138,8 @@ public string color;</p>
     {
         this.name = name;
         this.color = color;
-        c.catCome += this.MsRuning;//将自身应对广播“某”事件的方法，注册进广播者的该事件中
+        c.catCome += this.MsRuning;//将自身应对广播“某”事件的方法，注册进广播者的该事件中(订阅消息)
+        //c.catCome();//事件不能在类的外部进行调用(委托可以)，但可在类的外部注册。
     }
 
     public void MsRuning()

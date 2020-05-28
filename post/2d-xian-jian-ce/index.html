@@ -2,11 +2,11 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>2D线检测 | Wei开发日志</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590583085567">
+<title>2D线检测、范围检测 | Wei开发日志</title>
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590682192433">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="2D线检测 | Wei开发日志 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="2D线检测、范围检测 | Wei开发日志 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
@@ -22,7 +22,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590583085567" alt="">
+  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590682192433" alt="">
   </a>
   <h1 class="site-title">
     Wei开发日志
@@ -75,7 +75,7 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              2D线检测
+              2D线检测、范围检测
             </h2>
             <div class="post-info">
               <span>
@@ -93,7 +93,29 @@
         RaycastHit2D hit = Physics2D.Linecast(targertPos , targertPos + new Vector2(x, y));
         enemyCl.enabled = true;
         if (hit.transform == null || hit.collider.tag == &quot;Soda&quot; || hit.collider.tag == &quot;Food&quot;)
-            targertPos += new Vector2(x, y);</code></pre>
+            targertPos += new Vector2(x, y);
+</code></pre>
+<hr>
+<pre><code>private void GetDown()
+{//（检测点，检测范围，检测层级）
+    if (!Physics2D.OverlapCircle(headUp.position, 0.2f, ground))
+    {
+        if ((Input.GetButton(&quot;Down&quot;)||PlayerCT .instent .IsD ) &amp;&amp; gtext.IsTouchingLayers(ground))
+        {
+            ani.SetBool(&quot;Leiing&quot;, true);
+            bx.enabled = false;
+        }
+        else if (!Input.GetButton(&quot;Down&quot;) || !gtext.IsTouchingLayers(ground))
+        {
+            ani.SetBool(&quot;Leiing&quot;, false);
+            bx.enabled = true;
+        }
+    }
+}
+</code></pre>
+<hr>
+<p>Collider是否接触到某层级LayMask<br>
+gtext.IsTouchingLayers(ground)</p>
 
               </div>
               <div class="toc-container">

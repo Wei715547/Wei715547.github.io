@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei开发日志</title>
-    <updated>2020-05-27T13:19:12.894Z</updated>
+    <updated>2020-05-28T16:09:55.818Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -10,6 +10,138 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei开发日志</rights>
+    <entry>
+        <title type="html"><![CDATA[冒泡排序+(泛型/委托)]]></title>
+        <id>https://Wei715547.github.io/post/mou-pao-pai-xu-fan-xing-wei-tuo/</id>
+        <link href="https://Wei715547.github.io/post/mou-pao-pai-xu-fan-xing-wei-tuo/">
+        </link>
+        <updated>2020-05-28T15:53:37.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;</p>
+<p>namespace int类冒泡排序<br>
+{<br>
+class Program<br>
+{<br>
+static void Sort(int[] sortArray)<br>
+{<br>
+bool isChang = true;<br>
+do<br>
+{<br>
+isChang = false;<br>
+for (int i = 0; i &lt; sortArray.Length - 1; i++)<br>
+{<br>
+if (sortArray[i] &lt; sortArray[i + 1])<br>
+{<br>
+int temp = sortArray[i];<br>
+sortArray[i] = sortArray[i + 1];<br>
+sortArray[i + 1] = temp;<br>
+isChang = true;<br>
+}<br>
+}<br>
+} while (isChang);<br>
+}</p>
+<pre><code>    static void CommonSort&lt;T&gt;(T[] sortArray, Func&lt;T, T, bool&gt; compart)
+    {
+        bool isChang = true;
+        do
+        {
+            isChang = false;
+            for (int i = 0; i &lt; sortArray.Length - 1; i++)
+            {
+                if (compart(sortArray[i], sortArray[i + 1]))
+                {
+                    T temp = sortArray[i];
+                    sortArray[i] = sortArray[i + 1];
+                    sortArray[i + 1] = temp;
+                    isChang = true;
+                }
+            }
+        } while (isChang);
+    }
+
+    static void Main(string[] args)
+    {
+        /*int[] array = { 31, 423, 543, 35, 24, 454,6 };
+        Sort(array);
+        foreach (int i in array)
+        {
+            Console.WriteLine(i);
+        }*/
+
+        /*Employee e1 = new Employee(&quot;wei&quot;, 12000);
+        Employee e2 = new Employee(&quot;zz&quot;, 10000);
+        Employee e3 = new Employee(&quot;zh&quot;, 11000);
+        Employee[] earray = { e1, e2, e3 };*/
+        //组类声明
+        Employee[] earray = new Employee[]
+        {
+            new Employee(&quot;wei&quot;, 12000),
+            new Employee(&quot;zz&quot;, 10000),
+            new Employee(&quot;h&quot;, 11000)
+        };
+
+        CommonSort&lt;Employee&gt;(earray, Employee.Compare);
+        foreach (Employee e in earray)
+        {
+            Console.WriteLine(e);
+        }
+
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//泛型类<br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace int类冒泡排序<br>
+{<br>
+class Employee<br>
+{<br>
+public override string ToString()<br>
+{<br>
+return this .Name +&quot;:&quot;+this .Salary;<br>
+}</p>
+<pre><code>    public string Name { get; private set; }
+    public int Salary { get; private set; }
+
+    public Employee(string name ,int salary)
+    {
+        this.Name = name;
+        this.Salary = salary;
+    }
+
+    public static bool Compare(Employee e1,Employee e2)
+    {
+        if (e1.Salary &gt; e2.Salary) return true;
+        return false;
+    }
+
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Bool交替执行]]></title>
+        <id>https://Wei715547.github.io/post/bool-jiao-ti-zhi-xing/</id>
+        <link href="https://Wei715547.github.io/post/bool-jiao-ti-zhi-xing/">
+        </link>
+        <updated>2020-05-28T06:32:17.000Z</updated>
+        <content type="html"><![CDATA[<p>private bool bagShow;<br>
+private void Awake()<br>
+{<br>
+myBagPanel.SetActive(false);<br>
+}<br>
+private void Update()<br>
+{<br>
+if (Input .GetKeyDown (KeyCode.B ))<br>
+{<br>
+bagShow = !bagShow;<br>
+myBagPanel.SetActive(bagShow);</p>
+<pre><code>    }
+}</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[2D Bag System]]></title>
         <id>https://Wei715547.github.io/post/2d-bag-system/</id>
@@ -304,7 +436,7 @@ public string color;</p>
     }
 
     //public Action catCome;
-    public event Action catCome;//声明一个事件，发布一个消息
+    public event Action catCome;//声明一个事件，发布一个消息（不能在类的外部被调用）
 }
 </code></pre>
 <p>}</p>
@@ -322,7 +454,8 @@ public string color;</p>
     {
         this.name = name;
         this.color = color;
-        c.catCome += this.MsRuning;//将自身应对广播“某”事件的方法，注册进广播者的该事件中
+        c.catCome += this.MsRuning;//将自身应对广播“某”事件的方法，注册进广播者的该事件中(订阅消息)
+        //c.catCome();//事件不能在类的外部进行调用(委托可以)，但可在类的外部注册。
     }
 
     public void MsRuning()
@@ -825,45 +958,6 @@ private void Restart()
     food = 100;
     level -= level;
 }</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[2D线检测]]></title>
-        <id>https://Wei715547.github.io/post/2d-xian-jian-ce/</id>
-        <link href="https://Wei715547.github.io/post/2d-xian-jian-ce/">
-        </link>
-        <updated>2020-05-19T07:08:13.000Z</updated>
-        <content type="html"><![CDATA[<pre><code>        enemyCl.enabled = false;
-        RaycastHit2D hit = Physics2D.Linecast(targertPos , targertPos + new Vector2(x, y));
-        enemyCl.enabled = true;
-        if (hit.transform == null || hit.collider.tag == &quot;Soda&quot; || hit.collider.tag == &quot;Food&quot;)
-            targertPos += new Vector2(x, y);</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[断离销毁子类，状态机-动作融合]]></title>
-        <id>https://Wei715547.github.io/post/duan-chi-xiao-hui-zi-lei/</id>
-        <link href="https://Wei715547.github.io/post/duan-chi-xiao-hui-zi-lei/">
-        </link>
-        <updated>2020-05-19T01:18:53.000Z</updated>
-        <content type="html"><![CDATA[<pre><code>protected override void Start()
-{
-    base.Start();
-    fR = GetComponent&lt;Rigidbody2D&gt;();
-    //cl = GetComponent&lt;CircleCollider2D&gt;();
-    l = left.position.x;
-    r = right.position.x;
-    transform.DetachChildren();
-    Destroy(left.gameObject);
-    Destroy(right.gameObject);
-
-}
-
-Has Exit Time：当前状态是否播放完再进入下一状态
-Setting
-            Exit Time 1，(0~1+)当前状态播放一遍在进入下一状态
-            Transition Duratio 0，(0~1+)动作融合，2D不需要融合
-            Transition Offset 0，(0~1+)下一状态是否需要偏移</code></pre>
 ]]></content>
     </entry>
 </feed>
