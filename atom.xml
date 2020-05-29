@@ -2,11 +2,12 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei开发日志</title>
-    <updated>2020-05-29T03:05:49.257Z</updated>
+    <updated>2020-05-29T03:19:17.266Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
-    <subtitle>7</subtitle>
+    <subtitle>年月增长，我宜强盛。
+用于Unity+开发的技术积累</subtitle>
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei开发日志</rights>
