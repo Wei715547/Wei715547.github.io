@@ -1,285 +1,275 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+
 <title>Wei开发日志</title>
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590682192433">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590720193859">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Wei开发日志 - Atom Feed" href="https://Wei715547.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="7" />
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="7">
+    
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://Wei715547.github.io">
-  <img class="avatar" src="https://Wei715547.github.io/images/avatar.png?v=1590682192433" alt="">
-  </a>
-  <h1 class="site-title">
-    Wei开发日志
-  </h1>
-  <p class="site-description">
-    7
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
-  </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-</div>
+    <div id="app" class="main">
 
-    
-        <div class="post-container">
-  
-    <article class="post">
-      <a href="https://Wei715547.github.io/post/mou-pao-pai-xu-fan-xing-wei-tuo/">
-        <h2 class="post-title">冒泡排序+(泛型/委托)</h2>
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1590720193859" class="site-logo">
+        <h1 class="site-title">Wei开发日志</h1>
       </a>
-      <div class="post-info">
-        <span>
-          2020-05-28
-        </span>
-        <span>
-          2 min read
-        </span>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://Wei715547.github.io/post/bool-jiao-ti-zhi-xing/">
-        <h2 class="post-title">Bool交替执行</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-05-28
-        </span>
-        <span>
-          1 min read
-        </span>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://Wei715547.github.io/post/2d-bag-system/">
-        <h2 class="post-title">2D Bag System</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-05-27
-        </span>
-        <span>
-          7 min read
-        </span>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://Wei715547.github.io/post/wei-tuo-shi-jian-shi-xian-guang-bo-jian-ting-di-ceng-shi-xian/">
-        <h2 class="post-title">委托事件实现广播/监听（底层实现）</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-05-26
-        </span>
-        <span>
-          2 min read
-        </span>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://Wei715547.github.io/post/zheng-ze-biao-da-shi-zi-fu-chuan-ge-shi-pan-ding/">
-        <h2 class="post-title">正则表达式（字符串格式判定）</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-05-26
-        </span>
-        <span>
-          1 min read
-        </span>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://Wei715547.github.io/post/tuo-zhuai-jie-kou/">
-        <h2 class="post-title">拖拽接口</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-05-26
-        </span>
-        <span>
-          2 min read
-        </span>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://Wei715547.github.io/post/zi-fu-chuan-fang-fa/">
-        <h2 class="post-title">字符、可变字符串，方法</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-05-24
-        </span>
-        <span>
-          2 min read
-        </span>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://Wei715547.github.io/post/zi-ding-yi-list-ji-he/">
-        <h2 class="post-title">自定义List集合</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-05-24
-        </span>
-        <span>
-          3 min read
-        </span>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://Wei715547.github.io/post/xian-xing-biao/">
-        <h2 class="post-title">数据结构Base</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-05-23
-        </span>
-        <span>
-          1 min read
-        </span>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://Wei715547.github.io/post/gamemanager-chong-xin-jia-zai-hou-bu-xiao-hui/">
-        <h2 class="post-title">GameManager重新加载后不销毁</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2020-05-20
-        </span>
-        <span>
-          2 min read
-        </span>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-</div>
-
-    
-        <div class="pagination-container">
-  
-  
-    <a href="https://Wei715547.github.io/page/2" class="next-page">下一页</a>
-  
-</div>
-
-    
-        <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-  <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
-</div>
-
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
       </div>
     </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      7
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/mou-pao-pai-xu-fan-xing-wei-tuo/">
+                  <h2 class="post-title">冒泡排序+(泛型/委托)</h2>
+                </a>
+                <div class="post-date">
+                  2020-05-28
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/bool-jiao-ti-zhi-xing/">
+                  <h2 class="post-title">Bool交替执行</h2>
+                </a>
+                <div class="post-date">
+                  2020-05-28
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/2d-bag-system/">
+                  <h2 class="post-title">2D Bag System</h2>
+                </a>
+                <div class="post-date">
+                  2020-05-27
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/wei-tuo-shi-jian-shi-xian-guang-bo-jian-ting-di-ceng-shi-xian/">
+                  <h2 class="post-title">委托事件实现广播/监听（底层实现）</h2>
+                </a>
+                <div class="post-date">
+                  2020-05-26
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/zheng-ze-biao-da-shi-zi-fu-chuan-ge-shi-pan-ding/">
+                  <h2 class="post-title">正则表达式（字符串格式判定）</h2>
+                </a>
+                <div class="post-date">
+                  2020-05-26
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/tuo-zhuai-jie-kou/">
+                  <h2 class="post-title">拖拽接口</h2>
+                </a>
+                <div class="post-date">
+                  2020-05-26
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/zi-fu-chuan-fang-fa/">
+                  <h2 class="post-title">字符、可变字符串，方法</h2>
+                </a>
+                <div class="post-date">
+                  2020-05-24
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/zi-ding-yi-list-ji-he/">
+                  <h2 class="post-title">自定义List集合</h2>
+                </a>
+                <div class="post-date">
+                  2020-05-24
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/xian-xing-biao/">
+                  <h2 class="post-title">数据结构Base</h2>
+                </a>
+                <div class="post-date">
+                  2020-05-23
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/gamemanager-chong-xin-jia-zai-hou-bu-xiao-hui/">
+                  <h2 class="post-title">GameManager重新加载后不销毁</h2>
+                </a>
+                <div class="post-date">
+                  2020-05-20
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
+          
+
+          <div class="pagination-container">
+  
+  
+    <a href="https://Wei715547.github.io/page/2" class="next">下一页 <i class="icon-arrow-ios-forward-outline"></i></a>
+  
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
   </body>
 </html>
