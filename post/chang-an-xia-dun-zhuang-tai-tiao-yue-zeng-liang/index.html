@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>(敌人类）提取共有属性/方法 | Wei开发日志</title>
+<title>长按/下蹲状态跳跃增量 | Wei开发日志</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,11 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class Enemis : MonoBehaviour
+    <meta name="description" content="public void MidAirMovement()
 {
-pro..." />
+if (jumpPressed&amp;&amp;isOnground &amp;&amp;!isJump )//普通状态--在地面上，非跳跃状态，按下跳跃键
+{
+if (isC..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -100,77 +99,41 @@ pro..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">(敌人类）提取共有属性/方法</h2>
-            <div class="post-date">2020-05-08</div>
+            <h2 class="post-title">长按/下蹲状态跳跃增量</h2>
+            <div class="post-date">2020-05-29</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class Enemis : MonoBehaviour<br>
+              <p>public void MidAirMovement()<br>
 {<br>
-protected Animator ani;<br>
-protected CircleCollider2D cl;<br>
-// Start is called before the first frame update<br>
-protected virtual void Start()<br>
-//在继承的子类中复写protected override void Start(){base.Start(); //来获取父类用到的组件}<br>
+if (jumpPressed&amp;&amp;isOnground &amp;&amp;!isJump )//普通状态--在地面上，非跳跃状态，按下跳跃键<br>
 {<br>
-ani = GetComponent<Animator>();<br>
-cl = GetComponent<CircleCollider2D>();<br>
+if (isCrouch)//下蹲状态，增量<br>
+{<br>
+StandUp();<br>
+playerRGB.AddForce(Vector2.up * crouchJumpBoost, ForceMode2D.Impulse);//F1+F2<br>
+}<br>
+isOnground = false;<br>
+isJump = true;<br>
+jumpTime = Time.time + jumpHodeDuration;<br>
+playerRGB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);//F1<br>
+}<br>
+else if (isJump )//长按状态<br>
+{<br>
+if (jumpHeld)//长按跳跃键<br>
+playerRGB.AddForce(Vector2.up * jumpHpdeFpoce, ForceMode2D.Impulse);//F1+F3<br>
+if (jumpTime &lt; Time.time)<br>
+isJump = false;<br>
+}<br>
 }</p>
-<pre><code>public void Died()
-{
-    ani.SetTrigger(&quot;Died&quot;);
-    cl.enabled = false;
-}
-
-public void D()
-{
-    Destroy(gameObject);
-}
-</code></pre>
-<p>}</p>
-<p>//应用-所有敌人继承Enemis<br>
-private void OnCollisionEnter2D(Collision2D collision)         //(Player内代码)<br>
-{<br>
-if (collision.gameObject.tag == &quot;Enm&quot;)<br>
-{<br>
-//Enemis eni = collision.gameObject.GetComponent<Enemis>();//子类对象赋给父类引用(由于各子类不同)/(通过子类获取子类中父类实例--便于调用父类方法)👌</p>
-<pre><code>        if (ani.GetBool(&quot;Down&quot;))
-        {
-            //eni.Died();//直接调用父类中所有子类共有行为👌
-
-            collision.gameObject.SendMessage(&quot;Died&quot;);//或者不需声明父类直接在子类中调用父类方法👍👍👍
-
-            //collision.gameObject.transform.GetComponent&lt;Eagle&gt;().Died();
-            //FrogRangAI frog = collision.gameObject.GetComponent&lt;FrogRangAI&gt;();
-            //frog.Died();
-//由于敌人种类不确定(Eagle,FrogRangAI)，所以不能获取子类来调用父类中共有行为。🖕🖕🖕
-
-            AddUpForce();
-        }
-        else if (transform.position.x &lt; collision.gameObject.transform.position.x)
-        {
-            playerR.velocity = new Vector2(-3, playerR.velocity.y);
-            IsHaert = true;
-        }
-        else if (transform.position.x &gt; collision.gameObject.transform.position.x)
-        {
-            playerR.velocity = new Vector2(3, playerR.velocity.y);
-            IsHaert = true;
-        }
-        GamePanel.Intence.Damage();
-    }
-</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/gang-ti-add-force/">
+                <a href="https://Wei715547.github.io/post/mou-pao-pai-xu-fan-xing-wei-tuo/">
                   <h3 class="post-title">
-                    刚体-Add-Force
+                    冒泡排序+(泛型/委托)
                   </h3>
                 </a>
               </div>
