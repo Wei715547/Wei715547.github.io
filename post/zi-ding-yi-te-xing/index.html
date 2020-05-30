@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>长按/下蹲状态跳跃增量 | Wei开发日志</title>
+<title>自定义特性 | Wei开发日志</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,13 @@
 
 
 
-    <meta name="description" content="public void MidAirMovement()
+    <meta name="description" content="using System;
+using System.Collections.Generic;
+using System.Text;
+namespace 自定义特性
 {
-if (jumpPressed&amp;&amp;isOnground &amp;&amp;!isJump )//普通状态--在地面上，非跳跃状态，按下跳跃键
-{
-if (isC..." />
+//1.也行类的后缀以Attribute结尾
+//2.需要继承自:Sy..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -99,30 +101,47 @@ if (isC..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">长按/下蹲状态跳跃增量</h2>
-            <div class="post-date">2020-05-29</div>
+            <h2 class="post-title">自定义特性</h2>
+            <div class="post-date">2020-05-30</div>
             
             <div class="post-content" v-pre>
-              <p>public void MidAirMovement()<br>
+              <p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 自定义特性<br>
 {<br>
-if (jumpPressed&amp;&amp;isOnground &amp;&amp;!isJump )//普通状态--在地面上，非跳跃状态，按下跳跃键<br>
+//1.也行类的后缀以Attribute结尾<br>
+//2.需要继承自:System.Attribute<br>
+//3.一般情况下声明为 sealed(不需要被继承)<br>
+//4.一般情况下特性类用来表示目标结构的一些状态（定义一些字段/属性，一般不需要定义方法）<br>
+[AttributeUsage(AttributeTargets.Class)]//表示特性类的使用目标,(表示特性类可以应用到程序的那些结构)<br>
+sealed class MyTestAttribute :System.Attribute<br>
 {<br>
-if (isCrouch)//下蹲状态，增量<br>
+public string Description { get; set; }<br>
+public string VersionNumber { get; set; }<br>
+public int ID { get; set; }</p>
+<pre><code>    public MyTestAttribute(string des)
+    {
+        Description = des;
+    }
+}
+</code></pre>
+<p>}<br>
+//---------------------------------使用---------------------<br>
+using System;</p>
+<p>namespace 自定义特性<br>
 {<br>
-StandUp();<br>
-playerRGB.AddForce(Vector2.up * crouchJumpBoost, ForceMode2D.Impulse);//F1+F2<br>
+[MyTest(&quot;自定义特性类&quot;,ID = 100)]<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+Type type = typeof(Program);//通过typeof+类名，获取类的type对象<br>
+object[] array = type.GetCustomAttributes(false);//获取类的所有特性（false）不包括父类的<br>
+MyTestAttribute mytest = array[0] as MyTestAttribute;<br>
+Console.WriteLine(mytest.Description);<br>
+Console.WriteLine(mytest .ID );<br>
 }<br>
-isOnground = false;<br>
-isJump = true;<br>
-jumpTime = Time.time + jumpHodeDuration;<br>
-playerRGB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);//F1<br>
-}<br>
-else if (isJump )//长按状态<br>
-{<br>
-if (jumpHeld)//长按跳跃键<br>
-playerRGB.AddForce(Vector2.up * jumpHpdeFpoce, ForceMode2D.Impulse);//F1+F3<br>
-if (jumpTime &lt; Time.time)<br>
-isJump = false;<br>
 }<br>
 }</p>
 
@@ -131,9 +150,9 @@ isJump = false;<br>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/mou-pao-pai-xu-fan-xing-wei-tuo/">
+                <a href="https://Wei715547.github.io/post/conditional-te-xing/">
                   <h3 class="post-title">
-                    冒泡排序+(泛型/委托)
+                    Conditional特性(方法)，调用者信息特性(字段/属性)，DebuggerStepThrough(方法）)
                   </h3>
                 </a>
               </div>

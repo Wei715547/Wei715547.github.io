@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>长按/下蹲状态跳跃增量 | Wei开发日志</title>
+<title>Wei开发日志</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,9 @@
 
 
 
-    <meta name="description" content="public void MidAirMovement()
-{
-if (jumpPressed&amp;&amp;isOnground &amp;&amp;!isJump )//普通状态--在地面上，非跳跃状态，按下跳跃键
-{
-if (isC..." />
-    <meta name="keywords" content="" />
+    <meta name="description" content="年月增长，我宜强盛。
+用于Unity+开发的技术积累">
+    
   </head>
   <body>
     <div id="app" class="main">
@@ -98,50 +95,36 @@ if (isC..." />
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">长按/下蹲状态跳跃增量</h2>
-            <div class="post-date">2020-05-29</div>
-            
-            <div class="post-content" v-pre>
-              <p>public void MidAirMovement()<br>
-{<br>
-if (jumpPressed&amp;&amp;isOnground &amp;&amp;!isJump )//普通状态--在地面上，非跳跃状态，按下跳跃键<br>
-{<br>
-if (isCrouch)//下蹲状态，增量<br>
-{<br>
-StandUp();<br>
-playerRGB.AddForce(Vector2.up * crouchJumpBoost, ForceMode2D.Impulse);//F1+F2<br>
-}<br>
-isOnground = false;<br>
-isJump = true;<br>
-jumpTime = Time.time + jumpHodeDuration;<br>
-playerRGB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);//F1<br>
-}<br>
-else if (isJump )//长按状态<br>
-{<br>
-if (jumpHeld)//长按跳跃键<br>
-playerRGB.AddForce(Vector2.up * jumpHpdeFpoce, ForceMode2D.Impulse);//F1+F3<br>
-if (jumpTime &lt; Time.time)<br>
-isJump = false;<br>
-}<br>
-}</p>
-
-            </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/mou-pao-pai-xu-fan-xing-wei-tuo/">
-                  <h3 class="post-title">
-                    冒泡排序+(泛型/委托)
-                  </h3>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/hello-gridea/">
+                  <h2 class="post-title">Hello Gridea</h2>
                 </a>
+                <div class="post-date">
+                  2018-12-12
+                </div>
+                <div class="post-abstract">
+                  <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+
+                </div>
               </div>
-            
+              
+                <a class="right" href="https://Wei715547.github.io/post/hello-gridea/">
+                  <div class="feature-container" style="background-image: url('https://Wei715547.github.io/post-images/hello-gridea.png')">
+                  </div>
+                </a>
+              
+            </article>
+          
 
-            
-
-          </div>
+          <div class="pagination-container">
+  
+    <a href="https://Wei715547.github.io/page/7/" class="prev"><i class="icon-arrow-ios-back-outline"></i> 上一页</a>
+  
+  
+</div>
 
         </div>
       </div>

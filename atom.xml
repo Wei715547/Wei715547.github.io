@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei开发日志</title>
-    <updated>2020-05-30T06:37:01.219Z</updated>
+    <updated>2020-05-30T07:36:08.028Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,101 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei开发日志</rights>
+    <entry>
+        <title type="html"><![CDATA[自定义特性]]></title>
+        <id>https://Wei715547.github.io/post/zi-ding-yi-te-xing/</id>
+        <link href="https://Wei715547.github.io/post/zi-ding-yi-te-xing/">
+        </link>
+        <updated>2020-05-30T07:34:50.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 自定义特性<br>
+{<br>
+//1.也行类的后缀以Attribute结尾<br>
+//2.需要继承自:System.Attribute<br>
+//3.一般情况下声明为 sealed(不需要被继承)<br>
+//4.一般情况下特性类用来表示目标结构的一些状态（定义一些字段/属性，一般不需要定义方法）<br>
+[AttributeUsage(AttributeTargets.Class)]//表示特性类的使用目标,(表示特性类可以应用到程序的那些结构)<br>
+sealed class MyTestAttribute :System.Attribute<br>
+{<br>
+public string Description { get; set; }<br>
+public string VersionNumber { get; set; }<br>
+public int ID { get; set; }</p>
+<pre><code>    public MyTestAttribute(string des)
+    {
+        Description = des;
+    }
+}
+</code></pre>
+<p>}<br>
+//---------------------------------使用---------------------<br>
+using System;</p>
+<p>namespace 自定义特性<br>
+{<br>
+[MyTest(&quot;自定义特性类&quot;,ID = 100)]<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+Type type = typeof(Program);//通过typeof+类名，获取类的type对象<br>
+object[] array = type.GetCustomAttributes(false);//获取类的所有特性（false）不包括父类的<br>
+MyTestAttribute mytest = array[0] as MyTestAttribute;<br>
+Console.WriteLine(mytest.Description);<br>
+Console.WriteLine(mytest .ID );<br>
+}<br>
+}<br>
+}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Conditional特性(方法)，调用者信息特性(字段/属性)，DebuggerStepThrough(方法）)]]></title>
+        <id>https://Wei715547.github.io/post/conditional-te-xing/</id>
+        <link href="https://Wei715547.github.io/post/conditional-te-xing/">
+        </link>
+        <updated>2020-05-30T06:39:19.000Z</updated>
+        <content type="html"><![CDATA[<p>//#define Istest //定义一个宏</p>
+<p>using System;<br>
+using System.Diagnostics;</p>
+<p>namespace Contional特性//禁用方法<br>
+{<br>
+class Program<br>
+{<br>
+[Conditional(&quot;IsTest&quot;)]//宏被定义时，方法才可被调用(方法仍会被编译放入程序集当中)<br>
+static void Text1()<br>
+{<br>
+Console.WriteLine(&quot;Text1&quot;);<br>
+}</p>
+<pre><code>    static void Text2()
+    {
+        Console.WriteLine(&quot;Text2&quot;);
+    }
+</code></pre>
+<p>//调用者信息特性，DebuggerStepThrough特性<br>
+[DebuggerStepThrough]//可以跳过Debugger的单步调试 调试时略过该方法(确定该方法无错误是可以使用)<br>
+static void PrintOut(string str,<br>
+[CallerFilePath]string fileName=&quot;&quot;,[CallerLineNumber]int lineNumber=0,[CallerMemberName]string methodName=&quot;&quot;)<br>
+{<br>
+Console.WriteLine(str);<br>
+Console.WriteLine(fileName);//调用者文件路径<br>
+Console.WriteLine(lineNumber);//调用行<br>
+Console.WriteLine(methodName);//调用方法名<br>
+}</p>
+<pre><code>    static void Main(string[] args)
+    {
+        Text1();
+        Text1();
+        Text2();
+
+        PrintOut(&quot;123&quot;);//断点
+    }
+}
+</code></pre>
+<p>}<br>
+<img src="https://Wei715547.github.io/post-images/1590822404207.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1590822413420.jpg" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[反射特性]]></title>
         <id>https://Wei715547.github.io/post/fan-she-te-xing/</id>
@@ -716,160 +811,6 @@ Console.WriteLine(res);</p>
         string pattern = @&quot;^\d*$&quot;;//(数字字符串)以数字开头0个或多个，并以数字结尾
         bool issMach = Regex.IsMatch(num, pattern);
         Console.WriteLine(issMach);
-
-    }
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[拖拽接口]]></title>
-        <id>https://Wei715547.github.io/post/tuo-zhuai-jie-kou/</id>
-        <link href="https://Wei715547.github.io/post/tuo-zhuai-jie-kou/">
-        </link>
-        <updated>2020-05-26T09:21:49.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.EventSystems;<br>
-using UnityEngine.UI;<br>
-public class ItemOnnDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler<br>
-{<br>
-public Transform originatParent;<br>
-public Inventory myBag;<br>
-private int currentItemID;</p>
-<pre><code>public void OnBeginDrag(PointerEventData eventData)
-{
-    originatParent = transform.parent;
-    currentItemID = originatParent.GetComponent&lt;Slot&gt;().slotID;
-    transform.SetParent(transform.parent.parent);
-    transform.position = eventData.position;
-    GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = false;
-}
-
-public void OnDrag(PointerEventData eventData)
-{
-    transform.position = eventData.position;
-    //print(eventData.pointerCurrentRaycast.gameObject.name);
-}
-
-public void OnEndDrag(PointerEventData eventData)
-{
-    if (eventData.pointerCurrentRaycast.gameObject != null)
-    {
-        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Item Image&quot;)//物品栏有物品时
-        {
-            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform.parent.parent);
-            transform.position = eventData.pointerCurrentRaycast.gameObject.transform.parent.parent.position;
-
-            //交换存储位置
-            var temp = myBag.itemList[currentItemID];
-            myBag.itemList[currentItemID] = myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID];
-            myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID] = temp;
-            //交换存储位置
-
-            eventData.pointerCurrentRaycast.gameObject.transform.parent.SetParent(originatParent);
-            eventData.pointerCurrentRaycast.gameObject.transform.parent.position = originatParent.position;
-            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
-            return;
-        }
-        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Slot(Clone)&quot;)
-        {
-            //物品栏为空时
-            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform);
-            transform.position = eventData.pointerCurrentRaycast.gameObject.transform.position;
-
-            myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID] = myBag.itemList[currentItemID];
-            if (eventData.pointerCurrentRaycast.gameObject.GetComponent&lt;Slot&gt;().slotID != currentItemID)
-                myBag.itemList[currentItemID] = null;
-
-            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
-            return;
-        }
-    }
-    //其他任何位置返回原位
-    transform.SetParent(originatParent);
-    transform.position = originatParent.position;
-    GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[字符、可变字符串，方法]]></title>
-        <id>https://Wei715547.github.io/post/zi-fu-chuan-fang-fa/</id>
-        <link href="https://Wei715547.github.io/post/zi-fu-chuan-fang-fa/">
-        </link>
-        <updated>2020-05-24T15:55:23.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Text;</p>
-<p>namespace 字符串方法<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-//1.<br>
-string s = &quot; wei715547&quot;;<br>
-int res = s.CompareTo(&quot;wei715547&quot;);//元素相等时，返回值为0，<br>
-//调用者字母排序靠后时返回值为1，靠前是返回值为-1<br>
-Console.WriteLine(res);</p>
-<pre><code>        //2
-        string newstring = s.Replace('w', 'z');//替换字符
-        Console.WriteLine(newstring );
-        //string newstring2 = s.Replace('1', '2');
-
-        //3.字符串从指定字符位置拆分为数组
-        string[] stringArray = s.Split('1');
-        foreach (var item in stringArray )
-        {
-            Console.WriteLine(item );
-        }
-
-        //4.Substring.截取字符串
-        string newcut = s.Substring(2,5);
-        Console.WriteLine(newcut);
-
-        //5.清除字符串首尾空白
-        string clearspace = s.Trim();
-        Console.WriteLine(clearspace );
-
-        //6.返回指定字符的索引
-        int newindex = s.IndexOf('1');
-        Console.WriteLine(newindex );
-
-        //-------------------------------------------------------------
-        //可变字符串StringBuilder 
-        //create1.通过构造函数进行构建
-        StringBuilder sb = new StringBuilder(&quot;www.wei7157.github.co&quot;);
-        Console.WriteLine(sb);
-        //create2.声明空间大小
-        StringBuilder sb2 = new StringBuilder(20);
-        sb2.Append(&quot;www.wei7157.github.co&quot;);
-        Console.WriteLine(sb2);
-        //creat3.赋值同时声明空间大小
-        StringBuilder sb3 = new StringBuilder(&quot;www.wei7157.github.co&quot;, 100);
-        Console.WriteLine(sb3);
-
-
-        //字符串修改与标准字符串对比
-        sb.Append(&quot;000000&quot;);//在空余空间链接字符
-        Console.WriteLine(sb);
-        //对比常规字符串操作，运行效率更高
-        string str = &quot;www.wei7157.github.co&quot;;
-        str += &quot;000000&quot;;//在堆中创建新的字符，str索引指向新的字符，原来的字符被CLR回收（效率低）
-        Console.WriteLine(str);
-
-        //可变字符串Insert()方法
-        sb.Insert(0, &quot;http//&quot;);
-        Console.WriteLine(sb);
-        sb.Remove(0, 6);//根据索引范围移除字符
-        Console.WriteLine(sb);
-        sb.Replace('w', 'z');//字符替换
-        Console.WriteLine(sb);
-        Console.WriteLine(sb.ToString());//ToString()转变为不可变字符
 
     }
 }

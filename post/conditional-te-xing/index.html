@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>长按/下蹲状态跳跃增量 | Wei开发日志</title>
+<title>Conditional特性(方法)，调用者信息特性(字段/属性)，DebuggerStepThrough(方法）) | Wei开发日志</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,14 @@
 
 
 
-    <meta name="description" content="public void MidAirMovement()
+    <meta name="description" content="//#define Istest //定义一个宏
+using System;
+using System.Diagnostics;
+namespace Contional特性//禁用方法
 {
-if (jumpPressed&amp;&amp;isOnground &amp;&amp;!isJump )//普通状态--在地面上，非跳跃状态，按下跳跃键
+class Program
 {
-if (isC..." />
+[Conditio..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -99,41 +102,59 @@ if (isC..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">长按/下蹲状态跳跃增量</h2>
-            <div class="post-date">2020-05-29</div>
+            <h2 class="post-title">Conditional特性(方法)，调用者信息特性(字段/属性)，DebuggerStepThrough(方法）)</h2>
+            <div class="post-date">2020-05-30</div>
             
             <div class="post-content" v-pre>
-              <p>public void MidAirMovement()<br>
+              <p>//#define Istest //定义一个宏</p>
+<p>using System;<br>
+using System.Diagnostics;</p>
+<p>namespace Contional特性//禁用方法<br>
 {<br>
-if (jumpPressed&amp;&amp;isOnground &amp;&amp;!isJump )//普通状态--在地面上，非跳跃状态，按下跳跃键<br>
+class Program<br>
 {<br>
-if (isCrouch)//下蹲状态，增量<br>
+[Conditional(&quot;IsTest&quot;)]//宏被定义时，方法才可被调用(方法仍会被编译放入程序集当中)<br>
+static void Text1()<br>
 {<br>
-StandUp();<br>
-playerRGB.AddForce(Vector2.up * crouchJumpBoost, ForceMode2D.Impulse);//F1+F2<br>
-}<br>
-isOnground = false;<br>
-isJump = true;<br>
-jumpTime = Time.time + jumpHodeDuration;<br>
-playerRGB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);//F1<br>
-}<br>
-else if (isJump )//长按状态<br>
-{<br>
-if (jumpHeld)//长按跳跃键<br>
-playerRGB.AddForce(Vector2.up * jumpHpdeFpoce, ForceMode2D.Impulse);//F1+F3<br>
-if (jumpTime &lt; Time.time)<br>
-isJump = false;<br>
-}<br>
+Console.WriteLine(&quot;Text1&quot;);<br>
 }</p>
+<pre><code>    static void Text2()
+    {
+        Console.WriteLine(&quot;Text2&quot;);
+    }
+</code></pre>
+<p>//调用者信息特性，DebuggerStepThrough特性<br>
+[DebuggerStepThrough]//可以跳过Debugger的单步调试 调试时略过该方法(确定该方法无错误是可以使用)<br>
+static void PrintOut(string str,<br>
+[CallerFilePath]string fileName=&quot;&quot;,[CallerLineNumber]int lineNumber=0,[CallerMemberName]string methodName=&quot;&quot;)<br>
+{<br>
+Console.WriteLine(str);<br>
+Console.WriteLine(fileName);//调用者文件路径<br>
+Console.WriteLine(lineNumber);//调用行<br>
+Console.WriteLine(methodName);//调用方法名<br>
+}</p>
+<pre><code>    static void Main(string[] args)
+    {
+        Text1();
+        Text1();
+        Text2();
+
+        PrintOut(&quot;123&quot;);//断点
+    }
+}
+</code></pre>
+<p>}<br>
+<img src="https://Wei715547.github.io/post-images/1590822404207.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1590822413420.jpg" alt="" loading="lazy"></p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/mou-pao-pai-xu-fan-xing-wei-tuo/">
+                <a href="https://Wei715547.github.io/post/fan-she-te-xing/">
                   <h3 class="post-title">
-                    冒泡排序+(泛型/委托)
+                    反射特性
                   </h3>
                 </a>
               </div>
