@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei开发日志</title>
-    <updated>2020-05-30T02:56:42.634Z</updated>
+    <updated>2020-05-30T03:57:48.119Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,48 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei开发日志</rights>
+    <entry>
+        <title type="html"><![CDATA[反射特性]]></title>
+        <id>https://Wei715547.github.io/post/fan-she-te-xing/</id>
+        <link href="https://Wei715547.github.io/post/fan-she-te-xing/">
+        </link>
+        <updated>2020-05-30T03:57:11.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Reflection;</p>
+<p>namespace 反射与特性<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+MyClass my = new MyClass();<br>
+Type type = my.GetType();<br>
+Console.WriteLine(type .Name);//类的名字<br>
+Console.WriteLine(type .Namespace);//类峰命名空间<br>
+Console.WriteLine(type .Assembly );//类峰程序集命名空间</p>
+<pre><code>        FieldInfo[] array = type.GetFields();//获取类的字段
+        foreach (FieldInfo info in array )
+        {
+            Console.WriteLine(info .Name+&quot; &quot;);
+        }
+
+        PropertyInfo[] array2 = type.GetProperties();//获取类属性
+        foreach (PropertyInfo info in array2 )
+        {
+            Console.WriteLine(info .Name +&quot; &quot;);
+        }
+
+        MethodInfo[] array3 = type.GetMethods();//获取类的方法
+        foreach (MethodInfo info in array3)
+        { 
+            Console.WriteLine(info .Name +&quot; &quot;);
+        }
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[泛型类/方法/委托]]></title>
         <id>https://Wei715547.github.io/post/fan-xing-lei-fang-fa-wei-tuo/</id>
@@ -815,179 +857,6 @@ Console.WriteLine(res);</p>
         Console.WriteLine(sb.ToString());//ToString()转变为不可变字符
 
     }
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[自定义List集合]]></title>
-        <id>https://Wei715547.github.io/post/zi-ding-yi-list-ji-he/</id>
-        <link href="https://Wei715547.github.io/post/zi-ding-yi-list-ji-he/">
-        </link>
-        <updated>2020-05-24T10:00:49.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 自定义集合类MyList<br>
-{<br>
-class MyList<T> where T :IComparable<br>
-{<br>
-private T[] array;<br>
-private int count = 0;</p>
-<pre><code>    public MyList(int size)
-    {
-        if (size &gt; 0)
-            array = new T[size];
-    }
-
-    public MyList()
-    {
-        array = new T[0];
-    }
-
-    public int Capecity
-    {
-        get { return array.Length; }
-    }
-
-    public int Count
-    {
-        get { return count; }
-    }
-
-    public void Add(T item)
-    {
-        if (Count == Capecity)//判断元素个数与数组容量
-        {
-            if (Capecity == 0)
-                array = new T[4];
-            else
-            {
-                var newarray = new T[Capecity * 2];
-                Array.Copy(array, newarray, Count);
-                array = newarray;
-            }
-        }
-        array[Count] = item;
-        count++;
-    }
-
-    public T GetItem(int index)
-    {
-        if (index &gt;= 0 &amp;&amp; index &lt;= count-1)
-        {
-            return array[index];
-        }
-        else
-        {
-            Console.WriteLine(&quot;Index outof range&quot;);
-            throw new Exception(&quot;索引超出范围&quot;);
-        }
-
-    }
-
-    //索引器，属性
-    public T this[int index]
-    {
-        get { return GetItem(index); }
-        set
-        {
-            if (index &gt;= 0 &amp;&amp; index &lt;= count-1)
-            {
-                array[index] = value;
-            }
-            else
-            {
-                Console.WriteLine(&quot;Index outof range&quot;);
-                throw new Exception(&quot;索引超出范围&quot;);
-            }
-        }
-    }
-
-    public void Insert(int index, T item)
-    {
-        if (index &gt;= 0 &amp;&amp; index &lt;= count-1)
-        {
-            if (Count  == Capecity )//容量不足进行扩容
-            {
-                var newArray = new T[Capecity * 2];
-                Array.Copy(array, newArray, count);
-                array = newArray;
-            }
-            for (int i = count -1; i &gt;= index ; i--)
-            {
-                array[i+1] = array[i];
-            }
-            array[index] = item;
-            count++;
-        }
-        else
-        {
-            Console.WriteLine(&quot;Index outof range&quot;);
-            throw new Exception(&quot;索引超出范围&quot;);
-        }
-
-    }
-    
-    public void RemoveAt(int index)
-    {
-        if (index &gt;= 0 &amp;&amp; index &lt;= count-1)
-        {
-            for (int i = index +1; i &lt; count ; i++)
-            {
-                array[i - 1] = array[i];
-            }
-            count--;
-        }
-        else
-        {
-            throw new Exception(&quot;索引超出范围&quot;);
-        }
-    }
-
-    public int IndexOf(T item)
-    {
-        for (int i = 0; i &lt; count ; i++)
-        {
-            if (array[i].Equals(item))
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public int LastIndexOf(T item)
-    {
-        for (int i = count -1; i &gt;=0; i--)
-        {
-            if (array [i].Equals (item ))
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public void Sort()
-    {
-        for (int j = 0; j &lt; Count -1; j++)
-        {
-            for (int i = 0; i &lt; Count-1-j; i++)
-            {
-                if (array[i].CompareTo(array[i + 1]) &gt; 0)//返回值大于0是后面的铋前面的大
-                {
-                    //打的元素向后排
-                    T temp = array[i];
-                    array[i] = array[i + 1];
-                    array[i + 1] = temp;
-                }
-            }
-        }
-        
-    }
-
 }
 </code></pre>
 <p>}</p>

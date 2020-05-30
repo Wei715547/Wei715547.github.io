@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>数据结构Base | Wei开发日志</title>
+<title>反射特性 | Wei开发日志</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,10 +18,15 @@
 
 
 
-    <meta name="description" content="线性表：相同类型，有限，序列
-顺序表：线性表的顺序存储（静态数组（以分配默认大小），动态数组）
-单链表：线性表链式存储（链式指针，非顺序存储[数据，地址]对形式）
-判断单链表是否为空1，头结点head是否为空。2，头结点的指针head-&g..." />
+    <meta name="description" content="using System;
+using System.Reflection;
+namespace 反射与特性
+{
+class Program
+{
+static void Main(string[] args)
+{
+MyClass my = ..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -98,27 +103,53 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">数据结构Base</h2>
-            <div class="post-date">2020-05-23</div>
+            <h2 class="post-title">反射特性</h2>
+            <div class="post-date">2020-05-30</div>
             
             <div class="post-content" v-pre>
-              <p>线性表：相同类型，有限，序列<br>
-顺序表：线性表的顺序存储（静态数组（以分配默认大小），动态数组）<br>
-单链表：线性表链式存储（链式指针，非顺序存储[数据，地址]对形式）<br>
-判断单链表是否为空1，头结点head是否为空。2，头结点的指针head-&gt;next 是否为空<br>
-栈：顺序栈，链栈。<br>
-队列：先进先出--常用方法：初始化队列，判断队列是否为空（首末指针相同时队列为空），队列长度为末指针-首指针。<br>
-入队，出队，读取队头元素，销毁队列。<br>
-顺序队列，循环队列。</p>
+              <p>using System;<br>
+using System.Reflection;</p>
+<p>namespace 反射与特性<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+MyClass my = new MyClass();<br>
+Type type = my.GetType();<br>
+Console.WriteLine(type .Name);//类的名字<br>
+Console.WriteLine(type .Namespace);//类峰命名空间<br>
+Console.WriteLine(type .Assembly );//类峰程序集命名空间</p>
+<pre><code>        FieldInfo[] array = type.GetFields();//获取类的字段
+        foreach (FieldInfo info in array )
+        {
+            Console.WriteLine(info .Name+&quot; &quot;);
+        }
+
+        PropertyInfo[] array2 = type.GetProperties();//获取类属性
+        foreach (PropertyInfo info in array2 )
+        {
+            Console.WriteLine(info .Name +&quot; &quot;);
+        }
+
+        MethodInfo[] array3 = type.GetMethods();//获取类的方法
+        foreach (MethodInfo info in array3)
+        { 
+            Console.WriteLine(info .Name +&quot; &quot;);
+        }
+    }
+}
+</code></pre>
+<p>}</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/gamemanager-chong-xin-jia-zai-hou-bu-xiao-hui/">
+                <a href="https://Wei715547.github.io/post/fan-xing-lei-fang-fa-wei-tuo/">
                   <h3 class="post-title">
-                    GameManager重新加载后不销毁
+                    泛型类/方法/委托
                   </h3>
                 </a>
               </div>
