@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei开发日志</title>
-    <updated>2020-05-29T15:01:16.339Z</updated>
+    <updated>2020-05-30T02:56:42.634Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,108 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei开发日志</rights>
+    <entry>
+        <title type="html"><![CDATA[泛型类/方法/委托]]></title>
+        <id>https://Wei715547.github.io/post/fan-xing-lei-fang-fa-wei-tuo/</id>
+        <link href="https://Wei715547.github.io/post/fan-xing-lei-fang-fa-wei-tuo/">
+        </link>
+        <updated>2020-05-30T02:55:40.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 泛型类<br>
+{<br>
+//泛型类<br>
+class ClassA<T><br>
+{<br>
+private T a;<br>
+private T b;</p>
+<pre><code>    public ClassA (T a,T b)
+    {
+        this.a = a;
+        this.b = b;
+    }
+
+    public string Show()
+    {
+        return a +&quot; &quot;+ b;
+    }
+
+}
+</code></pre>
+<h2 id="">}</h2>
+<p>/*using System;</p>
+<p>namespace 泛型类<br>
+{<br>
+class Program<br>
+{<br>
+public static string  GetSum&lt;T,T2,T3&gt;(T a,T b)//泛型方法,可指定多个泛型，在调用是指定类型<br>
+{<br>
+return a +&quot; &quot;+ b;<br>
+}</p>
+<pre><code>    static void Main(string[] args)
+    {
+
+        var o1 = new ClassA &lt;int&gt;(22,53);
+
+        Console.WriteLine(  o1.Show());
+
+        var s1 = new ClassA&lt;string&gt;(&quot;wei&quot;, &quot;715&quot;);
+
+        Console.WriteLine(s1.Show());
+
+        Console.WriteLine(GetSum &lt;int ,int ,int &gt;(123,314));//有多个泛型时，调用要指定所有类型
+        Console.WriteLine( GetSum&lt;string ,string ,string &gt; (&quot;da&quot;,&quot;werr&quot;));
+
+
+        //Console.ReadKey();
+
+    }
+}
+</code></pre>
+<p>}*/<br>
+using System;<br>
+using System.Collections.Generic;</p>
+<p>//泛型委托<br>
+delegate T NumberChanger<T>(T n);//返回值与参数类型为T<br>
+namespace GenericDelegateAppl<br>
+{<br>
+class TestDelegate<br>
+{<br>
+static int num = 10;<br>
+public static int AddNum(int p)<br>
+{<br>
+num += p;<br>
+return num;<br>
+}</p>
+<pre><code>    public static int MultNum(int q)
+    {
+        num *= q;
+        return num;
+    }
+    public static int getNum()
+    {
+        return num;
+    }
+
+    static void Main(string[] args)
+    {
+        // 创建委托实例
+        //NumberChanger&lt;int&gt; nc1 = new NumberChanger&lt;int&gt;(AddNum);
+        NumberChanger&lt;int&gt; nc1 = AddNum;//上一行简写
+        NumberChanger&lt;int&gt; nc2 = new NumberChanger&lt;int&gt;(MultNum);
+        // 使用委托对象调用方法
+        nc1(25);
+        Console.WriteLine(&quot;Value of Num: {0}&quot;, getNum());
+        nc2(5);
+        Console.WriteLine(&quot;Value of Num: {0}&quot;, getNum());
+        Console.ReadKey();
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[长按/下蹲状态跳跃增量]]></title>
         <id>https://Wei715547.github.io/post/chang-an-xia-dun-zhuang-tai-tiao-yue-zeng-liang/</id>
@@ -889,22 +991,6 @@ private int count = 0;</p>
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[数据结构Base]]></title>
-        <id>https://Wei715547.github.io/post/xian-xing-biao/</id>
-        <link href="https://Wei715547.github.io/post/xian-xing-biao/">
-        </link>
-        <updated>2020-05-23T02:33:04.000Z</updated>
-        <content type="html"><![CDATA[<p>线性表：相同类型，有限，序列<br>
-顺序表：线性表的顺序存储（静态数组（以分配默认大小），动态数组）<br>
-单链表：线性表链式存储（链式指针，非顺序存储[数据，地址]对形式）<br>
-判断单链表是否为空1，头结点head是否为空。2，头结点的指针head-&gt;next 是否为空<br>
-栈：顺序栈，链栈。<br>
-队列：先进先出--常用方法：初始化队列，判断队列是否为空（首末指针相同时队列为空），队列长度为末指针-首指针。<br>
-入队，出队，读取队头元素，销毁队列。<br>
-顺序队列，循环队列。</p>
 ]]></content>
     </entry>
 </feed>

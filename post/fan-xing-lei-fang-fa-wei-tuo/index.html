@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>2D Jump | Wei开发日志</title>
+<title>泛型类/方法/委托 | Wei开发日志</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,16 @@
 
 
 
-    <meta name="description" content="using System.Collections;
+    <meta name="description" content="using System;
 using System.Collections.Generic;
-using UnityEngine;
-public class JumpBox : MonoBehaviour
+using System.Text;
+namespace 泛型类
 {
-[R..." />
+//泛型类
+class ClassA
+{
+private T a;
+pri..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -100,96 +104,101 @@ public class JumpBox : MonoBehaviour
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">2D Jump</h2>
-            <div class="post-date">2020-04-12</div>
+            <h2 class="post-title">泛型类/方法/委托</h2>
+            <div class="post-date">2020-05-30</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
+              <p>using System;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class JumpBox : MonoBehaviour<br>
+using System.Text;</p>
+<p>namespace 泛型类<br>
 {<br>
-[Range(0, 10)] public float jumpVelocity = 5f;<br>
-public LayerMask mask;<br>
-public float boxHeight;<br>
-private Vector2 playerSize;<br>
-private Vector2 boxSize;<br>
-private bool jumpRequest;<br>
-private bool grounded;<br>
-public float fallMultiplier = 2.5f;<br>
-public float LowJumpMultiplier = 2f;<br>
-private Rigidbody2D _rigidbody2D;</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
-    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
-    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight);
+//泛型类<br>
+class ClassA<T><br>
+{<br>
+private T a;<br>
+private T b;</p>
+<pre><code>    public ClassA (T a,T b)
+    {
+        this.a = a;
+        this.b = b;
+    }
+
+    public string Show()
+    {
+        return a +&quot; &quot;+ b;
+    }
 
 }
-
-// Update is called once per frame
-void Update()
-{
-    if (Input.GetButtonDown(&quot;Jump&quot;) &amp;&amp; grounded)
+</code></pre>
+<h2 id="">}</h2>
+<p>/*using System;</p>
+<p>namespace 泛型类<br>
+{<br>
+class Program<br>
+{<br>
+public static string  GetSum&lt;T,T2,T3&gt;(T a,T b)//泛型方法,可指定多个泛型，在调用是指定类型<br>
+{<br>
+return a +&quot; &quot;+ b;<br>
+}</p>
+<pre><code>    static void Main(string[] args)
     {
-        jumpRequest = true;
+
+        var o1 = new ClassA &lt;int&gt;(22,53);
+
+        Console.WriteLine(  o1.Show());
+
+        var s1 = new ClassA&lt;string&gt;(&quot;wei&quot;, &quot;715&quot;);
+
+        Console.WriteLine(s1.Show());
+
+        Console.WriteLine(GetSum &lt;int ,int ,int &gt;(123,314));//有多个泛型时，调用要指定所有类型
+        Console.WriteLine( GetSum&lt;string ,string ,string &gt; (&quot;da&quot;,&quot;werr&quot;));
+
+
+        //Console.ReadKey();
+
     }
 }
-private void FixedUpdate()
-{
-    //自然重力
-    Gud();
-
-    if (jumpRequest)
+</code></pre>
+<p>}*/<br>
+using System;<br>
+using System.Collections.Generic;</p>
+<p>//泛型委托<br>
+delegate T NumberChanger<T>(T n);//返回值与参数类型为T<br>
+namespace GenericDelegateAppl<br>
+{<br>
+class TestDelegate<br>
+{<br>
+static int num = 10;<br>
+public static int AddNum(int p)<br>
+{<br>
+num += p;<br>
+return num;<br>
+}</p>
+<pre><code>    public static int MultNum(int q)
     {
-        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
-        jumpRequest = false;
-        grounded = false;
+        num *= q;
+        return num;
     }
-    else
+    public static int getNum()
     {
-        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
-        if (Physics2D.OverlapBox(boxCenter, boxSize, 0, mask) != null)
-        {
-            grounded = true;
-        }
-        else
-        {
-            grounded = false;
-        }
-    }
-}
-
-private void Gud()
-{
-    if (_rigidbody2D.velocity.y &lt; 0)
-    {
-        _rigidbody2D.gravityScale = fallMultiplier;
-    }
-    else if (_rigidbody2D.velocity.y &gt; 0 &amp;&amp; !Input.GetButton(&quot;Jump&quot;))
-    {
-        _rigidbody2D.gravityScale = LowJumpMultiplier;
-    }
-    else
-    {
-        _rigidbody2D.gravityScale = 1f;
-    }
-}
-
-private void OnDrawGizmos()
-{
-    if (grounded)
-    {
-        Gizmos.color = Color.red;
-    }
-    else
-    {
-        Gizmos.color = Color.green;
+        return num;
     }
 
-    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
-    Gizmos.DrawWireCube(boxCenter, boxSize);
+    static void Main(string[] args)
+    {
+        // 创建委托实例
+        //NumberChanger&lt;int&gt; nc1 = new NumberChanger&lt;int&gt;(AddNum);
+        NumberChanger&lt;int&gt; nc1 = AddNum;//上一行简写
+        NumberChanger&lt;int&gt; nc2 = new NumberChanger&lt;int&gt;(MultNum);
+        // 使用委托对象调用方法
+        nc1(25);
+        Console.WriteLine(&quot;Value of Num: {0}&quot;, getNum());
+        nc2(5);
+        Console.WriteLine(&quot;Value of Num: {0}&quot;, getNum());
+        Console.ReadKey();
+    }
 }
 </code></pre>
 <p>}</p>
@@ -199,9 +208,9 @@ private void OnDrawGizmos()
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/eventsystems/">
+                <a href="https://Wei715547.github.io/post/chang-an-xia-dun-zhuang-tai-tiao-yue-zeng-liang/">
                   <h3 class="post-title">
-                    EventSystems
+                    长按/下蹲状态跳跃增量
                   </h3>
                 </a>
               </div>
