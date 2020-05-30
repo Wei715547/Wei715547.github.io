@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590818942835">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590820127170">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -24,9 +24,7 @@ namespace 反射与特性
 {
 class Program
 {
-static void Main(string[] args)
-{
-MyClass my = ..." />
+[Obsolete(&quot;过时的方法，请使用新的方法&quot;)]//弃用标记特性 O..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -36,7 +34,7 @@ MyClass my = ..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1590818942835" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1590820127170" class="site-logo">
         <h1 class="site-title">Wei开发日志</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -113,6 +111,11 @@ using System.Reflection;</p>
 {<br>
 class Program<br>
 {<br>
+[Obsolete(&quot;过时的方法，请使用新的方法&quot;)]//弃用标记特性 Obsolete<br>
+static void OldNethod()<br>
+{<br>
+Console.WriteLine(&quot;OM&quot;);<br>
+}<br>
 static void Main(string[] args)<br>
 {<br>
 MyClass my = new MyClass();<br>
@@ -147,6 +150,7 @@ foreach (var type in types)<br>
 {<br>
 Console.WriteLine(type);//利用Type对象输出程序集中所有类名字<br>
 }<br>
+//OldNethod();<br>
 }<br>
 }<br>
 }</p>
