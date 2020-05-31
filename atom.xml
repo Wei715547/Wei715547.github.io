@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei开发日志</title>
-    <updated>2020-05-31T15:06:18.191Z</updated>
+    <updated>2020-05-31T15:12:49.363Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -39,10 +39,20 @@ while (ar .IsCompleted ==false )//线程是否结束<br>
 Console.WriteLine(&quot;.&quot;);<br>
 }<br>
 int res = a.EndInvoke(ar);//异步线程返回值<br>
-Console.ReadKey();<br>
-}<br>
-}<br>
-}</p>
+Console.ReadKey();</p>
+<pre><code>        //检测线程结束
+        bool isEnd = ar.AsyncWaitHandle.WaitOne(1000);//1000毫秒表示超时，如果等待了1000ms线程还没有结束的时，这个方法会返回false。
+        //如在10001ms内结束了则返回的为true。
+        if (isEnd )
+        {
+            int r = a.EndInvoke(ar);
+            Console.WriteLine(r);
+        }
+        Console.ReadKey();
+    }
+}
+</code></pre>
+<p>}</p>
 ]]></content>
     </entry>
     <entry>
