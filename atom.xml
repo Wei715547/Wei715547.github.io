@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei开发日志</title>
-    <updated>2020-05-31T08:01:17.431Z</updated>
+    <updated>2020-05-31T15:06:18.191Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,40 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei开发日志</rights>
+    <entry>
+        <title type="html"><![CDATA[委托开启线程]]></title>
+        <id>https://Wei715547.github.io/post/wei-tuo-kai-qi-xian-cheng/</id>
+        <link href="https://Wei715547.github.io/post/wei-tuo-kai-qi-xian-cheng/">
+        </link>
+        <updated>2020-05-31T15:05:12.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Threading;</p>
+<p>namespace 线程_委托线程<br>
+{<br>
+class Program<br>
+{<br>
+public static int Test1(int i,string str)<br>
+{<br>
+Console.WriteLine(&quot;Test1&quot;+i+str );<br>
+Thread.Sleep(100);//线程休眠 单位ms<br>
+return 100;<br>
+}<br>
+static void Main(string[] args)<br>
+{<br>
+Func&lt;int,string ,int &gt; a = Test1;<br>
+IAsyncResult ar = a.BeginInvoke(100,&quot;wei&quot;,null,null);//VS运行异常<br>
+Console.WriteLine(&quot;main&quot;);<br>
+while (ar .IsCompleted ==false )//线程是否结束<br>
+{<br>
+Console.WriteLine(&quot;.&quot;);<br>
+}<br>
+int res = a.EndInvoke(ar);//异步线程返回值<br>
+Console.ReadKey();<br>
+}<br>
+}<br>
+}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[自定义特性]]></title>
         <id>https://Wei715547.github.io/post/zi-ding-yi-te-xing/</id>
@@ -768,54 +802,6 @@ c.CatComing();<br>
 }<br>
 }<br>
 }</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[正则表达式（字符串格式判定）]]></title>
-        <id>https://Wei715547.github.io/post/zheng-ze-biao-da-shi-zi-fu-chuan-ge-shi-pan-ding/</id>
-        <link href="https://Wei715547.github.io/post/zheng-ze-biao-da-shi-zi-fu-chuan-ge-shi-pan-ding/">
-        </link>
-        <updated>2020-05-26T12:05:29.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Text.RegularExpressions;</p>
-<p>namespace 正则表达式<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-string s = &quot;I amwei&quot;;<br>
-string res = Regex.Replace(s,&quot;^&quot;, &quot;start&quot;);//&quot;^&quot;匹配开始字符串<br>
-Console.WriteLine(res);</p>
-<pre><code>        string res2 = Regex.Replace(s, &quot;$&quot;, &quot;end&quot;);//&quot;$&quot;匹配结尾
-        Console.WriteLine(res2);
-
-        string num = Console.ReadLine();
-        /*bool isMatch = true;
-        for (int i = 0; i &lt; num.Length ; i++)
-        {
-            if(num[i]&lt;'0'||num[i]&gt;'9')
-            {
-                isMatch = false;
-                break;
-            }
-        }
-        if (isMatch)
-        {
-            Console.WriteLine(&quot;密码合法&quot;);
-        }
-        else
-        {
-            Console.WriteLine( &quot;密码不合法&quot;);
-        }*/
-        string pattern = @&quot;^\d*$&quot;;//(数字字符串)以数字开头0个或多个，并以数字结尾
-        bool issMach = Regex.IsMatch(num, pattern);
-        Console.WriteLine(issMach);
-
-    }
-}
-</code></pre>
-<p>}</p>
 ]]></content>
     </entry>
 </feed>

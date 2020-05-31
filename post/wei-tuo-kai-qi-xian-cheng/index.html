@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>EventSystems，屏幕拖拽 | Wei开发日志</title>
+<title>委托开启线程 | Wei开发日志</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,15 @@
 
 
 
-    <meta name="description" content="//简单方式
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
-us..." />
+    <meta name="description" content="using System;
+using System.Threading;
+namespace 线程_委托线程
+{
+class Program
+{
+public static int Test1(int i,string str)
+{
+Co..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -100,94 +103,45 @@ us..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">EventSystems，屏幕拖拽</h2>
-            <div class="post-date">2020-05-01</div>
+            <h2 class="post-title">委托开启线程</h2>
+            <div class="post-date">2020-05-31</div>
             
             <div class="post-content" v-pre>
-              <p>//简单方式<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.EventSystems;<br>
-using UnityEngine.UI;</p>
-<p>public class Drag : MonoBehaviour, /<em>IPointerDownHandler,</em>/ IDragHandler, IPointerClickHandler<br>
+              <p>using System;<br>
+using System.Threading;</p>
+<p>namespace 线程_委托线程<br>
 {<br>
-private RectTransform self;</p>
-<pre><code>private void Awake()
-{
-    self = GetComponent&lt;RectTransform&gt;();
-}
-
-public void OnDrag(PointerEventData eventData)
-{
-    //锚点的位置加上鼠标移动
-    self.anchoredPosition += eventData.delta;
-}
-
-public void OnPointerClick(PointerEventData eventData)//点击是执行
-{
-    //双击是隐藏界面
-    if (eventData.clickCount == 2)
-    {
-        gameObject.SetActive(false);
-    }
-}
-</code></pre>
-<h2 id="">}</h2>
-<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.EventSystems;<br>
-public class DIalogDrag : MonoBehaviour, IPointerDownHandler,IDragHandler,IPointerClickHandler<br>
+class Program<br>
 {<br>
-private RectTransform parentRTF;<br>
-private void Start()<br>
+public static int Test1(int i,string str)<br>
 {<br>
-//设置UI长宽<br>
-RectTransform rtf = GetComponent<RectTransform>();<br>
-rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 700);<br>
-rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 400);</p>
-<pre><code>    parentRTF = this.transform.parent as RectTransform;
-}
-private Vector3 siftVector;
-//按下时执行
-public void OnPointerDown(PointerEventData eventData)
-{
-    //记录按下点到中心点偏移量
-
-    Vector3 wordPoint;
-    //屏幕坐标--&gt;世界坐标
-    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
-    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
-    siftVector = this.transform.position - wordPoint;
-}
-//拖拽时执行
-public void OnDrag(PointerEventData eventData)
-{
-    Vector3 wordPoint;
-    //屏幕坐标--&gt;世界坐标
-    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
-    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
-    this.transform.position = wordPoint + siftVector ;
-    
-}
-
-public void OnPointerClick(PointerEventData eventData)
-{
-    if (eventData.clickCount == 2)
-        Destroy (this .gameObject );
-}
-</code></pre>
-<p>}</p>
+Console.WriteLine(&quot;Test1&quot;+i+str );<br>
+Thread.Sleep(100);//线程休眠 单位ms<br>
+return 100;<br>
+}<br>
+static void Main(string[] args)<br>
+{<br>
+Func&lt;int,string ,int &gt; a = Test1;<br>
+IAsyncResult ar = a.BeginInvoke(100,&quot;wei&quot;,null,null);//VS运行异常<br>
+Console.WriteLine(&quot;main&quot;);<br>
+while (ar .IsCompleted ==false )//线程是否结束<br>
+{<br>
+Console.WriteLine(&quot;.&quot;);<br>
+}<br>
+int res = a.EndInvoke(ar);//异步线程返回值<br>
+Console.ReadKey();<br>
+}<br>
+}<br>
+}</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/you-xi-shu-ju-lei-chuang-jian-chu-cun-du-qu/">
+                <a href="https://Wei715547.github.io/post/zi-ding-yi-te-xing/">
                   <h3 class="post-title">
-                    游戏数据类创建，储存、读取
+                    自定义特性
                   </h3>
                 </a>
               </div>
