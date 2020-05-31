@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590824144704">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590912071484">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -18,8 +18,15 @@
 
 
 
-    <meta name="description" content="        enemyCl.enabled = false;
-        RaycastHit2D hit = Physics2D.Linecast(targertPos , targertPos + new Vector2(x, ..." />
+    <meta name="description" content="/// 
+/// 射线检测
+/// 
+/// 自身位置偏移量（检测起始点）
+/// 射线方向
+/// 射线长度（检测距离）
+/// 检测层级
+/// 
+public RaycastHit2D Raycast(Vector2 offset,V..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -29,7 +36,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1590824144704" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1590912071484" class="site-logo">
         <h1 class="site-title">Wei开发日志</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -100,12 +107,28 @@
             <div class="post-date">2020-05-19</div>
             
             <div class="post-content" v-pre>
-              <pre><code>        enemyCl.enabled = false;
-        RaycastHit2D hit = Physics2D.Linecast(targertPos , targertPos + new Vector2(x, y));
-        enemyCl.enabled = true;
-        if (hit.transform == null || hit.collider.tag == &quot;Soda&quot; || hit.collider.tag == &quot;Food&quot;)
-            targertPos += new Vector2(x, y);
-</code></pre>
+              <p>/// <summary><br>
+/// 射线检测<br>
+/// </summary><br>
+/// <param name="offset">自身位置偏移量（检测起始点）</param><br>
+/// <param name="rayDiraction">射线方向</param><br>
+/// <param name="length">射线长度（检测距离）</param><br>
+/// <param name="layer">检测层级</param><br>
+/// <returns></returns><br>
+public RaycastHit2D Raycast(Vector2 offset,Vector2 rayDiraction,float length,LayerMask layer)<br>
+{<br>
+RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + offset, rayDiraction, length, layer);<br>
+Color color = hit? Color.green : Color.red;//hit可作为bool值检测到时为:TRUE，未检测到为:false<br>
+Debug.DrawLine((Vector2)transform.position + offset, (Vector2)transform.position + offset+rayDiraction*0.2f, color);<br>
+return hit;<br>
+}<br>
+//--------------------------------------------------------------------<br>
+//线检测<br>
+enemyCl.enabled = false;<br>
+RaycastHit2D hit = Physics2D.Linecast(targertPos , targertPos + new Vector2(x, y));<br>
+enemyCl.enabled = true;<br>
+if (hit.transform == null || hit.collider.tag == &quot;Soda&quot; || hit.collider.tag == &quot;Food&quot;)<br>
+targertPos += new Vector2(x, y);</p>
 <hr>
 <pre><code>private void GetDown()
 {//（检测点，检测范围，检测层级）
