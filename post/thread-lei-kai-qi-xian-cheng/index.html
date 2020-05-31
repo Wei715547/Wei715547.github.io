@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ComponenDemo | Wei开发日志</title>
+<title>Thread类开启线程 | Wei开发日志</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,14 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-/// 
-/// Component类提供了查找（当前物体，子类，父类）组件的功能..." />
+    <meta name="description" content="using System;
+using System.Threading;
+using System.Threading.Tasks;
+namespace 线程_通过Thread类开启
+{
+class Program
+{
+static vo..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -99,57 +102,86 @@ using UnityEngine;
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">ComponenDemo</h2>
-            <div class="post-date">2020-04-04</div>
+            <h2 class="post-title">Thread类开启线程</h2>
+            <div class="post-date">2020-05-31</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
+              <p>using System;<br>
+using System.Threading;<br>
+using System.Threading.Tasks;<br>
+namespace 线程_通过Thread类开启<br>
+{<br>
+class Program<br>
+{<br>
+static void Downloading(object fileName)<br>
+{<br>
+Console.WriteLine(&quot;startDownloadong&quot;+Thread .CurrentThread .ManagedThreadId +fileName );<br>
+Thread.Sleep(2000);<br>
+Console.WriteLine(&quot;END&quot;);<br>
+}<br>
+static void Main(string[] args)<br>
+{<br>
+//方式1.直接赋值一个方法引用<br>
+/<em>Thread t = new Thread(Downloading);<br>
+t.Start();//开始执行线程<br>
+Console.WriteLine(&quot;Main&quot;);</em>/</p>
+<pre><code>        //开启方式2。赋值一个表达式（匿名方法）
+        /*Thread t = new Thread(() =&gt;
+       {
+           Console.WriteLine(&quot;startDownloadong&quot; + Thread.CurrentThread.ManagedThreadId);
+           Thread.Sleep(2000);
+           Console.WriteLine(&quot;END&quot;);
+       });
+        t.Start();*/
+
+        /*//方式1.传递参数
+        Thread t = new Thread(Downloading);
+        t.Start(&quot;XXX&quot;);//开始执行线程
+        Console.WriteLine(&quot;Main&quot;);*/
+
+        //2.创建一个对象，将要传递的数据放到对象里进行传递
+        Mythread my = new Mythread(&quot;wei7&quot;, &quot;github.io&quot;);
+        Thread t = new Thread(my.DownloadFile);//以类里的普通方法作为线程方法
+        t.Start();//开启线程
+        Console.ReadKey();
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//用来传递参数的类<br>
+using System;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// Component类提供了查找（当前物体，子类，父类）组件的功能。<br>
-/// </summary><br>
-public class ComponentDemo : MonoBehaviour<br>
+using System.Text;<br>
+using System.Threading;</p>
+<p>namespace 线程_通过Thread类开启<br>
 {<br>
-private void OnGUI()<br>
+class Mythread<br>
 {<br>
-if (GUILayout.Button(&quot;Transtorm&quot;))<br>
-{<br>
-this.transform.position = new Vector3(0, 0, 10);<br>
-}<br>
-if (GUILayout .Button (&quot;GetComponent&quot;))<br>
-{<br>
-this.GetComponent<MeshRenderer>().material.color = Color.red;<br>
-}<br>
-if(GUILayout.Button (&quot;GetComponents&quot;))<br>
-{<br>
-var allConmponent = this.GetComponents<Component>();<br>
-foreach (var item in allConmponent )<br>
-{<br>
-print(item.GetType());<br>
-}<br>
-}<br>
-if (GUILayout.Button(&quot;GetComponentsInChildren&quot;))<br>
-{<br>
-//获取后代物体的指定类型组件（从自身开始）<br>
-//var sun = this.GetComponentInChildren<MeshRenderer>();//返回包含MeshRanderer组件的子对象<br>
-var allConmponent = this.GetComponentsInChildren<MeshRenderer>();//返回所有包含MeshRanderer组件的子对象<br>
-foreach (var item in allConmponent)<br>
-{<br>
-item.material.color = Color.blue;<br>
-}<br>
-}<br>
-}<br>
-}</p>
+private string filename;<br>
+private string filepath;</p>
+<pre><code>    public Mythread(string name,string path)
+    {
+        this.filename = name;
+        this.filepath = path;
+    }
+    public void DownloadFile()
+    {
+        Console.WriteLine(&quot;开始下载&quot;+filepath+filename);
+        Thread.Sleep(2000);
+        Console.WriteLine(&quot;下载完成&quot;);
+    }
+}
+</code></pre>
+<p>}</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/jumpandluo-di-jian-ce/">
+                <a href="https://Wei715547.github.io/post/wei-tuo-kai-qi-xian-cheng/">
                   <h3 class="post-title">
-                    jump&amp;落地检测
+                    委托开启线程
                   </h3>
                 </a>
               </div>

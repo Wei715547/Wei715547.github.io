@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei开发日志</title>
-    <updated>2020-05-31T15:12:49.363Z</updated>
+    <updated>2020-05-31T15:50:07.808Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,81 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei开发日志</rights>
+    <entry>
+        <title type="html"><![CDATA[Thread类开启线程]]></title>
+        <id>https://Wei715547.github.io/post/thread-lei-kai-qi-xian-cheng/</id>
+        <link href="https://Wei715547.github.io/post/thread-lei-kai-qi-xian-cheng/">
+        </link>
+        <updated>2020-05-31T15:49:26.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Threading;<br>
+using System.Threading.Tasks;<br>
+namespace 线程_通过Thread类开启<br>
+{<br>
+class Program<br>
+{<br>
+static void Downloading(object fileName)<br>
+{<br>
+Console.WriteLine(&quot;startDownloadong&quot;+Thread .CurrentThread .ManagedThreadId +fileName );<br>
+Thread.Sleep(2000);<br>
+Console.WriteLine(&quot;END&quot;);<br>
+}<br>
+static void Main(string[] args)<br>
+{<br>
+//方式1.直接赋值一个方法引用<br>
+/<em>Thread t = new Thread(Downloading);<br>
+t.Start();//开始执行线程<br>
+Console.WriteLine(&quot;Main&quot;);</em>/</p>
+<pre><code>        //开启方式2。赋值一个表达式（匿名方法）
+        /*Thread t = new Thread(() =&gt;
+       {
+           Console.WriteLine(&quot;startDownloadong&quot; + Thread.CurrentThread.ManagedThreadId);
+           Thread.Sleep(2000);
+           Console.WriteLine(&quot;END&quot;);
+       });
+        t.Start();*/
+
+        /*//方式1.传递参数
+        Thread t = new Thread(Downloading);
+        t.Start(&quot;XXX&quot;);//开始执行线程
+        Console.WriteLine(&quot;Main&quot;);*/
+
+        //2.创建一个对象，将要传递的数据放到对象里进行传递
+        Mythread my = new Mythread(&quot;wei7&quot;, &quot;github.io&quot;);
+        Thread t = new Thread(my.DownloadFile);//以类里的普通方法作为线程方法
+        t.Start();//开启线程
+        Console.ReadKey();
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//用来传递参数的类<br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;<br>
+using System.Threading;</p>
+<p>namespace 线程_通过Thread类开启<br>
+{<br>
+class Mythread<br>
+{<br>
+private string filename;<br>
+private string filepath;</p>
+<pre><code>    public Mythread(string name,string path)
+    {
+        this.filename = name;
+        this.filepath = path;
+    }
+    public void DownloadFile()
+    {
+        Console.WriteLine(&quot;开始下载&quot;+filepath+filename);
+        Thread.Sleep(2000);
+        Console.WriteLine(&quot;下载完成&quot;);
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[委托开启线程]]></title>
         <id>https://Wei715547.github.io/post/wei-tuo-kai-qi-xian-cheng/</id>
@@ -733,85 +808,6 @@ public void OnEndDrag(PointerEventData eventData)//拖拽结束时
 </code></pre>
 <p>}<br>
 <img src="https://Wei715547.github.io/post-images/1590553039734.PNG" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[委托事件实现广播/监听（底层实现）]]></title>
-        <id>https://Wei715547.github.io/post/wei-tuo-shi-jian-shi-xian-guang-bo-jian-ting-di-ceng-shi-xian/</id>
-        <link href="https://Wei715547.github.io/post/wei-tuo-shi-jian-shi-xian-guang-bo-jian-ting-di-ceng-shi-xian/">
-        </link>
-        <updated>2020-05-26T15:22:36.000Z</updated>
-        <content type="html"><![CDATA[<p>//广播者<br>
-using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 事件__观察者设计模式<br>
-{<br>
-class Cat//被观察者（广播着）<br>
-{<br>
-public string name;<br>
-public string color;</p>
-<pre><code>    public Cat(string name,string color)
-    {
-        this.name = name;
-        this.color = color;
-    }
-
-    public void CatComing()
-    {
-        Console.WriteLine(&quot;发起广播&quot;);
-        if(catCome!=null)
-            catCome();
-    }
-
-    //public Action catCome;
-    public event Action catCome;//声明一个事件，发布一个消息（不能在类的外部被调用）
-}
-</code></pre>
-<p>}</p>
-<p>//监听者<br>
-using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 事件__观察者设计模式<br>
-{<br>
-class Moust//观察者（监听着）<br>
-{<br>
-public string name;<br>
-public string color;</p>
-<pre><code>    public Moust(string name,string color,Cat c)
-    {
-        this.name = name;
-        this.color = color;
-        c.catCome += this.MsRuning;//将自身应对广播“某”事件的方法，注册进广播者的该事件中(订阅消息)
-        //c.catCome();//事件不能在类的外部进行调用(委托可以)，但可在类的外部注册。
-    }
-
-    public void MsRuning()
-    {
-        Console.WriteLine(&quot;监听着收到广播&quot;);
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//程序<br>
-using System;</p>
-<p>namespace 事件__观察者设计模式<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-Cat c = new Cat(&quot;Super BuleCat&quot;,&quot;Blue&quot;);<br>
-Moust m1 = new Moust(&quot;Mk&quot;, &quot;Blake&quot;,c);//将广播者传入监听者，在监听者中注册委托<br>
-//c.catCome += m1.MsRuning;//注册委托<br>
-Moust m2 = new Moust(&quot;Bt&quot;, &quot;Blue&quot;,c);<br>
-//c.catCome += m2.MsRuning;//注册委托<br>
-//c.catCome();//事件不能在类的外部进行调用(委托可以)，但可在类的外部注册。<br>
-c.CatComing();<br>
-}<br>
-}<br>
-}</p>
 ]]></content>
     </entry>
 </feed>
