@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei开发日志</title>
-    <updated>2020-06-01T03:47:20.887Z</updated>
+    <updated>2020-06-01T05:11:45.248Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,40 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei开发日志</rights>
+    <entry>
+        <title type="html"><![CDATA[线程池]]></title>
+        <id>https://Wei715547.github.io/post/xian-cheng-chi/</id>
+        <link href="https://Wei715547.github.io/post/xian-cheng-chi/">
+        </link>
+        <updated>2020-06-01T05:11:19.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Threading;</p>
+<p>namespace 线程池<br>
+{<br>
+class Program<br>
+{<br>
+static void ThreadMethod(object state)<br>
+{<br>
+Console.WriteLine(&quot;线程开始&quot;+Thread .CurrentThread .ManagedThreadId);<br>
+Thread.Sleep(2000);<br>
+Console.WriteLine(&quot;线程结束&quot;);<br>
+}</p>
+<pre><code>    static void Main(string[] args)
+    {
+        ThreadPool.QueueUserWorkItem(ThreadMethod);//开启一个工作线程（适合耗时较短的任务）
+        ThreadPool.QueueUserWorkItem(ThreadMethod);
+        ThreadPool.QueueUserWorkItem(ThreadMethod);
+        ThreadPool.QueueUserWorkItem(ThreadMethod);
+        ThreadPool.QueueUserWorkItem(ThreadMethod);
+        Console.ReadKey();
+
+
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Thread类开启线程]]></title>
         <id>https://Wei715547.github.io/post/thread-lei-kai-qi-xian-cheng/</id>
@@ -544,270 +578,6 @@ bagShow = !bagShow;<br>
 myBagPanel.SetActive(bagShow);</p>
 <pre><code>    }
 }</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[2D Bag System]]></title>
-        <id>https://Wei715547.github.io/post/2d-bag-system/</id>
-        <link href="https://Wei715547.github.io/post/2d-bag-system/">
-        </link>
-        <updated>2020-05-27T02:45:24.000Z</updated>
-        <content type="html"><![CDATA[<p>以本地资源类(ScriptableObject)实现数据存储/读取<br>
-//背包资源类<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-[CreateAssetMenu(fileName = &quot;New Item&quot;, menuName = &quot;Inventory/Inventory&quot;)]<br>
-//背包类<br>
-public class Inventory : ScriptableObject<br>
-{<br>
-#region<br>
-/<em>public static Inventory GetInventory()<br>
-{<br>
-return Resources.Load<Inventory>(&quot;Mybag&quot;);<br>
-}</em>/<br>
-#endregion</p>
-<pre><code>//物品类列表
-public List&lt;Items&gt; itemList = new List&lt;Items&gt;();
-</code></pre>
-<p>}</p>
-<p>//物品类<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-[CreateAssetMenu(fileName = &quot;New Item&quot; ,menuName = &quot;Inventory/New Item&quot;)]<br>
-//物品类<br>
-public class Items : ScriptableObject<br>
-{<br>
-public string  itemName ;//物品名称<br>
-public Sprite ItemImage;//物品图标<br>
-public int ItemHild;//物品数量<br>
-[TextArea]//文本框，存储多字符串<br>
-public string ItemInfo;//物品信息<br>
-public bool equip;//可可装备属性<br>
-}<br>
-<img src="https://Wei715547.github.io/post-images/1590550667528.PNG" alt="" loading="lazy"></p>
-<p>//UI预制件<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.UI;</p>
-<p>public class Slot : MonoBehaviour<br>
-{<br>
-public int slotID;//空格的ID<br>
-//public Items slotItem;<br>
-public Image slotImage;//物品图标<br>
-public Text slotNum;//物品数量<br>
-private Button itemButton;//可点击物体按钮<br>
-public GameObject itemInSlot;//物品整体UI<br>
-public string slotInfo;//物品信息</p>
-<pre><code>private void Awake()
-{
-    itemButton = this.gameObject.GetComponentInChildren&lt;Button&gt;();
-    itemButton.onClick.AddListener(ItemOnClecked);
-}
-
-public void ItemOnClecked()
-{
-    InventoryManager.UpdateItemInfo(slotInfo );//点击时显示物品信息，
-    //（物品位置交换后UI预制件中仍存储原来物品的信息，调用的也是创建时赋值的信息）场景重新加载 时UI预制件中的信息得到更新
-}
-
-public void SetupSlot (Items item)//刷新背包时传过来的本地资源中的物品对象
-{
-    if(item == null )//本地背包列表中物品为空时吟唱空白的物品对象，然后返回
-    {
-        itemInSlot.SetActive(false);
-        return;
-    }
-    //不为空时对UI预制件进行赋值
-    slotImage.sprite = item.ItemImage;//图标
-    slotNum.text = item.ItemHild.ToString();//数量
-    slotInfo = item.ItemInfo;//物品信息
-}
-</code></pre>
-<p>}<br>
-<img src="https://Wei715547.github.io/post-images/1590550908057.PNG" alt="" loading="lazy"></p>
-<p>//世界中的物品<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>//世界中的物品脚本<br>
-public class ItemOnWord : MonoBehaviour<br>
-{<br>
-public Items thisItem;//物品种类<br>
-public Inventory platerInventer;//要加入的背包</p>
-<pre><code>private void OnTriggerEnter2D(Collider2D collision)
-{
-    if (collision.gameObject .CompareTag (&quot;Player&quot;))//Tag相同时返回TRUE,
-    {
-        AddItems();
-    }
-    Destroy(this.gameObject);
-}
-
-public void AddItems()
-{
-    if (!platerInventer.itemList.Contains (thisItem ))//List方法包含此元素时返回TRUE,不包含返回FALSE
-    {
-        for (int i = 0; i &lt; platerInventer.itemList.Count; i++)//背包中没有该物品时遍历
-        {
-            if (platerInventer .itemList[i]==null) //将物品添加到第一个空位置
-            {
-                platerInventer.itemList[i] = thisItem;
-                break;//跳出循环
-            }
-        }
-    }else
-    {
-        thisItem.ItemHild += 1;//背包中有该物品时数量加一
-    }
-    InventoryManager.RefreshItem();//刷新背包
-}
-</code></pre>
-<p>}<br>
-<img src="https://Wei715547.github.io/post-images/1590552509280.PNG" alt="" loading="lazy"></p>
-<p>//背包管理脚本<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.UI;<br>
-//背包管理脚本<br>
-public class InventoryManager : MonoBehaviour<br>
-{<br>
-public static InventoryManager instance;</p>
-<pre><code>public Inventory myBag;
-public GameObject parentPanle;
-//public Slot slotPrefab;
-public GameObject prefab;
-public Text itemInfromation;
-
-//运行时的物品List,与本地数据保持一致
-public List&lt;GameObject&gt; slot = new List&lt;GameObject&gt;();
-
-
-private void Awake()//单例模式
-{
-    if (instance != null)
-        Destroy(this);
-    instance = this;
-}
-
-private void OnEnable()//启用时刷新一次
-{
-    //print(&quot;refs&quot;);
-    //print(parentPanle.transform.childCount);
-    RefreshItem();
-    instance.itemInfromation.text = &quot; &quot;;
-}
-
-public static void UpdateItemInfo(string ItemInfo)
-{
-    instance.itemInfromation.text = ItemInfo;
-}
-
-public static void RefreshItem()
-{
-    //清空背包
-    ClearBag();
-    //清空后，再根据本地资源类重新生成UI预制件设置其中的Items相关属性
-    for (int i=0;i&lt; instance.myBag.itemList.Count;i++)
-    {
-        //CreateNewItem(item);
-        instance.slot.Add(Instantiate(instance.prefab));
-        instance.slot[i].transform.SetParent(instance.parentPanle.transform);
-        instance.slot[i].GetComponent&lt;Slot&gt;().slotID = i;
-        instance.slot[i].GetComponent&lt;Slot&gt;().SetupSlot(instance.myBag.itemList[i]);
-
-    }
-}
-//清空UI中背包所有物品的方法
-public static void ClearBag()
-{
-    if (instance.parentPanle.transform.childCount == 0)
-        return;
-    for (int i = 0; i &lt; instance .parentPanle .transform .childCount ; i++)
-    {
-        Destroy(instance.parentPanle.transform.GetChild(i).gameObject);
-        instance.slot.Clear();
-    }
-}
-</code></pre>
-<p>}<br>
-<img src="https://Wei715547.github.io/post-images/1590552901698.PNG" alt="" loading="lazy"></p>
-<p>//------------------------物品拖拽/交换位置-----------------------------------//<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.EventSystems;<br>
-using UnityEngine.UI;<br>
-public class ItemOnnDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler//拖拽接口<br>
-{<br>
-public Transform originatParent;<br>
-public Inventory myBag;<br>
-private int currentItemID;</p>
-<pre><code>public void OnBeginDrag(PointerEventData eventData)//按下时
-{
-    originatParent = transform.parent;//记录初始所在父物体
-    currentItemID = originatParent.GetComponent&lt;Slot&gt;().slotID;//记录初始父物体在界面/本地数据List中位置
-    transform.SetParent(transform.parent.parent);//点击后将物体UI的父物体设置为与抽屉的父物体同级，方便显示
-    transform.position = eventData.position;//物体UI位置跟随屏幕滚光标
-    GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = false;//隐藏物品图标屏幕射线检测，使射线可检测到下层父级物体
-}
-
-public void OnDrag(PointerEventData eventData)//拖拽时
-{
-    transform.position = eventData.position;//拖拽时物体UI根数屏幕光标
-    print(eventData.pointerCurrentRaycast.gameObject.name);//屏幕射线检测到的物体名称
-}
-
-public void OnEndDrag(PointerEventData eventData)//拖拽结束时
-{
-    if (eventData.pointerCurrentRaycast.gameObject != null)//如果屏幕射线检测到的物体不为空时
-    {
-        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Item Image&quot;)//物品栏有物品时，物品未隐藏可被检测到（物品UI的图标）
-        {
-            //原物体UI移动到背包中目标物体UI位置
-            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform.parent.parent);//物品UI图标的父级的父级（Slot）
-            transform.position = eventData.pointerCurrentRaycast.gameObject.transform.parent.parent.position;
-            //将目标物体UI移动到原物体UI位置
-            eventData.pointerCurrentRaycast.gameObject.transform.parent.SetParent(originatParent);
-            eventData.pointerCurrentRaycast.gameObject.transform.parent.position = originatParent.position;
-
-            //交换本地数据中物体的存储位置
-            var temp = myBag.itemList[currentItemID];//本地数据中原物体保存为中间值
-            //本地数据中原物体移动到目标物体位置
-            myBag.itemList[currentItemID] = myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID];
-            //本地数据中目标物体位置变为中间值（原物体）
-            myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID] = temp;
-            //交换存储位置
-
-            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;//交换完成开启屏幕射线检测，可再次拖拽
-            return;//目标栏有物体，交换完成退出方法
-        }
-        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Slot(Clone)&quot;)//目标栏为空时（检测到的是抽屉）
-        {
-            //原物体之间放入目标抽屉
-            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform);
-            transform.position = eventData.pointerCurrentRaycast.gameObject.transform.position;
-            //将本地数据中的空物体赋值为，本地数据库中的目标物体
-            myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID] = myBag.itemList[currentItemID];
-            //如果如表抽屉不是原来的抽屉时执行
-            if (eventData.pointerCurrentRaycast.gameObject.GetComponent&lt;Slot&gt;().slotID != currentItemID)
-                myBag.itemList[currentItemID] = null;//之后本地数据中的目标物体设为空
-
-            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;//交换完成开启屏幕射线检测，可再次拖拽
-            return;//目标栏有物体，交换完成退出方法
-        }
-    }
-    //其他任何位置返回原位(非UI元素时)
-    transform.SetParent(originatParent);
-    transform.position = originatParent.position;
-    GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
-}
-</code></pre>
-<p>}<br>
-<img src="https://Wei715547.github.io/post-images/1590553039734.PNG" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
