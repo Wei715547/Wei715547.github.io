@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei开发日志</title>
-    <updated>2020-06-01T05:11:45.248Z</updated>
+    <updated>2020-06-01T05:21:22.443Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -12,7 +12,7 @@
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei开发日志</rights>
     <entry>
-        <title type="html"><![CDATA[线程池]]></title>
+        <title type="html"><![CDATA[线程池/Task类开启线程]]></title>
         <id>https://Wei715547.github.io/post/xian-cheng-chi/</id>
         <link href="https://Wei715547.github.io/post/xian-cheng-chi/">
         </link>
@@ -39,6 +39,36 @@ Console.WriteLine(&quot;线程结束&quot;);<br>
         Console.ReadKey();
 
 
+    }
+}
+</code></pre>
+<p>}<br>
+//-------------------------------------------------------------------------<br>
+using System;<br>
+using System.Threading;<br>
+using System.Threading.Tasks;</p>
+<p>namespace Task类开启线程<br>
+{<br>
+class Program<br>
+{<br>
+static void ThreadMethod()<br>
+{<br>
+Console.WriteLine(&quot;线程开始&quot; + Thread.CurrentThread.ManagedThreadId);<br>
+Thread.Sleep(2000);<br>
+Console.WriteLine(&quot;线程结束&quot;);<br>
+}</p>
+<pre><code>    static void Main(string[] args)
+    {
+        //1.开启方式
+        /*Task t = new Task(ThreadMethod);
+        t.Start();*/
+
+        //2.开启方式
+        /*TaskFactory tf = new TaskFactory();
+        Task t = tf.StartNew(ThreadMethod);*/
+
+        Console.WriteLine(&quot;Main&quot;);
+        Console.ReadKey();
     }
 }
 </code></pre>

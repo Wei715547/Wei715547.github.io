@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" >
 
-<title>线程池 | Wei开发日志</title>
+<title>线程池/Task类开启线程 | Wei开发日志</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590988296610">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1590988878955">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ Console.W..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1590988296610" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1590988878955" class="site-logo">
         <h1 class="site-title">Wei开发日志</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -103,7 +103,7 @@ Console.W..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">线程池</h2>
+            <h2 class="post-title">线程池/Task类开启线程</h2>
             <div class="post-date">2020-06-01</div>
             
             <div class="post-content" v-pre>
@@ -129,6 +129,36 @@ Console.WriteLine(&quot;线程结束&quot;);<br>
         Console.ReadKey();
 
 
+    }
+}
+</code></pre>
+<p>}<br>
+//-------------------------------------------------------------------------<br>
+using System;<br>
+using System.Threading;<br>
+using System.Threading.Tasks;</p>
+<p>namespace Task类开启线程<br>
+{<br>
+class Program<br>
+{<br>
+static void ThreadMethod()<br>
+{<br>
+Console.WriteLine(&quot;线程开始&quot; + Thread.CurrentThread.ManagedThreadId);<br>
+Thread.Sleep(2000);<br>
+Console.WriteLine(&quot;线程结束&quot;);<br>
+}</p>
+<pre><code>    static void Main(string[] args)
+    {
+        //1.开启方式
+        /*Task t = new Task(ThreadMethod);
+        t.Start();*/
+
+        //2.开启方式
+        /*TaskFactory tf = new TaskFactory();
+        Task t = tf.StartNew(ThreadMethod);*/
+
+        Console.WriteLine(&quot;Main&quot;);
+        Console.ReadKey();
     }
 }
 </code></pre>
