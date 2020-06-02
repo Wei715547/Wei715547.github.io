@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-01T08:07:22.687Z</updated>
+    <updated>2020-06-02T05:52:58.997Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,106 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[Socket客户端端口]]></title>
+        <id>https://Wei715547.github.io/post/socket-ke-hu-duan-duan-kou/</id>
+        <link href="https://Wei715547.github.io/post/socket-ke-hu-duan-duan-kou/">
+        </link>
+        <updated>2020-06-02T05:45:10.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Net;<br>
+using System.Net.Sockets;<br>
+using System.Text;</p>
+<p>namespace Socket客户端<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+//1.创建Socket<br>
+Socket tcpClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);//网咯、数据流形式、Tcp协议</p>
+<pre><code>        //2.发起建立连接的请求
+        IPAddress ipaddress = IPAddress.Parse(&quot;192.168.137.1&quot;);//可以将一个字符串的IP地址转化为IPaddress的对象
+        EndPoint point = new IPEndPoint(ipaddress, 7788);
+        //连接方法
+        tcpClient.Connect(point);//通过ip:端口号，定位连接到目标服务器
+        
+        //接收来自服务器的数据（接收方法）
+        byte[] data = new byte[1024]; //创建一个byte数组,(用来接收数据)
+         int length = tcpClient.Receive(data);//传递一个byte数组,(用来接收数据)、返回值表示接收了多少字符串
+        string message = Encoding.UTF8.GetString(data,0,length);//0~length的字节数据转化为字符串（把接收到的数据转化为字符串）
+        Console.WriteLine(message);
+
+        //向服务器端发送消息
+        string messagec = Console.ReadLine();//读取用户的输入
+        //发送方法
+        tcpClient.Send(Encoding.UTF8.GetBytes(messagec));//把字符串转化为byte数组发送到服务器端
+
+        Console.ReadKey();
+    }
+}
+</code></pre>
+<p>}<br>
+<img src="https://Wei715547.github.io/post-images/1591076933494.PNG" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Socket服务器端口]]></title>
+        <id>https://Wei715547.github.io/post/socket-fu-wu-qi-duan-kou/</id>
+        <link href="https://Wei715547.github.io/post/socket-fu-wu-qi-duan-kou/">
+        </link>
+        <updated>2020-06-02T05:40:59.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Net;<br>
+using System.Net.Sockets;<br>
+using System.Text;</p>
+<p>namespace Socket服务器端<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+//创建Socket<br>
+Socket tcpServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);//网咯、数据流形式、Tcp协议</p>
+<pre><code>        //1.绑定IP端口号
+        IPAddress ipaddress = new IPAddress(new byte[] { 192,168,137,1 });
+        EndPoint point = new IPEndPoint(ipaddress,7788);//IPEndPoint:IP端口的一层封装类
+        //申请方法
+        tcpServer.Bind(point);//向系统申请一个可用的ip根端口号，用来做通信
+        
+        //2.开始监听客户端连接
+        //监听方法
+        tcpServer.Listen(100);//开始监听等待客户端连接、允许（100）个客户端连接进来。
+        Console.WriteLine(&quot;开始监听连接&quot;);
+
+        //使用返回的Socket做通信
+
+        //3.接收客户端的连接//接收连接方法
+        //客户端的Socket对象的引用、用来收发客户端的数据
+        Socket clientSocket = tcpServer.Accept();//暂停当前线程，直到有一个客户端连接进来，之后进行下面的代码。
+        Console.WriteLine(&quot;一个客户端连接&quot;);
+
+        //4.客户端连接后向客户端发送一个消息
+        string message = &quot;欢迎接入Socket&quot;;//向客户端传输的信息
+        byte[] data = Encoding.UTF8.GetBytes(message);//对一个字符串做编码，转为字节数组
+        clientSocket.Send(data);
+        Console.WriteLine(&quot;向客户端发送了一条数据&quot;);
+
+        //5.接收客户端的数据
+        byte[] datac = new byte[1024];//创建一个字节数组用来接收客户端发过来的数据
+        int length = clientSocket.Receive(datac);
+        string messagec = Encoding.UTF8.GetString(datac, 0, length);//0~length的字节数据转化为字符串（只把接收到的数据转化为字符串）
+        Console.WriteLine(&quot;接收到一条从客户端发来的消息&quot;+messagec);
+
+
+        Console.ReadKey();
+    }
+}
+</code></pre>
+<p>}<br>
+<img src="https://Wei715547.github.io/post-images/1591076704544.PNG" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[线程池/Task类开启线程]]></title>
         <id>https://Wei715547.github.io/post/xian-cheng-chi/</id>
@@ -476,138 +576,6 @@ if (jumpTime &lt; Time.time)<br>
 isJump = false;<br>
 }<br>
 }</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[冒泡排序+(泛型/委托)]]></title>
-        <id>https://Wei715547.github.io/post/mou-pao-pai-xu-fan-xing-wei-tuo/</id>
-        <link href="https://Wei715547.github.io/post/mou-pao-pai-xu-fan-xing-wei-tuo/">
-        </link>
-        <updated>2020-05-28T15:53:37.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;</p>
-<p>namespace int类冒泡排序<br>
-{<br>
-class Program<br>
-{<br>
-static void Sort(int[] sortArray)<br>
-{<br>
-bool isChang = true;<br>
-do<br>
-{<br>
-isChang = false;<br>
-for (int i = 0; i &lt; sortArray.Length - 1; i++)<br>
-{<br>
-if (sortArray[i] &lt; sortArray[i + 1])<br>
-{<br>
-int temp = sortArray[i];<br>
-sortArray[i] = sortArray[i + 1];<br>
-sortArray[i + 1] = temp;<br>
-isChang = true;<br>
-}<br>
-}<br>
-} while (isChang);<br>
-}</p>
-<pre><code>    static void CommonSort&lt;T&gt;(T[] sortArray, Func&lt;T, T, bool&gt; compart)
-    {
-        bool isChang = true;
-        do
-        {
-            isChang = false;
-            for (int i = 0; i &lt; sortArray.Length - 1; i++)
-            {
-                if (compart(sortArray[i], sortArray[i + 1]))
-                {
-                    T temp = sortArray[i];
-                    sortArray[i] = sortArray[i + 1];
-                    sortArray[i + 1] = temp;
-                    isChang = true;
-                }
-            }
-        } while (isChang);
-    }
-
-    static void Main(string[] args)
-    {
-        /*int[] array = { 31, 423, 543, 35, 24, 454,6 };
-        Sort(array);
-        foreach (int i in array)
-        {
-            Console.WriteLine(i);
-        }*/
-
-        /*Employee e1 = new Employee(&quot;wei&quot;, 12000);
-        Employee e2 = new Employee(&quot;zz&quot;, 10000);
-        Employee e3 = new Employee(&quot;zh&quot;, 11000);
-        Employee[] earray = { e1, e2, e3 };*/
-        //组类声明
-        Employee[] earray = new Employee[]
-        {
-            new Employee(&quot;wei&quot;, 12000),
-            new Employee(&quot;zz&quot;, 10000),
-            new Employee(&quot;h&quot;, 11000)
-        };
-
-        CommonSort&lt;Employee&gt;(earray, Employee.Compare);
-        foreach (Employee e in earray)
-        {
-            Console.WriteLine(e);
-        }
-
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//泛型类<br>
-using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace int类冒泡排序<br>
-{<br>
-class Employee<br>
-{<br>
-public override string ToString()<br>
-{<br>
-return this .Name +&quot;:&quot;+this .Salary;<br>
-}</p>
-<pre><code>    public string Name { get; private set; }
-    public int Salary { get; private set; }
-
-    public Employee(string name ,int salary)
-    {
-        this.Name = name;
-        this.Salary = salary;
-    }
-
-    public static bool Compare(Employee e1,Employee e2)
-    {
-        if (e1.Salary &gt; e2.Salary) return true;
-        return false;
-    }
-
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Bool交替执行]]></title>
-        <id>https://Wei715547.github.io/post/bool-jiao-ti-zhi-xing/</id>
-        <link href="https://Wei715547.github.io/post/bool-jiao-ti-zhi-xing/">
-        </link>
-        <updated>2020-05-28T06:32:17.000Z</updated>
-        <content type="html"><![CDATA[<p>private bool bagShow;<br>
-private void Awake()<br>
-{<br>
-myBagPanel.SetActive(false);<br>
-}<br>
-private void Update()<br>
-{<br>
-if (Input .GetKeyDown (KeyCode.B ))<br>
-{<br>
-bagShow = !bagShow;<br>
-myBagPanel.SetActive(bagShow);</p>
-<pre><code>    }
-}</code></pre>
 ]]></content>
     </entry>
 </feed>

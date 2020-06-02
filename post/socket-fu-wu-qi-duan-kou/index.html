@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>碰撞，触发 | Wei: Development technology accumulation</title>
+<title>Socket服务器端口 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,16 +18,15 @@
 
 
 
-    <meta name="description" content="//都有碰撞器组件
-//运动的物体有刚体组件
-private void OnCollisionEnter(Collision other )
+    <meta name="description" content="using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+namespace Socket服务器端
 {
-    print(other.collider.name);
-    
-}
-
-
-//都有碰撞..." />
+class Program
+{
+stat..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -104,52 +103,68 @@ private void OnCollisionEnter(Collision other )
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">碰撞，触发</h2>
-            <div class="post-date">2020-04-13</div>
+            <h2 class="post-title">Socket服务器端口</h2>
+            <div class="post-date">2020-06-02</div>
             
             <div class="post-content" v-pre>
-              <pre><code>//都有碰撞器组件
-//运动的物体有刚体组件
-private void OnCollisionEnter(Collision other )
-{
-    print(other.collider.name);
-    
+              <p>using System;<br>
+using System.Net;<br>
+using System.Net.Sockets;<br>
+using System.Text;</p>
+<p>namespace Socket服务器端<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+//创建Socket<br>
+Socket tcpServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);//网咯、数据流形式、Tcp协议</p>
+<pre><code>        //1.绑定IP端口号
+        IPAddress ipaddress = new IPAddress(new byte[] { 192,168,137,1 });
+        EndPoint point = new IPEndPoint(ipaddress,7788);//IPEndPoint:IP端口的一层封装类
+        //申请方法
+        tcpServer.Bind(point);//向系统申请一个可用的ip根端口号，用来做通信
+        
+        //2.开始监听客户端连接
+        //监听方法
+        tcpServer.Listen(100);//开始监听等待客户端连接、允许（100）个客户端连接进来。
+        Console.WriteLine(&quot;开始监听连接&quot;);
+
+        //使用返回的Socket做通信
+
+        //3.接收客户端的连接//接收连接方法
+        //客户端的Socket对象的引用、用来收发客户端的数据
+        Socket clientSocket = tcpServer.Accept();//暂停当前线程，直到有一个客户端连接进来，之后进行下面的代码。
+        Console.WriteLine(&quot;一个客户端连接&quot;);
+
+        //4.客户端连接后向客户端发送一个消息
+        string message = &quot;欢迎接入Socket&quot;;//向客户端传输的信息
+        byte[] data = Encoding.UTF8.GetBytes(message);//对一个字符串做编码，转为字节数组
+        clientSocket.Send(data);
+        Console.WriteLine(&quot;向客户端发送了一条数据&quot;);
+
+        //5.接收客户端的数据
+        byte[] datac = new byte[1024];//创建一个字节数组用来接收客户端发过来的数据
+        int length = clientSocket.Receive(datac);
+        string messagec = Encoding.UTF8.GetString(datac, 0, length);//0~length的字节数据转化为字符串（只把接收到的数据转化为字符串）
+        Console.WriteLine(&quot;接收到一条从客户端发来的消息&quot;+messagec);
+
+
+        Console.ReadKey();
+    }
 }
-
-
-//都有碰撞器组件
-//其中一个勾选IsTriggger
-//其中一个有刚体组件
-private void OnTriggerEnter(Collider other)//触发开始执行 other碰撞到的物体
-{
-    
-    float a = other.GetComponent&lt;Enemy&gt;().Hp;
-    print(other.name+a);
-    other.GetComponent&lt;Enemy&gt;().Hp -= Random .Range (5,10);
-    print(other.name + other.GetComponent&lt;Enemy&gt;().Hp);
-    
-}
-
-private void OnTriggerStay(Collider other)//触发后每帧执行
-{
-    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.red;
-    if (other.GetComponent&lt;Enemy&gt;().Hp &lt;= 0)
-        Destroy(other.gameObject);
-}
-
-private void OnTriggerExit(Collider other)//触发结束时执行
-{
-    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.white;
-}</code></pre>
+</code></pre>
+<p>}<br>
+<img src="https://Wei715547.github.io/post-images/1591076704544.PNG" alt="" loading="lazy"></p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/2d-jump/">
+                <a href="https://Wei715547.github.io/post/xian-cheng-chi/">
                   <h3 class="post-title">
-                    2D Jump
+                    线程池/Task类开启线程
                   </h3>
                 </a>
               </div>

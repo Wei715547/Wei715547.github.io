@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>碰撞，触发 | Wei: Development technology accumulation</title>
+<title>Socket客户端端口 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,16 +18,15 @@
 
 
 
-    <meta name="description" content="//都有碰撞器组件
-//运动的物体有刚体组件
-private void OnCollisionEnter(Collision other )
+    <meta name="description" content="using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+namespace Socket客户端
 {
-    print(other.collider.name);
-    
-}
-
-
-//都有碰撞..." />
+class Program
+{
+stati..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -104,52 +103,54 @@ private void OnCollisionEnter(Collision other )
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">碰撞，触发</h2>
-            <div class="post-date">2020-04-13</div>
+            <h2 class="post-title">Socket客户端端口</h2>
+            <div class="post-date">2020-06-02</div>
             
             <div class="post-content" v-pre>
-              <pre><code>//都有碰撞器组件
-//运动的物体有刚体组件
-private void OnCollisionEnter(Collision other )
-{
-    print(other.collider.name);
-    
+              <p>using System;<br>
+using System.Net;<br>
+using System.Net.Sockets;<br>
+using System.Text;</p>
+<p>namespace Socket客户端<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+//1.创建Socket<br>
+Socket tcpClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);//网咯、数据流形式、Tcp协议</p>
+<pre><code>        //2.发起建立连接的请求
+        IPAddress ipaddress = IPAddress.Parse(&quot;192.168.137.1&quot;);//可以将一个字符串的IP地址转化为IPaddress的对象
+        EndPoint point = new IPEndPoint(ipaddress, 7788);
+        //连接方法
+        tcpClient.Connect(point);//通过ip:端口号，定位连接到目标服务器
+        
+        //接收来自服务器的数据（接收方法）
+        byte[] data = new byte[1024]; //创建一个byte数组,(用来接收数据)
+         int length = tcpClient.Receive(data);//传递一个byte数组,(用来接收数据)、返回值表示接收了多少字符串
+        string message = Encoding.UTF8.GetString(data,0,length);//0~length的字节数据转化为字符串（把接收到的数据转化为字符串）
+        Console.WriteLine(message);
+
+        //向服务器端发送消息
+        string messagec = Console.ReadLine();//读取用户的输入
+        //发送方法
+        tcpClient.Send(Encoding.UTF8.GetBytes(messagec));//把字符串转化为byte数组发送到服务器端
+
+        Console.ReadKey();
+    }
 }
-
-
-//都有碰撞器组件
-//其中一个勾选IsTriggger
-//其中一个有刚体组件
-private void OnTriggerEnter(Collider other)//触发开始执行 other碰撞到的物体
-{
-    
-    float a = other.GetComponent&lt;Enemy&gt;().Hp;
-    print(other.name+a);
-    other.GetComponent&lt;Enemy&gt;().Hp -= Random .Range (5,10);
-    print(other.name + other.GetComponent&lt;Enemy&gt;().Hp);
-    
-}
-
-private void OnTriggerStay(Collider other)//触发后每帧执行
-{
-    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.red;
-    if (other.GetComponent&lt;Enemy&gt;().Hp &lt;= 0)
-        Destroy(other.gameObject);
-}
-
-private void OnTriggerExit(Collider other)//触发结束时执行
-{
-    other.GetComponent&lt;MeshRenderer&gt;().material.color = Color.white;
-}</code></pre>
+</code></pre>
+<p>}<br>
+<img src="https://Wei715547.github.io/post-images/1591076933494.PNG" alt="" loading="lazy"></p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/2d-jump/">
+                <a href="https://Wei715547.github.io/post/socket-fu-wu-qi-duan-kou/">
                   <h3 class="post-title">
-                    2D Jump
+                    Socket服务器端口
                   </h3>
                 </a>
               </div>
