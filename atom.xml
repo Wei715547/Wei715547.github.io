@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-03T06:34:34.264Z</updated>
+    <updated>2020-06-03T15:49:00.478Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,50 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[File类，R/W]]></title>
+        <id>https://Wei715547.github.io/post/file-lei-rw/</id>
+        <link href="https://Wei715547.github.io/post/file-lei-rw/">
+        </link>
+        <updated>2020-06-03T15:48:34.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.IO;</p>
+<p>namespace FileClass_Read_and_Wright<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+/<em>string[] strarray = File.ReadAllLines(&quot;TextFile1.txt&quot;);//读取文件，把每一行文本文件读取成一个字符串，<br>
+//最后主城一个字符串数组<br>
+foreach (var s in strarray )<br>
+{<br>
+Console.WriteLine(s);<br>
+}</em>/</p>
+<pre><code>        /*string s = File.ReadAllText(&quot;TextFile1.txt&quot;);
+        Console.WriteLine(s);*/
+
+        byte[] byteArray = File.ReadAllBytes(&quot;20191103200554.jpg&quot;);
+        foreach (var b in byteArray)
+        {
+            Console.Write(b);
+        }
+
+        /*File.WriteAllText(&quot;TextFile2.txt&quot;, &quot;WEI&quot;);
+
+        File.WriteAllLines(&quot;TextFile3.txt&quot;, new string[] { &quot;wei&quot;, &quot;zzz&quot; });*/
+
+        //读取文件二进制数据
+        //byte[] data = File.ReadAllBytes(&quot;20191103200554.jpg&quot;);
+        //写入文件二进制数据（复制）
+        //File.WriteAllBytes(&quot;1.png&quot;, data);
+
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Socket客户端端口]]></title>
         <id>https://Wei715547.github.io/post/socket-ke-hu-duan-duan-kou/</id>
@@ -547,36 +591,6 @@ return num;<br>
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[长按/下蹲状态跳跃增量]]></title>
-        <id>https://Wei715547.github.io/post/chang-an-xia-dun-zhuang-tai-tiao-yue-zeng-liang/</id>
-        <link href="https://Wei715547.github.io/post/chang-an-xia-dun-zhuang-tai-tiao-yue-zeng-liang/">
-        </link>
-        <updated>2020-05-29T14:58:33.000Z</updated>
-        <content type="html"><![CDATA[<p>public void MidAirMovement()<br>
-{<br>
-if (jumpPressed&amp;&amp;isOnground &amp;&amp;!isJump&amp;&amp;!isHeadBlocked )//普通状态--在地面上，非跳跃状态，上部没有遮挡、按下跳跃键<br>
-{<br>
-if (isCrouch)//下蹲状态，增量<br>
-{<br>
-StandUp();<br>
-playerRGB.AddForce(Vector2.up * crouchJumpBoost, ForceMode2D.Impulse);//F1+F2<br>
-}<br>
-isOnground = false;<br>
-isJump = true;<br>
-jumpTime = Time.time + jumpHodeDuration;<br>
-playerRGB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);//F1<br>
-}<br>
-else if (isJump )//长按状态<br>
-{<br>
-if (jumpHeld)//长按跳跃键<br>
-playerRGB.AddForce(Vector2.up * jumpHpdeFpoce, ForceMode2D.Impulse);//F1+F3<br>
-if (jumpTime &lt; Time.time)<br>
-isJump = false;<br>
-}<br>
-}</p>
 ]]></content>
     </entry>
 </feed>

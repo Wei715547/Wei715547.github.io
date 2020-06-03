@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>获取同类物体 | Wei: Development technology accumulation</title>
+<title>File类，R/W | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,10 +18,15 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class FindEnemyDeom : MonoBehaviou..." />
+    <meta name="description" content="using System;
+using System.IO;
+namespace FileClass_Read_and_Wright
+{
+class Program
+{
+static void Main(string[] args)
+{
+/..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -98,46 +103,43 @@ public class FindEnemyDeom : MonoBehaviou..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">获取同类物体</h2>
-            <div class="post-date">2020-04-04</div>
+            <h2 class="post-title">File类，R/W</h2>
+            <div class="post-date">2020-06-03</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class FindEnemyDeom : MonoBehaviour<br>
-{</p>
-<pre><code>private void OnGUI()
-{
-    if (GUILayout .Button (&quot;查找血量最低的敌人&quot;))
-    {
-        //查找场景中所有Enemy类型的引用
-        Enemy[] allEnemy = Object.FindObjectsOfType&lt;Enemy&gt;();
-        //获取血量最低的对象的引用
-        Enemy min = FindEnemyByMinHp(allEnemy);
-        //根据Enemy类型的引用 获取其他组件类型引用
-        min.GetComponent&lt;MeshRenderer&gt;().material.color = Color.blue;
-    }
-    if (GUILayout.Button (&quot;层级位置获取子物体&quot;))
-    {
-        var childTF = TransformHelper.GetChild(this.transform , &quot;Cube3&quot;);
-        childTF.GetComponent&lt;MeshRenderer&gt;().material.color = Color.blue;
-        //print(childTF.name);
-        
-    }
-}
+              <p>using System;<br>
+using System.IO;</p>
+<p>namespace FileClass_Read_and_Wright<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+/<em>string[] strarray = File.ReadAllLines(&quot;TextFile1.txt&quot;);//读取文件，把每一行文本文件读取成一个字符串，<br>
+//最后主城一个字符串数组<br>
+foreach (var s in strarray )<br>
+{<br>
+Console.WriteLine(s);<br>
+}</em>/</p>
+<pre><code>        /*string s = File.ReadAllText(&quot;TextFile1.txt&quot;);
+        Console.WriteLine(s);*/
 
-public Enemy FindEnemyByMinHp(Enemy [] allEnemy)
-{
-    Enemy min = allEnemy[0];
+        byte[] byteArray = File.ReadAllBytes(&quot;20191103200554.jpg&quot;);
+        foreach (var b in byteArray)
+        {
+            Console.Write(b);
+        }
 
-    for (int i = 1; i &lt; allEnemy .Length ; i++)
-    {
-        if (min.Hp &gt; allEnemy[i].Hp)
-            min = allEnemy[i];
+        /*File.WriteAllText(&quot;TextFile2.txt&quot;, &quot;WEI&quot;);
+
+        File.WriteAllLines(&quot;TextFile3.txt&quot;, new string[] { &quot;wei&quot;, &quot;zzz&quot; });*/
+
+        //读取文件二进制数据
+        //byte[] data = File.ReadAllBytes(&quot;20191103200554.jpg&quot;);
+        //写入文件二进制数据（复制）
+        //File.WriteAllBytes(&quot;1.png&quot;, data);
+
     }
-    return min;
-
 }
 </code></pre>
 <p>}</p>
@@ -147,9 +149,9 @@ public Enemy FindEnemyByMinHp(Enemy [] allEnemy)
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/dian-ji-bo-fang-dong-hua/">
+                <a href="https://Wei715547.github.io/post/socket-ke-hu-duan-duan-kou/">
                   <h3 class="post-title">
-                    点击+/-播放动画
+                    Socket客户端端口
                   </h3>
                 </a>
               </div>
