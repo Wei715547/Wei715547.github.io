@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1591085260207">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1591165945137">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@ public class InP..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1591085260207" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1591165945137" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -158,6 +158,65 @@ IEnumerator LoadLeve()
         }
         yield return null;
     }
+}
+</code></pre>
+<p>}</p>
+<p>//方式2<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+using UnityEngine.SceneManagement;<br>
+public class LoadGame : MonoBehaviour {</p>
+<pre><code>public Slider processView;
+
+// Use this for initialization
+void Start () {
+    LoadGameMethod();
+    
+}
+
+// Update is called once per frame
+void Update () {
+	
+
+}
+public void LoadGameMethod()
+{
+    StartCoroutine(StartLoading_4(2));
+}
+
+private IEnumerator StartLoading_4(int scene)
+{
+    int displayProgress = 0;
+    int toProgress = 0;
+    AsyncOperation op = SceneManager.LoadSceneAsync(scene); 
+    op.allowSceneActivation = false;
+    while (op.progress &lt; 0.9f)
+    {
+        toProgress = (int)op.progress * 100;
+        while (displayProgress &lt; toProgress)
+        {
+            ++displayProgress;
+            SetLoadingPercentage(displayProgress);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    toProgress = 100;
+    while (displayProgress &lt; toProgress)
+    {
+        ++displayProgress;
+        SetLoadingPercentage(displayProgress);
+        yield return new WaitForEndOfFrame();
+    }
+    op.allowSceneActivation = true;
+}
+
+private void SetLoadingPercentage(float v)
+{
+    processView.value = v / 100;
 }
 </code></pre>
 <p>}</p>
