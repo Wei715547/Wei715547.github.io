@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>DG Tweening | Wei: Development technology accumulation</title>
+<title>生命周期 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,7 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using DG.Tweening;
-using UnityEngine.UI;
+    <meta name="description" content="
 ..." />
     <meta name="keywords" content="" />
   </head>
@@ -100,62 +96,20 @@ using UnityEngine.UI;
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">DG Tweening</h2>
-            <div class="post-date">2020-05-11</div>
+            <h2 class="post-title">生命周期</h2>
+            <div class="post-date">2020-06-06</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using DG.Tweening;<br>
-using UnityEngine.UI;<br>
-public class InDoor : MonoBehaviour<br>
-{</p>
-<pre><code>public GameObject InDoorPanel;
-
-private void Start()
-{
-    InDoorPanel.GetComponent&lt;Image&gt;().color = new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
-        InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0);
-    InDoorPanel.transform.position = new Vector3(InDoorPanel.transform.position.x,
-        -100, InDoorPanel.transform.position.z);
-    //InDoorPanel.transform.localScale= Vector3.zero;
-    InDoorPanel.SetActive(false);
-}
-
-private void OnTriggerEnter2D(Collider2D collision)
-{
-    if (collision.tag == &quot;Player&quot;)
-    {
-        InDoorPanel.SetActive(true);
-        InDoorPanel.GetComponent&lt;Image&gt;().DOColor(new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
-            InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0.7f), 0.3f);
-        InDoorPanel.transform.DOMoveY(110, 0.3f);
-        //InDoorPanel.transform.DOScale(Vector3.one, 0.3f);
-    }
-}
-
-private void OnTriggerExit2D(Collider2D collision)
-{
-    if (collision.tag == &quot;Player&quot;)
-    {
-        InDoorPanel.GetComponent&lt;Image&gt;().DOColor(new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
-            InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0), 0.3f);
-        InDoorPanel.transform.DOMoveY(-100, 0.3f).OnComplete(() =&gt; InDoorPanel.SetActive(false));
-        //InDoorPanel.transform.DOScale(Vector3.zero, 0.3f);
-    }
-}
-</code></pre>
-<p>}</p>
+              <figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1591431791506.png" alt="" loading="lazy"></figure>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/zui-gao-fen-pai-xu/">
+                <a href="https://Wei715547.github.io/post/shi-jiao-suo-fang-gen-sui/">
                   <h3 class="post-title">
-                    最高分排序
+                    视角缩放/跟随
                   </h3>
                 </a>
               </div>
