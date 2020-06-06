@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-06T05:39:05.356Z</updated>
+    <updated>2020-06-06T05:43:41.050Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -24,22 +24,22 @@ using UnityEngine;</p>
 {<br>
 public Transform target;<br>
 public Vector3 offset;</p>
-<pre><code>public float zoomSpeed = 4f;
+<pre><code>//视角范围，缩放速度
+public float zoomSpeed = 4f;
 public float minZoom = 5f;
 public float maxZoom = 10f;
 
-public float pitch=2f;
+public float pitch=2f;//视角高度值
 
-public float YawSpeed = 100f;
+private float currentZoom = 10f;//焦距
 
-private float currentZoom = 10f;
-
-private float currentYaw = 0f;
+public float YawSpeed = 100f;//旋转速度
+private float currentYaw = 0f;//旋转角度
 
 // Update is called once per frame
 void Update()
 {
-    currentZoom -= Input.GetAxis(&quot;Mouse ScrollWheel&quot;);
+    currentZoom -= Input.GetAxis(&quot;Mouse ScrollWheel&quot;)*zoomSpeed *Time .deltaTime;
     currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);//限定缩放范围
 
     currentYaw += Input.GetAxis(&quot;Horizontal&quot;) * YawSpeed * Time.deltaTime;

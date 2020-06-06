@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1591421942281">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1591422218772">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -33,7 +33,7 @@ pu..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1591421942281" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1591422218772" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -111,22 +111,22 @@ using UnityEngine;</p>
 {<br>
 public Transform target;<br>
 public Vector3 offset;</p>
-<pre><code>public float zoomSpeed = 4f;
+<pre><code>//视角范围，缩放速度
+public float zoomSpeed = 4f;
 public float minZoom = 5f;
 public float maxZoom = 10f;
 
-public float pitch=2f;
+public float pitch=2f;//视角高度值
 
-public float YawSpeed = 100f;
+private float currentZoom = 10f;//焦距
 
-private float currentZoom = 10f;
-
-private float currentYaw = 0f;
+public float YawSpeed = 100f;//旋转速度
+private float currentYaw = 0f;//旋转角度
 
 // Update is called once per frame
 void Update()
 {
-    currentZoom -= Input.GetAxis(&quot;Mouse ScrollWheel&quot;);
+    currentZoom -= Input.GetAxis(&quot;Mouse ScrollWheel&quot;)*zoomSpeed *Time .deltaTime;
     currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);//限定缩放范围
 
     currentYaw += Input.GetAxis(&quot;Horizontal&quot;) * YawSpeed * Time.deltaTime;
