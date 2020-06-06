@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>2D Jump | Wei: Development technology accumulation</title>
+<title>视角缩放/跟随 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -21,9 +21,9 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class JumpBox : MonoBehaviour
+public class CamerCT : MonoBehaviour
 {
-[R..." />
+pu..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -100,96 +100,45 @@ public class JumpBox : MonoBehaviour
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">2D Jump</h2>
-            <div class="post-date">2020-04-12</div>
+            <h2 class="post-title">视角缩放/跟随</h2>
+            <div class="post-date">2020-06-06</div>
             
             <div class="post-content" v-pre>
               <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;</p>
-<p>public class JumpBox : MonoBehaviour<br>
+<p>public class CamerCT : MonoBehaviour<br>
 {<br>
-[Range(0, 10)] public float jumpVelocity = 5f;<br>
-public LayerMask mask;<br>
-public float boxHeight;<br>
-private Vector2 playerSize;<br>
-private Vector2 boxSize;<br>
-private bool jumpRequest;<br>
-private bool grounded;<br>
-public float fallMultiplier = 2.5f;<br>
-public float LowJumpMultiplier = 2f;<br>
-private Rigidbody2D _rigidbody2D;</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
-    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
-    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight);
+public Transform target;<br>
+public Vector3 offset;</p>
+<pre><code>public float zoomSpeed = 4f;
+public float minZoom = 5f;
+public float maxZoom = 10f;
 
-}
+public float pitch=2f;
+
+public float YawSpeed = 100f;
+
+private float currentZoom = 10f;
+
+private float currentYaw = 0f;
 
 // Update is called once per frame
 void Update()
 {
-    if (Input.GetButtonDown(&quot;Jump&quot;) &amp;&amp; grounded)
-    {
-        jumpRequest = true;
-    }
-}
-private void FixedUpdate()
-{
-    //自然重力
-    Gud();
+    currentZoom -= Input.GetAxis(&quot;Mouse ScrollWheel&quot;);
+    currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);//限定缩放范围
 
-    if (jumpRequest)
-    {
-        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
-        jumpRequest = false;
-        grounded = false;
-    }
-    else
-    {
-        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
-        if (Physics2D.OverlapBox(boxCenter, boxSize, 0, mask) != null)
-        {
-            grounded = true;
-        }
-        else
-        {
-            grounded = false;
-        }
-    }
+    currentYaw += Input.GetAxis(&quot;Horizontal&quot;) * YawSpeed * Time.deltaTime;
+
 }
 
-private void Gud()
+private void LateUpdate()
 {
-    if (_rigidbody2D.velocity.y &lt; 0)
-    {
-        _rigidbody2D.gravityScale = fallMultiplier;
-    }
-    else if (_rigidbody2D.velocity.y &gt; 0 &amp;&amp; !Input.GetButton(&quot;Jump&quot;))
-    {
-        _rigidbody2D.gravityScale = LowJumpMultiplier;
-    }
-    else
-    {
-        _rigidbody2D.gravityScale = 1f;
-    }
-}
+    transform.position = target.position - offset * currentZoom;
+    transform.LookAt(target.position + Vector3.up*pitch);
 
-private void OnDrawGizmos()
-{
-    if (grounded)
-    {
-        Gizmos.color = Color.red;
-    }
-    else
-    {
-        Gizmos.color = Color.green;
-    }
-
-    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
-    Gizmos.DrawWireCube(boxCenter, boxSize);
+    transform.RotateAround(target.position, Vector3.up, currentYaw);
 }
 </code></pre>
 <p>}</p>
@@ -199,9 +148,9 @@ private void OnDrawGizmos()
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/eventsystems/">
+                <a href="https://Wei715547.github.io/post/zi-dong-xun-lu/">
                   <h3 class="post-title">
-                    EventSystems
+                    自动寻路
                   </h3>
                 </a>
               </div>

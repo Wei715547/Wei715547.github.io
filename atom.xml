@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-03T15:56:44.470Z</updated>
+    <updated>2020-06-06T05:39:05.356Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,93 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[视角缩放/跟随]]></title>
+        <id>https://Wei715547.github.io/post/shi-jiao-suo-fang-gen-sui/</id>
+        <link href="https://Wei715547.github.io/post/shi-jiao-suo-fang-gen-sui/">
+        </link>
+        <updated>2020-06-06T05:34:56.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class CamerCT : MonoBehaviour<br>
+{<br>
+public Transform target;<br>
+public Vector3 offset;</p>
+<pre><code>public float zoomSpeed = 4f;
+public float minZoom = 5f;
+public float maxZoom = 10f;
+
+public float pitch=2f;
+
+public float YawSpeed = 100f;
+
+private float currentZoom = 10f;
+
+private float currentYaw = 0f;
+
+// Update is called once per frame
+void Update()
+{
+    currentZoom -= Input.GetAxis(&quot;Mouse ScrollWheel&quot;);
+    currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);//限定缩放范围
+
+    currentYaw += Input.GetAxis(&quot;Horizontal&quot;) * YawSpeed * Time.deltaTime;
+
+}
+
+private void LateUpdate()
+{
+    transform.position = target.position - offset * currentZoom;
+    transform.LookAt(target.position + Vector3.up*pitch);
+
+    transform.RotateAround(target.position, Vector3.up, currentYaw);
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[自动寻路]]></title>
+        <id>https://Wei715547.github.io/post/zi-dong-xun-lu/</id>
+        <link href="https://Wei715547.github.io/post/zi-dong-xun-lu/">
+        </link>
+        <updated>2020-06-06T04:58:09.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.AI;</p>
+<p>public class PlayerCT : MonoBehaviour<br>
+{</p>
+<pre><code>public LayerMask movementMask;
+NavMeshAgent navMeshAgent;
+
+// Start is called before the first frame update
+void Start()
+{
+    animator = this.transform.GetComponent&lt;Animator&gt;();
+    navMeshAgent = GetComponent&lt;NavMeshAgent&gt;();
+}
+
+// Update is called once per frame
+void Update()
+{
+    if (Input.GetMouseButtonDown(1))
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (!Physics.Raycast(ray, out hit,100,movementMask))
+        {
+            //hit.collider .gameObject //射线打到的物体
+            return;
+        }
+        navMeshAgent.destination = hit.point;
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[File类，R/W]]></title>
         <id>https://Wei715547.github.io/post/file-lei-rw/</id>
@@ -432,165 +519,6 @@ Console.WriteLine(methodName);//调用方法名<br>
 <p>}<br>
 <img src="https://Wei715547.github.io/post-images/1590822404207.jpg" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1590822413420.jpg" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[反射特性]]></title>
-        <id>https://Wei715547.github.io/post/fan-she-te-xing/</id>
-        <link href="https://Wei715547.github.io/post/fan-she-te-xing/">
-        </link>
-        <updated>2020-05-30T03:57:11.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Reflection;</p>
-<p>namespace 反射与特性<br>
-{<br>
-class Program<br>
-{<br>
-[Obsolete(&quot;过时的方法，请使用新的方法&quot;)]//弃用标记特性 Obsolete<br>
-static void OldNethod()<br>
-{<br>
-Console.WriteLine(&quot;OM&quot;);<br>
-}<br>
-static void Main(string[] args)<br>
-{<br>
-MyClass my = new MyClass();<br>
-Type type = my.GetType();<br>
-Console.WriteLine(type .Name);//类的名字<br>
-Console.WriteLine(type .Namespace);//类峰命名空间<br>
-Console.WriteLine(type .Assembly );//类峰程序集命名空间</p>
-<pre><code>        FieldInfo[] array = type.GetFields();//获取类的字段
-        foreach (FieldInfo info in array )
-        {
-            Console.WriteLine(info .Name+&quot; &quot;);
-        }
-
-        PropertyInfo[] array2 = type.GetProperties();//获取类属性
-        foreach (PropertyInfo info in array2 )
-        {
-            Console.WriteLine(info .Name +&quot; &quot;);
-        }
-
-        MethodInfo[] array3 = type.GetMethods();//获取类的方法
-        foreach (MethodInfo info in array3)
-        { 
-            Console.WriteLine(info .Name +&quot; &quot;);
-        }
-</code></pre>
-<p>//-----------------------------------------------------------------------------<br>
-MyClass my = new MyClass();<br>
-Assembly assem = my.GetType().Assembly;//通过类的Type对象，获取它所在的抽象集 Assembly<br>
-Console.WriteLine(assem.FullName);<br>
-Type[] types = assem.GetTypes();//程序集中所有类的Type对象<br>
-foreach (var type in types)<br>
-{<br>
-Console.WriteLine(type);//利用Type对象输出程序集中所有类名字<br>
-}<br>
-//OldNethod();<br>
-}<br>
-}<br>
-}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[泛型类/方法/委托]]></title>
-        <id>https://Wei715547.github.io/post/fan-xing-lei-fang-fa-wei-tuo/</id>
-        <link href="https://Wei715547.github.io/post/fan-xing-lei-fang-fa-wei-tuo/">
-        </link>
-        <updated>2020-05-30T02:55:40.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 泛型类<br>
-{<br>
-//泛型类<br>
-class ClassA<T><br>
-{<br>
-private T a;<br>
-private T b;</p>
-<pre><code>    public ClassA (T a,T b)
-    {
-        this.a = a;
-        this.b = b;
-    }
-
-    public string Show()
-    {
-        return a +&quot; &quot;+ b;
-    }
-
-}
-</code></pre>
-<h2 id="">}</h2>
-<p>/*using System;</p>
-<p>namespace 泛型类<br>
-{<br>
-class Program<br>
-{<br>
-public static string  GetSum&lt;T,T2,T3&gt;(T a,T b)//泛型方法,可指定多个泛型，在调用是指定类型<br>
-{<br>
-return a +&quot; &quot;+ b;<br>
-}</p>
-<pre><code>    static void Main(string[] args)
-    {
-
-        var o1 = new ClassA &lt;int&gt;(22,53);
-
-        Console.WriteLine(  o1.Show());
-
-        var s1 = new ClassA&lt;string&gt;(&quot;wei&quot;, &quot;715&quot;);
-
-        Console.WriteLine(s1.Show());
-
-        Console.WriteLine(GetSum &lt;int ,int ,int &gt;(123,314));//有多个泛型时，调用要指定所有类型
-        Console.WriteLine( GetSum&lt;string ,string ,string &gt; (&quot;da&quot;,&quot;werr&quot;));
-
-
-        //Console.ReadKey();
-
-    }
-}
-</code></pre>
-<p>}*/<br>
-using System;<br>
-using System.Collections.Generic;</p>
-<p>//泛型委托<br>
-delegate T NumberChanger<T>(T n);//返回值与参数类型为T<br>
-namespace GenericDelegateAppl<br>
-{<br>
-class TestDelegate<br>
-{<br>
-static int num = 10;<br>
-public static int AddNum(int p)<br>
-{<br>
-num += p;<br>
-return num;<br>
-}</p>
-<pre><code>    public static int MultNum(int q)
-    {
-        num *= q;
-        return num;
-    }
-    public static int getNum()
-    {
-        return num;
-    }
-
-    static void Main(string[] args)
-    {
-        // 创建委托实例
-        //NumberChanger&lt;int&gt; nc1 = new NumberChanger&lt;int&gt;(AddNum);
-        NumberChanger&lt;int&gt; nc1 = AddNum;//上一行简写
-        NumberChanger&lt;int&gt; nc2 = new NumberChanger&lt;int&gt;(MultNum);
-        // 使用委托对象调用方法
-        nc1(25);
-        Console.WriteLine(&quot;Value of Num: {0}&quot;, getNum());
-        nc2(5);
-        Console.WriteLine(&quot;Value of Num: {0}&quot;, getNum());
-        Console.ReadKey();
-    }
-}
-</code></pre>
-<p>}</p>
 ]]></content>
     </entry>
 </feed>
