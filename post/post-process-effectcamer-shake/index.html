@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>点击+/-播放动画 | Wei: Development technology accumulation</title>
+<title>Post Process Effect/Camer Shake | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,13 +18,12 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-/// 
-/// 门
-/// 
-public class Door : MonoB..." />
+    <meta name="description" content="
+
+
+
+
+..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -101,63 +100,24 @@ public class Door : MonoB..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">点击+/-播放动画</h2>
-            <div class="post-date">2020-04-04</div>
+            <h2 class="post-title">Post Process Effect/Camer Shake</h2>
+            <div class="post-date">2020-06-07</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// 门<br>
-/// </summary><br>
-public class Door : MonoBehaviour<br>
-{</p>
-<pre><code>public bool doorStart = false ;
-
-public string animName = &quot;Door&quot;;
-
-private Animation anim;
-
-private void Start()
-{
-    anim = GetComponent&lt;Animation&gt;();
-}
-
-//点击当前物体是调用
-private void OnMouseDown()
-{
-    //如果开门状态
-    if (doorStart)
-    {
-        //关门
-        if (anim.isPlaying == false)
-        {
-            anim[animName].time = anim[animName].length;//从最后开始播
-        }
-
-        anim[animName].speed = -1;//倒叙播放
-    }
-    else
-    {          
-        //开门
-        anim[animName].speed = 1;
-    }
-    //播放动画
-    anim.Play(animName);
-    doorStart =! doorStart;
-}
-</code></pre>
-<p>}</p>
+              <p><img src="https://Wei715547.github.io/post-images/1591513702359.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1591513708909.PNG" alt="" loading="lazy"></p>
+<p><img src="https://Wei715547.github.io/post-images/1591514562757.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1591514569006.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1591514575527.PNG" alt="" loading="lazy"></p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/dao-ji-shi-mei-ge-gu-ding-shi-jian-chong-fu-zhi-xing/">
+                <a href="https://Wei715547.github.io/post/czhong-diao-yong-lua-cheng-xu/">
                   <h3 class="post-title">
-                    倒计时-每隔固定时间重复执行
+                    C#中调用Lua程序
                   </h3>
                 </a>
               </div>
