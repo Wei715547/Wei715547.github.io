@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-06T08:28:00.075Z</updated>
+    <updated>2020-06-07T04:59:39.509Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,69 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[C#中调用Lua程序]]></title>
+        <id>https://Wei715547.github.io/post/czhong-diao-yong-lua-cheng-xu/</id>
+        <link href="https://Wei715547.github.io/post/czhong-diao-yong-lua-cheng-xu/">
+        </link>
+        <updated>2020-06-07T04:56:04.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using XLua;<br>
+public class HW2 : MonoBehaviour<br>
+{<br>
+// Start is called before the first frame update<br>
+void Start()<br>
+{<br>
+//1.通过资源加载执行Lua程序<br>
+/<em>TextAsset ta = Resources.Load<TextAsset>(&quot;面向对象实现.lua&quot;);<br>
+//print(ta);<br>
+LuaEnv env = new LuaEnv();<br>
+env.DoString(ta.text);<br>
+env.Dispose();</em>/</p>
+<pre><code>    //2.通过require 'XXX'执行Lua程序
+    LuaEnv env = new LuaEnv();
+    env.DoString(&quot;require '面向对象实现'&quot;);
+    env.Dispose();
+
+}
+</code></pre>
+<p>}</p>
+<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using System.IO;<br>
+using UnityEngine;<br>
+using XLua;<br>
+public class Loader : MonoBehaviour<br>
+{<br>
+// Start is called before the first frame update<br>
+void Start()<br>
+{<br>
+LuaEnv env = new LuaEnv();</p>
+<pre><code>    env.AddLoader(MyLoader);//先执行自定义的Loader，自定义Loader中有返回Lua程序时，将不再执行系统加载的Lua程序
+    env.DoString(&quot;require 'text01'&quot;);//加载的文件会传递给Lodader
+    env.Dispose();
+}
+</code></pre>
+<p>//自定义Loader<br>
+private byte [] MyLoader(ref string filePath)<br>
+{<br>
+print(filePath);</p>
+<pre><code>    //通过自定义Loader返回Lua程序
+    //string s = &quot;print(123)&quot;;
+    //return System .Text .Encoding.UTF8 .GetBytes (s);
+
+    print(Application.streamingAssetsPath);
+
+    //通过路径读取返回Lua程序
+    string absPath = Application.streamingAssetsPath + &quot;/&quot; + filePath + &quot;.lua.txt&quot;;
+    return System.Text.Encoding.UTF8.GetBytes(File.ReadAllText( absPath));
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[生命周期]]></title>
         <id>https://Wei715547.github.io/post/sheng-ming-zhou-qi/</id>
@@ -433,53 +496,6 @@ Console.ReadKey();</p>
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[自定义特性]]></title>
-        <id>https://Wei715547.github.io/post/zi-ding-yi-te-xing/</id>
-        <link href="https://Wei715547.github.io/post/zi-ding-yi-te-xing/">
-        </link>
-        <updated>2020-05-30T07:34:50.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 自定义特性<br>
-{<br>
-//1.也行类的后缀以Attribute结尾<br>
-//2.需要继承自:System.Attribute<br>
-//3.一般情况下声明为 sealed(不需要被继承)<br>
-//4.一般情况下特性类用来表示目标结构的一些状态（定义一些字段/属性，一般不需要定义方法）<br>
-[AttributeUsage(AttributeTargets.Class)]//表示特性类的使用目标,(表示特性类可以应用到程序的那些结构)<br>
-sealed class MyTestAttribute :System.Attribute<br>
-{<br>
-public string Description { get; set; }<br>
-public string VersionNumber { get; set; }<br>
-public int ID { get; set; }</p>
-<pre><code>    public MyTestAttribute(string des)
-    {
-        Description = des;
-    }
-}
-</code></pre>
-<p>}<br>
-//---------------------------------使用---------------------<br>
-using System;</p>
-<p>namespace 自定义特性<br>
-{<br>
-[MyTest(&quot;自定义特性类&quot;,ID = 100)]<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-Type type = typeof(Program);//通过typeof+类名，获取类的type对象<br>
-object[] array = type.GetCustomAttributes(false);//获取类的所有特性（false）不包括父类的<br>
-MyTestAttribute mytest = array[0] as MyTestAttribute;<br>
-Console.WriteLine(mytest.Description);<br>
-Console.WriteLine(mytest .ID );<br>
-}<br>
-}<br>
-}</p>
 ]]></content>
     </entry>
 </feed>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Thread类开启线程 | Wei: Development technology accumulation</title>
+<title>Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,15 +18,9 @@
 
 
 
-    <meta name="description" content="using System;
-using System.Threading;
-using System.Threading.Tasks;
-namespace 线程_通过Thread类开启
-{
-class Program
-{
-static vo..." />
-    <meta name="keywords" content="" />
+    <meta name="description" content="年月增长，我宜强盛。
+用于Unity+开发的技术积累">
+    
   </head>
   <body>
     <div id="app" class="main">
@@ -101,95 +95,36 @@ static vo..." />
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">Thread类开启线程</h2>
-            <div class="post-date">2020-05-31</div>
-            
-            <div class="post-content" v-pre>
-              <p>using System;<br>
-using System.Threading;<br>
-using System.Threading.Tasks;<br>
-namespace 线程_通过Thread类开启<br>
-{<br>
-class Program<br>
-{<br>
-static void Downloading(object fileName)<br>
-{<br>
-Console.WriteLine(&quot;startDownloadong&quot;+Thread .CurrentThread .ManagedThreadId +fileName );<br>
-Thread.Sleep(2000);<br>
-Console.WriteLine(&quot;END&quot;);<br>
-}<br>
-static void Main(string[] args)<br>
-{<br>
-//方式1.直接赋值一个方法引用<br>
-/<em>Thread t = new Thread(Downloading);<br>
-t.Start();//开始执行线程<br>
-Console.WriteLine(&quot;Main&quot;);</em>/</p>
-<pre><code>        //开启方式2。赋值一个表达式（匿名方法）
-        /*Thread t = new Thread(() =&gt;
-       {
-           Console.WriteLine(&quot;startDownloadong&quot; + Thread.CurrentThread.ManagedThreadId);
-           Thread.Sleep(2000);
-           Console.WriteLine(&quot;END&quot;);
-       });
-        t.Start();*/
-
-        /*//方式1.传递参数
-        Thread t = new Thread(Downloading);
-        t.Start(&quot;XXX&quot;);//开始执行线程
-        Console.WriteLine(&quot;Main&quot;);*/
-
-        //2.创建一个对象，将要传递的数据放到对象里进行传递
-        Mythread my = new Mythread(&quot;wei7&quot;, &quot;github.io&quot;);
-        Thread t = new Thread(my.DownloadFile);//以类里的普通方法作为线程方法
-        t.Start();//开启线程
-        Console.ReadKey();
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//用来传递参数的类<br>
-using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;<br>
-using System.Threading;</p>
-<p>namespace 线程_通过Thread类开启<br>
-{<br>
-class Mythread<br>
-{<br>
-private string filename;<br>
-private string filepath;</p>
-<pre><code>    public Mythread(string name,string path)
-    {
-        this.filename = name;
-        this.filepath = path;
-    }
-    public void DownloadFile()
-    {
-        Console.WriteLine(&quot;开始下载&quot;+filepath+filename);
-        Thread.Sleep(2000);
-        Console.WriteLine(&quot;下载完成&quot;);
-    }
-}
-</code></pre>
-<p>}</p>
-
-            </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/wei-tuo-kai-qi-xian-cheng/">
-                  <h3 class="post-title">
-                    委托开启线程
-                  </h3>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/hello-gridea/">
+                  <h2 class="post-title">Hello Gridea</h2>
                 </a>
+                <div class="post-date">
+                  2018-12-12
+                </div>
+                <div class="post-abstract">
+                  <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+
+                </div>
               </div>
-            
+              
+                <a class="right" href="https://Wei715547.github.io/post/hello-gridea/">
+                  <div class="feature-container" style="background-image: url('https://Wei715547.github.io/post-images/hello-gridea.png')">
+                  </div>
+                </a>
+              
+            </article>
+          
 
-            
-
-          </div>
+          <div class="pagination-container">
+  
+    <a href="https://Wei715547.github.io/page/8/" class="prev"><i class="icon-arrow-ios-back-outline"></i> 上一页</a>
+  
+  
+</div>
 
         </div>
       </div>
