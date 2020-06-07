@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-07T08:45:11.212Z</updated>
+    <updated>2020-06-07T14:50:37.363Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -49,13 +49,43 @@ env.Dispose();</em>/</p>
     LuaEnv env = new LuaEnv();
     env.DoString(&quot;require '面向对象实现'&quot;);
     //访问Lua中的全局变量
-    int num = env.Global.Get&lt;int&gt;(&quot;num1&quot;);
+    /*int num = env.Global.Get&lt;int&gt;(&quot;num1&quot;);
     print(num);
     string s = env.Global.Get&lt;string&gt;(&quot;str&quot;);
     print(s);
     bool t = env.Global.Get&lt;bool&gt;(&quot;isOn&quot;);
-    print(t);
+    print(t);*/
+    //env.Dispose();
+
+    //映射到类
+    /*Person p = env.Global.Get&lt;Person&gt;(&quot;person&quot;);//值拷贝，耗费性能，
+    print(p.name + &quot;-&quot; + p.age);
+    p.name = &quot;ZZ&quot;;
+    env.DoString(&quot;print(person.name)&quot;);//不改变Lua中的变量值*/
+
+    //映射到接口
+    IPerson p = env.Global.Get&lt;IPerson&gt;(&quot;person&quot;);//引用拷贝，可改变Lua中的值
+    print(p.name + &quot;-&quot; + p.age);
+    p.name = &quot;ZL&quot;;
+    env.DoString(&quot;print(person.name)&quot;);
+
     env.Dispose();
+
+}
+
+//将Lua中的table映射到类（耗费性能）
+class Person
+{
+    public string name;
+    public int age;
+}
+
+//将Lua中的变量映射到接口
+[CSharpCallLua]
+interface IPerson
+{
+    string name { get; set; }
+    int age { get; set; }
 
 }
 </code></pre>

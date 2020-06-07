@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1591516211175">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1591541427905">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ public class HW2 : MonoBehavi..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1591516211175" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1591541427905" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -122,13 +122,43 @@ env.Dispose();</em>/</p>
     LuaEnv env = new LuaEnv();
     env.DoString(&quot;require '面向对象实现'&quot;);
     //访问Lua中的全局变量
-    int num = env.Global.Get&lt;int&gt;(&quot;num1&quot;);
+    /*int num = env.Global.Get&lt;int&gt;(&quot;num1&quot;);
     print(num);
     string s = env.Global.Get&lt;string&gt;(&quot;str&quot;);
     print(s);
     bool t = env.Global.Get&lt;bool&gt;(&quot;isOn&quot;);
-    print(t);
+    print(t);*/
+    //env.Dispose();
+
+    //映射到类
+    /*Person p = env.Global.Get&lt;Person&gt;(&quot;person&quot;);//值拷贝，耗费性能，
+    print(p.name + &quot;-&quot; + p.age);
+    p.name = &quot;ZZ&quot;;
+    env.DoString(&quot;print(person.name)&quot;);//不改变Lua中的变量值*/
+
+    //映射到接口
+    IPerson p = env.Global.Get&lt;IPerson&gt;(&quot;person&quot;);//引用拷贝，可改变Lua中的值
+    print(p.name + &quot;-&quot; + p.age);
+    p.name = &quot;ZL&quot;;
+    env.DoString(&quot;print(person.name)&quot;);
+
     env.Dispose();
+
+}
+
+//将Lua中的table映射到类（耗费性能）
+class Person
+{
+    public string name;
+    public int age;
+}
+
+//将Lua中的变量映射到接口
+[CSharpCallLua]
+interface IPerson
+{
+    string name { get; set; }
+    int age { get; set; }
 
 }
 </code></pre>
