@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-07T07:49:32.269Z</updated>
+    <updated>2020-06-07T08:45:11.212Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,16 +11,6 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
-    <entry>
-        <title type="html"><![CDATA[Post Process Effect]]></title>
-        <id>https://Wei715547.github.io/post/post-process-effect/</id>
-        <link href="https://Wei715547.github.io/post/post-process-effect/">
-        </link>
-        <updated>2020-06-07T07:05:12.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1591513702359.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1591513708909.PNG" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
     <entry>
         <title type="html"><![CDATA[Post Process Effect/Camer Shake]]></title>
         <id>https://Wei715547.github.io/post/post-process-effectcamer-shake/</id>
@@ -403,6 +393,81 @@ Console.WriteLine(&quot;线程结束&quot;);<br>
 
         Console.WriteLine(&quot;Main&quot;);
         Console.ReadKey();
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Thread类开启线程]]></title>
+        <id>https://Wei715547.github.io/post/thread-lei-kai-qi-xian-cheng/</id>
+        <link href="https://Wei715547.github.io/post/thread-lei-kai-qi-xian-cheng/">
+        </link>
+        <updated>2020-05-31T15:49:26.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Threading;<br>
+using System.Threading.Tasks;<br>
+namespace 线程_通过Thread类开启<br>
+{<br>
+class Program<br>
+{<br>
+static void Downloading(object fileName)<br>
+{<br>
+Console.WriteLine(&quot;startDownloadong&quot;+Thread .CurrentThread .ManagedThreadId +fileName );<br>
+Thread.Sleep(2000);<br>
+Console.WriteLine(&quot;END&quot;);<br>
+}<br>
+static void Main(string[] args)<br>
+{<br>
+//方式1.直接赋值一个方法引用<br>
+/<em>Thread t = new Thread(Downloading);<br>
+t.Start();//开始执行线程<br>
+Console.WriteLine(&quot;Main&quot;);</em>/</p>
+<pre><code>        //开启方式2。赋值一个表达式（匿名方法）
+        /*Thread t = new Thread(() =&gt;
+       {
+           Console.WriteLine(&quot;startDownloadong&quot; + Thread.CurrentThread.ManagedThreadId);
+           Thread.Sleep(2000);
+           Console.WriteLine(&quot;END&quot;);
+       });
+        t.Start();*/
+
+        /*//方式1.传递参数
+        Thread t = new Thread(Downloading);
+        t.Start(&quot;XXX&quot;);//开始执行线程
+        Console.WriteLine(&quot;Main&quot;);*/
+
+        //2.创建一个对象，将要传递的数据放到对象里进行传递
+        Mythread my = new Mythread(&quot;wei7&quot;, &quot;github.io&quot;);
+        Thread t = new Thread(my.DownloadFile);//以类里的普通方法作为线程方法
+        t.Start();//开启线程
+        Console.ReadKey();
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//用来传递参数的类<br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;<br>
+using System.Threading;</p>
+<p>namespace 线程_通过Thread类开启<br>
+{<br>
+class Mythread<br>
+{<br>
+private string filename;<br>
+private string filepath;</p>
+<pre><code>    public Mythread(string name,string path)
+    {
+        this.filename = name;
+        this.filepath = path;
+    }
+    public void DownloadFile()
+    {
+        Console.WriteLine(&quot;开始下载&quot;+filepath+filename);
+        Thread.Sleep(2000);
+        Console.WriteLine(&quot;下载完成&quot;);
     }
 }
 </code></pre>
