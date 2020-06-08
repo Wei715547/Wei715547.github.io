@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1591602226924">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1591608783112">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -18,14 +18,12 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-/// 
-/// 倒计时
-/// 
-p..." />
+    <meta name="description" content="//显示时间
+public static void UpdataTime (float time)
+{
+int minute = (int)(time / 60);
+int seconds = (int)(time % 60);
+inste..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -35,7 +33,7 @@ p..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1591602226924" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1591608783112" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -106,7 +104,14 @@ p..." />
             <div class="post-date">2020-04-04</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
+              <p>//显示时间<br>
+public static void UpdataTime (float time)<br>
+{<br>
+int minute = (int)(time / 60);<br>
+int seconds = (int)(time % 60);<br>
+instence.timeText.text = minute.ToString(&quot;00&quot;) + &quot;:&quot; + seconds.ToString(&quot;00&quot;);<br>
+}</p>
+<p>using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;<br>
 using UnityEngine.UI;<br>
