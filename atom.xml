@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-11T07:35:25.646Z</updated>
+    <updated>2020-06-11T09:46:33.733Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,33 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[Next Scence Don't Destroy]]></title>
+        <id>https://Wei715547.github.io/post/next-scence-dont-destroy/</id>
+        <link href="https://Wei715547.github.io/post/next-scence-dont-destroy/">
+        </link>
+        <updated>2020-06-11T08:38:18.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class CanvasDS : MonoBehaviour<br>
+{<br>
+//声明单例，判断其在场景中是否已存在（被赋值）<br>
+public static CanvasDS instance;</p>
+<pre><code>void Awake()
+{
+    if (instance != null)
+    {
+        Destroy(gameObject);//已存在与场景中时销毁此对象，保证场景中只有一个此类对象
+        return;
+    }
+    instance = this;
+    DontDestroyOnLoad(this);
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Audio Mixer]]></title>
         <id>https://Wei715547.github.io/post/audio-mixer/</id>
@@ -364,64 +391,6 @@ Socket tcpClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, Pro
 </code></pre>
 <p>}<br>
 <img src="https://Wei715547.github.io/post-images/1591076933494.PNG" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Socket服务器端口]]></title>
-        <id>https://Wei715547.github.io/post/socket-fu-wu-qi-duan-kou/</id>
-        <link href="https://Wei715547.github.io/post/socket-fu-wu-qi-duan-kou/">
-        </link>
-        <updated>2020-06-02T05:40:59.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Net;<br>
-using System.Net.Sockets;<br>
-using System.Text;</p>
-<p>namespace Socket服务器端<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-//创建Socket<br>
-Socket tcpServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);//网络、数据流形式、Tcp协议</p>
-<pre><code>        //1.绑定IP端口号
-        //IPAddress ipaddress = new IPAddress(new byte[] { 192,168,137,1 });
-        IPAddress ipaddress = IPAddress.Parse(&quot;192.168.137.1&quot;);//可以将一个字符串的IP地址转化为IPaddress的对象、同上一行代码
-        EndPoint point = new IPEndPoint(ipaddress,7788);//IPEndPoint:IP端口的一层封装类
-        //申请方法
-        tcpServer.Bind(point);//向系统申请一个可用的ip根端口号，用来做通信
-        
-        //2.开始监听客户端连接
-        //监听方法
-        tcpServer.Listen(100);//开始监听等待客户端连接、允许（100）个客户端连接进来。
-        Console.WriteLine(&quot;开始监听连接&quot;);
-
-        //使用返回的Socket做通信
-
-        //3.接收客户端的连接//接收连接方法
-        //客户端的Socket对象的引用、用来收发客户端的数据
-        Socket clientSocket = tcpServer.Accept();//暂停当前线程，直到有一个客户端连接进来，之后进行下面的代码。
-        Console.WriteLine(&quot;一个客户端连接&quot;);
-
-        //4.客户端连接后向客户端发送一个消息
-        string message = &quot;欢迎接入Socket&quot;;//向客户端传输的信息
-        byte[] data = Encoding.UTF8.GetBytes(message);//对一个字符串做编码，转为字节数组
-        clientSocket.Send(data);
-        Console.WriteLine(&quot;向客户端发送了一条数据&quot;);
-
-        //5.接收客户端的数据
-        byte[] datac = new byte[1024];//创建一个字节数组用来接收客户端发过来的数据
-        int length = clientSocket.Receive(datac);
-        string messagec = Encoding.UTF8.GetString(datac, 0, length);//0~length的字节数据转化为字符串（只把接收到的数据转化为字符串）
-        Console.WriteLine(&quot;接收到一条从客户端发来的消息&quot;+messagec);
-
-
-        Console.ReadKey();
-    }
-}
-</code></pre>
-<p>}<br>
-<img src="https://Wei715547.github.io/post-images/1591076704544.PNG" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
