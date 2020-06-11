@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>HP-Attack-Shell | Wei: Development technology accumulation</title>
+<title>UI图标冷却 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,13 +18,10 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-/// 
-/// HP，HP受损方法
-..." />
+    <meta name="description" content="private void FixedUpdate()
+{
+coodTime += Time.deltaTime;
+    if (Input.GetKeyDown(KeyCode.Z) &amp;&amp; coodTime &gt; se..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -101,114 +98,43 @@ using UnityEngine.UI;
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">HP-Attack-Shell</h2>
-            <div class="post-date">2020-04-07</div>
+            <h2 class="post-title">UI图标冷却</h2>
+            <div class="post-date">2020-06-11</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.UI;<br>
-/// <summary><br>
-/// HP，HP受损方法<br>
-/// </summary><br>
-public class TankHealth : MonoBehaviour<br>
+              <p>private void FixedUpdate()<br>
 {<br>
-public int hp = 100;<br>
-public GameObject tankExplosion;<br>
-public AudioClip tankExplositionAudio;<br>
-public Slider hpSlider;<br>
-private int hpTotal;<br>
-// Use this for initialization<br>
-void Start()<br>
-{<br>
-hpTotal = hp;<br>
-}</p>
-<pre><code>// Update is called once per frame
-void Update()
-{
-
-}
-void TankDamage()
-{
-    if (hp &lt;= 0) return;
-    hp -= Random.Range(10, 20);
-    hpSlider.value = (float)hp / hpTotal;
-    if (hp &lt;= 0)
+coodTime += Time.deltaTime;</p>
+<pre><code>    if (Input.GetKeyDown(KeyCode.Z) &amp;&amp; coodTime &gt; setcoodtime)
     {
-        AudioSource.PlayClipAtPoint(tankExplositionAudio, transform.position);
-        GameObject.Instantiate(tankExplosion, transform.position + Vector3.up, transform.rotation);
-        GameObject.Destroy(this.gameObject);
+        au.PlayOneShot(russ, 1f);
+        Russing();
+        coodTime = 0;
     }
-}
-</code></pre>
-<p>}</p>
-<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// 按下攻击，发射子弹向FirePoint前方飞进<br>
-/// </summary><br>
-public class TankAttack : MonoBehaviour<br>
-{</p>
-<pre><code>public GameObject shellPrefab;
-public KeyCode fireKey = KeyCode.Space;
-private Transform firePosition;
-public float shellSpeed = 10;
-public AudioClip shoutAudio;
-// Use this for initialization
-void Start()
-{
-    firePosition = transform.Find(&quot;FirePosition&quot;);
 }
 
 // Update is called once per frame
 void Update()
 {
-    if (Input.GetKeyDown(fireKey))
+    //UI显示
+    if (coodTime &gt; setcoodtime)
     {
-        AudioSource.PlayClipAtPoint(shoutAudio, transform.position);
-        GameObject go = GameObject.Instantiate(shellPrefab, firePosition.position, firePosition.rotation)as GameObject;
-        go.GetComponent&lt;Rigidbody&gt;().velocity = go.transform.forward * shellSpeed;
+        coodUI.fillAmount = 0;
+    }else
+    {
+        coodUI.fillAmount = 1-coodTime/setcoodtime ;
     }
 }
-</code></pre>
-<p>}</p>
-<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// 子弹出发检测，（两物体都有触发器，其中一个有刚体组件，其中一个触发器勾选Is Tirgger）<br>
-///打中目标，调用目标受损方法<br>
-/// </summary><br>
-public class Shell : MonoBehaviour<br>
-{</p>
-<pre><code>public GameObject shellExplosionPrefab;
-public  AudioClip shellExplosionAudio;
-
-
-public void OnTriggerEnter(Collider collider)
-{
-    AudioSource.PlayClipAtPoint(shellExplosionAudio,transform.position);
-    GameObject.Instantiate(shellExplosionPrefab, transform.position, transform.rotation);
-    GameObject.Destroy(this.gameObject);
-    if (collider.tag == &quot;Tank&quot;)
-    {
-        collider.SendMessage(&quot;TankDamage&quot;);
-    }
-
-}
-</code></pre>
-<p>}</p>
+![](https://Wei715547.github.io/post-images/1591842421156.PNG)</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/fu-shi-jiao-yi-dong-xuan-zhuan/">
+                <a href="https://Wei715547.github.io/post/post-process-effectcamer-shake/">
                   <h3 class="post-title">
-                    俯视较移动旋转
+                    Post Process Effect/Camer Shake
                   </h3>
                 </a>
               </div>
