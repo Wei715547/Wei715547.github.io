@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>2D Jump | Wei: Development technology accumulation</title>
+<title>Audio Mixer | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,11 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class JumpBox : MonoBehaviour
+    <meta name="description" content="void Awake()
 {
-[R..." />
+//Nomal Slider Ct
+Vo.value = FindObjectOfType().volume;
+    //Pvo = transform.Find(&quot;Player_Slider&qu..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -100,108 +99,35 @@ public class JumpBox : MonoBehaviour
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">2D Jump</h2>
-            <div class="post-date">2020-04-12</div>
+            <h2 class="post-title">Audio Mixer</h2>
+            <div class="post-date">2020-06-11</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class JumpBox : MonoBehaviour<br>
+              <p>void Awake()<br>
 {<br>
-[Range(0, 10)] public float jumpVelocity = 5f;<br>
-public LayerMask mask;<br>
-public float boxHeight;<br>
-private Vector2 playerSize;<br>
-private Vector2 boxSize;<br>
-private bool jumpRequest;<br>
-private bool grounded;<br>
-public float fallMultiplier = 2.5f;<br>
-public float LowJumpMultiplier = 2f;<br>
-private Rigidbody2D _rigidbody2D;</p>
-<pre><code>// Start is called before the first frame update
-void Start()
-{
-    _rigidbody2D = GetComponent&lt;Rigidbody2D&gt;();
-    playerSize = GetComponent&lt;SpriteRenderer&gt;().bounds.size;
-    boxSize = new Vector2(playerSize.x * 0.8f, boxHeight);
+//Nomal Slider Ct<br>
+Vo.value = FindObjectOfType<AudioSource>().volume;</p>
+<pre><code>    //Pvo = transform.Find(&quot;Player_Slider&quot;).GetComponent&lt;Slider&gt;();
 
+    auM.GetFloat(&quot;MainVolume&quot;,out float v);
+    Pvo.value = v;//Audio Mixer output value  to Slider
 }
 
-// Update is called once per frame
-void Update()
+private void Update()
 {
-    if (Input.GetButtonDown(&quot;Jump&quot;) &amp;&amp; grounded)
-    {
-        jumpRequest = true;
-    }
-}
-private void FixedUpdate()
-{
-    //自然重力
-    Gud();
-
-    if (jumpRequest)
-    {
-        _rigidbody2D.AddForce(Vector2.up * jumpVelocity, ForceMode2D.Impulse);
-        jumpRequest = false;
-        grounded = false;
-    }
-    else
-    {
-        Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
-        if (Physics2D.OverlapBox(boxCenter, boxSize, 0, mask) != null)
-        {
-            grounded = true;
-        }
-        else
-        {
-            grounded = false;
-        }
-    }
-}
-
-private void Gud()
-{
-    if (_rigidbody2D.velocity.y &lt; 0)
-    {
-        _rigidbody2D.gravityScale = fallMultiplier;
-    }
-    else if (_rigidbody2D.velocity.y &gt; 0 &amp;&amp; !Input.GetButton(&quot;Jump&quot;))
-    {
-        _rigidbody2D.gravityScale = LowJumpMultiplier;
-    }
-    else
-    {
-        _rigidbody2D.gravityScale = 1f;
-    }
-}
-
-private void OnDrawGizmos()
-{
-    if (grounded)
-    {
-        Gizmos.color = Color.red;
-    }
-    else
-    {
-        Gizmos.color = Color.green;
-    }
-
-    Vector2 boxCenter = (Vector2)transform.position + (Vector2.down * playerSize.y * 0.5f);
-    Gizmos.DrawWireCube(boxCenter, boxSize);
-}
-</code></pre>
-<p>}</p>
+    //Panel enable update the value
+    FindObjectOfType&lt;AudioSource&gt;().volume = Vo.value;
+    auM .SetFloat(&quot;MainVolume&quot;, Pvo.value);
+}</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/eventsystems/">
+                <a href="https://Wei715547.github.io/post/ui-tu-biao-leng-que/">
                   <h3 class="post-title">
-                    EventSystems
+                    UI图标冷却
                   </h3>
                 </a>
               </div>

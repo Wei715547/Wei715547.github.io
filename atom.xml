@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-11T02:27:07.391Z</updated>
+    <updated>2020-06-11T03:08:41.974Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,30 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[Audio Mixer]]></title>
+        <id>https://Wei715547.github.io/post/audio-mixer/</id>
+        <link href="https://Wei715547.github.io/post/audio-mixer/">
+        </link>
+        <updated>2020-06-11T02:36:35.000Z</updated>
+        <content type="html"><![CDATA[<p>void Awake()<br>
+{<br>
+//Nomal Slider Ct<br>
+Vo.value = FindObjectOfType<AudioSource>().volume;</p>
+<pre><code>    //Pvo = transform.Find(&quot;Player_Slider&quot;).GetComponent&lt;Slider&gt;();
+
+    auM.GetFloat(&quot;MainVolume&quot;,out float v);
+    Pvo.value = v;//Audio Mixer output value  to Slider
+}
+
+private void Update()
+{
+    //Panel enable update the value
+    FindObjectOfType&lt;AudioSource&gt;().volume = Vo.value;
+    auM .SetFloat(&quot;MainVolume&quot;, Pvo.value);
+}</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[UI图标冷却]]></title>
         <id>https://Wei715547.github.io/post/ui-tu-biao-leng-que/</id>
@@ -395,70 +419,6 @@ Socket tcpServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, Pro
 </code></pre>
 <p>}<br>
 <img src="https://Wei715547.github.io/post-images/1591076704544.PNG" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[线程池/Task类开启线程]]></title>
-        <id>https://Wei715547.github.io/post/xian-cheng-chi/</id>
-        <link href="https://Wei715547.github.io/post/xian-cheng-chi/">
-        </link>
-        <updated>2020-06-01T05:11:19.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Threading;</p>
-<p>namespace 线程池<br>
-{<br>
-class Program<br>
-{<br>
-static void ThreadMethod(object state)<br>
-{<br>
-Console.WriteLine(&quot;线程开始&quot;+Thread .CurrentThread .ManagedThreadId);<br>
-Thread.Sleep(2000);<br>
-Console.WriteLine(&quot;线程结束&quot;);<br>
-}</p>
-<pre><code>    static void Main(string[] args)
-    {
-        ThreadPool.QueueUserWorkItem(ThreadMethod);//开启一个工作线程（适合耗时较短的任务）
-        ThreadPool.QueueUserWorkItem(ThreadMethod);
-        ThreadPool.QueueUserWorkItem(ThreadMethod);
-        ThreadPool.QueueUserWorkItem(ThreadMethod);
-        ThreadPool.QueueUserWorkItem(ThreadMethod);
-        Console.ReadKey();
-
-
-    }
-}
-</code></pre>
-<p>}<br>
-//-------------------------------------------------------------------------<br>
-using System;<br>
-using System.Threading;<br>
-using System.Threading.Tasks;</p>
-<p>namespace Task类开启线程<br>
-{<br>
-class Program<br>
-{<br>
-static void ThreadMethod()<br>
-{<br>
-Console.WriteLine(&quot;线程开始&quot; + Thread.CurrentThread.ManagedThreadId);<br>
-Thread.Sleep(2000);<br>
-Console.WriteLine(&quot;线程结束&quot;);<br>
-}</p>
-<pre><code>    static void Main(string[] args)
-    {
-        //1.开启方式
-        /*Task t = new Task(ThreadMethod);
-        t.Start();*/
-
-        //2.开启方式
-        /*TaskFactory tf = new TaskFactory();
-        Task t = tf.StartNew(ThreadMethod);*/
-
-        Console.WriteLine(&quot;Main&quot;);
-        Console.ReadKey();
-    }
-}
-</code></pre>
-<p>}</p>
 ]]></content>
     </entry>
 </feed>
