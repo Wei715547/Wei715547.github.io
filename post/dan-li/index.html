@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>多态（1）虚函数(复写所继承类中的虚方法） | Wei: Development technology accumulation</title>
+<title>单例 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,10 +18,13 @@
 
 
 
-    <meta name="description" content="//多态概念：在继承关系前提下，实例化出的不同对象，，这些对象调用相同的方法，但表现出不同的行为，就叫做多态。
-using System;
-using System.Collections.Generic;
-using System.Tex..." />
+    <meta name="description" content="3.单例模式---在被调用的脚本中，公开声明一个静态的该脚本实例，在初始化时使&quot;实例=this&quot;
+便于在其他脚本中直接调用该脚本与其中的方法。
+
+
+
+两脚本有碰撞，触发关系时可直接利用
+(碰撞)collsion.game..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -106,126 +109,79 @@ using System.Tex..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">多态（1）虚函数(复写所继承类中的虚方法）</h2>
-            <div class="post-date">2020-05-06</div>
+            <h2 class="post-title">单例</h2>
+            <div class="post-date">2020-06-12</div>
             
             <div class="post-content" v-pre>
-              <p>//多态概念：在继承关系前提下，实例化出的不同对象，，这些对象调用相同的方法，但表现出不同的行为，就叫做多态。</p>
-<p>using System;<br>
+              <p>3.单例模式---在被调用的脚本中，公开声明一个静态的该脚本实例，在初始化时使&quot;实例=this&quot;<br>
+便于在其他脚本中直接调用该脚本与其中的方法。<br>
+<img src="https://Wei715547.github.io/post-images/1589271341241.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589271396945.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1589963622098.PNG" alt="" loading="lazy"></p>
+<p>两脚本有碰撞，触发关系时可直接利用<br>
+(碰撞)collsion.gameObject.GetComponent&lt;被调用脚本名&gt;().方法名();<br>
+(触发)collsion.GetComponent&lt;被调用脚本名&gt;().方法名();<br>
+或SendMessage（以”方法名“调用物体中继承 MonoBehaviour 脚本的方法.）<br>
+(碰撞)collision.gameObject.SendMessage(&quot;方法名&quot;);<br>
+(触发)collsion.SendMessage(&quot;方法名&quot;);<br>
+调用对方脚本中的方法<br>
+<img src="https://Wei715547.github.io/post-images/1589272112653.PNG" alt="" loading="lazy"></p>
+<p>//4.单例模式<br>
+using System.Collections;<br>
 using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 多态<br>
+using UnityEngine;<br>
+using UnityEngine.SceneManagement;<br>
+public class GameManager : MonoBehaviour<br>
 {<br>
-class TrafficTool<br>
+public static GameManager instance;<br>
+SceneFader fader;<br>
+// Start is called before the first frame update<br>
+void Awake()<br>
 {<br>
-public virtual void Run()<br>
+if (instance!=null )<br>
 {<br>
-Console.WriteLine(&quot;启动&quot;);<br>
+return;<br>
 }<br>
-public virtual void Stop()<br>
-{<br>
-Console.WriteLine(&quot;停止&quot;);<br>
-}</p>
-<pre><code>    public void Break()
-    {
-        Console.WriteLine(&quot;抛锚&quot;);
-    }
+instance = this;<br>
+DontDestroyOnLoad(gameObject);</p>
+<pre><code>}
+
+//在外部将其他脚本通过此静态方法注册到GameManager中的变量（引用），（可在GameManager中调用其他脚本中的方法）
+ /*   void Awake()//被调用的脚本
+{
+    ani = GetComponent&lt;Animator&gt;();
+    FaderID = Animator.StringToHash(&quot;Fade&quot;);
+    ////将脚本指定为GameManager的变量，使其中的方法可以在gamemanager中调用
+    GameManager.RegisterCceneFader(this);
+}*/
+public static void RegisterCceneFader(SceneFader obj)
+{
+    instance.fader = obj;
+}
+
+public static void PlayerDied()
+{
+    instance.fader.FadeOut();//调用其他脚本中的方法
+    instance.Invoke(&quot;RestartScence&quot;, 1.5f);
+}
+
+public void RestartScence()
+{
+    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    
 }
 </code></pre>
 <p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 多态<br>
-{<br>
-class Car:TrafficTool<br>
-{<br>
-public override void Run()<br>
-{<br>
-base.Run();<br>
-Console.WriteLine(&quot;汽车启动&quot;);</p>
-<pre><code>    }
-
-    public override void Stop()
-    {
-        base.Stop();
-        Console.WriteLine(&quot;汽车停下&quot;);
-    }
-    public void Break()
-    {
-        Console.WriteLine(&quot;刹车&quot;);
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 多态<br>
-{<br>
-class AipPlan:TrafficTool<br>
-{<br>
-public override void Run()<br>
-{<br>
-base.Run();<br>
-Console.WriteLine(&quot;飞机启动&quot;);</p>
-<pre><code>    }
-
-    public override void Stop()
-    {
-        base.Stop();
-        Console.WriteLine(&quot;飞机停下&quot;);
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//程序实现<br>
-using System;</p>
-<p>namespace 多态<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-/*Car s = new Car();<br>
-AipPlan a = new AipPlan();<br>
-Driver d1 = new Driver();<br>
-d1.Drive(s);</p>
-<pre><code>        d1.Drive(a);*/
-
-        TrafficTool t3 = new Car();
-        TrafficTool t4 = new AipPlan();
-        //基于“虚方法”的多态
-        t3.Run();//启动汽车启动
-        t4.Run();//启动飞机启动
-
-        //里式转换
-        TrafficTool t1 = new TrafficTool();
-        TrafficTool t2 = new Car();//父类引用指向子类对象，
-        t1.Break();//父类方法
-        t2.Break();//父类方法
-
-        //父类需要调用子类方法时，将父类转为子类（
-        //父类引用指向子类对象时才能够转换）
-        //ar c1 = (Car )t2;//强转
-        bool r = t2 is Car;//可以转换返回真/不能转返回假
-        Car c1 = t2 as Car;//可以转返回子类对象/不能转返回Null
-
-        t1.Break();//父类方法
-        c1.Break();//子类方法
-    }
-}
-</code></pre>
-<p>}</p>
+<p>复杂时可使用事件的广播，监听</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/cji-chu-lei-jie-gou/">
+                <a href="https://Wei715547.github.io/post/next-scence-dont-destroy/">
                   <h3 class="post-title">
-                    C#基础-类/结构
+                    Next Scence Don&#39;t Destroy
                   </h3>
                 </a>
               </div>
