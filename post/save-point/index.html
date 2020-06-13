@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>向量API | Wei: Development technology accumulation</title>
+<title>Save Point | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,11 @@
 
 
 
-    <meta name="description" content="using System.Collections;
+    <meta name="description" content="//Prefab脚本
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class VectorAPI : MonoBehaviour
-{
-..." />
+public class SavePoint : MonoB..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -108,48 +107,105 @@ public class VectorAPI : MonoBehaviour
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">向量API</h2>
-            <div class="post-date">2020-04-04</div>
+            <h2 class="post-title">Save Point</h2>
+            <div class="post-date">2020-06-13</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
+              <p>//Prefab脚本<br>
+using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;</p>
-<p>public class VectorAPI : MonoBehaviour<br>
+<p>public class SavePoint : MonoBehaviour<br>
 {<br>
-public AnimationCurve cuver;<br>
-private float x;<br>
-public  float psTime=3;<br>
-private Vector3 targetPoint = new Vector3 (0, 0, 10);<br>
-private void OnGUI()<br>
+private LayerMask player;<br>
+private Light signlLight;<br>
+// Start is called before the first frame update<br>
+void Start()<br>
 {<br>
-if (GUILayout.RepeatButton (&quot;Move&quot;))<br>
-{<br>
-//将物体移动至（0，0,10）<br>
-//匀速移动<br>
-this.transform.position = Vector3.MoveTowards(this.transform.position,targetPoint , 2);<br>
-//先快后慢--终点与比例固定<br>
-this.transform.position = Vector3.Lerp (this.transform.position, targetPoint , 2 );</p>
-<pre><code>    }
-    if (GUILayout.RepeatButton(&quot;Lerp&quot;))
+player = LayerMask.NameToLayer(&quot;Player&quot;);<br>
+signlLight = GetComponentInChildren<Light>();<br>
+}</p>
+<pre><code>//玩家触碰到Point时调用GM中的方法
+private void OnTriggerEnter2D(Collider2D collision)
+{
+    if (collision.gameObject .layer ==player )
     {
-        x += Time.deltaTime/psTime ;
-        //自然变化，起点，终点固定，比例根据曲线变化
-        this.transform.position =
-            Vector3.LerpUnclamped (Vector3.zero, targetPoint, cuver.Evaluate(x));
+        signlLight.color = Color.green;
+        this.gameObject.GetComponent&lt;SpriteRenderer&gt;().material.color = Color.green;
+        Debug.Log(&quot;Save&quot;);
+        
+        GameManager.instance.SavePoint();
     }
 }
 </code></pre>
 <p>}</p>
+<p>//GameManager<br>
+public Vector2 playerPos ;//存储玩家位置，(通关/返回主界面时职位Vector2.zero<br>
+//instance.playerPos = Vector2.zero;//通关后位置初始化)<br>
+/存档点位置更新<br>
+public void SavePoint()<br>
+{<br>
+instance.playerPos = instance.playerMove.transform.position;//玩家位置赋值给GM中的Pos<br>
+}<br>
+//GM中的Save/Load<br>
+public GameData Save()<br>
+{<br>
+GameData date = new GameData();<br>
+date.scence = SceneManager.GetActiveScene().buildIndex;<br>
+date.deathCount = instance.deathCount;<br>
+date.bgmValue = UIManager.instence.GetBGMValue();<br>
+date.fxValue = UIManager.instence.GetFXValue();</p>
+<pre><code>    if (instance.playerPos == Vector2.zero)
+    {
+        date.posx = 0;
+        date.posy = 0;
+    }
+
+    else
+    {
+        date.posx = instance.playerPos.x;
+        date.posy = instance.playerPos.y;
+    }
+
+    return date;
+
+}
+
+public void Load(GameData date)
+{
+    instance.playerPos = new Vector2(date.posx, date.posy);
+
+    SceneManager.LoadScene(date .scence );
+    //UIManager.instence.ShowLoadPanel(date.scence);
+    instance.deathCount = date.deathCount;
+    UIManager.UpdataDeathUI(instance.deathCount);
+    GameManager.instance.time = 0;
+    UIManager.instence.SetBGMValue(date.bgmValue);
+    UIManager.instence.SetFXValue(date.fxValue);
+}
+
+//Player控制脚本
+Start
+{
+//玩家未接触到存档点GM中默认Pos=0；此时将默认未值赋值给GM中的Pos。
+    //（通关之后GM中的Pos会被PlayerWin()方法赋值为默认值）
+    if ( GameManager.instance.playerPos==Vector2.zero)
+    {
+        GameManager.instance.playerPos = playerPos;
+    }else//玩家触碰到存档点时，将GM中的位置赋值给玩家物体的Pos。
+    {
+        transform.position = GameManager.instance.playerPos;
+    }
+    }</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/di-yi-ren-cheng-jing-tou-xuan-zhuan/">
+                <a href="https://Wei715547.github.io/post/dan-li/">
                   <h3 class="post-title">
-                    第一人称镜头旋转
+                    单例
                   </h3>
                 </a>
               </div>
