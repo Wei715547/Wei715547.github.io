@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-13T08:26:39.259Z</updated>
+    <updated>2020-06-15T10:01:28.724Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,52 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[创建AssetBundles/从AssetBundles中加载文件到场景]]></title>
+        <id>https://Wei715547.github.io/post/chuang-jian-assetbundles/</id>
+        <link href="https://Wei715547.github.io/post/chuang-jian-assetbundles/">
+        </link>
+        <updated>2020-06-15T09:21:12.000Z</updated>
+        <content type="html"><![CDATA[<p>//此脚本放在“Asset/Editor”<br>
+using System.IO;<br>
+using UnityEditor;</p>
+<p>public class CreateAB<br>
+{<br>
+[MenuItem(&quot;Assets/Build AssetBundles&quot;)]<br>
+static void BuildAllAssetBuundles()<br>
+{<br>
+string dir = &quot;AssetBundles&quot;;<br>
+if (Directory.Exists (dir)==false)<br>
+{<br>
+Directory.CreateDirectory(dir);<br>
+}<br>
+BuildPipeline.BuildAssetBundles(dir, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);<br>
+}<br>
+}</p>
+<p>////////////////////////////////////////////////////////<br>
+//加载<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class LoadFormFile : MonoBehaviour<br>
+{<br>
+private void Start()<br>
+{<br>
+AssetBundle ab = AssetBundle.LoadFromFile(&quot;AssetBundles/tree&quot;);//文件路径<br>
+GameObject tree = ab.LoadAsset<GameObject>(&quot;Tree 02&quot;);//预制件名称<br>
+GameObject go = Instantiate(tree);<br>
+go.transform.SetParent(this.transform );</p>
+<pre><code>    //遍历生成AB报中所有物体并生成
+    /*Object[] obj = ab.LoadAllAssets();
+    foreach (Object item in obj)
+    {
+        Instantiate(item);
+    }*/
+}  
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Save Point]]></title>
         <id>https://Wei715547.github.io/post/save-point/</id>
@@ -423,47 +469,6 @@ private void LateUpdate()
     transform.LookAt(target.position + Vector3.up*pitch);
 
     transform.RotateAround(target.position, Vector3.up, currentYaw);
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[自动寻路]]></title>
-        <id>https://Wei715547.github.io/post/zi-dong-xun-lu/</id>
-        <link href="https://Wei715547.github.io/post/zi-dong-xun-lu/">
-        </link>
-        <updated>2020-06-06T04:58:09.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.AI;</p>
-<p>public class PlayerCT : MonoBehaviour<br>
-{</p>
-<pre><code>public LayerMask movementMask;
-NavMeshAgent navMeshAgent;
-
-// Start is called before the first frame update
-void Start()
-{
-    animator = this.transform.GetComponent&lt;Animator&gt;();
-    navMeshAgent = GetComponent&lt;NavMeshAgent&gt;();
-}
-
-// Update is called once per frame
-void Update()
-{
-    if (Input.GetMouseButtonDown(1))
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (!Physics.Raycast(ray, out hit,100,movementMask))
-        {
-            //hit.collider .gameObject //射线打到的物体
-            return;
-        }
-        navMeshAgent.destination = hit.point;
-    }
 }
 </code></pre>
 <p>}</p>

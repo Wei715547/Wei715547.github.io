@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>LifeCeyle | Wei: Development technology accumulation</title>
+<title>创建AssetBundles/从AssetBundles中加载文件到场景 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,12 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class Lifecycle : MonoBehaviour
+    <meta name="description" content="//此脚本放在“Asset/Editor”
+using System.IO;
+using UnityEditor;
+public class CreateAB
 {
-..." />
+[MenuItem(&quot;Assets/Build AssetBund..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -108,91 +108,46 @@ public class Lifecycle : MonoBehaviour
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">LifeCeyle</h2>
-            <div class="post-date">2020-04-04</div>
+            <h2 class="post-title">创建AssetBundles/从AssetBundles中加载文件到场景</h2>
+            <div class="post-date">2020-06-15</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
+              <p>//此脚本放在“Asset/Editor”<br>
+using System.IO;<br>
+using UnityEditor;</p>
+<p>public class CreateAB<br>
+{<br>
+[MenuItem(&quot;Assets/Build AssetBundles&quot;)]<br>
+static void BuildAllAssetBuundles()<br>
+{<br>
+string dir = &quot;AssetBundles&quot;;<br>
+if (Directory.Exists (dir)==false)<br>
+{<br>
+Directory.CreateDirectory(dir);<br>
+}<br>
+BuildPipeline.BuildAssetBundles(dir, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);<br>
+}<br>
+}</p>
+<p>////////////////////////////////////////////////////////<br>
+//加载<br>
+using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;</p>
-<p>public class Lifecycle : MonoBehaviour<br>
+<p>public class LoadFormFile : MonoBehaviour<br>
 {<br>
-//脚本：.cs  类文件<br>
-//附加到游戏体中，定义游戏对象行为指令的代码</p>
-<pre><code>//C#类
-//字段
-//属性
-//构造函数
-//方法
-
-//脚本：
-//字段
-//方法
-
-[SerializeField ]//在编译器中显示私有变量
-private  int a = 100;
-
-[HideInInspector ]//在编译器中隐藏公共变量
-public int b;
-
-[Range (0,100)]
-public float c;
-
-//属性：在编译器中不能显示，通常脚本中不写。
-/*public int A
-{
-    get{ return this.a; }
-    set{ this.a = value; }
-}
-*/
-/*
-public Lifecycle ()//不要在脚本中写构造函数
-{
-    //不能在子线程中访问主线程成员。
-    b = (int)Time.time;
-}
-*/
-
-//*******************初始阶段**********************
-
-//执行时机:创建游对象，立即执行1次 (早于Start)
-//作用：初始化---相当于构造函数
-private void Awake()
-{
-    Debug.Log(&quot;Awake&quot; + Time.time+&quot;-&quot;+this .name );
-    
-}
-//执行时机:创建游对象，脚本启用 才执行（1次）
-//作用：初始化---相当于构造函数
-private void Start()
-{
-    b = Random.Range(1, 100);
-    Debug.Log(&quot;Start&quot; + Time.time+&quot;-&quot;+this .name );//调试
-    print(&quot;ok&quot;);//调试（父类的方法-仅在脚本中可以直接使用）
-}
-
-//********************物理阶段*********************
-//执行时机：每隔固定时间执行一次。（时间可以修改  默认值 0.02 s）
-//适用性：适合对物体做物理操作（移动，旋转。。。。），不会受到渲染影响
-private void FixedUpdate()
-{//渲染时间不固定（每帧渲染量不同，机器性能不同）
-    Debug.Log(Time.time);
-}
-
-public float time;//调试
-//********************游戏逻辑*********************
-//执行时机：渲染帧执行，执行间隔不固定
-//适用性：处理游戏逻辑
-private void Update()
-{
-    //单帧调试：启动调试  运行场景  暂停游戏 加断点  单帧执行  结束调试
-    //调试过程中，输入代码
-    //右键  快速监视
-    //查看  即时窗口
-    time = Time.time;
-}
-
-//********************结束阶段*********************
+private void Start()<br>
+{<br>
+AssetBundle ab = AssetBundle.LoadFromFile(&quot;AssetBundles/tree&quot;);//文件路径<br>
+GameObject tree = ab.LoadAsset<GameObject>(&quot;Tree 02&quot;);//预制件名称<br>
+GameObject go = Instantiate(tree);<br>
+go.transform.SetParent(this.transform );</p>
+<pre><code>    //遍历生成AB报中所有物体并生成
+    /*Object[] obj = ab.LoadAllAssets();
+    foreach (Object item in obj)
+    {
+        Instantiate(item);
+    }*/
+}  
 </code></pre>
 <p>}</p>
 
@@ -201,9 +156,9 @@ private void Update()
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/gameobjectdemo/">
+                <a href="https://Wei715547.github.io/post/save-point/">
                   <h3 class="post-title">
-                    GameObjectDemo
+                    Save Point
                   </h3>
                 </a>
               </div>
