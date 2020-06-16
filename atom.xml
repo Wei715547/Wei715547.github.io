@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-15T10:15:10.146Z</updated>
+    <updated>2020-06-16T15:32:57.639Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -37,21 +37,52 @@ BuildPipeline.BuildAssetBundles(dir, BuildAssetBundleOptions.None, BuildTarget.S
 //加载<br>
 using System.Collections;<br>
 using System.Collections.Generic;<br>
+using System.IO;<br>
 using UnityEngine;</p>
 <p>public class LoadFormFile : MonoBehaviour<br>
 {<br>
+//IEnumerator Start()//异步加载使用协同程序调用<br>
 private void Start()<br>
 {<br>
-AssetBundle ab = AssetBundle.LoadFromFile(&quot;AssetBundles/tree&quot;);//文件路径<br>
+//string path1 = &quot;AssetBundles / mt.wei&quot;;<br>
+string path = &quot;AssetBundles/tree.wei&quot;;<br>
+//示例：通过本地路径加载AB包<br>
+/<em>AssetBundle ab1 = AssetBundle.LoadFromFile(&quot;AssetBundles/mt.wei&quot;);//存在依赖包时，所依赖的资源包也需要加载<br>
+AssetBundle ab = AssetBundle.LoadFromFile(&quot;AssetBundles/tree.wei&quot;);//文件路径<br>
 GameObject tree = ab.LoadAsset<GameObject>(&quot;Tree 02&quot;);//预制件名称<br>
 GameObject go = Instantiate(tree);<br>
-go.transform.SetParent(this.transform );</p>
+go.transform.SetParent(this.transform );</em>/</p>
 <pre><code>    //遍历生成AB报中所有物体并生成
     /*Object[] obj = ab.LoadAllAssets();
     foreach (Object item in obj)
     {
         Instantiate(item);
     }*/
+
+
+    //第一种方式:通过内存加载AB包的方式：AssetBundle.LoadFromMemoryAsync
+    //异步加载
+    /*AssetBundleCreateRequest request = AssetBundle.LoadFromMemoryAsync(File.ReadAllBytes(path));
+    yield return request;
+    AssetBundle ab = request.assetBundle;*/
+
+    //同步加载
+    //AssetBundle ab = AssetBundle.LoadFromMemory(File.ReadAllBytes(path));
+
+    //第二种方式：通过本地文件加载AB包：
+    //异步加载
+    /*AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(path);
+    yield return request;
+    AssetBundle ab = request.assetBundle;*/
+    //同步加载（示例）
+    AssetBundle ab = AssetBundle.LoadFromFile(path);
+
+
+    //使用里面的资源
+    GameObject tree = ab.LoadAsset&lt;GameObject&gt;(&quot;Tree 02&quot;);
+    GameObject go = Instantiate(tree/*, transform.position,Quaternion.identity*/);
+    go.transform.position = this.transform.position;
+
 }  
 </code></pre>
 <p>}<br>
