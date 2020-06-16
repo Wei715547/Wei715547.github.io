@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1592321545015">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1592323030867">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -33,7 +33,7 @@ public class CreateAB
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1592321545015" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1592323030867" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -133,11 +133,12 @@ BuildPipeline.BuildAssetBundles(dir, BuildAssetBundleOptions.None, BuildTarget.S
 using System.Collections;<br>
 using System.Collections.Generic;<br>
 using System.IO;<br>
-using UnityEngine;</p>
-<p>public class LoadFormFile : MonoBehaviour<br>
+using UnityEngine;<br>
+using UnityEngine.Networking;<br>
+public class LoadFormFile : MonoBehaviour<br>
 {<br>
-//IEnumerator Start()//异步加载使用协同程序调用<br>
-private void Start()<br>
+IEnumerator Start()//异步加载使用协同程序调用<br>
+//private void Start()<br>
 {<br>
 //string path1 = &quot;AssetBundles / mt.wei&quot;;<br>
 string path = &quot;AssetBundles/tree.wei&quot;;<br>
@@ -170,7 +171,21 @@ go.transform.SetParent(this.transform );</em>/</p>
     yield return request;
     AssetBundle ab = request.assetBundle;*/
     //同步加载（示例）
-    AssetBundle ab = AssetBundle.LoadFromFile(path);
+    //AssetBundle ab = AssetBundle.LoadFromFile(path);
+
+    ////////////网络加载////////////
+
+    //第三种方式：WWW.LoadFromCacheOrDownload（异步加载(IEnumerator)）
+    /*WWW www = WWW.LoadFromCacheOrDownload(@&quot;file:///D:\715\3DFreeWord\AssetBundles\tree.wei&quot;,1);
+    yield return www;
+    AssetBundle ab = www.assetBundle;*/
+
+
+    //第四种方式：UnityWebRequest（异步执行(IEnumerator)）
+    string uri = @&quot;file:///D:\715\3DFreeWord\AssetBundles\tree.wei&quot;;
+    UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(uri);
+    yield return request.Send();
+    AssetBundle ab = DownloadHandlerAssetBundle.GetContent(request);
 
 
     //使用里面的资源
