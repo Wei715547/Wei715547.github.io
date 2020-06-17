@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1592360913114">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1592374119509">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -33,7 +33,7 @@ public class CreateAB
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1592360913114" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1592374119509" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -193,10 +193,22 @@ go.transform.SetParent(this.transform );</em>/</p>
     GameObject tree = ab.LoadAsset&lt;GameObject&gt;(&quot;Tree 02&quot;);
     GameObject go = Instantiate(tree/*, transform.position,Quaternion.identity*/);
     go.transform.position = this.transform.position;
-
-}  
 </code></pre>
-<p>}<br>
+<p>//通过Mainfest获取所有的依赖包<br>
+AssetBundle mainfestAB = AssetBundle.LoadFromFile(&quot;AssetBundles/AssetBundles&quot;);//加载AssetBundles文件<br>
+AssetBundleManifest mainfest = mainfestAB.LoadAsset<AssetBundleManifest>(&quot;AssetBundleManifest&quot;);//通过AssetBundles获取AssetBundles.manifest文件<br>
+/<em>foreach (string name in mainfest.GetAllAssetBundles())//获取所有的AB包，返回包名。<br>
+{<br>
+print(name);<br>
+}</em>/<br>
+string[] strs = mainfest.GetAllDependencies(&quot;tree.wei&quot;);//获取某个AB包所依赖的包，返回包名。<br>
+foreach (string name in strs)<br>
+{<br>
+print(name);<br>
+AssetBundle.LoadFromFile(&quot;AssetBundles/&quot; + name);//加载所有的依赖包<br>
+}<br>
+}<br>
+}<br>
 <img src="https://Wei715547.github.io/post-images/1592216098868.jpg" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1592216105421.jpg" alt="" loading="lazy"></p>
 

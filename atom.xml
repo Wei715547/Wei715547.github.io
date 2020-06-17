@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-17T02:29:19.661Z</updated>
+    <updated>2020-06-17T06:47:29.998Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -98,10 +98,22 @@ go.transform.SetParent(this.transform );</em>/</p>
     GameObject tree = ab.LoadAsset&lt;GameObject&gt;(&quot;Tree 02&quot;);
     GameObject go = Instantiate(tree/*, transform.position,Quaternion.identity*/);
     go.transform.position = this.transform.position;
-
-}  
 </code></pre>
-<p>}<br>
+<p>//通过Mainfest获取所有的依赖包<br>
+AssetBundle mainfestAB = AssetBundle.LoadFromFile(&quot;AssetBundles/AssetBundles&quot;);//加载AssetBundles文件<br>
+AssetBundleManifest mainfest = mainfestAB.LoadAsset<AssetBundleManifest>(&quot;AssetBundleManifest&quot;);//通过AssetBundles获取AssetBundles.manifest文件<br>
+/<em>foreach (string name in mainfest.GetAllAssetBundles())//获取所有的AB包，返回包名。<br>
+{<br>
+print(name);<br>
+}</em>/<br>
+string[] strs = mainfest.GetAllDependencies(&quot;tree.wei&quot;);//获取某个AB包所依赖的包，返回包名。<br>
+foreach (string name in strs)<br>
+{<br>
+print(name);<br>
+AssetBundle.LoadFromFile(&quot;AssetBundles/&quot; + name);//加载所有的依赖包<br>
+}<br>
+}<br>
+}<br>
 <img src="https://Wei715547.github.io/post-images/1592216098868.jpg" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1592216105421.jpg" alt="" loading="lazy"></p>
 ]]></content>
