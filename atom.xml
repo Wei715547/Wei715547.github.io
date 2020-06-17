@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-16T15:57:17.452Z</updated>
+    <updated>2020-06-17T02:29:19.661Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -90,7 +90,8 @@ go.transform.SetParent(this.transform );</em>/</p>
     string uri = @&quot;file:///D:\715\3DFreeWord\AssetBundles\tree.wei&quot;;
     UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(uri);
     yield return request.Send();
-    AssetBundle ab = DownloadHandlerAssetBundle.GetContent(request);
+    //AssetBundle ab = DownloadHandlerAssetBundle.GetContent(request);//获取方式一
+    AssetBundle ab = (request.downloadHandler as DownloadHandlerAssetBundle).assetBundle;//获取方式二
 
 
     //使用里面的资源
