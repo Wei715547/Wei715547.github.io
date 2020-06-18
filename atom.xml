@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-18T09:24:51.842Z</updated>
+    <updated>2020-06-18T09:40:26.606Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -12,44 +12,62 @@
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
     <entry>
-        <title type="html"><![CDATA[XLua虚拟环境/Lua脚本调用方式]]></title>
-        <id>https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-fang-shi/</id>
-        <link href="https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-fang-shi/">
+        <title type="html"><![CDATA[补丁开发过程]]></title>
+        <id>https://Wei715547.github.io/post/bu-ding-kai-fa-guo-cheng/</id>
+        <link href="https://Wei715547.github.io/post/bu-ding-kai-fa-guo-cheng/">
         </link>
-        <updated>2020-06-18T09:19:29.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using XLua;<br>
-using System.IO;<br>
-public class HotFixScript : MonoBehaviour<br>
+        <updated>2020-06-18T09:33:15.000Z</updated>
+        <content type="html"><![CDATA[<p>Process-&gt;在所有可能出现问题的类上打上[Hotfix]标签，在所有Lua调用C#的方法打上[LuaCallCSharp]，在所有C#调用Lua的方法打上[CSharpCallLua]-&gt;打包发布-&gt;修改时只需要更新Lua文件，修改资源是（声音，模型，贴图，UI）只需要更新AB包。用户只需要下载Lua文件和AB包</p>
+<p>using UnityEngine;<br>
+using XLua;</p>
+<p>namespace XLuaTest<br>
 {<br>
-private LuaEnv LuaEnv;<br>
-// Start is called before the first frame update<br>
-void Start()<br>
+[Hotfix]//在需要修复的类前加上[Hotfix]特性<br>
+public class HotfixTest : MonoBehaviour<br>
 {<br>
-LuaEnv = new LuaEnv();<br>
-LuaEnv.AddLoader(MyLoader);<br>
-LuaEnv.DoString(&quot;require'fish'&quot;);<br>
-}</p>
-<pre><code>private byte[] MyLoader(ref string filePath)
-{
-    string absPath = @&quot;D:\715\XluaProjects\PlayerGamePackage\&quot; + filePath + &quot;.lua.txt&quot;;
-    return System.Text.Encoding.UTF8.GetBytes(File.ReadAllText(absPath));
-}
+LuaEnv luaenv = new LuaEnv();//Lua虚拟运行环境</p>
+<pre><code>    private int tick = 0;
 
-private void OnDestroy()
-{
-    LuaEnv.Dispose();
+    // Use this for initialization
+    void Start()
+    {
+    }
+
+    // Update is called once per frame
+    [LuaCallCSharp]
+    void Update()
+    {
+        if (++tick % 50 == 0)
+        {
+            Debug.Log(&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Update in C#, tick = &quot; + tick);
+        }
+    }
+
+    void OnGUI()
+    {
+        if (GUI.Button(new Rect(10, 10, 300, 80), &quot;Hotfix&quot;))
+        {//要修改的类名，要修复的类中的方法，作为替换的Lua中的方法
+            luaenv.DoString(@&quot;
+            xlua.hotfix(CS.XLuaTest.HotfixTest, 'Update', function(self)
+                local a = CS.UnityEngine.GameObject.Find('Main Camera')
+                CS.UnityEngine.Debug.Log(a.name)
+                --[[self.tick = self.tick + 1
+                if (self.tick % 50) == 0 then
+                    print('&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Update in lua, tick = ' .. self.tick)
+                end--]]
+            end)
+        &quot;);
+        }
+    }
 }
 </code></pre>
 <p>}</p>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[XLua虚拟环境/Lua脚本调用形式]]></title>
-        <id>https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-xing-shi/</id>
-        <link href="https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-xing-shi/">
+        <title type="html"><![CDATA[XLua虚拟环境/Lua脚本调用方式]]></title>
+        <id>https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-fang-shi/</id>
+        <link href="https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-fang-shi/">
         </link>
         <updated>2020-06-18T09:19:29.000Z</updated>
         <content type="html"><![CDATA[<p>using System.Collections;<br>

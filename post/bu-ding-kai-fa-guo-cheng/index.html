@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>XLua迁入工程，Hotfis环境配置 | Wei: Development technology accumulation</title>
+<title>补丁开发过程 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,10 +18,7 @@
 
 
 
-    <meta name="description" content="工程路径名不包含中文
-
-补丁创建完成后将XLua附带示例文件删除在进行打包
-..." />
+    <meta name="description" content="Process-&gt;在所有可能出现问题的类上打上[Hotfix]标签，在所有Lua调用C#的方法打上[LuaCallCSharp]，在所有C#调用Lua的方法打上[CSharpCallLua]-&gt;打包发布-&gt;修改时只需要更新..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -106,22 +103,64 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">XLua迁入工程，Hotfis环境配置</h2>
+            <h2 class="post-title">补丁开发过程</h2>
             <div class="post-date">2020-06-18</div>
             
             <div class="post-content" v-pre>
-              <p>工程路径名不包含中文<br>
-<img src="https://Wei715547.github.io/post-images/1592472285876.png" alt="" loading="lazy"><br>
-补丁创建完成后将XLua附带示例文件删除在进行打包</p>
+              <p>Process-&gt;在所有可能出现问题的类上打上[Hotfix]标签，在所有Lua调用C#的方法打上[LuaCallCSharp]，在所有C#调用Lua的方法打上[CSharpCallLua]-&gt;打包发布-&gt;修改时只需要更新Lua文件，修改资源是（声音，模型，贴图，UI）只需要更新AB包。用户只需要下载Lua文件和AB包</p>
+<p>using UnityEngine;<br>
+using XLua;</p>
+<p>namespace XLuaTest<br>
+{<br>
+[Hotfix]//在需要修复的类前加上[Hotfix]特性<br>
+public class HotfixTest : MonoBehaviour<br>
+{<br>
+LuaEnv luaenv = new LuaEnv();//Lua虚拟运行环境</p>
+<pre><code>    private int tick = 0;
+
+    // Use this for initialization
+    void Start()
+    {
+    }
+
+    // Update is called once per frame
+    [LuaCallCSharp]
+    void Update()
+    {
+        if (++tick % 50 == 0)
+        {
+            Debug.Log(&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Update in C#, tick = &quot; + tick);
+        }
+    }
+
+    void OnGUI()
+    {
+        if (GUI.Button(new Rect(10, 10, 300, 80), &quot;Hotfix&quot;))
+        {//要修改的类名，要修复的类中的方法，作为替换的Lua中的方法
+            luaenv.DoString(@&quot;
+            xlua.hotfix(CS.XLuaTest.HotfixTest, 'Update', function(self)
+                local a = CS.UnityEngine.GameObject.Find('Main Camera')
+                CS.UnityEngine.Debug.Log(a.name)
+                --[[self.tick = self.tick + 1
+                if (self.tick % 50) == 0 then
+                    print('&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Update in lua, tick = ' .. self.tick)
+                end--]]
+            end)
+        &quot;);
+        }
+    }
+}
+</code></pre>
+<p>}</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/chuang-jian-assetbundles/">
+                <a href="https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-fang-shi/">
                   <h3 class="post-title">
-                    创建AssetBundles/从AssetBundles中加载文件到场景
+                    XLua虚拟环境/Lua脚本调用方式
                   </h3>
                 </a>
               </div>
