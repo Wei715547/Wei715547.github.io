@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-17T06:47:29.998Z</updated>
+    <updated>2020-06-18T08:30:11.761Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,15 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[XLua迁入工程，Hotfis环境配置]]></title>
+        <id>https://Wei715547.github.io/post/xlua-qian-ru-gong-cheng-hotfis-huan-jing-pei-zhi/</id>
+        <link href="https://Wei715547.github.io/post/xlua-qian-ru-gong-cheng-hotfis-huan-jing-pei-zhi/">
+        </link>
+        <updated>2020-06-18T08:16:39.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1592469004213.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[创建AssetBundles/从AssetBundles中加载文件到场景]]></title>
         <id>https://Wei715547.github.io/post/chuang-jian-assetbundles/</id>
@@ -487,52 +496,6 @@ print(filePath);</p>
         </link>
         <updated>2020-06-06T08:23:03.000Z</updated>
         <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1591431791506.png" alt="" loading="lazy"></figure>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[视角缩放/跟随]]></title>
-        <id>https://Wei715547.github.io/post/shi-jiao-suo-fang-gen-sui/</id>
-        <link href="https://Wei715547.github.io/post/shi-jiao-suo-fang-gen-sui/">
-        </link>
-        <updated>2020-06-06T05:34:56.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class CamerCT : MonoBehaviour<br>
-{<br>
-public Transform target;<br>
-public Vector3 offset;</p>
-<pre><code>//视角范围，缩放速度
-public float zoomSpeed = 4f;
-public float minZoom = 5f;
-public float maxZoom = 10f;
-
-public float pitch=2f;//视角高度值
-
-private float currentZoom = 10f;//焦距
-
-public float YawSpeed = 100f;//旋转速度
-private float currentYaw = 0f;//旋转角度
-
-// Update is called once per frame
-void Update()
-{
-    currentZoom -= Input.GetAxis(&quot;Mouse ScrollWheel&quot;)*zoomSpeed *Time .deltaTime;
-    currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);//限定缩放范围
-
-    currentYaw += Input.GetAxis(&quot;Horizontal&quot;) * YawSpeed * Time.deltaTime;
-
-}
-
-private void LateUpdate()
-{
-    transform.position = target.position - offset * currentZoom;
-    transform.LookAt(target.position + Vector3.up*pitch);
-
-    transform.RotateAround(target.position, Vector3.up, currentYaw);
-}
-</code></pre>
-<p>}</p>
 ]]></content>
     </entry>
 </feed>
