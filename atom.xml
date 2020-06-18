@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-18T08:55:16.584Z</updated>
+    <updated>2020-06-18T09:24:51.842Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -12,13 +12,83 @@
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
     <entry>
+        <title type="html"><![CDATA[XLua虚拟环境/Lua脚本调用方式]]></title>
+        <id>https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-fang-shi/</id>
+        <link href="https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-fang-shi/">
+        </link>
+        <updated>2020-06-18T09:19:29.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using XLua;<br>
+using System.IO;<br>
+public class HotFixScript : MonoBehaviour<br>
+{<br>
+private LuaEnv LuaEnv;<br>
+// Start is called before the first frame update<br>
+void Start()<br>
+{<br>
+LuaEnv = new LuaEnv();<br>
+LuaEnv.AddLoader(MyLoader);<br>
+LuaEnv.DoString(&quot;require'fish'&quot;);<br>
+}</p>
+<pre><code>private byte[] MyLoader(ref string filePath)
+{
+    string absPath = @&quot;D:\715\XluaProjects\PlayerGamePackage\&quot; + filePath + &quot;.lua.txt&quot;;
+    return System.Text.Encoding.UTF8.GetBytes(File.ReadAllText(absPath));
+}
+
+private void OnDestroy()
+{
+    LuaEnv.Dispose();
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[XLua虚拟环境/Lua脚本调用形式]]></title>
+        <id>https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-xing-shi/</id>
+        <link href="https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-xing-shi/">
+        </link>
+        <updated>2020-06-18T09:19:29.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using XLua;<br>
+using System.IO;<br>
+public class HotFixScript : MonoBehaviour<br>
+{<br>
+private LuaEnv LuaEnv;<br>
+// Start is called before the first frame update<br>
+void Start()<br>
+{<br>
+LuaEnv = new LuaEnv();<br>
+LuaEnv.AddLoader(MyLoader);<br>
+LuaEnv.DoString(&quot;require'fish'&quot;);<br>
+}</p>
+<pre><code>private byte[] MyLoader(ref string filePath)
+{
+    string absPath = @&quot;D:\715\XluaProjects\PlayerGamePackage\&quot; + filePath + &quot;.lua.txt&quot;;
+    return System.Text.Encoding.UTF8.GetBytes(File.ReadAllText(absPath));
+}
+
+private void OnDestroy()
+{
+    LuaEnv.Dispose();
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[XLua迁入工程，Hotfis环境配置]]></title>
         <id>https://Wei715547.github.io/post/xlua-qian-ru-gong-cheng-hotfis-huan-jing-pei-zhi/</id>
         <link href="https://Wei715547.github.io/post/xlua-qian-ru-gong-cheng-hotfis-huan-jing-pei-zhi/">
         </link>
         <updated>2020-06-18T08:16:39.000Z</updated>
         <content type="html"><![CDATA[<p>工程路径名不包含中文<br>
-<img src="https://Wei715547.github.io/post-images/1592469004213.png" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1592472285876.png" alt="" loading="lazy"><br>
 补丁创建完成后将XLua附带示例文件删除在进行打包</p>
 ]]></content>
     </entry>
@@ -389,115 +459,6 @@ void Update()
 <p><img src="https://Wei715547.github.io/post-images/1591514562757.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1591514569006.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1591514575527.PNG" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[C#中调用Lua程序]]></title>
-        <id>https://Wei715547.github.io/post/czhong-diao-yong-lua-cheng-xu/</id>
-        <link href="https://Wei715547.github.io/post/czhong-diao-yong-lua-cheng-xu/">
-        </link>
-        <updated>2020-06-07T04:56:04.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using XLua;<br>
-public class HW2 : MonoBehaviour<br>
-{<br>
-// Start is called before the first frame update<br>
-void Start()<br>
-{<br>
-//1.通过资源加载执行Lua程序<br>
-/<em>TextAsset ta = Resources.Load<TextAsset>(&quot;面向对象实现.lua&quot;);<br>
-//print(ta);<br>
-LuaEnv env = new LuaEnv();<br>
-env.DoString(ta.text);<br>
-env.Dispose();</em>/</p>
-<pre><code>    //2.通过require 'XXX'执行Lua程序
-    LuaEnv env = new LuaEnv();
-    env.DoString(&quot;require '面向对象实现'&quot;);
-    //访问Lua中的全局变量
-    /*int num = env.Global.Get&lt;int&gt;(&quot;num1&quot;);
-    print(num);
-    string s = env.Global.Get&lt;string&gt;(&quot;str&quot;);
-    print(s);
-    bool t = env.Global.Get&lt;bool&gt;(&quot;isOn&quot;);
-    print(t);*/
-    //env.Dispose();
-
-    //映射到类
-    /*Person p = env.Global.Get&lt;Person&gt;(&quot;person&quot;);//值拷贝，耗费性能，
-    print(p.name + &quot;-&quot; + p.age);
-    p.name = &quot;ZZ&quot;;
-    env.DoString(&quot;print(person.name)&quot;);//不改变Lua中的变量值*/
-
-    //映射到接口
-    IPerson p = env.Global.Get&lt;IPerson&gt;(&quot;person&quot;);//引用拷贝，可改变Lua中的值
-    print(p.name + &quot;-&quot; + p.age);
-    p.name = &quot;ZL&quot;;
-    env.DoString(&quot;print(person.name)&quot;);
-
-    env.Dispose();
-
-}
-
-//将Lua中的table映射到类（耗费性能）
-class Person
-{
-    public string name;
-    public int age;
-}
-
-//将Lua中的变量映射到接口
-[CSharpCallLua]
-interface IPerson
-{
-    string name { get; set; }
-    int age { get; set; }
-
-}
-</code></pre>
-<p>}</p>
-<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using System.IO;<br>
-using UnityEngine;<br>
-using XLua;<br>
-public class Loader : MonoBehaviour<br>
-{<br>
-// Start is called before the first frame update<br>
-void Start()<br>
-{<br>
-LuaEnv env = new LuaEnv();</p>
-<pre><code>    env.AddLoader(MyLoader);//先执行自定义的Loader，自定义Loader中有返回Lua程序时，将不再执行系统加载的Lua程序
-    env.DoString(&quot;require 'text01'&quot;);//加载的文件会传递给Lodader
-    env.Dispose();
-}
-</code></pre>
-<p>//自定义Loader<br>
-private byte [] MyLoader(ref string filePath)<br>
-{<br>
-print(filePath);</p>
-<pre><code>    //通过自定义Loader返回Lua程序
-    //string s = &quot;print(123)&quot;;
-    //return System .Text .Encoding.UTF8 .GetBytes (s);
-
-    print(Application.streamingAssetsPath);
-
-    //通过路径读取返回Lua程序
-    string absPath = Application.streamingAssetsPath + &quot;/&quot; + filePath + &quot;.lua.txt&quot;;
-    return System.Text.Encoding.UTF8.GetBytes(File.ReadAllText( absPath));
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[生命周期]]></title>
-        <id>https://Wei715547.github.io/post/sheng-ming-zhou-qi/</id>
-        <link href="https://Wei715547.github.io/post/sheng-ming-zhou-qi/">
-        </link>
-        <updated>2020-06-06T08:23:03.000Z</updated>
-        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1591431791506.png" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
 </feed>

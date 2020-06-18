@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>接口-简单案例 | Wei: Development technology accumulation</title>
+<title>XLua虚拟环境/Lua脚本调用形式 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,15 +18,12 @@
 
 
 
-    <meta name="description" content="using System;
+    <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-namespace 接口
-{
-interface IUSB
-{
-void Read();
-    void..." />
+using UnityEngine;
+using XLua;
+using System.IO;
+public class..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -111,81 +108,34 @@ void Read();
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">接口-简单案例</h2>
-            <div class="post-date">2020-05-06</div>
+            <h2 class="post-title">XLua虚拟环境/Lua脚本调用形式</h2>
+            <div class="post-date">2020-06-18</div>
             
             <div class="post-content" v-pre>
-              <p>using System;<br>
+              <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
+using UnityEngine;<br>
+using XLua;<br>
+using System.IO;<br>
+public class HotFixScript : MonoBehaviour<br>
 {<br>
-interface IUSB<br>
+private LuaEnv LuaEnv;<br>
+// Start is called before the first frame update<br>
+void Start()<br>
 {<br>
-void Read();</p>
-<pre><code>    void Write(string s);
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
-{<br>
-class UDisk : IUSB<br>
-{<br>
-/// <summary><br>
-/// 存储内容<br>
-/// </summary><br>
-private string content;</p>
-<pre><code>    public void Read()
-    {
-        Console.WriteLine(content);
-    }
-
-    public void Write(string s)
-    {
-        content = s;
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
-{<br>
-class HardDisk:IUSB<br>
-{<br>
-private string content;</p>
-<pre><code>    public void Read()
-    {
-        Console.WriteLine(content);
-    }
-
-    public void Write(string s)
-    {
-        content = s;
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//程序<br>
-using System;</p>
-<p>namespace 接口<br>
-{</p>
-<pre><code>class Program
+LuaEnv = new LuaEnv();<br>
+LuaEnv.AddLoader(MyLoader);<br>
+LuaEnv.DoString(&quot;require'fish'&quot;);<br>
+}</p>
+<pre><code>private byte[] MyLoader(ref string filePath)
 {
-    static void Main(string[] args)
-    {
-        UDisk u1 = new UDisk();
-        u1.Write(&quot;Wei的U盘&quot;);
-        u1.Read();
+    string absPath = @&quot;D:\715\XluaProjects\PlayerGamePackage\&quot; + filePath + &quot;.lua.txt&quot;;
+    return System.Text.Encoding.UTF8.GetBytes(File.ReadAllText(absPath));
+}
 
-        HardDisk h = new HardDisk();
-        h.Write(&quot;Wei的硬盘&quot;);
-        h.Read();
-    }
+private void OnDestroy()
+{
+    LuaEnv.Dispose();
 }
 </code></pre>
 <p>}</p>
@@ -195,9 +145,9 @@ using System;</p>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/duo-tai-3jie-kou-duo-ji-cheng-jie-kou-ti-gong-te-shu-gong-neng/">
+                <a href="https://Wei715547.github.io/post/xlua-qian-ru-gong-cheng-hotfis-huan-jing-pei-zhi/">
                   <h3 class="post-title">
-                    多态（3）接口（多继承接口，提供“大量”特殊功能）
+                    XLua迁入工程，Hotfis环境配置
                   </h3>
                 </a>
               </div>
