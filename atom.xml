@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-18T09:41:22.941Z</updated>
+    <updated>2020-06-18T15:51:22.276Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -70,7 +70,8 @@ LuaEnv luaenv = new LuaEnv();//Lua虚拟运行环境</p>
         <link href="https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-fang-shi/">
         </link>
         <updated>2020-06-18T09:19:29.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
+        <content type="html"><![CDATA[<p>此处在本地执行，实际应从服务器中下在Lua补丁程序<br>
+using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;<br>
 using XLua;<br>
@@ -83,20 +84,66 @@ void Start()<br>
 {<br>
 LuaEnv = new LuaEnv();<br>
 LuaEnv.AddLoader(MyLoader);<br>
-LuaEnv.DoString(&quot;require'fish'&quot;);<br>
+LuaEnv.DoString(&quot;require'fish'&quot;);//fish中的Lua程序包含所有要更新的方法逻辑代码（Lua补丁程序）<br>
 }</p>
 <pre><code>private byte[] MyLoader(ref string filePath)
 {
     string absPath = @&quot;D:\715\XluaProjects\PlayerGamePackage\&quot; + filePath + &quot;.lua.txt&quot;;
     return System.Text.Encoding.UTF8.GetBytes(File.ReadAllText(absPath));
 }
-
+private void OnDisable()
+{
+    //在销毁前将委托置为空（避免报错）
+    //(Hotfix底层实际已委托形式实现，将Lua的方法注册到委托中，委托不为空时执行Lua中更新的方法)
+    LuaEnv.DoString(&quot;require'fishDispose'&quot;);
+}
 private void OnDestroy()
 {
     LuaEnv.Dispose();
 }
 </code></pre>
-<p>}</p>
+<p>}<br>
+/////////////////////////////////////////////////////////////<br>
+//fish.lua.txt<br>
+--1.修复CL间距<br>
+local UnityEngine=CS.UnityEngine<br>
+xlua.hotfix(CS.Treasour,'CreatePrize',function(self)<br>
+for i=0,4,1 do<br>
+local go = UnityEngine.GameObject.Instantiate(self.gold,self.transform.position+UnityEngine.Vector3(-10+i<em>40,0,0),self.transform.rotation)<br>
+go.transform.SetParent(go.transform,self.cavas)<br>
+local go = UnityEngine.GameObject.Instantiate(self.diamands,self.transform.position+UnityEngine.Vector3(0,40,0)+UnityEngine.Vector3(-10+i</em>40,0,0),self.transform.rotation)<br>
+go.transform.SetParent(go.transform,self.cavas)<br>
+end<br>
+end)</p>
+<pre><code>--2.修复Attack方法
+</code></pre>
+<p>xlua.private_accessible(CS.Gun)--要访问类中的私有变量时<br>
+xlua.hotfix(CS.Gun,'Attack',function(self)<br>
+if UnityEngine.Input.GetMouseButtonDown(0) then<br>
+if self.gold&lt;1+(self.gunLevel-1)<em>2 or gold ==0 than<br>
+return<br>
+end<br>
+self.bullectAudio.clip = self.bullectAudios[self.gunLevel-1]<br>
+--self.bullectAudio.Play(self)成员变量调用内部方法方式1<br>
+self.bullectAudio:Play()--方式2<br>
+if self.Butterfly then<br>
+UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation</em>UnityEngine.Quaternion.Euler(0,0,20))<br>
+UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation*UnityEngine.Quaternion.Euler(0,0,-20))<br>
+end</p>
+<pre><code>	UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation)
+
+	if not self.canShootForFree then
+		self:GoldChange(-1,-(self.gunLevel-1)*2)
+	end
+	self.attackCD = 0
+	self.attack = false
+end
+</code></pre>
+<p>end)<br>
+\\\\\\\\\\\\\\\\\\\\\\\\\\<br>
+\fishDispose.lua.txt</p>
+<p>xlua.hotfix(CS.Treasour,'CreatePrize',nil)</p>
+<p>xlua.hotfix(CS.Gun,'Attack',nil)</p>
 ]]></content>
     </entry>
     <entry>
