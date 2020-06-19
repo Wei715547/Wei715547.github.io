@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1592551210792">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1592558286571">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -33,7 +33,7 @@ usi..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1592551210792" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1592558286571" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -122,7 +122,7 @@ public class HotFixScript : MonoBehaviour<br>
 {<br>
 private LuaEnv LuaEnv;<br>
 // Start is called before the first frame update<br>
-void Start()//修改C#类的Start方法时，此处应在Awake中调用<br>
+void Awake()//修改C#类的Start方法时，此处应在Awake中调用<br>
 {<br>
 LuaEnv = new LuaEnv();<br>
 LuaEnv.AddLoader(MyLoader);<br>
@@ -175,10 +175,46 @@ end</p>
 <pre><code>	UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation)
 
 	if not self.canShootForFree then
-		self:GoldChange(-1,-(self.gunLevel-1)*2)
+		self:GoldChange(-1,-(self.gunLevel-1)*2)--一般情况下引用非静态方法时，使用成员变量+：来引用
 	end
 	self.attackCD = 0
 	self.attack = false
+end
+</code></pre>
+<p>end)<br>
+--*******************************************************************<br>
+--4.Prace<br>
+local util = require 'util'--加载XLua自带方法集<br>
+xlua.private_accessible(CS.Boss)--可访问类的私有变量<br>
+util.hotfix_ex(CS.Boss,'Start',function(self)--在C#脚本的基础上附加代码（谨慎使用次饭饭执较慢）<br>
+self.Start(self)--执行原C#中的方法<br>
+self.m_reduceGold = self.m_reduceGold-20<br>
+end)</p>
+<p>xlua.private_accessible(CS.DeffendBoss)<br>
+util.hotfix_ex(CS.DeffendBoss,'Start',function(self)<br>
+self.Start(self)<br>
+self.m_reduceDiamond = self.m_reduceDiamond-5<br>
+end)</p>
+<p>xlua.private_accessible(CS.InvisibleBoss)<br>
+util.hotfix_ex(CS.InvisibleBoss,'Start',function(self)<br>
+self.Start(self)<br>
+self.m_reduceDiamond = self.m_reduceDiamond-5<br>
+end)</p>
+<p>--************************************<br>
+--5.0处理CL产生负值<br>
+util.hotfix_ex(CS.Gun,'GoldChange',function(self,number)--修改存在参数的方法时，将自身与参数都写入函数<br>
+self.GoldChange(self,number)</p>
+<pre><code>if self.gold&lt;-number then
+	self.gold = 0
+	return
+end
+</code></pre>
+<p>end)</p>
+<p>util.hotfix_ex(CS.Gun,'DiamandsChange',function(self,number)<br>
+self.DiamandsChange(self,number)</p>
+<pre><code>if self.diamands&lt;-number then
+	self.diamands = 0
+	return
 end
 </code></pre>
 <p>end)<br>
