@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>XLua补丁调用本地AssetBundle资源 | Wei: Development technology accumulation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1592663384442">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="C#中加载AB包与获取AB包中Object的静态方法
+
+public static Dictionary&lt;string, GameObject&gt; prefabDict = new Dictionary&lt;string, Ga..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1592663384442" class="site-logo">
+        <h1 class="site-title">Wei: Development technology accumulation</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">XLua补丁调用本地AssetBundle资源</h2>
+            <div class="post-date">2020-06-20</div>
+            
+            <div class="post-content" v-pre>
+              <pre><code>C#中加载AB包与获取AB包中Object的静态方法
+
+public static Dictionary&lt;string, GameObject&gt; prefabDict = new Dictionary&lt;string, GameObject&gt;();//根据对象名称存储对象的静态字典集合
+
+[LuaCallCSharp]
+public static void LoadResource(string resName,string filePath)
+{
+    AssetBundle ab = AssetBundle.LoadFromFile(@&quot;D:\715\XluaProjects\FishingJoy\AssetBundles\&quot;+filePath);//本AB地资源路径
+    GameObject gameObject = ab.LoadAsset&lt;GameObject&gt;(resName);
+    prefabDict.Add(resName, gameObject);//键值存到字典集合
+}
+[LuaCallCSharp]
+public static GameObject GetGameObject(string goName)
+{
+    return prefabDict[goName];//根据打包前的对象名获取字典中对应的对象
+}
+</code></pre>
+<p>/////////////////////////////////////////////////////////////////////////////</p>
+<p>--****************************************************<br>
+--6.0Fish生成方式</p>
+<p>--利用C#类中的静态方法加载AB资源（此处静态方法放在HotFixScript热更新脚本中）</p>
+<p>xlua.hotfix(CS.CreateFish,'Start',function(self)//更新HotFixScript中的Start方法<br>
+CS.HotFixScript.LoadResource('level3fish3','gamaobjectenemy.ab')//加载AB包将新的对象加载放入字典集合<br>
+end)</p>
+<p>xlua.private_accessible(CS.CreateFish)<br>
+xlua.hotfix(CS.CreateFish,'Update',function(self)</p>
+<pre><code>self:CreateALotOfFish()
+
+--单种鱼的生成
+    if self.ItemtimeVal &gt;= 0.5 then
+</code></pre>
+<p>--<em><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>Lua中生成随机数的处理</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></em><br>
+--位置随机数<br>
+self.num = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(0, 4))--Lua只有一种数值类型此处取浮点型下界<br>
+--游戏物体随机数<br>
+self.ItemNum = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(1, 101))</p>
+<pre><code>		local halfLength=self.fishList.Length/2
+
+		local littlefishTypeIndex = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(0,halfLength))
+		local bigfishTypeIndex = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(halfLength,self.fishList.Length))
+		local itemTypeIndex = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(0,self.item.Length))
+		
+        --产生气泡
+        if self.ItemNum &lt; 20 then
+
+            self:CreateGameObject(self.item[3])
+			
+        end
+
+
+        if self.ItemNum &lt;= 42 then
+			for i=0,2,1 do
+				self:CreateGameObject(self.fishList[littlefishTypeIndex]);
+			end
+			self:CreateGameObject(self.item[itemTypeIndex])
+        
+        --第二种鱼30% 43-72
+        elseif self.ItemNum &gt;= 43 and self.ItemNum &lt; 72 then
+			for i=0,1,1 do
+				self:CreateGameObject(self.fishList[bigfishTypeIndex]);
+			end
+			self:CreateGameObject(self.item[itemTypeIndex])
+</code></pre>
+<p>--<em><strong><strong><strong><strong><strong><strong><strong><strong><strong>加载本地AB包中的资源</strong></strong></strong></strong></strong></strong></strong></strong></strong></em>********<br>
+--2.0新的鱼/AB包<br>
+elseif self.ItemNum &gt;= 73 and self.ItemNum &lt; 83 then<br>
+newFish = CS.HotFixScript.GetGameObject('level3fish3')--Lua中无泛型类，不需指定类型，直接声明字段接收静态方法返回的对象<br>
+self:CreateGameObject(newFish)<br>
+--*********************************************************************<br>
+elseif self.ItemNum &gt;= 84 and self.ItemNum &lt; 86 then<br>
+self:CreateGameObject(self.boss)</p>
+<pre><code>        elseif self.ItemNum &gt;= 87 and self.ItemNum &lt;= 88 then
+        
+            self:CreateGameObject(self.boss2)
+        
+
+        elseif self.ItemNum ==100 then
+        
+
+            self:CreateGameObject(self.boss3)
+
+        else
+        
+            self:CreateGameObject(self.item[0]);
+
+        end
+
+        self.ItemtimeVal = 0;
+
+    else
+        self.ItemtimeVal = self.ItemtimeVal + UnityEngine.Time.deltaTime;
+    end
+</code></pre>
+<p>end)</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/bu-ding-kai-fa-guo-cheng/">
+                  <h3 class="post-title">
+                    补丁开发过程
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
