@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-20T14:29:51.775Z</updated>
+    <updated>2020-06-21T15:41:46.544Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,70 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[空类应用于后期热更新]]></title>
+        <id>https://Wei715547.github.io/post/kong-lei-ying-yong-yu-hou-qi-re-geng-xin/</id>
+        <link href="https://Wei715547.github.io/post/kong-lei-ying-yong-yu-hou-qi-re-geng-xin/">
+        </link>
+        <updated>2020-06-21T15:36:59.000Z</updated>
+        <content type="html"><![CDATA[<p>//空类<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using XLua;<br>
+[Hotfix]<br>
+public class HotFixEmpty : MonoBehaviour<br>
+{<br>
+// Start is called before the first frame update<br>
+[LuaCallCSharp]<br>
+void Start()<br>
+{</p>
+<pre><code>}
+
+// Update is called once per frame
+[LuaCallCSharp]
+void Update()
+{
+    
+}
+[LuaCallCSharp]
+private void OnTriggerEnter(Collider other)
+{
+    
+}
+[LuaCallCSharp]
+private void BehaviourMethod()
+{
+
+}
+</code></pre>
+<p>}</p>
+<p>xxx.lua.txt<br>
+--*************************************************************<br>
+--9.0新的类</p>
+<p>xlua.private_accessible(CS.HotFixEmpty)<br>
+xlua.hotfix(CS.HotFixEmpty,'Start',function(self)<br>
+self:Invoke(&quot;BehaviourMethod&quot;,8)<br>
+end)</p>
+<p>xlua.hotfix(CS.HotFixEmpty,'Update',function(self)<br>
+self.transform:Translate(-self.transform.right<em>4</em>UnityEngine.Time.deltaTime,UnityEngine.Space.World)<br>
+end)</p>
+<p>xlua.hotfix(CS.HotFixEmpty,'OnTriggerEnter',function(self,other)<br>
+if other.tag~=&quot;Untagged&quot; and other.tag~=&quot;Wall&quot; then<br>
+UnityEngine.Object.Destroy(other.gameObject)<br>
+end<br>
+end)</p>
+<p>xlua.hotfix(CS.HotFixEmpty,'BehaviourMethod',function(self)<br>
+CS.Gun.Instance.level = CS.Gun.Instance.level+1<br>
+if CS.Gun.Instance.level==4 then<br>
+CS.Gun.Instance.level=1<br>
+end<br>
+canCreateNewFish = true<br>
+CS.Gun.Instance.changeAudio = true<br>
+UnityEngine.Object.Destroy(self.gameObject)<br>
+end)</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[XLua补丁调用本地AssetBundle资源]]></title>
         <id>https://Wei715547.github.io/post/xlua-bu-ding-diao-yong-ben-di-assetbundle-zi-yuan/</id>
@@ -617,38 +681,6 @@ private void Update()
 </code></pre>
 <p><img src="https://Wei715547.github.io/post-images/1591860911716.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1591860919096.PNG" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[UI图标冷却]]></title>
-        <id>https://Wei715547.github.io/post/ui-tu-biao-leng-que/</id>
-        <link href="https://Wei715547.github.io/post/ui-tu-biao-leng-que/">
-        </link>
-        <updated>2020-06-11T02:23:02.000Z</updated>
-        <content type="html"><![CDATA[<p>private void FixedUpdate()<br>
-{<br>
-coodTime += Time.deltaTime;</p>
-<pre><code>    if (Input.GetKeyDown(KeyCode.Z) &amp;&amp; coodTime &gt; setcoodtime)
-    {
-        au.PlayOneShot(russ, 1f);
-        Russing();
-        coodTime = 0;
-    }
-}
-
-// Update is called once per frame
-void Update()
-{
-    //UI显示
-    if (coodTime &gt; setcoodtime)
-    {
-        coodUI.fillAmount = 0;
-    }else
-    {
-        coodUI.fillAmount = 1-coodTime/setcoodtime ;
-    }
-}
-![](https://Wei715547.github.io/post-images/1591842421156.PNG)</code></pre>
 ]]></content>
     </entry>
 </feed>
