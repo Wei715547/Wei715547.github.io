@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>自定义特性 | Wei: Development technology accumulation</title>
+<title>获取NetBox网络服务器上的AB包与Lua脚本 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,13 +18,11 @@
 
 
 
-    <meta name="description" content="using System;
-using System.Collections.Generic;
-using System.Text;
-namespace 自定义特性
+    <meta name="description" content="//AB包（UnityWebRequest request 异步执行）
+[LuaCallCSharp]
+public  void LoadResource(string resName,string filePath)
 {
-//1.也行类的后缀以Attribute结尾
-//2.需要继承自:Sy..." />
+StartCor..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -109,58 +107,55 @@ namespace 自定义特性
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">自定义特性</h2>
-            <div class="post-date">2020-05-30</div>
+            <h2 class="post-title">获取NetBox网络服务器上的AB包与Lua脚本</h2>
+            <div class="post-date">2020-06-22</div>
             
             <div class="post-content" v-pre>
-              <p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 自定义特性<br>
+              <p>//AB包（UnityWebRequest request 异步执行）<br>
+[LuaCallCSharp]<br>
+public  void LoadResource(string resName,string filePath)<br>
 {<br>
-//1.也行类的后缀以Attribute结尾<br>
-//2.需要继承自:System.Attribute<br>
-//3.一般情况下声明为 sealed(不需要被继承)<br>
-//4.一般情况下特性类用来表示目标结构的一些状态（定义一些字段/属性，一般不需要定义方法）<br>
-[AttributeUsage(AttributeTargets.Class)]//表示特性类的使用目标,(表示特性类可以应用到程序的那些结构)<br>
-sealed class MyTestAttribute :System.Attribute<br>
-{<br>
-public string Description { get; set; }<br>
-public string VersionNumber { get; set; }<br>
-public int ID { get; set; }</p>
-<pre><code>    public MyTestAttribute(string des)
-    {
-        Description = des;
-    }
-}
-</code></pre>
-<p>}<br>
-//---------------------------------使用---------------------<br>
-using System;</p>
-<p>namespace 自定义特性<br>
-{<br>
-[MyTest(&quot;自定义特性类&quot;,ID = 100)]<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-Type type = typeof(Program);//通过typeof+类名，获取类的type对象<br>
-object[] array = type.GetCustomAttributes(false);//获取类的所有特性（false）不包括父类的<br>
-MyTestAttribute mytest = array[0] as MyTestAttribute;<br>
-Console.WriteLine(mytest.Description);<br>
-Console.WriteLine(mytest .ID );<br>
-}<br>
-}<br>
+StartCoroutine(LoadResourceCorotine(resName,filePath));<br>
 }</p>
+<pre><code>IEnumerator LoadResourceCorotine(string resName,string filePath)
+{
+    UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(@&quot;http://localhost/AssetBundles/&quot; + filePath); 
+    yield return request.SendWebRequest();
+    AssetBundle ab = (request.downloadHandler as DownloadHandlerAssetBundle).assetBundle;
+
+    GameObject gameObject = ab.LoadAsset&lt;GameObject&gt;(resName);
+    prefabDict.Add(resName, gameObject); 
+}
+
+/////////////////////////////////////////////////////////////////////////
+</code></pre>
+<p>// Lua脚本(加载场景时同时加载NetBox上的Lua脚本保存到本地(本地存在时直接覆盖源文件))<br>
+public void LoadGameMethod()<br>
+{<br>
+StartCoroutine(LoadResourceCorotine());<br>
+StartCoroutine(StartLoading_4(2));<br>
+}</p>
+<pre><code>IEnumerator LoadResourceCorotine()
+{
+    UnityWebRequest request = UnityWebRequest.Get(@&quot;http://localhost/fish.lua.txt&quot;);
+    yield return request.SendWebRequest();
+    string str = request.downloadHandler.text;//获取下载的脚本文本
+    File.WriteAllText(@&quot;D:\715\XluaProjects\PlayerGamePackage\fish.lua.txt&quot;, str);存储到本地
+
+    UnityWebRequest request1 = UnityWebRequest.Get(@&quot;http://localhost/fishDispose.lua.txt&quot;);
+    yield return request1.SendWebRequest();
+    string str1 = request1.downloadHandler.text;
+    File.WriteAllText(@&quot;D:\715\XluaProjects\PlayerGamePackage\fishDispose.lua.txt&quot;, str1);
+}</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/conditional-te-xing/">
+                <a href="https://Wei715547.github.io/post/kong-lei-ying-yong-yu-hou-qi-re-geng-xin/">
                   <h3 class="post-title">
-                    Conditional特性(方法)，调用者信息特性(字段/属性)，DebuggerStepThrough(方法）)
+                    空类应用于后期热更新
                   </h3>
                 </a>
               </div>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-21T15:41:46.544Z</updated>
+    <updated>2020-06-22T07:28:09.692Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,50 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[获取NetBox网络服务器上的AB包与Lua脚本]]></title>
+        <id>https://Wei715547.github.io/post/huo-qu-netbox-wang-luo-fu-wu-qi-shang-de-ab-bao-yu-lua-jiao-ben/</id>
+        <link href="https://Wei715547.github.io/post/huo-qu-netbox-wang-luo-fu-wu-qi-shang-de-ab-bao-yu-lua-jiao-ben/">
+        </link>
+        <updated>2020-06-22T07:12:21.000Z</updated>
+        <content type="html"><![CDATA[<p>//AB包（UnityWebRequest request 异步执行）<br>
+[LuaCallCSharp]<br>
+public  void LoadResource(string resName,string filePath)<br>
+{<br>
+StartCoroutine(LoadResourceCorotine(resName,filePath));<br>
+}</p>
+<pre><code>IEnumerator LoadResourceCorotine(string resName,string filePath)
+{
+    UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(@&quot;http://localhost/AssetBundles/&quot; + filePath); 
+    yield return request.SendWebRequest();
+    AssetBundle ab = (request.downloadHandler as DownloadHandlerAssetBundle).assetBundle;
+
+    GameObject gameObject = ab.LoadAsset&lt;GameObject&gt;(resName);
+    prefabDict.Add(resName, gameObject); 
+}
+
+/////////////////////////////////////////////////////////////////////////
+</code></pre>
+<p>// Lua脚本(加载场景时同时加载NetBox上的Lua脚本保存到本地(本地存在时直接覆盖源文件))<br>
+public void LoadGameMethod()<br>
+{<br>
+StartCoroutine(LoadResourceCorotine());<br>
+StartCoroutine(StartLoading_4(2));<br>
+}</p>
+<pre><code>IEnumerator LoadResourceCorotine()
+{
+    UnityWebRequest request = UnityWebRequest.Get(@&quot;http://localhost/fish.lua.txt&quot;);
+    yield return request.SendWebRequest();
+    string str = request.downloadHandler.text;//获取下载的脚本文本
+    File.WriteAllText(@&quot;D:\715\XluaProjects\PlayerGamePackage\fish.lua.txt&quot;, str);存储到本地
+
+    UnityWebRequest request1 = UnityWebRequest.Get(@&quot;http://localhost/fishDispose.lua.txt&quot;);
+    yield return request1.SendWebRequest();
+    string str1 = request1.downloadHandler.text;
+    File.WriteAllText(@&quot;D:\715\XluaProjects\PlayerGamePackage\fishDispose.lua.txt&quot;, str1);
+}</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[空类应用于后期热更新]]></title>
         <id>https://Wei715547.github.io/post/kong-lei-ying-yong-yu-hou-qi-re-geng-xin/</id>
@@ -654,33 +698,6 @@ public static CanvasDS instance;</p>
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Audio Mixer]]></title>
-        <id>https://Wei715547.github.io/post/audio-mixer/</id>
-        <link href="https://Wei715547.github.io/post/audio-mixer/">
-        </link>
-        <updated>2020-06-11T02:36:35.000Z</updated>
-        <content type="html"><![CDATA[<p>void Awake()<br>
-{<br>
-//Nomal Slider Ct<br>
-Vo.value = FindObjectOfType<AudioSource>().volume;</p>
-<pre><code>    //Pvo = transform.Find(&quot;Player_Slider&quot;).GetComponent&lt;Slider&gt;();
-
-    auM.GetFloat(&quot;MainVolume&quot;,out float v);
-    Pvo.value = v;//Audio Mixer output value  to Slider
-}
-
-private void Update()
-{
-    //Panel enable update the value
-    FindObjectOfType&lt;AudioSource&gt;().volume = Vo.value;
-    auM .SetFloat(&quot;MainVolume&quot;, Pvo.value);
-}
-</code></pre>
-<p><img src="https://Wei715547.github.io/post-images/1591860911716.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1591860919096.PNG" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
