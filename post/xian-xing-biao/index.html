@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1592985743010">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1593050425180">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -38,7 +38,7 @@ void Add(T i..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1592985743010" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1593050425180" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -263,7 +263,195 @@ private int count = 0;//数据个数</p>
 顺序表：线性表的顺序存储（静态数组（以分配默认大小），动态数组）<br>
 单链表：线性表链式存储（链式指针，非顺序存储[数据，地址]对形式）<br>
 判断单链表是否为空1，头结点head是否为空。2，头结点的指针head-&gt;next 是否为空<br>
-栈：顺序栈，链栈。<br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 数据结构<br>
+{/// <summary><br>
+/// 单链表<br>
+/// </summary><br>
+/// <typeparam name="T"></typeparam><br>
+class LinkList<T> : IListDS<T><br>
+{<br>
+private Node<T> head;</p>
+<pre><code>    public LinkList()
+    {
+        head = null;
+    }
+
+    public T this[int index]
+    {
+        get
+        {
+            Node&lt;T&gt; temp = head;
+            for (int i = 0; i &lt; index; i++)
+            {
+                temp = temp.Next;
+            }
+            return temp.Date;
+        }
+
+    }
+
+    public void Add(T item)
+    {
+        Node&lt;T&gt; newNode = new Node&lt;T&gt;(item);//根据新的数据创建节点
+        //如果头结点为空则该节点作为头结点
+        if(head==null)
+        {
+            head = newNode;
+        }
+        else
+        {//把新的节点放到链表的末尾
+            //访问到链表的末尾点
+            Node&lt;T&gt; temp = head;
+            while (true)
+            {
+                if (temp.Next != null)
+                {
+                    temp = temp.Next;
+                }else
+                {
+                    break;
+                }
+            }
+            temp.Next = newNode;
+
+        }
+    }
+
+    public void Clear()
+    {
+        head = null;
+    }
+
+    public T Delete(int index)
+    {
+        T date = default(T);
+        if (index == 0)
+        {
+            date = head.Date;
+            head = head.Next;
+        }
+        else
+        {
+            Node&lt;T&gt; temp = head;
+            for (int i = 0; i &lt; index - 1; i++)
+            {
+                temp = temp.Next;
+            }
+            Node&lt;T&gt; pr = temp;
+            Node&lt;T&gt; d = temp.Next;
+            date = d.Date;
+            Node&lt;T&gt; l = d.Next;
+            pr.Next = l;
+        }
+        return date;
+    }
+
+    public T GetEle(int index)
+    {
+        if (head == null)
+        {
+            Console.WriteLine(&quot;Index outof range&quot;);
+            throw new Exception(&quot;链表为空&quot;);
+        }
+
+        if (index == 0)
+            return head.Date;
+
+        Node&lt;T&gt; temp = head;
+        for (int i = 0; i &lt; index ; i++)
+        {
+            temp = temp.Next;
+        }
+        return temp.Date;
+    }
+
+    public int GetLength()
+    {
+        if (head == null)
+            return 0;
+        else
+        {
+            int length = 1;
+            Node&lt;T&gt; temp = head;
+            while (true)
+            {
+                if (temp.Next != null)
+                {
+                    length++;
+                    temp = temp.Next;
+                }
+                else
+                    break;
+            }
+            return length;
+        }
+    }
+
+    public void Insert(T item, int index)
+    {
+        Node&lt;T&gt; newNode = new Node&lt;T&gt;(item);
+        if (index ==0)
+        {
+            newNode.Next = head;
+            head = newNode;
+        }else
+        {
+            Node&lt;T&gt; temp = head;
+            for (int i = 0; i &lt; index -1; i++)
+            {
+                temp = temp.Next; 
+            }
+            Node&lt;T&gt; pr = temp;
+            Node&lt;T&gt; cu = temp.Next;
+            pr.Next = newNode;
+            newNode.Next = cu;
+        }
+    }
+
+    public bool IsEmpty()
+    {
+        if (head != null)
+            return false;
+        else
+            return true;
+    }
+
+    public int Locate(T value)
+    {
+        
+        Node&lt;T&gt; temp = head;
+        if (temp == null)
+            return -1;
+        else
+        {
+            int index = 0;
+            while (true)
+            {
+                if (temp.Date.Equals(value))
+                {
+                    return index;
+                }
+                else
+                {
+                    if (temp.Next != null)
+                    {
+                        index++;
+                        temp = temp.Next;
+                    }
+                    else break;
+                }
+            }
+            return -1;
+        }
+
+    }
+}
+</code></pre>
+<p>}</p>
+<p>栈：顺序栈，链栈。<br>
 队列：先进先出--常用方法：初始化队列，判断队列是否为空（首末指针相同时队列为空），队列长度为末指针-首指针。<br>
 入队，出队，读取队头元素，销毁队列。<br>
 顺序队列，循环队列。</p>
