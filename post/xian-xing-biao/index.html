@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1593050425180">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1593050919730">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -38,7 +38,7 @@ void Add(T i..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1593050425180" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1593050919730" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -263,6 +263,56 @@ private int count = 0;//数据个数</p>
 顺序表：线性表的顺序存储（静态数组（以分配默认大小），动态数组）<br>
 单链表：线性表链式存储（链式指针，非顺序存储[数据，地址]对形式）<br>
 判断单链表是否为空1，头结点head是否为空。2，头结点的指针head-&gt;next 是否为空<br>
+//节点类<br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 数据结构<br>
+{/// <summary><br>
+/// 线性表-节点类<br>
+/// </summary><br>
+class Node<T><br>
+{<br>
+private T date;<br>
+private Node<T> next;</p>
+<pre><code>    public T Date
+    {
+        get { return date; }
+        set { date = value; }
+    }
+
+    public Node &lt;T&gt; Next
+    {
+        get { return next; }
+        set { next = value; }
+    }
+
+    public Node()
+    {
+        date = default(T);
+        next = null;
+    }
+
+    public Node (T value)
+    {
+        date = value;
+        next = null;
+    }
+
+    public Node (T value,Node &lt;T&gt; next)
+    {
+        date = value;
+        this.next = next;
+    }
+
+    public Node(Node &lt;T&gt; next)
+    {
+        this.next = next; 
+    }
+}
+</code></pre>
+<p>}<br>
+///////////////////////////////////////////////////////////<br>
 using System;<br>
 using System.Collections.Generic;<br>
 using System.Text;</p>
