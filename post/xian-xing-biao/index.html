@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1593050919730">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1593159816224">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -38,7 +38,7 @@ void Add(T i..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1593050919730" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1593159816224" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -502,6 +502,137 @@ private Node<T> head;</p>
 </code></pre>
 <p>}</p>
 <p>栈：顺序栈，链栈。<br>
+1.1顺序栈<br>
+namespace 栈<br>
+{<br>
+interface IStackDS<T><br>
+{<br>
+int Count { get; }<br>
+int GetLength();<br>
+bool IsEmpty();<br>
+void Clear();<br>
+void Push(T item);<br>
+T Pop();<br>
+T Peek();</p>
+<pre><code>}
+</code></pre>
+<p>}<br>
+namespace 栈<br>
+{<br>
+class SeqStack<T> : IStackDS<T><br>
+{<br>
+private T[] date;<br>
+private int top;</p>
+<pre><code>    public SeqStack(int size)
+    {
+        date = new T[size];
+        top = -1;
+    }
+
+    public SeqStack ():this (10)
+    {
+
+    }
+
+
+    public int Count
+    {
+        get
+        {
+            return top+1;
+        }
+    }
+
+    public void Clear()
+    {
+        top = -1;
+    }
+
+    public int GetLength()
+    {
+        return Count;
+    }
+
+    public bool IsEmpty()
+    {
+        return Count == 0;
+    }
+
+    public T Peek()
+    {
+        return date[top];
+    }
+
+    public T Pop()
+    {
+        T temp = date[top];
+        top--;
+        return temp;
+    }
+
+    public void Push(T item)
+    {
+        date[top +1] = item;
+        top++;
+    }
+}
+</code></pre>
+<p>}<br>
+2.链栈<br>
+{/// <summary><br>
+/// 链栈的节点类<br>
+/// </summary><br>
+/// <typeparam name="T"></typeparam><br>
+class Node<T><br>
+{<br>
+private T date;<br>
+private Node<T> next;</p>
+<pre><code>    public T Date
+    {
+        get
+        {
+            return date;
+        }
+        set
+        {
+            date = value;
+        }
+    }
+    public Node &lt;T&gt; Next
+    {
+        get
+        {
+            return next;
+        }
+        set
+        {
+            next = value;
+        }
+    }
+
+    public Node ()
+    {
+        date = default(T);
+        next = null;
+    }
+    public Node (T date )
+    {
+        this.date = date;
+        this.next = null;
+    }
+    public Node (T date,Node &lt;T&gt; next)
+    {
+        this.date = date;
+        this.next = next;
+    }
+    public Node (Node&lt;T&gt; next)
+    {
+        this.next = next;
+        this.date = default(T);
+    }
+}
+</code></pre>
+<p>}<br>
 队列：先进先出--常用方法：初始化队列，判断队列是否为空（首末指针相同时队列为空），队列长度为末指针-首指针。<br>
 入队，出队，读取队头元素，销毁队列。<br>
 顺序队列，循环队列。</p>
