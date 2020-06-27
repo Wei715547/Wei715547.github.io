@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1593159816224">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1593227578199">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -38,7 +38,7 @@ void Add(T i..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1593159816224" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1593227578199" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -635,7 +635,253 @@ private Node<T> next;</p>
 <p>}<br>
 队列：先进先出--常用方法：初始化队列，判断队列是否为空（首末指针相同时队列为空），队列长度为末指针-首指针。<br>
 入队，出队，读取队头元素，销毁队列。<br>
-顺序队列，循环队列。</p>
+namespace 队列<br>
+{/// <summary><br>
+/// 先入队先出后入队后出<br>
+/// </summary><br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+//声明队列<br>
+//SeqQueue<int> queue = new SeqQueue<int>();<br>
+//使用链队列<br>
+LinkQueue<int> queue = new LinkQueue<int>();</p>
+<pre><code>        //入队
+        queue.Enqueue(23);
+        queue.Enqueue(45);
+        queue.Enqueue(66);
+        queue.Enqueue(89);
+
+        Console.WriteLine(&quot;添加数据之后队列的大小为：&quot;+queue.Count);
+
+        //出队：取得队首的数据，并删除
+        int i = queue.Dequeue();
+        Console.WriteLine(&quot;取得队首的数据：&quot;+i);
+
+        Console.WriteLine(&quot;取出队首数据后队列大小为：&quot;+queue.Count);
+
+        //取得队首数据，不删除
+        int j = queue.Peek();
+        Console.WriteLine(&quot;队首数据：&quot;+j);
+        Console.WriteLine( &quot;队列大小：&quot;+queue .Count);
+
+        queue.Clear();
+        Console.WriteLine(&quot;清空队列后队列大小为：&quot;+queue.Count);
+
+    }
+}
+</code></pre>
+<p>}</p>
+<p>顺序队列，<br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 队列<br>
+{<br>
+class SeqQueue<T> : IQueue<T><br>
+{<br>
+private T[] date;<br>
+private int count;<br>
+private int front;//队首/队首元素索引减一<br>
+private int rear;//队尾/队尾元素索引</p>
+<pre><code>    public SeqQueue(int size)
+    {
+        date = new T[size];
+        count = 0;
+        front = -1;
+        rear  = - 1;
+    }
+    public SeqQueue ():this(10)
+    {
+
+    }
+
+    public int Count
+    {
+        get { return count; }
+    }
+
+    public void Clear()
+    {
+        count = 0;
+        front = rear = -1;
+    }
+
+    public T Dequeue()
+    {
+        if (count &gt;0)
+        {
+            T temp = date[front + 1];
+            front++;
+            count--;
+            return temp;
+        }
+        else
+        {
+            Console.WriteLine(&quot;队列为空&quot;);
+            return default(T);
+        }
+    }
+
+    public void Enqueue(T item)
+    {
+        if (count == date.Length)
+        {
+            Console.WriteLine(&quot;队列已满&quot;);
+        }else
+        {
+            if(rear==date .Length-1)
+            {
+                date[0] = item;
+                rear = 0;
+                count++;
+            }
+            else
+            {
+                date[rear + 1] = item;
+                rear++;
+                count++;
+            }
+        }
+    }
+
+    public int GetLength()
+    {
+        return count;
+    }
+
+    public bool IsEmpty()
+    {
+        return count == 0;
+    }
+
+    public T Peek()
+    {
+        T temp = date[front + 1];
+        return temp;
+    }
+}
+</code></pre>
+<p>}</p>
+<p>循环队列。<br>
+namespace 队列<br>
+{/// <summary><br>
+/// 节点类<br>
+/// </summary><br>
+/// <typeparam name="T"></typeparam><br>
+class Node<T><br>
+{<br>
+private T date;<br>
+private Node<T> next;</p>
+<pre><code>    public Node (T date)
+    {
+        this.date = date;
+    }
+
+    public T Date
+    {
+        get { return date; }
+        set { date = value; }
+    }
+
+    public Node &lt;T&gt; Next
+    {
+        get { return next; }
+        set { this.next = value; }
+    }
+}
+</code></pre>
+<p>}</p>
+<p>namespace 队列<br>
+{<br>
+class LinkQueue<T> : IQueue<T><br>
+{<br>
+private Node<T> front;<br>
+private Node<T> rear;<br>
+private int count;</p>
+<pre><code>    public LinkQueue()
+    {
+        front = null;
+        rear = null;
+        count = 0;
+    }
+
+    public int Count
+    {
+        get { return count; }
+    }
+
+    public void Clear()
+    {
+        count = 0;
+        front = null;
+        rear = null;
+    }
+
+    public T Dequeue()
+    {
+        if (count == 0)
+        {
+            Console.WriteLine(&quot;队列为空&quot;);
+            return default(T);
+        }
+        else if (count == 1)
+        {
+            T temp = front.Date;
+            //Clear();
+            front = rear = null;
+            count = 0;
+            return temp;
+        }
+        else
+        {
+            T temp = front.Date;
+            front = front.Next;
+            count--;
+            return temp;
+        }
+    }
+
+    public void Enqueue(T item)
+    {
+        Node&lt;T&gt; newNode = new Node&lt;T&gt;(item);
+        if (count ==0)
+        {
+            front = newNode;
+            rear = newNode;
+            count = 1;
+        }else
+        {
+            rear.Next = newNode;
+            rear = newNode;
+            count++;
+        }
+    }
+
+    public int GetLength()
+    {
+        return count;
+    }
+
+    public bool IsEmpty()
+    {
+        return count == 0;
+    }
+
+    public T Peek()
+    {
+        if (front !=null)
+        {
+            return front.Date;
+        }else
+        {
+            return default(T);
+        }
+    }
+}
+</code></pre>
+<p>}</p>
 
             </div>
             
