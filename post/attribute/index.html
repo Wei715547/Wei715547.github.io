@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>2D多段跳 | Wei: Development technology accumulation</title>
+<title>Attribute | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,13 +18,10 @@
 
 
 
-    <meta name="description" content="
-public int jumpForce;
-public int jumptimes = 2;
-private int jumpCount;
-    public void JumpMax()
-{
-    if (ani.GetBool(..." />
+    <meta name="description" content="默认情况下，Inspector窗口会显示所有的公共字段，Attribute可以叠加发生作用
+1.HideInInspector：隐藏字段
+2.SerializeFiled：把私有字段在Inspector中显示
+3.Header：对公共字段进..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -109,76 +106,30 @@ private int jumpCount;
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">2D多段跳</h2>
-            <div class="post-date">2020-05-16</div>
+            <h2 class="post-title">Attribute</h2>
+            <div class="post-date">2020-06-27</div>
             
             <div class="post-content" v-pre>
-              <p><img src="https://Wei715547.github.io/post-images/1589614659174.PNG" alt="" loading="lazy"><br>
-public int jumpForce;<br>
-public int jumptimes = 2;<br>
-private int jumpCount;</p>
-<pre><code>    public void JumpMax()
-{
-    if (ani.GetBool(&quot;Heart&quot;)) return;
-    
-    if (Physics2D.OverlapCircle(foot.position, 0.2f, ground))
-    {
-        jumpCount = jumptimes ;
-        ani.SetBool(&quot;Jumping&quot;, false);
-    }
-    if (Input.GetButtonDown(&quot;Jump&quot;) &amp;&amp; Physics2D.OverlapCircle(foot.position, 0.2f, ground))
-    {
-        au.PlayOneShot(jump, 1f);
-        playerR.velocity = new Vector2(playerR.velocity.x, jumpForce );
-        ani.SetBool(&quot;Jumping&quot;, true);
-        ani.SetBool(&quot;Idle&quot;, false);
-        ani.SetBool(&quot;Down&quot;, false);
-        jumpCount--;
-    }else if(Input.GetButtonDown(&quot;Jump&quot;)&amp;&amp; jumpCount &gt; 0&amp;&amp; !Physics2D.OverlapCircle(foot.position, 0.2f, ground))
-    {
-        au.PlayOneShot(jump, 1f);
-        playerR.velocity = new Vector2(playerR.velocity.x, jumpForce );
-        ani.SetBool(&quot;Jumping&quot;, true);
-        ani.SetBool(&quot;Idle&quot;, false);
-        ani.SetBool(&quot;Down&quot;, false);
-        jumpCount--;
-    }
-}    public void JumpMax()
-{
-    if (ani.GetBool(&quot;Heart&quot;)) return;
-    
-    if (Physics2D.OverlapCircle(foot.position, 0.2f, ground))
-    {
-        jumpCount = jumptimes ;
-        ani.SetBool(&quot;Jumping&quot;, false);
-    }
-    if (Input.GetButtonDown(&quot;Jump&quot;) &amp;&amp; Physics2D.OverlapCircle(foot.position, 0.2f, ground))
-    {
-        au.PlayOneShot(jump, 1f);
-        playerR.velocity = new Vector2(playerR.velocity.x, jumpForce );
-        ani.SetBool(&quot;Jumping&quot;, true);
-        ani.SetBool(&quot;Idle&quot;, false);
-        ani.SetBool(&quot;Down&quot;, false);
-        jumpCount--;
-    }else if(Input.GetButtonDown(&quot;Jump&quot;)&amp;&amp; jumpCount &gt; 0&amp;&amp; !Physics2D.OverlapCircle(foot.position, 0.2f, ground))
-    {
-        au.PlayOneShot(jump, 1f);
-        playerR.velocity = new Vector2(playerR.velocity.x, jumpForce );
-        ani.SetBool(&quot;Jumping&quot;, true);
-        ani.SetBool(&quot;Idle&quot;, false);
-        ani.SetBool(&quot;Down&quot;, false);
-        jumpCount--;
-    }
-}</code></pre>
+              <p>默认情况下，Inspector窗口会显示所有的公共字段，Attribute可以叠加发生作用<br>
+1.HideInInspector：隐藏字段<br>
+2.SerializeFiled：把私有字段在Inspector中显示<br>
+3.Header：对公共字段进行分组 （【Header（&quot;描述&quot;）】）<br>
+4.Space：给各个字段分组之间添加一个空行<br>
+5.Textarea：可以在输入框内输出多行，超出范围会出现滚动条<br>
+6.Range：给字段定数值范围，以滑动条的形式呈现 （【Range（0,1）】）<br>
+7.Tooltip：为字段添加提示信息，鼠标悬停字段处即可出现<br>
+8.ContextMenu：为方法提供可执行方式，在Inspector窗口右键点击脚本即可看到方法<br>
+9.DisallowMultipleComponent：指定脚本不能重复添加<br>
+10.RequireComponent：在一个类中绑定另一个类，实现同步</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/fan-xing-ji-he-listdictionary/">
+                <a href="https://Wei715547.github.io/post/huo-qu-netbox-wang-luo-fu-wu-qi-shang-de-ab-bao-yu-lua-jiao-ben/">
                   <h3 class="post-title">
-                    泛型集合List,Dictionary
+                    获取NetBox网络服务器上的AB包与Lua脚本
                   </h3>
                 </a>
               </div>

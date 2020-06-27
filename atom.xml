@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-27T03:36:05.931Z</updated>
+    <updated>2020-06-27T04:19:53.412Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,25 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[Attribute]]></title>
+        <id>https://Wei715547.github.io/post/attribute/</id>
+        <link href="https://Wei715547.github.io/post/attribute/">
+        </link>
+        <updated>2020-06-27T04:19:31.000Z</updated>
+        <content type="html"><![CDATA[<p>默认情况下，Inspector窗口会显示所有的公共字段，Attribute可以叠加发生作用<br>
+1.HideInInspector：隐藏字段<br>
+2.SerializeFiled：把私有字段在Inspector中显示<br>
+3.Header：对公共字段进行分组 （【Header（&quot;描述&quot;）】）<br>
+4.Space：给各个字段分组之间添加一个空行<br>
+5.Textarea：可以在输入框内输出多行，超出范围会出现滚动条<br>
+6.Range：给字段定数值范围，以滑动条的形式呈现 （【Range（0,1）】）<br>
+7.Tooltip：为字段添加提示信息，鼠标悬停字段处即可出现<br>
+8.ContextMenu：为方法提供可执行方式，在Inspector窗口右键点击脚本即可看到方法<br>
+9.DisallowMultipleComponent：指定脚本不能重复添加<br>
+10.RequireComponent：在一个类中绑定另一个类，实现同步</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[获取NetBox网络服务器上的AB包与Lua脚本]]></title>
         <id>https://Wei715547.github.io/post/huo-qu-netbox-wang-luo-fu-wu-qi-shang-de-ab-bao-yu-lua-jiao-ben/</id>
@@ -671,33 +690,6 @@ public void RestartScence()
 </code></pre>
 <p>}</p>
 <p>复杂时可使用事件的广播，监听</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Next Scence Don't Destroy]]></title>
-        <id>https://Wei715547.github.io/post/next-scence-dont-destroy/</id>
-        <link href="https://Wei715547.github.io/post/next-scence-dont-destroy/">
-        </link>
-        <updated>2020-06-11T08:38:18.000Z</updated>
-        <content type="html"><![CDATA[<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class CanvasDS : MonoBehaviour<br>
-{<br>
-//声明单例，判断其在场景中是否已存在（被赋值）<br>
-public static CanvasDS instance;</p>
-<pre><code>void Awake()
-{
-    if (instance != null)
-    {
-        Destroy(gameObject);//已存在与场景中时销毁此对象，保证场景中只有一个此类对象
-        return;
-    }
-    instance = this;
-    DontDestroyOnLoad(this);
-}
-</code></pre>
-<p>}</p>
 ]]></content>
     </entry>
 </feed>
