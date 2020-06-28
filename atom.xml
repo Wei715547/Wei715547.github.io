@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-27T04:19:53.412Z</updated>
+    <updated>2020-06-28T14:57:49.098Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,264 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[Sort]]></title>
+        <id>https://Wei715547.github.io/post/sort/</id>
+        <link href="https://Wei715547.github.io/post/sort/">
+        </link>
+        <updated>2020-06-28T03:11:56.000Z</updated>
+        <content type="html"><![CDATA[<p>直插排序<br>
+<img src="https://Wei715547.github.io/post-images/1593314284836.jpg" alt="" loading="lazy"><br>
+static void InsertSort(int[] dateArray)<br>
+{<br>
+for (int i = 1; i &lt; dateArray .Length ; i++)<br>
+{<br>
+int iValue = dateArray[i];<br>
+bool isInsert = false;<br>
+//从第二个元素开始拿到i位置元素，和前面的元素对比<br>
+//如比I大，就让其向后移动，（保证前面的元素从小到大排序）<br>
+for (int j = i - 1; j &gt;= 0; j--)<br>
+{<br>
+if (dateArray [j]&gt;iValue)<br>
+{<br>
+dateArray[j + 1] = dateArray[j];<br>
+}else//在前面发现一比i小的值就停止移动<br>
+{<br>
+dateArray[j + 1] = iValue;<br>
+isInsert = true;<br>
+break;<br>
+}<br>
+}<br>
+if (isInsert ==false)//前面的值都比i大将i放到最前面<br>
+{<br>
+dateArray[0] = iValue;<br>
+}<br>
+}<br>
+}</p>
+<pre><code>    选择排序
+</code></pre>
+<p><img src="https://Wei715547.github.io/post-images/1593315435960.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1593315539844.jpg" alt="" loading="lazy"><br>
+static void SelectSort(int[] dateArray)<br>
+{<br>
+for (int i = 0; i &lt; dateArray .Length ; i++)<br>
+{<br>
+int mindate = dateArray[i];<br>
+int minIndex = i;<br>
+for (int j = i+1; j &lt; dateArray.Length ; j++)<br>
+{<br>
+if (dateArray [j]&lt;mindate )<br>
+{<br>
+mindate = dateArray[j];<br>
+minIndex = j;<br>
+}<br>
+}<br>
+if (minIndex !=i)<br>
+{<br>
+int temp = dateArray[i];<br>
+dateArray[i] = mindate;<br>
+dateArray[minIndex] = temp;<br>
+}<br>
+}<br>
+}</p>
+<pre><code>    快速排序
+    /// &lt;summary&gt;
+    /// 对数组范围内的数据进行排序
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;dateArray&quot;&gt;要排序的数组&lt;/param&gt;
+    /// &lt;param name=&quot;left&quot;&gt;开始索引&lt;/param&gt;
+    /// &lt;param name=&quot;right&quot;&gt;结束索引&lt;/param&gt;
+    static void QuickSort(int [] dateArray,int left,int right)
+    {
+        if (left &lt;right )
+        {
+            int x = dateArray[left];//基准数，把比它小或等于它的放在它左边，然后把比它大的放在右边
+            int i = left;
+            int j = right;
+
+            while (true &amp;&amp; i &lt; j)
+            {
+                //从后往前比较，（从右往左找一个小于/等于x的数字）
+                while (true &amp;&amp; i &lt; j)
+                {
+                    if (dateArray[j] &lt; x)//找到了一个小于基准数的数字，把它放在x左边（i位置）
+                    {
+                        dateArray[i] = dateArray[j];
+                        break;
+                    }
+                    else
+                    {
+                        j--;
+                    }
+                }
+                //从前往后找一个（左到右找一个比x大的数字，放在放在基准位置（j）
+                while (true &amp;&amp; i &lt; j)
+                {
+                    if (dateArray[i] &gt; x)
+                    {
+                        dateArray[j] = dateArray[i];
+                        break;
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
+            }
+            dateArray[i] = x;
+            QuickSort(dateArray, left, i - 1);
+            QuickSort(dateArray, i + 1, right);
+        }
+    }</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[自定义String,Array]]></title>
+        <id>https://Wei715547.github.io/post/zi-ding-yi-stringarray/</id>
+        <link href="https://Wei715547.github.io/post/zi-ding-yi-stringarray/">
+        </link>
+        <updated>2020-06-28T01:53:18.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace 串<br>
+{<br>
+class StringDS<br>
+{<br>
+private char[] date;<br>
+public StringDS(char[] array )<br>
+{<br>
+date = new char[array.Length];<br>
+for (int i = 0; i &lt; date.Length; i++)<br>
+{<br>
+date[i] = array[i];<br>
+}<br>
+}<br>
+public StringDS(string str)<br>
+{<br>
+date = new char[str.Length];<br>
+for (int i = 0; i &lt; date.Length; i++)<br>
+{<br>
+date[i] = str[i];<br>
+}<br>
+}</p>
+<pre><code>    //索引器
+    public char this[int index]
+    {
+        get { return date[index]; }
+    }
+
+    public int GetLength()
+    {
+        return date.Length;
+    }
+
+    /// &lt;summary&gt;
+    /// 如果两字符相同返回0
+    /// 如果当前字符小于s,返回-1
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;s&quot;&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public int Compare(StringDS s)
+    {
+        //取得长度较小的字符串长度
+        int len = this.GetLength() &lt; s.GetLength() ? this.GetLength() : s.GetLength();
+        int index = -1;
+        for (int i = 0; i &lt; len; i++)
+        {
+            if (this[i]!=s[i])
+            {
+                index = i;
+                break;
+            }
+        }
+        if(index !=-1)
+        {
+            if (this[index ] &gt; s[index ])
+                return 1;
+            else
+                return -1;
+        }else
+        {
+            if (this.GetLength()==s.GetLength ())
+            {
+                return 0;
+            }else
+            {
+                if (this.GetLength() &gt; s.GetLength())
+                    return 1;
+                else
+                    return -1;
+            }
+        }
+    }
+    /// &lt;summary&gt;
+    /// 截取字符串
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;index&quot;&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;length&quot;&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public StringDS SubString(int index,int length)
+    {
+        char[] newDate = new char[length];
+        for (int i = 0; i &lt; length; i++)
+        {
+            newDate[i] = date[i+index ];
+        }
+        return new StringDS ( newDate);
+    }
+    public override string ToString()
+    {
+        /*string s=&quot;&quot;;
+        foreach (char  item in date)
+        {
+            s += item;
+        }
+        return s;*/
+        return new string(date);
+        
+    }
+    public static StringDS Concat(StringDS a,StringDS b)
+    {
+        char [] newDate = new char[a.GetLength() + b.GetLength()];
+        for (int i = 0; i &lt; a.GetLength (); i++)
+        {
+            newDate[i] = a[i];
+        }
+        for (int i = a.GetLength (); i &lt; newDate .Length; i++)
+        {
+            newDate[i] = b[i - a.GetLength()];
+        }
+        return new StringDS(newDate);
+    }
+
+    public int IndexOf(StringDS str)
+    {
+        for (int i = 0; i &lt;= this .GetLength ()-str .GetLength (); i++)
+        {
+            bool isEqual = true;
+            for (int j = i; j &lt; i+str.GetLength (); j++)
+            {
+                if (this [j]!=str [j-i])
+                {
+                    isEqual = false;
+                }
+            }
+            if (isEqual )
+            {
+                return i;
+            }else
+            {
+                continue;
+            }
+        }
+        return -1;
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Attribute]]></title>
         <id>https://Wei715547.github.io/post/attribute/</id>
@@ -527,169 +785,6 @@ AssetBundle.LoadFromFile(&quot;AssetBundles/&quot; + name);//加载所有的依�
 }<br>
 <img src="https://Wei715547.github.io/post-images/1592216098868.jpg" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1592216105421.jpg" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Save Point]]></title>
-        <id>https://Wei715547.github.io/post/save-point/</id>
-        <link href="https://Wei715547.github.io/post/save-point/">
-        </link>
-        <updated>2020-06-13T08:06:34.000Z</updated>
-        <content type="html"><![CDATA[<p>//Prefab脚本<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class SavePoint : MonoBehaviour<br>
-{<br>
-private LayerMask player;<br>
-private Light signlLight;<br>
-// Start is called before the first frame update<br>
-void Start()<br>
-{<br>
-player = LayerMask.NameToLayer(&quot;Player&quot;);<br>
-signlLight = GetComponentInChildren<Light>();<br>
-}</p>
-<pre><code>//玩家触碰到Point时调用GM中的方法
-private void OnTriggerEnter2D(Collider2D collision)
-{
-    if (collision.gameObject .layer ==player )
-    {
-        signlLight.color = Color.green;
-        this.gameObject.GetComponent&lt;SpriteRenderer&gt;().material.color = Color.green;
-        Debug.Log(&quot;Save&quot;);
-        
-        GameManager.instance.SavePoint();
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//GameManager<br>
-public Vector2 playerPos ;//存储玩家位置，(通关/返回主界面时职位Vector2.zero<br>
-//instance.playerPos = Vector2.zero;//通关后位置初始化)<br>
-/存档点位置更新<br>
-public void SavePoint()<br>
-{<br>
-instance.playerPos = instance.playerMove.transform.position;//玩家位置赋值给GM中的Pos<br>
-}<br>
-//GM中的Save/Load<br>
-public GameData Save()<br>
-{<br>
-GameData date = new GameData();<br>
-date.scence = SceneManager.GetActiveScene().buildIndex;<br>
-date.deathCount = instance.deathCount;<br>
-date.bgmValue = UIManager.instence.GetBGMValue();<br>
-date.fxValue = UIManager.instence.GetFXValue();</p>
-<pre><code>    if (instance.playerPos == Vector2.zero)
-    {
-        date.posx = 0;
-        date.posy = 0;
-    }
-
-    else
-    {
-        date.posx = instance.playerPos.x;
-        date.posy = instance.playerPos.y;
-    }
-
-    return date;
-
-}
-
-public void Load(GameData date)
-{
-    instance.playerPos = new Vector2(date.posx, date.posy);
-
-    SceneManager.LoadScene(date .scence );
-    //UIManager.instence.ShowLoadPanel(date.scence);
-    instance.deathCount = date.deathCount;
-    UIManager.UpdataDeathUI(instance.deathCount);
-    GameManager.instance.time = 0;
-    UIManager.instence.SetBGMValue(date.bgmValue);
-    UIManager.instence.SetFXValue(date.fxValue);
-}
-
-//Player控制脚本
-Start
-{
-//玩家未接触到存档点GM中默认Pos=0；此时将默认未值赋值给GM中的Pos。
-    //（通关之后GM中的Pos会被PlayerWin()方法赋值为默认值）
-    if ( GameManager.instance.playerPos==Vector2.zero)
-    {
-        GameManager.instance.playerPos = playerPos;
-    }else//玩家触碰到存档点时，将GM中的位置赋值给玩家物体的Pos。
-    {
-        transform.position = GameManager.instance.playerPos;
-    }
-    }</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[单例]]></title>
-        <id>https://Wei715547.github.io/post/dan-li/</id>
-        <link href="https://Wei715547.github.io/post/dan-li/">
-        </link>
-        <updated>2020-06-12T08:02:53.000Z</updated>
-        <content type="html"><![CDATA[<p>3.单例模式---在被调用的脚本中，公开声明一个静态的该脚本实例，在初始化时使&quot;实例=this&quot;<br>
-便于在其他脚本中直接调用该脚本与其中的方法。<br>
-<img src="https://Wei715547.github.io/post-images/1589271341241.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1589271396945.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1589963622098.PNG" alt="" loading="lazy"></p>
-<p>两脚本有碰撞，触发关系时可直接利用<br>
-(碰撞)collsion.gameObject.GetComponent&lt;被调用脚本名&gt;().方法名();<br>
-(触发)collsion.GetComponent&lt;被调用脚本名&gt;().方法名();<br>
-或SendMessage（以”方法名“调用物体中继承 MonoBehaviour 脚本的方法.）<br>
-(碰撞)collision.gameObject.SendMessage(&quot;方法名&quot;);<br>
-(触发)collsion.SendMessage(&quot;方法名&quot;);<br>
-调用对方脚本中的方法<br>
-<img src="https://Wei715547.github.io/post-images/1589272112653.PNG" alt="" loading="lazy"></p>
-<p>//4.单例模式<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.SceneManagement;<br>
-public class GameManager : MonoBehaviour<br>
-{<br>
-public static GameManager instance;<br>
-SceneFader fader;<br>
-// Start is called before the first frame update<br>
-void Awake()<br>
-{<br>
-if (instance!=null )<br>
-{<br>
-Destroy(gameObject);<br>
-return;<br>
-}<br>
-instance = this;<br>
-DontDestroyOnLoad(gameObject);</p>
-<pre><code>}
-
-//在外部将其他脚本通过此静态方法注册到GameManager中的变量（引用），（可在GameManager中调用其他脚本中的方法）
- /*   void Awake()//被调用的脚本
-{
-    ani = GetComponent&lt;Animator&gt;();
-    FaderID = Animator.StringToHash(&quot;Fade&quot;);
-    ////将脚本指定为GameManager的变量，使其中的方法可以在gamemanager中调用
-    GameManager.RegisterCceneFader(this);
-}*/
-public static void RegisterCceneFader(SceneFader obj)
-{
-    instance.fader = obj;
-}
-
-public static void PlayerDied()
-{
-    instance.fader.FadeOut();//调用其他脚本中的方法
-    instance.Invoke(&quot;RestartScence&quot;, 1.5f);
-}
-
-public void RestartScence()
-{
-    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    
-}
-</code></pre>
-<p>}</p>
-<p>复杂时可使用事件的广播，监听</p>
 ]]></content>
     </entry>
 </feed>
