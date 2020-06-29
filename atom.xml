@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-29T03:08:25.469Z</updated>
+    <updated>2020-06-29T03:32:55.710Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -67,7 +67,7 @@ dateArray[0] = iValue;<br>
 选择排序<br>
 static void SelectSort(int[] dateArray)<br>
 {<br>
-for (int i = 0; i &lt; dateArray .Length ; i++)<br>
+for (int i = 0; i &lt; dateArray .Length-1 ; i++)<br>
 {<br>
 int mindate = dateArray[i];<br>
 int minIndex = i;<br>
