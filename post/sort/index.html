@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1593356259815">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1593400093628">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@ int iValue = dateArray..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1593356259815" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1593400093628" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -141,10 +141,26 @@ dateArray[0] = iValue;<br>
 }<br>
 }<br>
 }</p>
-<pre><code>    选择排序
+<pre><code>    冒泡排序
+    static void BubbleSort(int[] dateArray)
+    {
+        for (int i = 0; i &lt; dateArray .Length-1 ; i++)//总循环次数
+        {
+            for (int j = 0; j &lt; dateArray.Length-1-i; j++)//循环n次后后n个数已经最大不需在进入比较
+            {
+                if (dateArray [j]&gt;dateArray [j+1])
+                {
+                    int temp = dateArray[j];
+                    dateArray[j] = dateArray[j + 1];
+                    dateArray[j + 1] = temp;
+                }
+            }
+        }
+    }
 </code></pre>
 <p><img src="https://Wei715547.github.io/post-images/1593315435960.jpg" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1593315539844.jpg" alt="" loading="lazy"><br>
+选择排序<br>
 static void SelectSort(int[] dateArray)<br>
 {<br>
 for (int i = 0; i &lt; dateArray .Length ; i++)<br>
