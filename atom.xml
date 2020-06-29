@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-29T03:32:55.710Z</updated>
+    <updated>2020-06-29T08:04:47.658Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,105 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[Search/Perm]]></title>
+        <id>https://Wei715547.github.io/post/search/</id>
+        <link href="https://Wei715547.github.io/post/search/">
+        </link>
+        <updated>2020-06-29T07:14:47.000Z</updated>
+        <content type="html"><![CDATA[<p>顺序查找<br>
+static int SeqSearch(int[] dateArray,int x)<br>
+{<br>
+int i;<br>
+for(i=0;i&lt;dateArray.Length;i++)<br>
+{<br>
+if (dateArray[i] == x)<br>
+return i;<br>
+}<br>
+//if (i == dateArray.Length)<br>
+return -1;<br>
+}<br>
+//二分查找<br>
+/// <summary><br>
+/// 二分查找，对从小到大排序过的数据进行查找，效率极高<br>
+/// </summary><br>
+/// <param name="datArray"></param><br>
+/// <param name="x"></param><br>
+/// <returns></returns><br>
+static int BinSearch(int[] datArray,int x)<br>
+{<br>
+int left = 0, right = datArray.Length - 1;<br>
+while(left &lt;=right)<br>
+{<br>
+int mind = (left + right) / 2;<br>
+if (datArray[mind] &gt; x)<br>
+right = mind - 1;<br>
+else if (datArray[mind] &lt; x)<br>
+left = mind + 1;<br>
+else if (datArray[mind] == x)<br>
+return mind;<br>
+}<br>
+return -1;<br>
+}</p>
+<pre><code>     //递归阶乘
+    static int Mtn(int n)
+    {
+        if (n == 0)
+            return 1;
+        else
+            return n * Mtn(n - 1);
+        /*int m = 1;
+        for (int i = n; i &gt;0; i--)
+        {
+            m *= i;
+        }
+        return m;*/
+    }
+
+    //递归二分查找
+    static int BinarySearch_R(int[] dateArray,int x, int left,int right)
+    {
+        if(left &lt;=right )
+        {
+            int mind = (left + right) / 2;
+            if (x &lt; dateArray[mind])
+                return BinarySearch_R(dateArray, x, left, mind - 1);
+            else if (x &gt; dateArray[mind])
+                return BinarySearch_R(dateArray, x, mind + 1, right);
+            else if (x == dateArray[mind])
+                return mind;
+        }
+        return -1;
+    }
+}
+</code></pre>
+<p>}</p>
+<p>Perm排列组合<br>
+static void Perautations(char[] s,int k,int m)<br>
+{<br>
+if(k==m)<br>
+{<br>
+for (int i = 0; i &lt;= m; i++)<br>
+{<br>
+Console.Write(s[i]);<br>
+}<br>
+}<br>
+else<br>
+{<br>
+for (int i = k; i &lt;= m; i++)<br>
+{<br>
+char temp = s[i];<br>
+s[i] = s[k];<br>
+s[k] = temp;<br>
+Perautations(s, k + 1, m);<br>
+char temp2 = s[i];<br>
+s[i] = s[k];<br>
+s[k] = temp2;<br>
+}<br>
+}<br>
+}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Sort]]></title>
         <id>https://Wei715547.github.io/post/sort/</id>
@@ -694,113 +793,6 @@ end
         <content type="html"><![CDATA[<p>工程路径名不包含中文<br>
 <img src="https://Wei715547.github.io/post-images/1592472285876.png" alt="" loading="lazy"><br>
 补丁创建完成后将XLua附带示例文件删除在进行打包</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[创建AssetBundles/从AssetBundles中加载文件到场景]]></title>
-        <id>https://Wei715547.github.io/post/chuang-jian-assetbundles/</id>
-        <link href="https://Wei715547.github.io/post/chuang-jian-assetbundles/">
-        </link>
-        <updated>2020-06-15T09:21:12.000Z</updated>
-        <content type="html"><![CDATA[<p>//此脚本放在“Asset/Editor”<br>
-using System.IO;<br>
-using UnityEditor;</p>
-<p>public class CreateAB<br>
-{<br>
-[MenuItem(&quot;Assets/Build AssetBundles&quot;)]<br>
-static void BuildAllAssetBuundles()<br>
-{<br>
-string dir = &quot;AssetBundles&quot;;<br>
-if (Directory.Exists (dir)==false)<br>
-{<br>
-Directory.CreateDirectory(dir);<br>
-}<br>
-BuildPipeline.BuildAssetBundles(dir, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows64);<br>
-}<br>
-}</p>
-<p>////////////////////////////////////////////////////////<br>
-//加载<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using System.IO;<br>
-using UnityEngine;<br>
-using UnityEngine.Networking;<br>
-public class LoadFormFile : MonoBehaviour<br>
-{<br>
-IEnumerator Start()//异步加载使用协同程序调用<br>
-//private void Start()<br>
-{<br>
-//string path1 = &quot;AssetBundles / mt.wei&quot;;<br>
-string path = &quot;AssetBundles/tree.wei&quot;;<br>
-//示例：通过本地路径加载AB包<br>
-/<em>AssetBundle ab1 = AssetBundle.LoadFromFile(&quot;AssetBundles/mt.wei&quot;);//存在依赖包时，所依赖的资源包也需要加载<br>
-AssetBundle ab = AssetBundle.LoadFromFile(&quot;AssetBundles/tree.wei&quot;);//文件路径<br>
-GameObject tree = ab.LoadAsset<GameObject>(&quot;Tree 02&quot;);//预制件名称<br>
-GameObject go = Instantiate(tree);<br>
-go.transform.SetParent(this.transform );</em>/</p>
-<pre><code>    //遍历生成AB报中所有物体并生成
-    /*Object[] obj = ab.LoadAllAssets();
-    foreach (Object item in obj)
-    {
-        Instantiate(item);
-    }*/
-
-
-    //第一种方式:通过内存加载AB包的方式：AssetBundle.LoadFromMemoryAsync
-    //异步加载
-    /*AssetBundleCreateRequest request = AssetBundle.LoadFromMemoryAsync(File.ReadAllBytes(path));
-    yield return request;
-    AssetBundle ab = request.assetBundle;*/
-
-    //同步加载
-    //AssetBundle ab = AssetBundle.LoadFromMemory(File.ReadAllBytes(path));
-
-    //第二种方式：通过本地文件加载AB包：
-    //异步加载
-    /*AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(path);
-    yield return request;
-    AssetBundle ab = request.assetBundle;*/
-    //同步加载（示例）
-    //AssetBundle ab = AssetBundle.LoadFromFile(path);
-
-    ////////////网络加载////////////
-
-    //第三种方式：WWW.LoadFromCacheOrDownload（异步加载(IEnumerator)）
-    /*WWW www = WWW.LoadFromCacheOrDownload(@&quot;file:///D:\715\3DFreeWord\AssetBundles\tree.wei&quot;,1);
-    yield return www;
-    AssetBundle ab = www.assetBundle;*/
-
-
-    //第四种方式：UnityWebRequest（异步执行(IEnumerator)）
-    string uri = @&quot;file:///D:\715\3DFreeWord\AssetBundles\tree.wei&quot;;
-    UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(uri);
-    yield return request.Send();
-    //AssetBundle ab = DownloadHandlerAssetBundle.GetContent(request);//获取方式一
-    AssetBundle ab = (request.downloadHandler as DownloadHandlerAssetBundle).assetBundle;//获取方式二
-
-
-    //使用里面的资源
-    GameObject tree = ab.LoadAsset&lt;GameObject&gt;(&quot;Tree 02&quot;);
-    GameObject go = Instantiate(tree/*, transform.position,Quaternion.identity*/);
-    go.transform.position = this.transform.position;
-</code></pre>
-<p>//通过Mainfest获取所有的依赖包<br>
-AssetBundle mainfestAB = AssetBundle.LoadFromFile(&quot;AssetBundles/AssetBundles&quot;);//加载AssetBundles文件<br>
-AssetBundleManifest mainfest = mainfestAB.LoadAsset<AssetBundleManifest>(&quot;AssetBundleManifest&quot;);//通过AssetBundles获取AssetBundles.manifest文件<br>
-/<em>foreach (string name in mainfest.GetAllAssetBundles())//获取所有的AB包，返回包名。<br>
-{<br>
-print(name);<br>
-}</em>/<br>
-string[] strs = mainfest.GetAllDependencies(&quot;tree.wei&quot;);//获取某个AB包所依赖的包，返回包名。<br>
-foreach (string name in strs)<br>
-{<br>
-print(name);<br>
-AssetBundle.LoadFromFile(&quot;AssetBundles/&quot; + name);//加载所有的依赖包<br>
-}<br>
-}<br>
-}<br>
-<img src="https://Wei715547.github.io/post-images/1592216098868.jpg" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1592216105421.jpg" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
