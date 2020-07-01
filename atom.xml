@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-06-30T06:59:32.034Z</updated>
+    <updated>2020-07-01T08:34:28.910Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,172 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[C#二叉树建立/遍历(前中后层)]]></title>
+        <id>https://Wei715547.github.io/post/cer-cha-shu-jian-li-bian-li-qian-zhong-hou-ceng/</id>
+        <link href="https://Wei715547.github.io/post/cer-cha-shu-jian-li-bian-li-qian-zhong-hou-ceng/">
+        </link>
+        <updated>2020-07-01T08:08:52.000Z</updated>
+        <content type="html"><![CDATA[<p>//节点类<br>
+namespace 二叉树<br>
+{<br>
+class Node<T><br>
+{<br>
+private T date;<br>
+public T Date { get { return date; } set { date = value; } }<br>
+private Node<T> leftNode;<br>
+public Node<T> LeftNode<br>
+{<br>
+get { return leftNode; }<br>
+set { leftNode = value; }<br>
+}<br>
+private Node<T> rightNode;<br>
+public Node <T> RightNode<br>
+{<br>
+get { return rightNode; }<br>
+set { rightNode = value; }<br>
+}</p>
+<pre><code>    public Node()
+    {
+        leftNode = null;
+        rightNode = null;
+    }
+
+    public Node (T date)
+    {
+        this.date = date;
+        leftNode = null;
+        rightNode = null;
+    }
+
+}
+</code></pre>
+<p>}<br>
+//二叉树<br>
+namespace 二叉树<br>
+{<br>
+class BinaryTree<T><br>
+{<br>
+private Node<T> node;<br>
+public Node <T> RootNode<br>
+{<br>
+get { return node; }<br>
+set { node = value; }<br>
+}</p>
+<pre><code>    public void  ShowNode(Node &lt;T&gt; node )
+    {
+        Console.Write(node .Date+&quot; &quot;);
+    }
+
+    //前序遍历-节点-左子树-右子树：+-*/ABCDE
+    public void PerOrder()
+    {
+        PerOrder(node);
+    }
+    public void PerOrder(Node &lt;T&gt; root)
+    {
+        if (root!=null)
+        {
+            ShowNode(root);
+            PerOrder(root.LeftNode);
+            PerOrder(root.RightNode);
+        }
+    }
+    //中序遍历-左子树-节点-右子树：A/B*C-D+E
+    public void InOrder()
+    {
+        InOrder(node);
+
+    }
+    public void InOrder(Node&lt;T&gt; root)
+    {
+        if (root !=null)
+        {
+            InOrder(root.LeftNode);
+            ShowNode(root); //显示当前节点
+            InOrder(root.RightNode);
+        }
+    }
+    //后序遍历-左子树-右子树-节点：AB/C*D-E+
+    public void PostOrder()
+    {
+        PostOrder(node);
+    }
+    public void PostOrder(Node &lt;T&gt; root)
+    {
+        if (root!=null)
+        {
+            PostOrder(root.LeftNode);
+            PostOrder(root.RightNode);
+            ShowNode(root);
+        }
+    }
+
+    
+    /// &lt;summary&gt;
+    /// 层序遍历-分别显示第一...层
+    /// 显示：+
+    /// 队列：显示+之前把节点的左子树节点，右子树节点先后放入队列中，然后显示该节点-将其移除队列
+    /// &lt;/summary&gt;
+    public void LevelOrder()
+    {
+        Queue&lt;Node&lt;T&gt;&gt; q = new Queue&lt;Node&lt;T&gt;&gt;();
+        Node&lt;T&gt; node = RootNode;
+        while(node!=null)
+        {
+            ShowNode(node);
+            if (node.LeftNode != null) q.Enqueue(node.LeftNode);
+            if (node.RightNode != null) q.Enqueue(node.RightNode);
+            if (q.Count == 0) return;
+            node = q.Dequeue();
+        }
+    }
+}
+</code></pre>
+<p>}<br>
+//测试程序<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+BinaryTree<char> tree = new BinaryTree<char>(); ;<br>
+Node<char> nodeOne ,nodeTwo, nodeTheer, nodeFore,a,b,c,d,e;<br>
+nodeOne = new Node<char>('+');<br>
+nodeTwo = new Node<char>('-');<br>
+nodeTheer = new Node<char>('*');<br>
+nodeFore = new Node<char>('/');<br>
+a = new Node<char>('A');<br>
+b = new Node<char>('B');<br>
+c = new Node<char>('C');<br>
+d = new Node<char>('D');<br>
+e = new Node<char>('E');<br>
+tree.RootNode = nodeOne;<br>
+nodeOne.LeftNode = nodeTwo;<br>
+nodeOne.RightNode = e;<br>
+nodeTwo.LeftNode = nodeTheer;<br>
+nodeTwo.RightNode = d;<br>
+nodeTheer.LeftNode = nodeFore;<br>
+nodeTheer.RightNode = c;<br>
+nodeFore.LeftNode = a;<br>
+nodeFore.RightNode = b;</p>
+<pre><code>        /*//二叉树的中序遍历,以左子树-节点-右子树的顺序输出节点；
+        tree.InOrder();
+
+        //前序遍历
+        tree.PerOrder();
+
+        //后续排序
+        tree.PostOrder();*/
+
+        //层序遍历
+        tree.LevelOrder();
+
+    }
+}
+![](https://Wei715547.github.io/post-images/1593592462809.png)
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[通过EvenSystems.EventTrigger实现UI Button的按下，抬起....等事件]]></title>
         <id>https://Wei715547.github.io/post/tong-guo-evensystemseventtrigger-shi-xian-ui-button-de-an-xia-tai-qi-deng-shi-jian/</id>
@@ -751,124 +917,6 @@ LuaEnv luaenv = new LuaEnv();//Lua虚拟运行环境</p>
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[XLua虚拟环境/Lua脚本调用方式]]></title>
-        <id>https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-fang-shi/</id>
-        <link href="https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-fang-shi/">
-        </link>
-        <updated>2020-06-18T09:19:29.000Z</updated>
-        <content type="html"><![CDATA[<p>此处在本地执行，实际应从服务器中下在Lua补丁程序<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using XLua;<br>
-using System.IO;<br>
-public class HotFixScript : MonoBehaviour<br>
-{<br>
-private LuaEnv LuaEnv;<br>
-// Start is called before the first frame update<br>
-void Awake()//修改C#类的Start方法时，此处应在Awake中调用<br>
-{<br>
-LuaEnv = new LuaEnv();<br>
-LuaEnv.AddLoader(MyLoader);<br>
-LuaEnv.DoString(&quot;require'fish'&quot;);//fish中的Lua程序包含所有要更新的方法逻辑代码（Lua补丁程序）<br>
-}</p>
-<pre><code>private byte[] MyLoader(ref string filePath)
-{
-    string absPath = @&quot;D:\715\XluaProjects\PlayerGamePackage\&quot; + filePath + &quot;.lua.txt&quot;;
-    return System.Text.Encoding.UTF8.GetBytes(File.ReadAllText(absPath));
-}
-private void OnDisable()
-{
-    //在销毁前将委托置为空（避免报错）
-    //(Hotfix底层实际已委托形式实现，将Lua的方法注册到委托中，委托不为空时执行Lua中更新的方法)
-    LuaEnv.DoString(&quot;require'fishDispose'&quot;);
-}
-private void OnDestroy()
-{
-    LuaEnv.Dispose();
-}
-</code></pre>
-<p>}<br>
-/////////////////////////////////////////////////////////////<br>
-//fish.lua.txt<br>
---1.修复CL间距<br>
-local UnityEngine=CS.UnityEngine<br>
-xlua.hotfix(CS.Treasour,'CreatePrize',function(self)<br>
-for i=0,4,1 do<br>
-local go = UnityEngine.GameObject.Instantiate(self.gold,self.transform.position+UnityEngine.Vector3(-10+i<em>40,0,0),self.transform.rotation)<br>
-go.transform.SetParent(go.transform,self.cavas)<br>
-local go = UnityEngine.GameObject.Instantiate(self.diamands,self.transform.position+UnityEngine.Vector3(0,40,0)+UnityEngine.Vector3(-10+i</em>40,0,0),self.transform.rotation)<br>
-go.transform.SetParent(go.transform,self.cavas)<br>
-end<br>
-end)</p>
-<pre><code>--2.修复Attack方法
-</code></pre>
-<p>xlua.private_accessible(CS.Gun)--要访问类中的私有变量时<br>
-xlua.hotfix(CS.Gun,'Attack',function(self)<br>
-if UnityEngine.Input.GetMouseButtonDown(0) then<br>
-if self.gold&lt;1+(self.gunLevel-1)<em>2 or gold ==0 than<br>
-return<br>
-end<br>
-self.bullectAudio.clip = self.bullectAudios[self.gunLevel-1]<br>
---self.bullectAudio.Play(self)成员变量调用内部方法方式1<br>
-self.bullectAudio:Play()--方式2<br>
-if self.Butterfly then<br>
-UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation</em>UnityEngine.Quaternion.Euler(0,0,20))<br>
-UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation*UnityEngine.Quaternion.Euler(0,0,-20))<br>
-end</p>
-<pre><code>	UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation)
-
-	if not self.canShootForFree then
-		self:GoldChange(-1,-(self.gunLevel-1)*2)--一般情况下引用非静态方法时，使用成员变量+：来引用
-	end
-	self.attackCD = 0
-	self.attack = false
-end
-</code></pre>
-<p>end)<br>
---*******************************************************************<br>
---4.Prace<br>
-local util = require 'util'--加载XLua自带方法集<br>
-xlua.private_accessible(CS.Boss)--可访问类的私有变量<br>
-util.hotfix_ex(CS.Boss,'Start',function(self)--在C#脚本的基础上附加代码（谨慎使用次饭饭执较慢）<br>
-self.Start(self)--执行原C#中的方法<br>
-self.m_reduceGold = self.m_reduceGold-20<br>
-end)</p>
-<p>xlua.private_accessible(CS.DeffendBoss)<br>
-util.hotfix_ex(CS.DeffendBoss,'Start',function(self)<br>
-self.Start(self)<br>
-self.m_reduceDiamond = self.m_reduceDiamond-5<br>
-end)</p>
-<p>xlua.private_accessible(CS.InvisibleBoss)<br>
-util.hotfix_ex(CS.InvisibleBoss,'Start',function(self)<br>
-self.Start(self)<br>
-self.m_reduceDiamond = self.m_reduceDiamond-5<br>
-end)</p>
-<p>--************************************<br>
---5.0处理CL产生负值<br>
-util.hotfix_ex(CS.Gun,'GoldChange',function(self,number)--修改存在参数的方法时，将自身与参数都写入函数<br>
-self.GoldChange(self,number)</p>
-<pre><code>if self.gold&lt;-number then
-	self.gold = 0
-	return
-end
-</code></pre>
-<p>end)</p>
-<p>util.hotfix_ex(CS.Gun,'DiamandsChange',function(self,number)<br>
-self.DiamandsChange(self,number)</p>
-<pre><code>if self.diamands&lt;-number then
-	self.diamands = 0
-	return
-end
-</code></pre>
-<p>end)<br>
-\\\\\\\\\\\\\\\\\\\\\\\\\\<br>
-\fishDispose.lua.txt</p>
-<p>xlua.hotfix(CS.Treasour,'CreatePrize',nil)</p>
-<p>xlua.hotfix(CS.Gun,'Attack',nil)</p>
 ]]></content>
     </entry>
 </feed>

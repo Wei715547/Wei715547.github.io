@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>C#二叉树建立/遍历(前中后层) | Wei: Development technology accumulation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1593592464907">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="//节点类
+namespace 二叉树
+{
+class Node
+{
+private T date;
+public T Date { get { return date; } set { date = value; } }
+private ..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1593592464907" class="site-logo">
+        <h1 class="site-title">Wei: Development technology accumulation</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">C#二叉树建立/遍历(前中后层)</h2>
+            <div class="post-date">2020-07-01</div>
+            
+            <div class="post-content" v-pre>
+              <p>//节点类<br>
+namespace 二叉树<br>
+{<br>
+class Node<T><br>
+{<br>
+private T date;<br>
+public T Date { get { return date; } set { date = value; } }<br>
+private Node<T> leftNode;<br>
+public Node<T> LeftNode<br>
+{<br>
+get { return leftNode; }<br>
+set { leftNode = value; }<br>
+}<br>
+private Node<T> rightNode;<br>
+public Node <T> RightNode<br>
+{<br>
+get { return rightNode; }<br>
+set { rightNode = value; }<br>
+}</p>
+<pre><code>    public Node()
+    {
+        leftNode = null;
+        rightNode = null;
+    }
+
+    public Node (T date)
+    {
+        this.date = date;
+        leftNode = null;
+        rightNode = null;
+    }
+
+}
+</code></pre>
+<p>}<br>
+//二叉树<br>
+namespace 二叉树<br>
+{<br>
+class BinaryTree<T><br>
+{<br>
+private Node<T> node;<br>
+public Node <T> RootNode<br>
+{<br>
+get { return node; }<br>
+set { node = value; }<br>
+}</p>
+<pre><code>    public void  ShowNode(Node &lt;T&gt; node )
+    {
+        Console.Write(node .Date+&quot; &quot;);
+    }
+
+    //前序遍历-节点-左子树-右子树：+-*/ABCDE
+    public void PerOrder()
+    {
+        PerOrder(node);
+    }
+    public void PerOrder(Node &lt;T&gt; root)
+    {
+        if (root!=null)
+        {
+            ShowNode(root);
+            PerOrder(root.LeftNode);
+            PerOrder(root.RightNode);
+        }
+    }
+    //中序遍历-左子树-节点-右子树：A/B*C-D+E
+    public void InOrder()
+    {
+        InOrder(node);
+
+    }
+    public void InOrder(Node&lt;T&gt; root)
+    {
+        if (root !=null)
+        {
+            InOrder(root.LeftNode);
+            ShowNode(root); //显示当前节点
+            InOrder(root.RightNode);
+        }
+    }
+    //后序遍历-左子树-右子树-节点：AB/C*D-E+
+    public void PostOrder()
+    {
+        PostOrder(node);
+    }
+    public void PostOrder(Node &lt;T&gt; root)
+    {
+        if (root!=null)
+        {
+            PostOrder(root.LeftNode);
+            PostOrder(root.RightNode);
+            ShowNode(root);
+        }
+    }
+
+    
+    /// &lt;summary&gt;
+    /// 层序遍历-分别显示第一...层
+    /// 显示：+
+    /// 队列：显示+之前把节点的左子树节点，右子树节点先后放入队列中，然后显示该节点-将其移除队列
+    /// &lt;/summary&gt;
+    public void LevelOrder()
+    {
+        Queue&lt;Node&lt;T&gt;&gt; q = new Queue&lt;Node&lt;T&gt;&gt;();
+        Node&lt;T&gt; node = RootNode;
+        while(node!=null)
+        {
+            ShowNode(node);
+            if (node.LeftNode != null) q.Enqueue(node.LeftNode);
+            if (node.RightNode != null) q.Enqueue(node.RightNode);
+            if (q.Count == 0) return;
+            node = q.Dequeue();
+        }
+    }
+}
+</code></pre>
+<p>}<br>
+//测试程序<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+BinaryTree<char> tree = new BinaryTree<char>(); ;<br>
+Node<char> nodeOne ,nodeTwo, nodeTheer, nodeFore,a,b,c,d,e;<br>
+nodeOne = new Node<char>('+');<br>
+nodeTwo = new Node<char>('-');<br>
+nodeTheer = new Node<char>('*');<br>
+nodeFore = new Node<char>('/');<br>
+a = new Node<char>('A');<br>
+b = new Node<char>('B');<br>
+c = new Node<char>('C');<br>
+d = new Node<char>('D');<br>
+e = new Node<char>('E');<br>
+tree.RootNode = nodeOne;<br>
+nodeOne.LeftNode = nodeTwo;<br>
+nodeOne.RightNode = e;<br>
+nodeTwo.LeftNode = nodeTheer;<br>
+nodeTwo.RightNode = d;<br>
+nodeTheer.LeftNode = nodeFore;<br>
+nodeTheer.RightNode = c;<br>
+nodeFore.LeftNode = a;<br>
+nodeFore.RightNode = b;</p>
+<pre><code>        /*//二叉树的中序遍历,以左子树-节点-右子树的顺序输出节点；
+        tree.InOrder();
+
+        //前序遍历
+        tree.PerOrder();
+
+        //后续排序
+        tree.PostOrder();*/
+
+        //层序遍历
+        tree.LevelOrder();
+
+    }
+}
+![](https://Wei715547.github.io/post-images/1593592462809.png)
+</code></pre>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/tong-guo-evensystemseventtrigger-shi-xian-ui-button-de-an-xia-tai-qi-deng-shi-jian/">
+                  <h3 class="post-title">
+                    通过EvenSystems.EventTrigger实现UI Button的按下，抬起....等事件
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
