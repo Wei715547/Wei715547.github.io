@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>二叉查找树BST | Wei: Development technology accumulation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1593746879823">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="//元素类
+class Element
+{
+public int key;
+public Element (int k)
+{
+key = k;
+}
+}
+//节点类
+class BstNode
+{
+    public Element dat..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1593746879823" class="site-logo">
+        <h1 class="site-title">Wei: Development technology accumulation</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">二叉查找树BST</h2>
+            <div class="post-date">2020-07-03</div>
+            
+            <div class="post-content" v-pre>
+              <p>//元素类<br>
+class Element<br>
+{<br>
+public int key;<br>
+public Element (int k)<br>
+{<br>
+key = k;<br>
+}<br>
+}<br>
+//节点类<br>
+class BstNode<br>
+{</p>
+<pre><code>    public Element date ;
+
+    public BstNode leftNode;
+    public BstNode rightNode;
+    public void DisPlay( int i)
+    {
+        Console.WriteLine(&quot;Position:&quot; +i + &quot;Date:&quot; +date.key);
+        if (leftNode != null) 
+            leftNode.DisPlay(2 * i);
+        if (rightNode != null)
+            rightNode.DisPlay(2 * i+1);
+    }
+}
+
+//二叉查找树
+namespace 二叉查找树
+</code></pre>
+<p>{<br>
+class BST<br>
+{<br>
+private BstNode root;<br>
+public BstNode Root<br>
+{<br>
+get { return root; }<br>
+set { root = value; }<br>
+}<br>
+public BST()<br>
+{<br>
+root = null;<br>
+}<br>
+public BST(BstNode init )<br>
+{<br>
+root = init;<br>
+}</p>
+<pre><code>    public BstNode IterSearch(Element x)
+    {
+        for(BstNode t = root;t!=null;)
+        {
+            if (x.key == t.date.key)
+                return t;
+            if (x.key &lt; t.date.key)
+                t = t.leftNode;
+            if (x.key &gt; t.date.key)
+                t = t.rightNode;
+
+        }
+        return null;
+
+    }
+
+    public BstNode Search(BstNode sr, Element x)
+    {
+        if (sr == null)
+        {
+            Console.WriteLine(&quot;输入节点为空或未找到数据&quot;);
+            return null;
+        }
+        if (sr.date.key == x.key) return sr;
+        if (x.key &lt;sr .date.key)
+        {
+            return Search(sr.leftNode, x);
+        }
+        return Search(sr.rightNode, x);
+    }
+    public void DisPlay()
+    {
+        if(root !=null )
+        {
+            root.DisPlay(1);
+        }
+        else
+        {
+            Console.WriteLine(&quot;Is null&quot;);
+        }
+    }
+    public bool Insert(Element x)
+    {
+        BstNode   p = root;
+        BstNode q = null;
+        while(p!=null)
+        {
+            q = p;
+            if (x.key.Equals( p.date.key)) 
+                return false;
+            if (x.key &lt; p.date.key)
+                p = p.leftNode;
+            else 
+                p = p.rightNode;
+        }
+        p = new BstNode();
+        p.leftNode = null;
+        p.rightNode = null;
+        p.date = x;
+        if (root == null) root = p;
+        else if (x.key &lt; q.date.key) q.leftNode = p;
+        else q.rightNode = p;
+        return true;
+    }
+
+    public void ShowNode(BstNode root)
+    {
+        Console.WriteLine(root .date.key+&quot; &quot;);
+    }
+
+    /// &lt;summary&gt;
+    /// 中序遍历结果为排序后的数据
+    /// &lt;/summary&gt;
+    public void InOrder()
+    {
+        InOrder(Root);
+    }
+    public void InOrder(BstNode node)
+    {
+        if (node!=null )
+        {
+            InOrder(node.leftNode);
+            ShowNode(node);
+            InOrder(node.rightNode);
+        }
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//实例程序<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+BST m = new BST();<br>
+//Element a, b, c, d, e, f, g, h, i, j;<br>
+Element a = new Element(5);<br>
+Element b = new Element(3);<br>
+Element c = new Element(11);<br>
+Element d = new Element(3);<br>
+Element e = new Element(15);<br>
+Element f = new Element(2);<br>
+Element g= new Element(8);<br>
+Element h = new Element(22);<br>
+Element i = new Element(20);<br>
+Element j = new Element(9);</p>
+<pre><code>        Console.WriteLine(m.Insert(a));
+        Console.WriteLine(m.Insert(b));
+        Console.WriteLine(m.Insert (c));
+        Console.WriteLine(m.Insert (d));
+        Console.WriteLine(m.Insert (e));
+        Console.WriteLine(m.Insert(f));
+        Console.WriteLine(m.Insert (g));
+        Console.WriteLine(m.Insert (i));
+        m.DisPlay();
+
+        BstNode p = m.Search(m.Root,f);
+        Console.WriteLine(&quot;找到的是&quot;+p.date.key);
+
+        m.InOrder();
+    }
+}
+![](https://Wei715547.github.io/post-images/1593746877703.png)</code></pre>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/cer-cha-shu-jian-li-bian-li-qian-zhong-hou-ceng/">
+                  <h3 class="post-title">
+                    C#二叉树建立/遍历(前中后层)
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
