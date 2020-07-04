@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>正则表达式（字符串格式判定） | Wei: Development technology accumulation</title>
+<title>红黑树 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,15 +18,13 @@
 
 
 
-    <meta name="description" content="using System;
-using System.Text.RegularExpressions;
-namespace 正则表达式
-{
-class Program
-{
-static void Main(string[] args)
-{
-..." />
+    <meta name="description" content="1、衡树，非平衡树
+2、红黑树特征：节点都用颜色，插入删除节点遵守红黑规则
+红黑规则：
+1.每个节点不是红色便是黑色
+2.根节点总是黑色
+3.如果节点时红的，则它的子节点必须是黑色的
+4.从根到叶节点的每条滤路径，必须包含相同数目的黑色节点..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -111,59 +109,29 @@ static void Main(string[] args)
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">正则表达式（字符串格式判定）</h2>
-            <div class="post-date">2020-05-26</div>
+            <h2 class="post-title">红黑树</h2>
+            <div class="post-date">2020-07-04</div>
             
             <div class="post-content" v-pre>
-              <p>using System;<br>
-using System.Text.RegularExpressions;</p>
-<p>namespace 正则表达式<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-string s = &quot;I amwei&quot;;<br>
-string res = Regex.Replace(s,&quot;^&quot;, &quot;start&quot;);//&quot;^&quot;匹配开始字符串<br>
-Console.WriteLine(res);</p>
-<pre><code>        string res2 = Regex.Replace(s, &quot;$&quot;, &quot;end&quot;);//&quot;$&quot;匹配结尾
-        Console.WriteLine(res2);
-
-        string num = Console.ReadLine();
-        /*bool isMatch = true;
-        for (int i = 0; i &lt; num.Length ; i++)
-        {
-            if(num[i]&lt;'0'||num[i]&gt;'9')
-            {
-                isMatch = false;
-                break;
-            }
-        }
-        if (isMatch)
-        {
-            Console.WriteLine(&quot;密码合法&quot;);
-        }
-        else
-        {
-            Console.WriteLine( &quot;密码不合法&quot;);
-        }*/
-        string pattern = @&quot;^\d*$&quot;;//(数字字符串)以数字开头0个或多个，并以数字结尾
-        bool issMach = Regex.IsMatch(num, pattern);
-        Console.WriteLine(issMach);
-
-    }
-}
-</code></pre>
-<p>}</p>
+              <p>1、衡树，非平衡树<br>
+2、红黑树特征：节点都用颜色，插入删除节点遵守红黑规则<br>
+红黑规则：<br>
+1.每个节点不是红色便是黑色<br>
+2.根节点总是黑色<br>
+3.如果节点时红的，则它的子节点必须是黑色的<br>
+4.从根到叶节点的每条滤路径，必须包含相同数目的黑色节点<br>
+不满足规则时的修改方法<br>
+1.改变节点的颜色<br>
+2.旋转</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/tuo-zhuai-jie-kou/">
+                <a href="https://Wei715547.github.io/post/er-cha-cha-zhao-shu-bst/">
                   <h3 class="post-title">
-                    拖拽接口
+                    二叉查找树BST
                   </h3>
                 </a>
               </div>
