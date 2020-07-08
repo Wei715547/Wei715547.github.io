@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Leet Code01 | Wei: Development technology accumulation</title>
+<title>Leet Code01-03 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1594197468339">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1594220564609">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@ class Program
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1594197468339" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1594220564609" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -109,7 +109,7 @@ class Program
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Leet Code01</h2>
+            <h2 class="post-title">Leet Code01-03</h2>
             <div class="post-date">2020-07-08</div>
             
             <div class="post-content" v-pre>
@@ -150,16 +150,35 @@ class Program<br>
         for (int i = 0; i &lt; nums.Length; i++)
         {
             int dis = target - nums[i];
-            if (map.ContainsKey(dis))
+            if (map.ContainsKey(dis) &amp;&amp; map[dis]!=i)
             {
                 return   new int[] { map[dis],i};
-            }else
+            }
+            
+            if(!map.ContainsKey(nums[i]))
             {
                 map.Add(nums[i], i);
             }
         }
-        return null;
+        return new int[] { 0, 0 };
     }
+//给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+public static int LengthOfLongestSubstring(string s)
+    {
+
+        int max = 0;
+        Queue&lt;char&gt; q = new Queue&lt;char&gt;();
+        foreach (char c in s)
+        {
+            while (q.Contains(c))
+                q.Dequeue();
+            q.Enqueue(c);
+            if (q.Count &gt; max)
+                max = q.Count;
+        }
+        return max;
+    }
+
 }
 </code></pre>
 <p>}</p>

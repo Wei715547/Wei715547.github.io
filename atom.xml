@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-08T08:37:53.090Z</updated>
+    <updated>2020-07-08T15:02:48.733Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -12,7 +12,7 @@
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
     <entry>
-        <title type="html"><![CDATA[Leet Code01]]></title>
+        <title type="html"><![CDATA[Leet Code01-03]]></title>
         <id>https://Wei715547.github.io/post/leet-code01/</id>
         <link href="https://Wei715547.github.io/post/leet-code01/">
         </link>
@@ -54,16 +54,35 @@ class Program<br>
         for (int i = 0; i &lt; nums.Length; i++)
         {
             int dis = target - nums[i];
-            if (map.ContainsKey(dis))
+            if (map.ContainsKey(dis) &amp;&amp; map[dis]!=i)
             {
                 return   new int[] { map[dis],i};
-            }else
+            }
+            
+            if(!map.ContainsKey(nums[i]))
             {
                 map.Add(nums[i], i);
             }
         }
-        return null;
+        return new int[] { 0, 0 };
     }
+//给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+public static int LengthOfLongestSubstring(string s)
+    {
+
+        int max = 0;
+        Queue&lt;char&gt; q = new Queue&lt;char&gt;();
+        foreach (char c in s)
+        {
+            while (q.Contains(c))
+                q.Dequeue();
+            q.Enqueue(c);
+            if (q.Count &gt; max)
+                max = q.Count;
+        }
+        return max;
+    }
+
 }
 </code></pre>
 <p>}</p>
