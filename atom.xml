@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-04T04:54:10.955Z</updated>
+    <updated>2020-07-08T08:37:53.090Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,64 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[Leet Code01]]></title>
+        <id>https://Wei715547.github.io/post/leet-code01/</id>
+        <link href="https://Wei715547.github.io/post/leet-code01/">
+        </link>
+        <updated>2020-07-08T08:35:31.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;<br>
+using System.Collections.Generic;</p>
+<p>namespace Leet_Code<br>
+{<br>
+class Program<br>
+{<br>
+/*给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。</p>
+<pre><code>    你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
+
+
+
+    示例:
+
+    给定 nums = [2, 7, 11, 15], target = 9
+
+    因为 nums[0] + nums[1] = 2 + 7 = 9
+    所以返回[0, 1]
+
+    来源：力扣（LeetCode）
+    链接：https://leetcode-cn.com/problems/two-sum
+    著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+    static void Main(string[] args)
+    {
+        int[] nums = new int[] { 2, 15, 11, 7 };
+        int [] ans = LeetCodeone(nums, 9);
+        foreach (var item in ans)
+        {
+            Console.WriteLine(item);
+        }
+    }
+    
+    public static int [] LeetCodeone(int[] nums,int target)
+    {
+        Dictionary&lt;int, int&gt; map = new Dictionary&lt;int, int&gt;();
+        for (int i = 0; i &lt; nums.Length; i++)
+        {
+            int dis = target - nums[i];
+            if (map.ContainsKey(dis))
+            {
+                return   new int[] { map[dis],i};
+            }else
+            {
+                map.Add(nums[i], i);
+            }
+        }
+        return null;
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[红黑树]]></title>
         <id>https://Wei715547.github.io/post/hong-hei-shu/</id>
@@ -894,70 +952,6 @@ StartCoroutine(StartLoading_4(2));<br>
     string str1 = request1.downloadHandler.text;
     File.WriteAllText(@&quot;D:\715\XluaProjects\PlayerGamePackage\fishDispose.lua.txt&quot;, str1);
 }</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[空类应用于后期热更新]]></title>
-        <id>https://Wei715547.github.io/post/kong-lei-ying-yong-yu-hou-qi-re-geng-xin/</id>
-        <link href="https://Wei715547.github.io/post/kong-lei-ying-yong-yu-hou-qi-re-geng-xin/">
-        </link>
-        <updated>2020-06-21T15:36:59.000Z</updated>
-        <content type="html"><![CDATA[<p>//空类<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using XLua;<br>
-[Hotfix]<br>
-public class HotFixEmpty : MonoBehaviour<br>
-{<br>
-// Start is called before the first frame update<br>
-[LuaCallCSharp]<br>
-void Start()<br>
-{</p>
-<pre><code>}
-
-// Update is called once per frame
-[LuaCallCSharp]
-void Update()
-{
-    
-}
-[LuaCallCSharp]
-private void OnTriggerEnter(Collider other)
-{
-    
-}
-[LuaCallCSharp]
-private void BehaviourMethod()
-{
-
-}
-</code></pre>
-<p>}</p>
-<p>xxx.lua.txt<br>
---*************************************************************<br>
---9.0新的类</p>
-<p>xlua.private_accessible(CS.HotFixEmpty)<br>
-xlua.hotfix(CS.HotFixEmpty,'Start',function(self)<br>
-self:Invoke(&quot;BehaviourMethod&quot;,8)<br>
-end)</p>
-<p>xlua.hotfix(CS.HotFixEmpty,'Update',function(self)<br>
-self.transform:Translate(-self.transform.right<em>4</em>UnityEngine.Time.deltaTime,UnityEngine.Space.World)<br>
-end)</p>
-<p>xlua.hotfix(CS.HotFixEmpty,'OnTriggerEnter',function(self,other)<br>
-if other.tag~=&quot;Untagged&quot; and other.tag~=&quot;Wall&quot; then<br>
-UnityEngine.Object.Destroy(other.gameObject)<br>
-end<br>
-end)</p>
-<p>xlua.hotfix(CS.HotFixEmpty,'BehaviourMethod',function(self)<br>
-CS.Gun.Instance.level = CS.Gun.Instance.level+1<br>
-if CS.Gun.Instance.level==4 then<br>
-CS.Gun.Instance.level=1<br>
-end<br>
-canCreateNewFish = true<br>
-CS.Gun.Instance.changeAudio = true<br>
-UnityEngine.Object.Destroy(self.gameObject)<br>
-end)</p>
 ]]></content>
     </entry>
 </feed>

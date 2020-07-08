@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>补丁开发过程 | Wei: Development technology accumulation</title>
+<title>Leet Code01 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,13 @@
 
 
 
-    <meta name="description" content="Process-&gt;在所有可能出现问题的类上打上[Hotfix]标签，在所有Lua调用C#的方法打上[LuaCallCSharp]，在所有C#调用Lua的方法打上[CSharpCallLua]-&gt;打包发布-&gt;修改时只需要更新..." />
+    <meta name="description" content="using System;
+using System.Collections.Generic;
+namespace Leet_Code
+{
+class Program
+{
+/*给定一个整数数组 nums 和一个目标值 target，请你在该..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -103,51 +109,56 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">补丁开发过程</h2>
-            <div class="post-date">2020-06-18</div>
+            <h2 class="post-title">Leet Code01</h2>
+            <div class="post-date">2020-07-08</div>
             
             <div class="post-content" v-pre>
-              <p>Process-&gt;在所有可能出现问题的类上打上[Hotfix]标签，在所有Lua调用C#的方法打上[LuaCallCSharp]，在所有C#调用Lua的方法打上[CSharpCallLua]-&gt;打包发布-&gt;修改时只需要更新Lua文件，修改资源是（声音，模型，贴图，UI）只需要更新AB包。用户只需要下载Lua文件和AB包</p>
-<p>using UnityEngine;<br>
-using XLua;</p>
-<p>namespace XLuaTest<br>
+              <p>using System;<br>
+using System.Collections.Generic;</p>
+<p>namespace Leet_Code<br>
 {<br>
-[Hotfix]//在需要修复的类前加上[Hotfix]特性<br>
-public class HotfixTest : MonoBehaviour<br>
+class Program<br>
 {<br>
-LuaEnv luaenv = new LuaEnv();//Lua虚拟运行环境</p>
-<pre><code>    private int tick = 0;
+/*给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。</p>
+<pre><code>    你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
 
-    // Use this for initialization
-    void Start()
-    {
-    }
 
-    // Update is called once per frame
-    [LuaCallCSharp]
-    void Update()
+
+    示例:
+
+    给定 nums = [2, 7, 11, 15], target = 9
+
+    因为 nums[0] + nums[1] = 2 + 7 = 9
+    所以返回[0, 1]
+
+    来源：力扣（LeetCode）
+    链接：https://leetcode-cn.com/problems/two-sum
+    著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
+    static void Main(string[] args)
     {
-        if (++tick % 50 == 0)
+        int[] nums = new int[] { 2, 15, 11, 7 };
+        int [] ans = LeetCodeone(nums, 9);
+        foreach (var item in ans)
         {
-            Debug.Log(&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Update in C#, tick = &quot; + tick);
+            Console.WriteLine(item);
         }
     }
-
-    void OnGUI()
+    
+    public static int [] LeetCodeone(int[] nums,int target)
     {
-        if (GUI.Button(new Rect(10, 10, 300, 80), &quot;Hotfix&quot;))
-        {//要修改的类名，要修复的类中的方法，作为替换的Lua中的方法
-            luaenv.DoString(@&quot;
-            xlua.hotfix(CS.XLuaTest.HotfixTest, 'Update', function(self)
-                local a = CS.UnityEngine.GameObject.Find('Main Camera')
-                CS.UnityEngine.Debug.Log(a.name)
-                --[[self.tick = self.tick + 1
-                if (self.tick % 50) == 0 then
-                    print('&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Update in lua, tick = ' .. self.tick)
-                end--]]
-            end)
-        &quot;);
+        Dictionary&lt;int, int&gt; map = new Dictionary&lt;int, int&gt;();
+        for (int i = 0; i &lt; nums.Length; i++)
+        {
+            int dis = target - nums[i];
+            if (map.ContainsKey(dis))
+            {
+                return   new int[] { map[dis],i};
+            }else
+            {
+                map.Add(nums[i], i);
+            }
         }
+        return null;
     }
 }
 </code></pre>
@@ -158,9 +169,9 @@ LuaEnv luaenv = new LuaEnv();//Lua虚拟运行环境</p>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/xlua-xu-ni-huan-jing-lua-jiao-ben-diao-yong-fang-shi/">
+                <a href="https://Wei715547.github.io/post/hong-hei-shu/">
                   <h3 class="post-title">
-                    XLua虚拟环境/Lua脚本调用方式
+                    红黑树
                   </h3>
                 </a>
               </div>
