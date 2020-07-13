@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>(敌人类）提取共有属性/方法 | Wei: Development technology accumulation</title>
+<title>解决Hash冲突的方式 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,13 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class Enemis : MonoBehaviour
+    <meta name="description" content="//解决冲突的方式
+//1.桶式散列法
+//在数组列表中存储数组列表
+//一个键(主容器数组列表索引)可存储多个值(数组列表内的“数组列表的多个值“)
+class BucketHash
 {
-pro..." />
+    private const int SIZ..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -108,67 +109,89 @@ pro..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">(敌人类）提取共有属性/方法</h2>
-            <div class="post-date">2020-05-08</div>
+            <h2 class="post-title">解决Hash冲突的方式</h2>
+            <div class="post-date">2020-07-13</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class Enemis : MonoBehaviour<br>
-{<br>
-protected Animator ani;<br>
-protected CircleCollider2D cl;<br>
-// Start is called before the first frame update<br>
-protected virtual void Start()<br>
-//在继承的子类中复写protected override void Start(){base.Start(); //来获取父类用到的组件}<br>
-{<br>
-ani = GetComponent<Animator>();<br>
-cl = GetComponent<CircleCollider2D>();<br>
-}</p>
-<pre><code>public void Died()
-{
-    ani.SetTrigger(&quot;Died&quot;);
-    cl.enabled = false;
-}
+              <p>//解决冲突的方式</p>
+<p>//1.桶式散列法<br>
+//在数组列表中存储数组列表<br>
+//一个键(主容器数组列表索引)可存储多个值(数组列表内的“数组列表的多个值“)<br>
+class BucketHash<br>
+{</p>
+<pre><code>    private const int SIZE = 101;
+    ArrayList[] date;
 
-public void D()
-{
-    Destroy(gameObject);
+    public BucketHash()
+    {
+        date = new ArrayList[SIZE];
+        for (int i = 0; i &lt; SIZE; i++)
+        {
+            date[i] = new ArrayList(4);
+        }
+    }
+
+    public int Hash(string s)
+    {
+        long key = 0;
+        char[] cname = s.ToCharArray();
+        for (int i = 0; i &lt; cname.Length; i++)
+        {
+            key += 37 * key + (int)cname[i];
+        }
+        key = key % date.GetUpperBound(0);
+        if (key &lt; 0)
+            key += date.GetUpperBound(0);
+        return (int)key;
+    }
+
+    public void Insert(string s)
+    {
+        int hash_key = Hash(s);
+        if (!date[hash_key].Contains(s))
+            date[hash_key].Add(s);
+
+    }
+
+    public void Remove(string s)
+    {
+        int hash_key = Hash(s);
+        if (date[hash_key].Contains(s))
+            date[hash_key].Remove(s);
+    }
+
+    public void ShowTable()
+    {
+        for (int i = 0; i &lt; date.Length; i++)
+        {
+            if (date[i].Count&gt;0)
+            {
+                Console.Write(i+&quot;:&quot;);
+                foreach (string s in date[i])
+                {
+                    Console.Write(s);
+                }
+                Console.WriteLine();
+            }
+                
+        }
+    }
 }
 </code></pre>
-<p>}</p>
-<p>//应用-所有敌人继承Enemis<br>
-private void OnCollisionEnter2D(Collision2D collision)         //(Player内代码)<br>
+<p>}<br>
+//示例程序<br>
+class Program<br>
 {<br>
-if (collision.gameObject.tag == &quot;Enm&quot;)<br>
+static void Main(string[] args)<br>
 {<br>
-//Enemis eni = collision.gameObject.GetComponent<Enemis>();//子类对象赋给父类引用(由于各子类不同)/(通过子类获取子类中父类实例--便于调用父类方法)👌</p>
-<pre><code>        if (ani.GetBool(&quot;Down&quot;))
-        {
-            //eni.Died();//直接调用父类中所有子类共有行为👌
-
-            collision.gameObject.SendMessage(&quot;Died&quot;);//或者不需声明父类直接在子类中调用父类方法👍👍👍
-
-            //collision.gameObject.transform.GetComponent&lt;Eagle&gt;().Died();
-            //FrogRangAI frog = collision.gameObject.GetComponent&lt;FrogRangAI&gt;();
-            //frog.Died();
-//由于敌人种类不确定(Eagle,FrogRangAI)，所以不能获取子类来调用父类中共有行为。🖕🖕🖕
-
-            AddUpForce();
-        }
-        else if (transform.position.x &lt; collision.gameObject.transform.position.x)
-        {
-            playerR.velocity = new Vector2(-3, playerR.velocity.y);
-            IsHaert = true;
-        }
-        else if (transform.position.x &gt; collision.gameObject.transform.position.x)
-        {
-            playerR.velocity = new Vector2(3, playerR.velocity.y);
-            IsHaert = true;
-        }
-        GamePanel.Intence.Damage();
-    }
+//桶式散列法<br>
+BucketHash bkHash = new BucketHash();<br>
+for (int i = 0; i &lt; someName .Length; i++)<br>
+{<br>
+bkHash.Insert(someName[i]);<br>
+}<br>
+bkHash.ShowTable();</p>
+<pre><code>    }
 </code></pre>
 
             </div>
@@ -176,9 +199,9 @@ if (collision.gameObject.tag == &quot;Enm&quot;)<br>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/gang-ti-add-force/">
+                <a href="https://Wei715547.github.io/post/san-lie-biao-hashtable/">
                   <h3 class="post-title">
-                    刚体-Add-Force
+                    散列表HashTable
                   </h3>
                 </a>
               </div>

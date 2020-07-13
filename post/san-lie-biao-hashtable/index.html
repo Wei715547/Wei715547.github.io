@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>(敌人类）提取共有属性/方法 | Wei: Development technology accumulation</title>
+<title>散列表HashTable | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,14 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class Enemis : MonoBehaviour
+    <meta name="description" content="namespace Hash
 {
-pro..." />
+class Program
+{
+static void Main(string[] args)
+{
+string[] hashTable = new string[10007];//数组长度使用素数
+str..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -108,77 +110,103 @@ pro..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">(敌人类）提取共有属性/方法</h2>
-            <div class="post-date">2020-05-08</div>
+            <h2 class="post-title">散列表HashTable</h2>
+            <div class="post-date">2020-07-13</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class Enemis : MonoBehaviour<br>
+              <p>namespace Hash<br>
 {<br>
-protected Animator ani;<br>
-protected CircleCollider2D cl;<br>
-// Start is called before the first frame update<br>
-protected virtual void Start()<br>
-//在继承的子类中复写protected override void Start(){base.Start(); //来获取父类用到的组件}<br>
+class Program<br>
 {<br>
-ani = GetComponent<Animator>();<br>
-cl = GetComponent<CircleCollider2D>();<br>
-}</p>
-<pre><code>public void Died()
-{
-    ani.SetTrigger(&quot;Died&quot;);
-    cl.enabled = false;
-}
+static void Main(string[] args)<br>
+{<br>
+string[] hashTable = new string[10007];//数组长度使用素数<br>
+string name;<br>
+string[] someName = new string[] { &quot;Wei&quot;, &quot;WDQWAS&quot;, &quot;QWCQCQ&quot;, &quot;WeCQSCi3&quot;, &quot;QWC&quot;, &quot;SCZ&quot;, &quot;VDBC&quot;, &quot;XCDF&quot;, &quot;XSDXDS&quot;, &quot;Wei9&quot; };</p>
+<pre><code>        int hashKey;
+        for (int i = 0; i &lt; someName .Length; i++)
+        {
+            name = someName[i];
+            hashKey = BatterHashMathf(name, hashTable);
+            hashTable[hashKey] = name;
+        }
+        ShowTable(hashTable);
 
-public void D()
-{
-    Destroy(gameObject);
+        Console.WriteLine(InHash(&quot;Wei&quot;,hashTable));
+        Console.WriteLine(GetKey (&quot;Wei&quot;,hashTable));
+
+    }
+
+    public static int HashMathf(string s,string [] table)
+    {
+        int key = 0;
+        char[] cname = s.ToCharArray();
+        for (int i = 0; i &lt;cname .Length; i++)
+        {
+            key += (int)cname[i];
+        }
+        return key % table.GetUpperBound(0);
+    }
+
+    //解决冲突的方式
+    //桶式散列法
+    //开放地址法
+    //双重散列法
+    public static int BatterHashMathf(string s,string[] arr)
+    {
+        long key = 0;
+        char[] cname = s.ToCharArray();
+        for (int i = 0; i &lt; cname.Length; i++)
+        {
+            key += 37*key+(int)cname[i];
+        }
+        key = key % arr.GetUpperBound(0);
+        if (key &lt; 0)
+            key += arr.GetUpperBound(0);
+        return (int)key;
+    }
+
+    public static void ShowTable(string [] arr)
+    {
+        for (int i = 0; i &lt; arr.Length; i++)
+        {
+            if (arr[i]!=null)
+                Console.WriteLine(i+&quot;:&quot;+arr[i]);
+        }
+    }
+
+    public static bool InHash(string s,string []arr)
+    {
+        int hashKey = BatterHashMathf(s, arr);
+        if (arr[hashKey].Equals(s))
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
+    }
+
+    public static int GetKey(string s,string []arr)
+    {
+        if (InHash(s, arr))
+            return BatterHashMathf(s, arr);
+        else
+            return -1;
+    }
+
 }
 </code></pre>
 <p>}</p>
-<p>//应用-所有敌人继承Enemis<br>
-private void OnCollisionEnter2D(Collision2D collision)         //(Player内代码)<br>
-{<br>
-if (collision.gameObject.tag == &quot;Enm&quot;)<br>
-{<br>
-//Enemis eni = collision.gameObject.GetComponent<Enemis>();//子类对象赋给父类引用(由于各子类不同)/(通过子类获取子类中父类实例--便于调用父类方法)👌</p>
-<pre><code>        if (ani.GetBool(&quot;Down&quot;))
-        {
-            //eni.Died();//直接调用父类中所有子类共有行为👌
-
-            collision.gameObject.SendMessage(&quot;Died&quot;);//或者不需声明父类直接在子类中调用父类方法👍👍👍
-
-            //collision.gameObject.transform.GetComponent&lt;Eagle&gt;().Died();
-            //FrogRangAI frog = collision.gameObject.GetComponent&lt;FrogRangAI&gt;();
-            //frog.Died();
-//由于敌人种类不确定(Eagle,FrogRangAI)，所以不能获取子类来调用父类中共有行为。🖕🖕🖕
-
-            AddUpForce();
-        }
-        else if (transform.position.x &lt; collision.gameObject.transform.position.x)
-        {
-            playerR.velocity = new Vector2(-3, playerR.velocity.y);
-            IsHaert = true;
-        }
-        else if (transform.position.x &gt; collision.gameObject.transform.position.x)
-        {
-            playerR.velocity = new Vector2(3, playerR.velocity.y);
-            IsHaert = true;
-        }
-        GamePanel.Intence.Damage();
-    }
-</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/gang-ti-add-force/">
+                <a href="https://Wei715547.github.io/post/gou-jian-zi-dian-ji-he/">
                   <h3 class="post-title">
-                    刚体-Add-Force
+                    构建字典集合
                   </h3>
                 </a>
               </div>

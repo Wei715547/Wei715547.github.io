@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-13T13:34:54.197Z</updated>
+    <updated>2020-07-13T15:27:10.617Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,186 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[解决Hash冲突的方式]]></title>
+        <id>https://Wei715547.github.io/post/jie-jue-hash-chong-tu-de-fang-shi/</id>
+        <link href="https://Wei715547.github.io/post/jie-jue-hash-chong-tu-de-fang-shi/">
+        </link>
+        <updated>2020-07-13T15:17:48.000Z</updated>
+        <content type="html"><![CDATA[<p>//解决冲突的方式</p>
+<p>//1.桶式散列法<br>
+//在数组列表中存储数组列表<br>
+//一个键(主容器数组列表索引)可存储多个值(数组列表内的“数组列表的多个值“)<br>
+class BucketHash<br>
+{</p>
+<pre><code>    private const int SIZE = 101;
+    ArrayList[] date;
+
+    public BucketHash()
+    {
+        date = new ArrayList[SIZE];
+        for (int i = 0; i &lt; SIZE; i++)
+        {
+            date[i] = new ArrayList(4);
+        }
+    }
+
+    public int Hash(string s)
+    {
+        long key = 0;
+        char[] cname = s.ToCharArray();
+        for (int i = 0; i &lt; cname.Length; i++)
+        {
+            key += 37 * key + (int)cname[i];
+        }
+        key = key % date.GetUpperBound(0);
+        if (key &lt; 0)
+            key += date.GetUpperBound(0);
+        return (int)key;
+    }
+
+    public void Insert(string s)
+    {
+        int hash_key = Hash(s);
+        if (!date[hash_key].Contains(s))
+            date[hash_key].Add(s);
+
+    }
+
+    public void Remove(string s)
+    {
+        int hash_key = Hash(s);
+        if (date[hash_key].Contains(s))
+            date[hash_key].Remove(s);
+    }
+
+    public void ShowTable()
+    {
+        for (int i = 0; i &lt; date.Length; i++)
+        {
+            if (date[i].Count&gt;0)
+            {
+                Console.Write(i+&quot;:&quot;);
+                foreach (string s in date[i])
+                {
+                    Console.Write(s);
+                }
+                Console.WriteLine();
+            }
+                
+        }
+    }
+}
+</code></pre>
+<p>}<br>
+//示例程序<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+//桶式散列法<br>
+BucketHash bkHash = new BucketHash();<br>
+for (int i = 0; i &lt; someName .Length; i++)<br>
+{<br>
+bkHash.Insert(someName[i]);<br>
+}<br>
+bkHash.ShowTable();</p>
+<pre><code>    }
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[散列表HashTable]]></title>
+        <id>https://Wei715547.github.io/post/san-lie-biao-hashtable/</id>
+        <link href="https://Wei715547.github.io/post/san-lie-biao-hashtable/">
+        </link>
+        <updated>2020-07-13T15:15:58.000Z</updated>
+        <content type="html"><![CDATA[<p>namespace Hash<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+string[] hashTable = new string[10007];//数组长度使用素数<br>
+string name;<br>
+string[] someName = new string[] { &quot;Wei&quot;, &quot;WDQWAS&quot;, &quot;QWCQCQ&quot;, &quot;WeCQSCi3&quot;, &quot;QWC&quot;, &quot;SCZ&quot;, &quot;VDBC&quot;, &quot;XCDF&quot;, &quot;XSDXDS&quot;, &quot;Wei9&quot; };</p>
+<pre><code>        int hashKey;
+        for (int i = 0; i &lt; someName .Length; i++)
+        {
+            name = someName[i];
+            hashKey = BatterHashMathf(name, hashTable);
+            hashTable[hashKey] = name;
+        }
+        ShowTable(hashTable);
+
+        Console.WriteLine(InHash(&quot;Wei&quot;,hashTable));
+        Console.WriteLine(GetKey (&quot;Wei&quot;,hashTable));
+
+    }
+
+    public static int HashMathf(string s,string [] table)
+    {
+        int key = 0;
+        char[] cname = s.ToCharArray();
+        for (int i = 0; i &lt;cname .Length; i++)
+        {
+            key += (int)cname[i];
+        }
+        return key % table.GetUpperBound(0);
+    }
+
+    //解决冲突的方式
+    //桶式散列法
+    //开放地址法
+    //双重散列法
+    public static int BatterHashMathf(string s,string[] arr)
+    {
+        long key = 0;
+        char[] cname = s.ToCharArray();
+        for (int i = 0; i &lt; cname.Length; i++)
+        {
+            key += 37*key+(int)cname[i];
+        }
+        key = key % arr.GetUpperBound(0);
+        if (key &lt; 0)
+            key += arr.GetUpperBound(0);
+        return (int)key;
+    }
+
+    public static void ShowTable(string [] arr)
+    {
+        for (int i = 0; i &lt; arr.Length; i++)
+        {
+            if (arr[i]!=null)
+                Console.WriteLine(i+&quot;:&quot;+arr[i]);
+        }
+    }
+
+    public static bool InHash(string s,string []arr)
+    {
+        int hashKey = BatterHashMathf(s, arr);
+        if (arr[hashKey].Equals(s))
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
+    }
+
+    public static int GetKey(string s,string []arr)
+    {
+        if (InHash(s, arr))
+            return BatterHashMathf(s, arr);
+        else
+            return -1;
+    }
+
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[构建字典集合]]></title>
         <id>https://Wei715547.github.io/post/gou-jian-zi-dian-ji-he/</id>
@@ -817,172 +997,6 @@ dateArray[minIndex] = temp;<br>
             QuickSort(dateArray, i + 1, right);
         }
     }</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[自定义String,Array]]></title>
-        <id>https://Wei715547.github.io/post/zi-ding-yi-stringarray/</id>
-        <link href="https://Wei715547.github.io/post/zi-ding-yi-stringarray/">
-        </link>
-        <updated>2020-06-28T01:53:18.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 串<br>
-{<br>
-class StringDS<br>
-{<br>
-private char[] date;<br>
-public StringDS(char[] array )<br>
-{<br>
-date = new char[array.Length];<br>
-for (int i = 0; i &lt; date.Length; i++)<br>
-{<br>
-date[i] = array[i];<br>
-}<br>
-}<br>
-public StringDS(string str)<br>
-{<br>
-date = new char[str.Length];<br>
-for (int i = 0; i &lt; date.Length; i++)<br>
-{<br>
-date[i] = str[i];<br>
-}<br>
-}</p>
-<pre><code>    //索引器
-    public char this[int index]
-    {
-        get { return date[index]; }
-    }
-
-    public int GetLength()
-    {
-        return date.Length;
-    }
-
-    /// &lt;summary&gt;
-    /// 如果两字符相同返回0
-    /// 如果当前字符小于s,返回-1
-    /// &lt;/summary&gt;
-    /// &lt;param name=&quot;s&quot;&gt;&lt;/param&gt;
-    /// &lt;returns&gt;&lt;/returns&gt;
-    public int Compare(StringDS s)
-    {
-        //取得长度较小的字符串长度
-        int len = this.GetLength() &lt; s.GetLength() ? this.GetLength() : s.GetLength();
-        int index = -1;
-        for (int i = 0; i &lt; len; i++)
-        {
-            if (this[i]!=s[i])
-            {
-                index = i;
-                break;
-            }
-        }
-        if(index !=-1)
-        {
-            if (this[index ] &gt; s[index ])
-                return 1;
-            else
-                return -1;
-        }else
-        {
-            if (this.GetLength()==s.GetLength ())
-            {
-                return 0;
-            }else
-            {
-                if (this.GetLength() &gt; s.GetLength())
-                    return 1;
-                else
-                    return -1;
-            }
-        }
-    }
-    /// &lt;summary&gt;
-    /// 截取字符串
-    /// &lt;/summary&gt;
-    /// &lt;param name=&quot;index&quot;&gt;&lt;/param&gt;
-    /// &lt;param name=&quot;length&quot;&gt;&lt;/param&gt;
-    /// &lt;returns&gt;&lt;/returns&gt;
-    public StringDS SubString(int index,int length)
-    {
-        char[] newDate = new char[length];
-        for (int i = 0; i &lt; length; i++)
-        {
-            newDate[i] = date[i+index ];
-        }
-        return new StringDS ( newDate);
-    }
-    public override string ToString()
-    {
-        /*string s=&quot;&quot;;
-        foreach (char  item in date)
-        {
-            s += item;
-        }
-        return s;*/
-        return new string(date);
-        
-    }
-    public static StringDS Concat(StringDS a,StringDS b)
-    {
-        char [] newDate = new char[a.GetLength() + b.GetLength()];
-        for (int i = 0; i &lt; a.GetLength (); i++)
-        {
-            newDate[i] = a[i];
-        }
-        for (int i = a.GetLength (); i &lt; newDate .Length; i++)
-        {
-            newDate[i] = b[i - a.GetLength()];
-        }
-        return new StringDS(newDate);
-    }
-
-    public int IndexOf(StringDS str)
-    {
-        for (int i = 0; i &lt;= this .GetLength ()-str .GetLength (); i++)
-        {
-            bool isEqual = true;
-            for (int j = i; j &lt; i+str.GetLength (); j++)
-            {
-                if (this [j]!=str [j-i])
-                {
-                    isEqual = false;
-                }
-            }
-            if (isEqual )
-            {
-                return i;
-            }else
-            {
-                continue;
-            }
-        }
-        return -1;
-    }
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Attribute]]></title>
-        <id>https://Wei715547.github.io/post/attribute/</id>
-        <link href="https://Wei715547.github.io/post/attribute/">
-        </link>
-        <updated>2020-06-27T04:19:31.000Z</updated>
-        <content type="html"><![CDATA[<p>默认情况下，Inspector窗口会显示所有的公共字段，Attribute可以叠加发生作用<br>
-1.HideInInspector：隐藏字段<br>
-2.SerializeFiled：把私有字段在Inspector中显示<br>
-3.Header：对公共字段进行分组 （【Header（&quot;描述&quot;）】）<br>
-4.Space：给各个字段分组之间添加一个空行<br>
-5.Textarea：可以在输入框内输出多行，超出范围会出现滚动条<br>
-6.Range：给字段定数值范围，以滑动条的形式呈现 （【Range（0,1）】）<br>
-7.Tooltip：为字段添加提示信息，鼠标悬停字段处即可出现<br>
-8.ContextMenu：为方法提供可执行方式，在Inspector窗口右键点击脚本即可看到方法<br>
-9.DisallowMultipleComponent：指定脚本不能重复添加<br>
-10.RequireComponent：在一个类中绑定另一个类，实现同步</p>
 ]]></content>
     </entry>
 </feed>
