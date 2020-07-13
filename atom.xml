@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-08T15:02:48.733Z</updated>
+    <updated>2020-07-13T13:34:54.197Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,62 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[构建字典集合]]></title>
+        <id>https://Wei715547.github.io/post/gou-jian-zi-dian-ji-he/</id>
+        <link href="https://Wei715547.github.io/post/gou-jian-zi-dian-ji-he/">
+        </link>
+        <updated>2020-07-13T13:32:28.000Z</updated>
+        <content type="html"><![CDATA[<p>using System.Collections;<br>
+namespace MyDictionary<br>
+{//字典集合类<br>
+class IDic:DictionaryBase<br>
+{<br>
+public IDic()<br>
+{</p>
+<pre><code>    }
+    public void Add(string name,string IP)
+    {
+        base.InnerHashtable[name] = IP;
+    }
+
+    public string Item(string name)
+    {
+        return base.InnerHashtable[name].ToString();
+    }
+
+    public void Remove(string name)
+    {
+        base.InnerHashtable.Remove(name);
+    }
+
+}
+</code></pre>
+<p>}<br>
+//示例程序<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+IDic IPDic = new IDic();<br>
+IPDic.Add(&quot;Wei&quot;, &quot;715547&quot;);<br>
+IPDic.Add(&quot;Wei02&quot;, &quot;715548&quot;);<br>
+IPDic.Add(&quot;Wei03&quot;, &quot;715549&quot;);</p>
+<pre><code>        Console.WriteLine(IPDic.Item(&quot;Wei&quot;));
+
+        DictionaryEntry[] ips = new DictionaryEntry[IPDic.Count];
+
+        IPDic.CopyTo(ips,0);
+        for (int i = 0; i &lt;= ips.GetUpperBound(0); i++)
+        {
+            Console.WriteLine(ips[i].Key+&quot;:&quot;+ips[i].Value);
+        }
+
+
+    }
+}</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Leet Code01-03]]></title>
         <id>https://Wei715547.github.io/post/leet-code01/</id>
@@ -927,50 +983,6 @@ date[i] = str[i];<br>
 8.ContextMenu：为方法提供可执行方式，在Inspector窗口右键点击脚本即可看到方法<br>
 9.DisallowMultipleComponent：指定脚本不能重复添加<br>
 10.RequireComponent：在一个类中绑定另一个类，实现同步</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[获取NetBox网络服务器上的AB包与Lua脚本]]></title>
-        <id>https://Wei715547.github.io/post/huo-qu-netbox-wang-luo-fu-wu-qi-shang-de-ab-bao-yu-lua-jiao-ben/</id>
-        <link href="https://Wei715547.github.io/post/huo-qu-netbox-wang-luo-fu-wu-qi-shang-de-ab-bao-yu-lua-jiao-ben/">
-        </link>
-        <updated>2020-06-22T07:12:21.000Z</updated>
-        <content type="html"><![CDATA[<p>//AB包（UnityWebRequest request 异步执行）<br>
-[LuaCallCSharp]<br>
-public  void LoadResource(string resName,string filePath)<br>
-{<br>
-StartCoroutine(LoadResourceCorotine(resName,filePath));<br>
-}</p>
-<pre><code>IEnumerator LoadResourceCorotine(string resName,string filePath)
-{
-    UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(@&quot;http://localhost/AssetBundles/&quot; + filePath); 
-    yield return request.SendWebRequest();
-    AssetBundle ab = (request.downloadHandler as DownloadHandlerAssetBundle).assetBundle;
-
-    GameObject gameObject = ab.LoadAsset&lt;GameObject&gt;(resName);
-    prefabDict.Add(resName, gameObject); 
-}
-
-/////////////////////////////////////////////////////////////////////////
-</code></pre>
-<p>// Lua脚本(加载场景时同时加载NetBox上的Lua脚本保存到本地(本地存在时直接覆盖源文件))<br>
-public void LoadGameMethod()<br>
-{<br>
-StartCoroutine(LoadResourceCorotine());<br>
-StartCoroutine(StartLoading_4(2));<br>
-}</p>
-<pre><code>IEnumerator LoadResourceCorotine()
-{
-    UnityWebRequest request = UnityWebRequest.Get(@&quot;http://localhost/fish.lua.txt&quot;);
-    yield return request.SendWebRequest();
-    string str = request.downloadHandler.text;//获取下载的脚本文本
-    File.WriteAllText(@&quot;D:\715\XluaProjects\PlayerGamePackage\fish.lua.txt&quot;, str);存储到本地
-
-    UnityWebRequest request1 = UnityWebRequest.Get(@&quot;http://localhost/fishDispose.lua.txt&quot;);
-    yield return request1.SendWebRequest();
-    string str1 = request1.downloadHandler.text;
-    File.WriteAllText(@&quot;D:\715\XluaProjects\PlayerGamePackage\fishDispose.lua.txt&quot;, str1);
-}</code></pre>
 ]]></content>
     </entry>
 </feed>
