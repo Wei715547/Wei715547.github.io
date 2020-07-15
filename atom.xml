@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-13T15:27:10.617Z</updated>
+    <updated>2020-07-15T04:54:40.683Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -96,6 +96,12 @@ bkHash.Insert(someName[i]);<br>
 }<br>
 bkHash.ShowTable();</p>
 <pre><code>    }
+
+//2.开放地址法
+//发生冲突时，寻找下一个空的散列地址（平方探测直至找到下一个空位置）
+
+//多重散列
+//存在多种哈希函数，发生冲突时调用备选哈希函数
 </code></pre>
 ]]></content>
     </entry>
