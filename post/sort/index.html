@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1594788868840">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1594998751832">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@ int iValue = dateArray..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1594788868840" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1594998751832" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -182,8 +182,43 @@ dateArray[i] = mindate;<br>
 dateArray[minIndex] = temp;<br>
 }<br>
 }<br>
-}</p>
-<pre><code>    快速排序
+}<br>
+<img src="https://Wei715547.github.io/post-images/1594998749011.jpg" alt="" loading="lazy"><br>
+//希尔排序<br>
+/// <summary><br>
+/// 希尔排序<br>
+/// </summary><br>
+/// <param name="arr"></param><br>
+public static void ShellSort(int [] arr)<br>
+{<br>
+int inner, temp;<br>
+/<em>int h = 1;<br>
+while (h &lt; arr.Length / 3)<br>
+{<br>
+h = h * 3 + 1;<br>
+}</em>/<br>
+int h = 3;//间隔值<br>
+while (h&gt;0)<br>
+{</p>
+<pre><code>            for (int i = h; i &lt;= arr .Length-1; i++)
+            {
+                temp = arr[i]; 
+                inner = i;
+                while((inner &gt;h-1)&amp;&amp;arr[inner-h]&gt;=temp)
+                {
+                    arr[inner] = arr[inner - h];
+                    inner -= h;
+
+                }
+                arr[inner] = temp;
+
+            }
+
+            h = (h - 1) % 3;
+        }
+    }
+
+    快速排序
     /// &lt;summary&gt;
     /// 对数组范围内的数据进行排序
     /// &lt;/summary&gt;
