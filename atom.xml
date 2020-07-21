@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-21T05:21:55.674Z</updated>
+    <updated>2020-07-21T10:41:37.818Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,73 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[里式转换-类多态]]></title>
+        <id>https://Wei715547.github.io/post/li-shi-zhuan-huan-lei-duo-tai/</id>
+        <link href="https://Wei715547.github.io/post/li-shi-zhuan-huan-lei-duo-tai/">
+        </link>
+        <updated>2020-07-21T10:40:38.000Z</updated>
+        <content type="html"><![CDATA[<p>class Program<br>
+{<br>
+public class Per<br>
+{<br>
+public void Say()<br>
+{<br>
+Console.WriteLine(&quot;Per&quot;);<br>
+}<br>
+}<br>
+public class PerSOne:Per<br>
+{<br>
+public void Say()<br>
+{<br>
+Console.WriteLine(&quot;PerSOne&quot;);<br>
+}<br>
+}<br>
+public class PerSTwo:Per<br>
+{<br>
+public void Say()<br>
+{<br>
+Console.WriteLine(&quot;PerSTwo&quot;);<br>
+}<br>
+}</p>
+<pre><code>    static void Main(string[] args)
+    {
+        //里式转换-类多态
+        Per[] per = new Per[3];
+        Random r = new Random();
+        int rs = 0;
+        for (int i = 0; i &lt; per.Length; i++)
+        {
+            rs = r.Next(0, 2);
+            switch(rs)
+            {
+                case 0:per[i] = new PerSOne();
+                    break;
+                case 1:per[i] = new PerSTwo();
+                    break;
+            }
+        }
+
+        for (int i = 0; i &lt; per.Length; i++)
+        {
+            if (per[i] is PerSOne)
+            {
+                ((PerSOne)per[i]).Say();
+            }
+            else if (per[i] is PerSTwo)
+            {
+                ((PerSTwo)per[i]).Say();
+            }
+            else
+                per[i].Say();
+            
+        }
+
+        Console.ReadKey();
+
+    }</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[解决Hash冲突的方式]]></title>
         <id>https://Wei715547.github.io/post/jie-jue-hash-chong-tu-de-fang-shi/</id>
@@ -876,168 +943,6 @@ s[k] = temp2;<br>
 }<br>
 }<br>
 }</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Sort]]></title>
-        <id>https://Wei715547.github.io/post/sort/</id>
-        <link href="https://Wei715547.github.io/post/sort/">
-        </link>
-        <updated>2020-06-28T03:11:56.000Z</updated>
-        <content type="html"><![CDATA[<p>直插排序<br>
-<img src="https://Wei715547.github.io/post-images/1593314284836.jpg" alt="" loading="lazy"><br>
-static void InsertSort(int[] dateArray)<br>
-{<br>
-for (int i = 1; i &lt; dateArray .Length ; i++)<br>
-{<br>
-int iValue = dateArray[i];<br>
-bool isInsert = false;<br>
-//从第二个元素开始拿到i位置元素，和前面的元素对比<br>
-//如比I大，就让其向后移动，（保证前面的元素从小到大排序）<br>
-for (int j = i - 1; j &gt;= 0; j--)<br>
-{<br>
-if (dateArray [j]&gt;iValue)<br>
-{<br>
-dateArray[j + 1] = dateArray[j];<br>
-}else//在前面发现一比i小的值就停止移动<br>
-{<br>
-dateArray[j + 1] = iValue;<br>
-isInsert = true;<br>
-break;<br>
-}<br>
-}<br>
-if (isInsert ==false)//前面的值都比i大将i放到最前面<br>
-{<br>
-dateArray[0] = iValue;<br>
-}<br>
-}<br>
-}</p>
-<pre><code>    冒泡排序
-    static void BubbleSort(int[] dateArray)
-    {
-        for (int i = 0; i &lt; dateArray .Length-1 ; i++)//总循环次数
-        {
-            for (int j = 0; j &lt; dateArray.Length-1-i; j++)//循环n次后后n个数已经最大不需在进入比较
-            {
-                if (dateArray [j]&gt;dateArray [j+1])
-                {
-                    int temp = dateArray[j];
-                    dateArray[j] = dateArray[j + 1];
-                    dateArray[j + 1] = temp;
-                }
-            }
-        }
-    }
-</code></pre>
-<p><img src="https://Wei715547.github.io/post-images/1593315435960.jpg" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1593315539844.jpg" alt="" loading="lazy"><br>
-选择排序<br>
-static void SelectSort(int[] dateArray)<br>
-{<br>
-for (int i = 0; i &lt; dateArray .Length-1 ; i++)<br>
-{<br>
-int mindate = dateArray[i];<br>
-int minIndex = i;<br>
-for (int j = i+1; j &lt; dateArray.Length ; j++)<br>
-{<br>
-if (dateArray [j]&lt;mindate )<br>
-{<br>
-mindate = dateArray[j];<br>
-minIndex = j;<br>
-}<br>
-}<br>
-if (minIndex !=i)<br>
-{<br>
-int temp = dateArray[i];<br>
-dateArray[i] = mindate;<br>
-dateArray[minIndex] = temp;<br>
-}<br>
-}<br>
-}<br>
-<img src="https://Wei715547.github.io/post-images/1594998749011.jpg" alt="" loading="lazy"><br>
-//希尔排序<br>
-/// <summary><br>
-/// 希尔排序<br>
-/// </summary><br>
-/// <param name="arr"></param><br>
-public static void ShellSort(int [] arr)<br>
-{<br>
-int inner, temp;<br>
-/<em>int h = 1;<br>
-while (h &lt; arr.Length / 3)<br>
-{<br>
-h = h * 3 + 1;<br>
-}</em>/<br>
-int h = 3;//间隔值<br>
-while (h&gt;0)<br>
-{</p>
-<pre><code>            for (int i = h; i &lt;= arr .Length-1; i++)
-            {
-                temp = arr[i]; 
-                inner = i;
-                while((inner &gt;h-1)&amp;&amp;arr[inner-h]&gt;=temp)
-                {
-                    arr[inner] = arr[inner - h];
-                    inner -= h;
-
-                }
-                arr[inner] = temp;
-
-            }
-
-            h = (h - 1) % 3;
-        }
-    }
-
-    快速排序
-    /// &lt;summary&gt;
-    /// 对数组范围内的数据进行排序
-    /// &lt;/summary&gt;
-    /// &lt;param name=&quot;dateArray&quot;&gt;要排序的数组&lt;/param&gt;
-    /// &lt;param name=&quot;left&quot;&gt;开始索引&lt;/param&gt;
-    /// &lt;param name=&quot;right&quot;&gt;结束索引&lt;/param&gt;
-    static void QuickSort(int [] dateArray,int left,int right)
-    {
-        if (left &lt;right )
-        {
-            int x = dateArray[left];//基准数，把比它小或等于它的放在它左边，然后把比它大的放在右边
-            int i = left;
-            int j = right;
-
-            while (true &amp;&amp; i &lt; j)
-            {
-                //从后往前比较，（从右往左找一个小于/等于x的数字）
-                while (true &amp;&amp; i &lt; j)
-                {
-                    if (dateArray[j] &lt; x)//找到了一个小于基准数的数字，把它放在x左边（i位置）
-                    {
-                        dateArray[i] = dateArray[j];
-                        break;
-                    }
-                    else
-                    {
-                        j--;
-                    }
-                }
-                //从前往后找一个（左到右找一个比x大的数字，放在放在基准位置（j）
-                while (true &amp;&amp; i &lt; j)
-                {
-                    if (dateArray[i] &gt; x)
-                    {
-                        dateArray[j] = dateArray[i];
-                        break;
-                    }
-                    else
-                    {
-                        i++;
-                    }
-                }
-            }
-            dateArray[i] = x;
-            QuickSort(dateArray, left, i - 1);
-            QuickSort(dateArray, i + 1, right);
-        }
-    }</code></pre>
 ]]></content>
     </entry>
 </feed>

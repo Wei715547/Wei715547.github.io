@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>视角缩放/跟随 | Wei: Development technology accumulation</title>
+<title>里式转换-类多态 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,17 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class CamerCT : MonoBehaviour
+    <meta name="description" content="class Program
 {
-pu..." />
+public class Per
+{
+public void Say()
+{
+Console.WriteLine(&quot;Per&quot;);
+}
+}
+public class PerSOne:Per
+..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -108,57 +113,78 @@ pu..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">视角缩放/跟随</h2>
-            <div class="post-date">2020-06-06</div>
+            <h2 class="post-title">里式转换-类多态</h2>
+            <div class="post-date">2020-07-21</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class CamerCT : MonoBehaviour<br>
+              <p>class Program<br>
 {<br>
-public Transform target;<br>
-public Vector3 offset;</p>
-<pre><code>//视角范围，缩放速度
-public float zoomSpeed = 4f;
-public float minZoom = 5f;
-public float maxZoom = 10f;
+public class Per<br>
+{<br>
+public void Say()<br>
+{<br>
+Console.WriteLine(&quot;Per&quot;);<br>
+}<br>
+}<br>
+public class PerSOne:Per<br>
+{<br>
+public void Say()<br>
+{<br>
+Console.WriteLine(&quot;PerSOne&quot;);<br>
+}<br>
+}<br>
+public class PerSTwo:Per<br>
+{<br>
+public void Say()<br>
+{<br>
+Console.WriteLine(&quot;PerSTwo&quot;);<br>
+}<br>
+}</p>
+<pre><code>    static void Main(string[] args)
+    {
+        //里式转换-类多态
+        Per[] per = new Per[3];
+        Random r = new Random();
+        int rs = 0;
+        for (int i = 0; i &lt; per.Length; i++)
+        {
+            rs = r.Next(0, 2);
+            switch(rs)
+            {
+                case 0:per[i] = new PerSOne();
+                    break;
+                case 1:per[i] = new PerSTwo();
+                    break;
+            }
+        }
 
-public float pitch=2f;//视角高度值
+        for (int i = 0; i &lt; per.Length; i++)
+        {
+            if (per[i] is PerSOne)
+            {
+                ((PerSOne)per[i]).Say();
+            }
+            else if (per[i] is PerSTwo)
+            {
+                ((PerSTwo)per[i]).Say();
+            }
+            else
+                per[i].Say();
+            
+        }
 
-private float currentZoom = 10f;//焦距
+        Console.ReadKey();
 
-public float YawSpeed = 100f;//旋转速度
-private float currentYaw = 0f;//旋转角度
-
-// Update is called once per frame
-void Update()
-{
-    currentZoom -= Input.GetAxis(&quot;Mouse ScrollWheel&quot;)*zoomSpeed *Time .deltaTime;
-    currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);//限定缩放范围
-
-    currentYaw += Input.GetAxis(&quot;Horizontal&quot;) * YawSpeed * Time.deltaTime;
-
-}
-
-private void LateUpdate()
-{
-    transform.position = target.position - offset * currentZoom;
-    transform.LookAt(target.position + Vector3.up*pitch);
-
-    transform.RotateAround(target.position, Vector3.up, currentYaw);
-}
-</code></pre>
-<p>}</p>
+    }</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/zi-dong-xun-lu/">
+                <a href="https://Wei715547.github.io/post/jie-jue-hash-chong-tu-de-fang-shi/">
                   <h3 class="post-title">
-                    自动寻路
+                    解决Hash冲突的方式
                   </h3>
                 </a>
               </div>
