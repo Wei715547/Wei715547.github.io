@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1595328089018">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1595409984020">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ static void Main(string[] args)
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1595328089018" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1595409984020" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -147,6 +147,60 @@ Console.WriteLine(s);<br>
         //写入文件二进制数据（复制）
         //File.WriteAllBytes(&quot;1.png&quot;, data);
 
+    }
+}
+</code></pre>
+<p>}<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+//Path类与String类相似<br>
+string path = @&quot;C:\Users\qweasd\Desktop\NewC\NNN\GaO4\CYG1114\2CYG\1.txt&quot;;<br>
+/<em>int index = path.LastIndexOf(&quot;\&quot;);<br>
+string s = path.Substring(index + 1);<br>
+Console.WriteLine(s);</em>/<br>
+//获取文件名<br>
+Console.WriteLine( Path.GetFileName(path));<br>
+//获取文件名不包含扩展名<br>
+Console.WriteLine(Path.GetFileNameWithoutExtension(path));<br>
+//获取文件的扩展名<br>
+Console.WriteLine(Path.GetExtension(path));<br>
+//获取文件所在文件夹的名称<br>
+Console.WriteLine(Path.GetDirectoryName(path));<br>
+//绝对路径<br>
+Console.WriteLine(Path.GetFullPath(path));<br>
+//合并路径<br>
+Console.WriteLine(Path.Combine(@&quot;c\a&quot;,&quot;b.txt&quot;));</p>
+<pre><code>        //File类
+        //创建文件
+        /*File.Create(&quot;2.txt&quot;);
+        Console.WriteLine(&quot;Create f&quot;);
+        Console.ReadKey();*/
+        //删除文件
+        //File.Delete(@&quot;D:\715\CSharp\2.txt&quot;);
+
+        //字符串转字节数组
+        byte[] bit = Encoding.Default.GetBytes(path);
+        //字节数组转字符串
+        string str = Encoding.Default.GetString(bit);
+
+        //写入
+        string ss  = &quot;WWWWWWWWWCXRCMCOTXNOMX&quot;;
+        byte[] dt = Encoding.Default.GetBytes(ss);
+        File.WriteAllBytes(&quot;1.txt&quot;, dt);
+        //由字符串数组逐行写入
+        File.WriteAllLines(&quot;1.txt&quot;, new string[] { &quot;weqr&quot;, &quot;fsdf&quot;, &quot;rfsf&quot; });
+        File.WriteAllText(&quot;1.txt&quot;, &quot;decwdsq&quot;);
+        //追加写入
+        File.AppendAllText(&quot;1.txt&quot;, &quot;---wei&quot;);
+
+        //读取
+        byte[] b = File.ReadAllBytes(&quot;1.txt&quot;);
+        //相对路径：D:\715\CSharp\文件类\bin\Debug\netcoreapp3.0-程序调试文件夹下
+        Console.WriteLine(Encoding.UTF8.GetString(b));
+        File.ReadAllLines(@&quot;D:\715\CSharp\1.txt&quot;);//返回字符串数组
+        File.ReadAllText(@&quot;D:\715\CSharp\1.txt&quot;);//返回一个字符串
     }
 }
 </code></pre>
