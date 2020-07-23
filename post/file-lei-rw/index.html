@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1595409984020">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1595521045029">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ static void Main(string[] args)
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1595409984020" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1595521045029" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -201,6 +201,57 @@ Console.WriteLine(Path.Combine(@&quot;c\a&quot;,&quot;b.txt&quot;));</p>
         Console.WriteLine(Encoding.UTF8.GetString(b));
         File.ReadAllLines(@&quot;D:\715\CSharp\1.txt&quot;);//返回字符串数组
         File.ReadAllText(@&quot;D:\715\CSharp\1.txt&quot;);//返回一个字符串
+
+        //FileStream类
+
+        //读取数据
+        /*FileStream fil = new FileStream(@&quot;D:\715\CSharp\1.txt&quot;, FileMode.OpenOrCreate, FileAccess.Read);
+        //参数-FileStream（路径，对文件的操作，对文件里面的数据进行的操作）
+        byte[] buffer = new byte[1025 * 1024 * 5];
+        //返回读取到的有效字节数
+        int r = fil.Read(buffer, 0, buffer.Length);//读取长度
+        string s = Encoding.Default.GetString(buffer, 0, r);
+        fil.Close();//关闭流
+        fil.Dispose();//释放占用资源
+        Console.WriteLine(s);*/
+
+        //写入数据
+        //将文件流对象写入using{}中，系统会自动释放所占用的资源
+        /*using (FileStream fileWrite = new FileStream(@&quot;D:\715\CSharp\1.txt&quot;, FileMode.Create, FileAccess.Write))
+        {
+            string date = &quot;Date Save&quot;;
+            byte[] bufferW = Encoding.Default.GetBytes(date);
+            fileWrite.Write(bufferW, 0, bufferW.Length);
+        }*/
+
+        string soucre = @&quot;C:\Users\qweasd\Desktop\SAVE.png&quot;;
+        string target = @&quot;D:\715\CSharp\new.png&quot;;
+        CoppyFile(soucre, target);
+        Console.WriteLine(&quot;复制成功&quot;);
+        Console.ReadLine();
+        //StreamReader &amp; StreamWriter
+
+    }
+    public static void CoppyFile(string soucre,string target)
+    {
+        //创建一个读取流
+        using (FileStream fsRead = new FileStream(soucre, FileMode.Open, FileAccess.Read))
+        {
+            //创建一个写入流
+            using (FileStream fsWrite = new FileStream (target ,FileMode.OpenOrCreate,FileAccess.Write))
+            {
+                byte[] buffer = new byte[1024 * 1024 * 5];
+
+                while (true)
+                {
+                    int r = fsRead.Read(buffer, 0, buffer.Length);
+                    if (r == 0)
+                        break;
+                    fsWrite.Write(buffer, 0, r);
+                }
+                
+            }
+        }
     }
 }
 </code></pre>
