@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>UI图标冷却 | Wei: Development technology accumulation</title>
+<title>简单工厂设计模式 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,10 +18,14 @@
 
 
 
-    <meta name="description" content="private void FixedUpdate()
+    <meta name="description" content="using System;
+namespace 简单工厂设计模式//（抽象类实现的多态）
 {
-coodTime += Time.deltaTime;
-    if (Input.GetKeyDown(KeyCode.Z) &amp;&amp; coodTime &gt; se..." />
+class Program
+{
+static void Main(string[] args)
+{
+string brand = Console...." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -106,43 +110,76 @@ coodTime += Time.deltaTime;
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">UI图标冷却</h2>
-            <div class="post-date">2020-06-11</div>
+            <h2 class="post-title">简单工厂设计模式</h2>
+            <div class="post-date">2020-07-24</div>
             
             <div class="post-content" v-pre>
-              <p>private void FixedUpdate()<br>
+              <p>using System;</p>
+<p>namespace 简单工厂设计模式//（抽象类实现的多态）<br>
 {<br>
-coodTime += Time.deltaTime;</p>
-<pre><code>    if (Input.GetKeyDown(KeyCode.Z) &amp;&amp; coodTime &gt; setcoodtime)
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+string brand = Console.ReadLine();<br>
+NoteBook cosm = GetNoteBook(brand);<br>
+cosm.Say();<br>
+}</p>
+<pre><code>    public static NoteBook GetNoteBook(string brand)
     {
-        au.PlayOneShot(russ, 1f);
-        Russing();
-        coodTime = 0;
+        NoteBook nb = null;
+        switch(brand)
+        {
+            case &quot;Lenovo&quot;:nb = new Lenovo();
+                break;
+            case &quot;Acre&quot;:nb = new Acre();
+                break;
+            case &quot;IBM&quot;:nb = new IBM();
+                break;
+        }
+        return nb;
     }
-}
 
-// Update is called once per frame
-void Update()
-{
-    //UI显示
-    if (coodTime &gt; setcoodtime)
+    public abstract class NoteBook
     {
-        coodUI.fillAmount = 0;
-    }else
+        public abstract void Say();
+    }
+
+    public class Lenovo : NoteBook
     {
-        coodUI.fillAmount = 1-coodTime/setcoodtime ;
+        public override void Say()
+        {
+            Console.WriteLine(&quot;Lenovo&quot;);
+        }
+    }
+
+    public class Acre:NoteBook
+    {
+        public override void Say()
+        {
+            Console.WriteLine(&quot;Acre&quot;);
+        }
+    }
+
+    public class IBM:NoteBook
+    {
+        public override void Say()
+        {
+            Console.WriteLine(&quot;IBM&quot;);
+        }
     }
 }
-![](https://Wei715547.github.io/post-images/1591842421156.PNG)</code></pre>
+</code></pre>
+<p>}</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/post-process-effectcamer-shake/">
+                <a href="https://Wei715547.github.io/post/fang-wen-xiu-shi-fu/">
                   <h3 class="post-title">
-                    Post Process Effect/Camer Shake
+                    访问修饰符
                   </h3>
                 </a>
               </div>

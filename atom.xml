@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-24T14:30:54.019Z</updated>
+    <updated>2020-07-24T14:47:33.589Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,71 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[简单工厂设计模式]]></title>
+        <id>https://Wei715547.github.io/post/jian-dan-gong-han-she-ji-mo-shi/</id>
+        <link href="https://Wei715547.github.io/post/jian-dan-gong-han-she-ji-mo-shi/">
+        </link>
+        <updated>2020-07-24T14:46:10.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;</p>
+<p>namespace 简单工厂设计模式//（抽象类实现的多态）<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+string brand = Console.ReadLine();<br>
+NoteBook cosm = GetNoteBook(brand);<br>
+cosm.Say();<br>
+}</p>
+<pre><code>    public static NoteBook GetNoteBook(string brand)
+    {
+        NoteBook nb = null;
+        switch(brand)
+        {
+            case &quot;Lenovo&quot;:nb = new Lenovo();
+                break;
+            case &quot;Acre&quot;:nb = new Acre();
+                break;
+            case &quot;IBM&quot;:nb = new IBM();
+                break;
+        }
+        return nb;
+    }
+
+    public abstract class NoteBook
+    {
+        public abstract void Say();
+    }
+
+    public class Lenovo : NoteBook
+    {
+        public override void Say()
+        {
+            Console.WriteLine(&quot;Lenovo&quot;);
+        }
+    }
+
+    public class Acre:NoteBook
+    {
+        public override void Say()
+        {
+            Console.WriteLine(&quot;Acre&quot;);
+        }
+    }
+
+    public class IBM:NoteBook
+    {
+        public override void Say()
+        {
+            Console.WriteLine(&quot;IBM&quot;);
+        }
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[访问修饰符]]></title>
         <id>https://Wei715547.github.io/post/fang-wen-xiu-shi-fu/</id>
@@ -782,64 +847,6 @@ nodeFore.RightNode = b;</p>
 }
 ![](https://Wei715547.github.io/post-images/1593592462809.png)
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[通过EvenSystems.EventTrigger实现UI Button的按下，抬起....等事件]]></title>
-        <id>https://Wei715547.github.io/post/tong-guo-evensystemseventtrigger-shi-xian-ui-button-de-an-xia-tai-qi-deng-shi-jian/</id>
-        <link href="https://Wei715547.github.io/post/tong-guo-evensystemseventtrigger-shi-xian-ui-button-de-an-xia-tai-qi-deng-shi-jian/">
-        </link>
-        <updated>2020-06-30T06:41:07.000Z</updated>
-        <content type="html"><![CDATA[<p>using UnityEngine.EventSystems;</p>
-<pre><code>private Button jump;
-private EventTrigger trigger;
-
-void Start()
-{
-    jump = GameObject.Find(&quot;btn_Jump&quot;).GetComponent&lt;Button&gt;();
-    trigger = jump.gameObject.GetComponent&lt;EventTrigger&gt;();//（在按钮上添加EventTrigger组件）
-</code></pre>
-<p>//按下，抬起事件<br>
-EventTrigger.Entry down = new EventTrigger.Entry();//声明事件委托对象<br>
-down.eventID = EventTriggerType.PointerDown;委托对象的属性，按下类型(事件类型)<br>
-down.callback = new EventTrigger.TriggerEvent();//声明回调函数对象<br>
-down.callback.AddListener(JumpButtonDown);//要调用的方法<br>
-trigger.triggers.Add(down);将委托加入EvenSystem的事件委托链</p>
-<pre><code>    EventTrigger.Entry undown = new EventTrigger.Entry();
-    undown.eventID = EventTriggerType.PointerUp;//抬起事件
-    undown.callback = new EventTrigger.TriggerEvent();
-    undown.callback.AddListener(JumpButtonUp);
-    trigger.triggers.Add(undown);
-
-//光标移入，移出事件
-    /*EventTrigger.Entry downing = new EventTrigger.Entry();
-    downing.eventID = EventTriggerType.PointerEnter;
-    downing.callback = new EventTrigger.TriggerEvent();
-    downing.callback.AddListener(JumpButton);
-    trigger.triggers.Add(downing);
-    EventTrigger.Entry undowning = new EventTrigger.Entry();
-    undowning.eventID = EventTriggerType.PointerExit;
-    undowning.callback = new EventTrigger.TriggerEvent();
-    undowning.callback.AddListener(UnJumpButton);
-    trigger.triggers.Add(downing);*/
-}
-
-public void JumpButtonDown(BaseEventData pointDate)
-{
-    print(&quot;按下跳跃键&quot;);
-    jumpPressed = true;//模拟ButtonDown
-    jumpHeld = true;
-    Invoke(&quot;SetBack&quot;, 0.1f);
-}
-public void JumpButtonUp(BaseEventData pointDate)
-{
-    print(&quot;抬起跳跃键&quot;);
-    jumpHeld = false;
-}
-public void SetBack()
-{
-    jumpPressed = false;
-}</code></pre>
 ]]></content>
     </entry>
 </feed>
