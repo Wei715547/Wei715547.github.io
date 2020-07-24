@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-24T15:21:45.698Z</updated>
+    <updated>2020-07-24T15:26:31.329Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -87,7 +87,7 @@ private:私有的，只能在当前类中访问<br>
 protected:受保护的，只能在当前类或其子类中访问<br>
 internal:只能在当前程序集/项目中访问，在同一项目中internal与public权限相同<br>
 protected innternal:  protected + innternal</p>
-<p>1.可以修饰类的只有：public，internal (partial):部分类-多个人需要写同一个类时使用每个人完成类的一部分。<br>
+<p>1.可以修饰类的只有：public，internal [1.(partial):部分类-多个人需要写同一个类时使用每个人完成类的一部分。2.sealed:密封类，此类不可被继承但可继承的类。<br>
 2.子类的访问权限不能高于父类的访问权限，会暴露父类成员<br>
 例：在程序集外会通过子类访问到子类所继承的父类成员！<br>
 internal class Person<br>

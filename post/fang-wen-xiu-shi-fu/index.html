@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1595604079534">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1595604387733">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ protec..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1595604079534" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1595604387733" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -116,7 +116,7 @@ private:私有的，只能在当前类中访问<br>
 protected:受保护的，只能在当前类或其子类中访问<br>
 internal:只能在当前程序集/项目中访问，在同一项目中internal与public权限相同<br>
 protected innternal:  protected + innternal</p>
-<p>1.可以修饰类的只有：public，internal (partial):部分类-多个人需要写同一个类时使用每个人完成类的一部分。<br>
+<p>1.可以修饰类的只有：public，internal [1.(partial):部分类-多个人需要写同一个类时使用每个人完成类的一部分。2.sealed:密封类，此类不可被继承但可继承的类。<br>
 2.子类的访问权限不能高于父类的访问权限，会暴露父类成员<br>
 例：在程序集外会通过子类访问到子类所继承的父类成员！<br>
 internal class Person<br>
