@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>里式转换-类多态 | Wei: Development technology accumulation</title>
+<title>访问修饰符 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,17 +18,11 @@
 
 
 
-    <meta name="description" content="class Program
-{
-public class Per
-{
-public void Say()
-{
-Console.WriteLine(&quot;Per&quot;);
-}
-}
-public class PerSOne:Per
-..." />
+    <meta name="description" content="public: 公开访问
+private:私有的，只能在当前类中访问
+protected:受保护的，只能在当前类或其子类中访问
+internal:只能在当前程序集/项目中访问，在同一项目中internal与public权限相同
+protec..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -113,78 +107,36 @@ public class PerSOne:Per
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">里式转换-类多态</h2>
-            <div class="post-date">2020-07-21</div>
+            <h2 class="post-title">访问修饰符</h2>
+            <div class="post-date">2020-07-24</div>
             
             <div class="post-content" v-pre>
-              <p>class Program<br>
-{<br>
-public class Per<br>
-{<br>
-public void Say()<br>
-{<br>
-Console.WriteLine(&quot;Per&quot;);<br>
-}<br>
-}<br>
-public class PerSOne:Per<br>
-{<br>
-public void Say()<br>
-{<br>
-Console.WriteLine(&quot;PerSOne&quot;);<br>
-}<br>
-}<br>
-public class PerSTwo:Per<br>
-{<br>
-public void Say()<br>
-{<br>
-Console.WriteLine(&quot;PerSTwo&quot;);<br>
-}<br>
-}</p>
-<pre><code>    static void Main(string[] args)
+              <p>public: 公开访问<br>
+private:私有的，只能在当前类中访问<br>
+protected:受保护的，只能在当前类或其子类中访问<br>
+internal:只能在当前程序集/项目中访问，在同一项目中internal与public权限相同<br>
+protected innternal:  protected + innternal</p>
+<p>1.可以修饰类的只有：public，internal<br>
+2.子类的访问权限不能高于父类的访问权限，会暴露父类成员<br>
+例：在程序集外会通过子类访问到子类所继承的父类成员！<br>
+internal class Person<br>
+{</p>
+<pre><code>    }
+
+    public class Student : Person
     {
-        //里式转换-类多态
-        Per[] per = new Per[3];
-        Random r = new Random();
-        int rs = 0;
-        for (int i = 0; i &lt; per.Length; i++)
-        {
-            rs = r.Next(0, 2);
-            switch(rs)
-            {
-                case 0:per[i] = new PerSOne();
-                    break;
-                case 1:per[i] = new PerSTwo();
-                    break;
-            }
-        }
 
-        for (int i = 0; i &lt; per.Length; i++)
-        {
-            if (per[i] is PerSOne)
-            {
-                ((PerSOne)per[i]).Say();
-            }
-            else if (per[i] is PerSTwo)
-            {
-                ((PerSTwo)per[i]).Say();
-            }
-            else
-                per[i].Say();
-            
-        }
-
-        Console.ReadKey();
-
-    }</code></pre>
+    }
+</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/jie-jue-hash-chong-tu-de-fang-shi/">
+                <a href="https://Wei715547.github.io/post/li-shi-zhuan-huan-lei-duo-tai/">
                   <h3 class="post-title">
-                    解决Hash冲突的方式
+                    里式转换-类多态
                   </h3>
                 </a>
               </div>

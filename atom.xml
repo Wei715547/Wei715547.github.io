@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-24T09:06:16.063Z</updated>
+    <updated>2020-07-24T14:30:54.019Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,31 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[访问修饰符]]></title>
+        <id>https://Wei715547.github.io/post/fang-wen-xiu-shi-fu/</id>
+        <link href="https://Wei715547.github.io/post/fang-wen-xiu-shi-fu/">
+        </link>
+        <updated>2020-07-24T14:20:12.000Z</updated>
+        <content type="html"><![CDATA[<p>public: 公开访问<br>
+private:私有的，只能在当前类中访问<br>
+protected:受保护的，只能在当前类或其子类中访问<br>
+internal:只能在当前程序集/项目中访问，在同一项目中internal与public权限相同<br>
+protected innternal:  protected + innternal</p>
+<p>1.可以修饰类的只有：public，internal<br>
+2.子类的访问权限不能高于父类的访问权限，会暴露父类成员<br>
+例：在程序集外会通过子类访问到子类所继承的父类成员！<br>
+internal class Person<br>
+{</p>
+<pre><code>    }
+
+    public class Student : Person
+    {
+
+    }
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[里式转换-类多态]]></title>
         <id>https://Wei715547.github.io/post/li-shi-zhuan-huan-lei-duo-tai/</id>
@@ -815,134 +840,6 @@ public void SetBack()
 {
     jumpPressed = false;
 }</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Search/Perm]]></title>
-        <id>https://Wei715547.github.io/post/search/</id>
-        <link href="https://Wei715547.github.io/post/search/">
-        </link>
-        <updated>2020-06-29T07:14:47.000Z</updated>
-        <content type="html"><![CDATA[<p>顺序查找<br>
-static int SeqSearch(int[] dateArray,int x)<br>
-{<br>
-int i;<br>
-for(i=0;i&lt;dateArray.Length;i++)<br>
-{<br>
-if (dateArray[i] == x)<br>
-return i;<br>
-}<br>
-//if (i == dateArray.Length)<br>
-return -1;<br>
-}<br>
-//二分查找<br>
-/// <summary><br>
-/// 二分查找，对从小到大排序过的数据进行查找，效率极高<br>
-/// </summary><br>
-/// <param name="datArray"></param><br>
-/// <param name="x"></param><br>
-/// <returns></returns><br>
-static int BinSearch(int[] datArray,int x)<br>
-{<br>
-int left = 0, right = datArray.Length - 1;<br>
-while(left &lt;=right)<br>
-{<br>
-int mind = (left + right) / 2;<br>
-if (datArray[mind] &gt; x)<br>
-right = mind - 1;<br>
-else if (datArray[mind] &lt; x)<br>
-left = mind + 1;<br>
-else if (datArray[mind] == x)<br>
-return mind;<br>
-}<br>
-return -1;<br>
-}</p>
-<pre><code>     //递归阶乘
-    static int Mtn(int n)
-    {
-        if (n == 0)
-            return 1;
-        else
-            return n * Mtn(n - 1);
-        /*int m = 1;
-        for (int i = n; i &gt;0; i--)
-        {
-            m *= i;
-        }
-        return m;*/
-    }
-
-    //递归二分查找
-    static int BinarySearch_R(int[] dateArray,int x, int left,int right)
-    {
-        if(left &lt;=right )
-        {
-            int mind = (left + right) / 2;
-            if (x &lt; dateArray[mind])
-                return BinarySearch_R(dateArray, x, left, mind - 1);
-            else if (x &gt; dateArray[mind])
-                return BinarySearch_R(dateArray, x, mind + 1, right);
-            else if (x == dateArray[mind])
-                return mind;
-        }
-        return -1;
-    }
-}
-</code></pre>
-<p>}<br>
-//递归快速排序<br>
-/// <summary><br>
-/// 递归快速排序<br>
-/// </summary><br>
-/// <param name="dateArray">数组</param><br>
-/// <param name="left">0</param><br>
-/// <param name="right">最大索引date.Length-1</param><br>
-static void QuickSort(int[] dateArray,int left,int right)<br>
-{<br>
-if (left&lt;right )<br>
-{<br>
-int i = left;<br>
-int j = right+1;<br>
-int pivot = dateArray[i];</p>
-<pre><code>            do
-            {
-                do i++; while (dateArray[i] &lt; pivot);
-                do j--; while (dateArray[j] &gt; pivot);
-                if (i &lt; j)
-                {
-                    swap(ref dateArray[i], ref dateArray[j]);
-                }
-            } while (i &lt; j);
-            swap(ref dateArray[left], ref dateArray[j]);
-            QuickSort(dateArray, left, j - 1);
-            QuickSort(dateArray, j + 1, right);
-        }
-    }
-</code></pre>
-<p>Perm排列组合<br>
-static void Perautations(char[] s,int k,int m)<br>
-{<br>
-if(k==m)<br>
-{<br>
-for (int i = 0; i &lt;= m; i++)<br>
-{<br>
-Console.Write(s[i]);<br>
-}<br>
-}<br>
-else<br>
-{<br>
-for (int i = k; i &lt;= m; i++)<br>
-{<br>
-char temp = s[i];<br>
-s[i] = s[k];<br>
-s[k] = temp;<br>
-Perautations(s, k + 1, m);<br>
-char temp2 = s[i];<br>
-s[i] = s[k];<br>
-s[k] = temp2;<br>
-}<br>
-}<br>
-}</p>
 ]]></content>
     </entry>
 </feed>
