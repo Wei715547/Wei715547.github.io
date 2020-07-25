@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1595604387733">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1595664120942">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -21,7 +21,9 @@
     <meta name="description" content="二进制方法（Binary Formatter）
 序列化：新建或打开一个二进制文件，通过二进制格式器将对象写入该二进制文件。
 反序列化：打开待反序列化的二进制文件，通过二进制格式器将文件解析成对象。
-XML：扩展标记语言，用于标记电子文件使其..." />
+class Program
+{
+stati..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -31,7 +33,7 @@ XML：扩展标记语言，用于标记电子文件使其..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1595604387733" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1595664120942" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -112,8 +114,34 @@ XML：扩展标记语言，用于标记电子文件使其..." />
             <div class="post-content" v-pre>
               <p>二进制方法（Binary Formatter）<br>
 序列化：新建或打开一个二进制文件，通过二进制格式器将对象写入该二进制文件。<br>
-反序列化：打开待反序列化的二进制文件，通过二进制格式器将文件解析成对象。</p>
-<p>XML：扩展标记语言，用于标记电子文件使其具有结构性的标记语言。<br>
+反序列化：打开待反序列化的二进制文件，通过二进制格式器将文件解析成对象。<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+SaveDate savePoint = new SaveDate();<br>
+savePoint.Score = 100;</p>
+<pre><code>        //序列化
+        using (FileStream fsWrite = new FileStream (@&quot;D:\715\CSharp\1.txt&quot;,FileMode.OpenOrCreate,FileAccess.Write))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(fsWrite, savePoint);
+        }
+
+        //反序列化
+        SaveDate saveRead;
+        using (FileStream fsRead = new FileStream (@&quot;D:\715\CSharp\1.txt&quot;,FileMode.OpenOrCreate,FileAccess.Read))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            saveRead = (SaveDate) bf.Deserialize(fsRead);
+        }
+
+        Console.WriteLine(saveRead.Score);
+    }
+}
+</code></pre>
+<p>////////////////////////////////////////////////////////////<br>
+XML：扩展标记语言，用于标记电子文件使其具有结构性的标记语言。<br>
 可以用来标记数据、定义数据类型。<br>
 序列化与反序列化的方式与二进制方法十分类似。<br>
 http://blog.csdn.net/y1196645376/article/details/52541882</p>
