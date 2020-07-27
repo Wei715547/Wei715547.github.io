@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>DG Tweening | Wei: Development technology accumulation</title>
+<title>MD5加密 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,12 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using DG.Tweening;
-using UnityEngine.UI;
-..." />
+    <meta name="description" content="class Program
+{
+static void Main(string[] args)
+{
+Console.WriteLine(GetMd5(&quot;123&quot;));
+//202cb962ac5975b964b7152d..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -108,62 +108,45 @@ using UnityEngine.UI;
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">DG Tweening</h2>
-            <div class="post-date">2020-05-11</div>
+            <h2 class="post-title">MD5加密</h2>
+            <div class="post-date">2020-07-27</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using DG.Tweening;<br>
-using UnityEngine.UI;<br>
-public class InDoor : MonoBehaviour<br>
-{</p>
-<pre><code>public GameObject InDoorPanel;
-
-private void Start()
-{
-    InDoorPanel.GetComponent&lt;Image&gt;().color = new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
-        InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0);
-    InDoorPanel.transform.position = new Vector3(InDoorPanel.transform.position.x,
-        -100, InDoorPanel.transform.position.z);
-    //InDoorPanel.transform.localScale= Vector3.zero;
-    InDoorPanel.SetActive(false);
-}
-
-private void OnTriggerEnter2D(Collider2D collision)
-{
-    if (collision.tag == &quot;Player&quot;)
+              <p>class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+Console.WriteLine(GetMd5(&quot;123&quot;));<br>
+//202cb962ac5975b964b7152d234b70<br>
+}</p>
+<pre><code>    public static string GetMd5(string str)
     {
-        InDoorPanel.SetActive(true);
-        InDoorPanel.GetComponent&lt;Image&gt;().DOColor(new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
-            InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0.7f), 0.3f);
-        InDoorPanel.transform.DOMoveY(110, 0.3f);
-        //InDoorPanel.transform.DOScale(Vector3.one, 0.3f);
-    }
-}
+        MD5 md5 = MD5.Create();
+        byte[] strbf = Encoding.Default.GetBytes(str);
+        byte[] md5bf = md5.ComputeHash(strbf);
+        //字节数组--字符串
+        //1.按照编码格式解析
+        //2.ToString()
+        //3.将数组元素的每个元素ToString();
+        //return Encoding.Default.GetString(md5bf);
+        string strec = &quot;&quot;;
+        for (int i = 0; i &lt; md5bf.Length; i++)
+        {
+            strec += md5bf[i].ToString (&quot;x&quot;);//默认10进制&quot;x&quot;:十六进制
 
-private void OnTriggerExit2D(Collider2D collision)
-{
-    if (collision.tag == &quot;Player&quot;)
-    {
-        InDoorPanel.GetComponent&lt;Image&gt;().DOColor(new Color(InDoorPanel.GetComponent&lt;Image&gt;().color.r, 
-            InDoorPanel.GetComponent&lt;Image&gt;().color.g, InDoorPanel.GetComponent&lt;Image&gt;().color.b, 0), 0.3f);
-        InDoorPanel.transform.DOMoveY(-100, 0.3f).OnComplete(() =&gt; InDoorPanel.SetActive(false));
-        //InDoorPanel.transform.DOScale(Vector3.zero, 0.3f);
+        }
+        return strec;
     }
-}
-</code></pre>
-<p>}</p>
+}</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/zui-gao-fen-pai-xu/">
+                <a href="https://Wei715547.github.io/post/jian-dan-gong-han-she-ji-mo-shi/">
                   <h3 class="post-title">
-                    最高分排序
+                    简单工厂设计模式
                   </h3>
                 </a>
               </div>
