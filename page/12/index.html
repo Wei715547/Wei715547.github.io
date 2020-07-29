@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>GameManager重新加载后不销毁 | Wei: Development technology accumulation</title>
+<title>Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,9 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-//在其他物体上调用
-public class Loder : MonoBehav..." />
-    <meta name="keywords" content="" />
+    <meta name="description" content="年月增长，我宜强盛。
+用于Unity+开发的技术积累">
+    
   </head>
   <body>
     <div id="app" class="main">
@@ -106,104 +103,36 @@ public class Loder : MonoBehav..." />
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">GameManager重新加载后不销毁</h2>
-            <div class="post-date">2020-05-20</div>
-            
-            <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-//在其他物体上调用<br>
-public class Loder : MonoBehaviour<br>
-{<br>
-public GameObject gamemenager;</p>
-<pre><code>// Start is called before the first frame update
-void Awake()
-{
-    if (Gamemanager.Instence == null)
-        GameObject.Instantiate(gamemenager);
-}
-</code></pre>
-<h2 id="">}</h2>
-<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.UI;<br>
-using UnityEngine.SceneManagement;<br>
-public class Gamemanager : MonoBehaviour<br>
-{<br>
-//单例模式<br>
-private static Gamemanager _instence;</p>
-<pre><code>public static Gamemanager Instence 
-{
-    get { return _instence; }
-}
-
-private void Awake()
-{
-    _instence = this;
-    DontDestroyOnLoad(gameObject);//加载场景时不销毁
-    InitGame();
-}
-
-//bool交替执行
-private bool sleepStep = true;
-    public void OnplayerMove()
-{
-    if (sleepStep ==true )
-    {
-        sleepStep =false ;
-    }else
-    {
-        foreach (var enemy in enemyList )
-        {
-            enemy.Move();
-        }
-        sleepStep = true;
-    }
-
-    //角色移动后
-    if (player.targetpos.x == mapmanager.xc - 1.5f &amp;&amp; player.targetpos.y == mapmanager.yc - 1.5f)
-    {
-        IsEnd = true;
-        //加载下一关
-        SceneManager.LoadScene(SceneManager .GetActiveScene ().buildIndex );
-    }
-}
-
-
-    //场景加载后执行
-private void OnLevelWasLoaded(int SceneLevel)
-{
-    level++;
-    InitGame();
-}
-
-    //失败后重新开始游戏
-private void Restart()
-{
-    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    food = 100;
-    level -= level;
-}</code></pre>
-
-            </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/2d-xian-jian-ce/">
-                  <h3 class="post-title">
-                    2D线检测、范围检测
-                  </h3>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/hello-gridea/">
+                  <h2 class="post-title">Hello Gridea</h2>
                 </a>
+                <div class="post-date">
+                  2018-12-12
+                </div>
+                <div class="post-abstract">
+                  <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+
+                </div>
               </div>
-            
+              
+                <a class="right" href="https://Wei715547.github.io/post/hello-gridea/">
+                  <div class="feature-container" style="background-image: url('https://Wei715547.github.io/post-images/hello-gridea.png')">
+                  </div>
+                </a>
+              
+            </article>
+          
 
-            
-
-          </div>
+          <div class="pagination-container">
+  
+    <a href="https://Wei715547.github.io/page/11/" class="prev"><i class="icon-arrow-ios-back-outline"></i> 上一页</a>
+  
+  
+</div>
 
         </div>
       </div>

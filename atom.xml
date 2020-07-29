@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-27T11:15:44.757Z</updated>
+    <updated>2020-07-29T09:08:50.914Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,60 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[Winform控件]]></title>
+        <id>https://Wei715547.github.io/post/winform-kong-jian/</id>
+        <link href="https://Wei715547.github.io/post/winform-kong-jian/">
+        </link>
+        <updated>2020-07-28T02:03:35.000Z</updated>
+        <content type="html"><![CDATA[<p>控件：<br>
+1.属性：Name--后台获取前台对象，需要使用的属性。<br>
+visible--是否显示控件<br>
+Enable--是否可用控件<br>
+2.事件: 注册事件<br>
+触发事件<br>
+3.在Program-Main函数中创建的窗口为主窗口程序，次窗口关闭时整个应用程序庀</p>
+<pre><code>5.TextBox控件 WordWrap:指示文本框是否换行
+                        PasswordChar:文本框输入时显示固定字符
+                        SoocllBar:是否显示滚动条
+                        事件：TextChange:文本框内容发生改变时调用方法
+6.Timer 事件：Enable默认为False,启用更改为True; Tick:每隔固定时间调用方法
+
+7.RadioButton：多选按钮--存在多个时只可选一个，使用GroupBox分组可选择多个
+
+8.MenuStrip：菜单栏（多组按钮）
+MDI窗口设计：主窗体MDI属性设置为True，
+                        子窗体  from.MdiParent(from1);-设置父窗体。
+                        子窗体排列：在主窗体方法中调用--LayoutMdi(MdiLayout.TileHorizontal);(横向排列）
+                        LayoutMdi(MdiLayout.TileVertical);(纵向排列）
+9.ListBox：listBox1.Items.Add()--列表项，listBox1.SelectedIndex--当前所选中列表中项目的索引
+事件:
+    private void listBox1_DoubleClick(object sender, EventArgs e)
+    {
+        SoundPlayer sp = new SoundPlayer();//多媒体音乐播放器类
+        sp.SoundLocation = musicFullPath[listBox1.SelectedIndex];//音乐文件的全路径
+        sp.Play();
+    }
+10.打开文件：private void btn_Openfile_Click(object sender, EventArgs e)
+    {
+        OpenFileDialog opf = new OpenFileDialog();
+        opf.Title = &quot;请选择文件&quot;;
+        opf.InitialDirectory = @&quot;C:\Users\qweasd\Music&quot;;
+        opf.Multiselect = true;
+        opf.Filter = &quot;音乐文件|*.wav|所有文件|*.*;&quot;;
+        opf.ShowDialog();
+        //获得在该文件夹下选择的所有文件的全路径
+        string[] musicFiles = opf.FileNames;
+        for (int i = 0; i &lt; musicFiles.Length; i++)
+        {
+            listBox1.Items.Add(Path.GetFileName(musicFiles[i]));//从全路径中截取文件名方法，将文件名显示在ListBox中
+            musicFullPath.Add(musicFiles[i]);//所有选中音乐的全文件路径列表
+        }
+
+    }
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[MD5加密]]></title>
         <id>https://Wei715547.github.io/post/md5-jia-mi/</id>
@@ -537,184 +591,6 @@ public static int LengthOfLongestSubstring(string s)
 不满足规则时的修改方法<br>
 1.改变节点的颜色<br>
 2.旋转</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[二叉查找树BST]]></title>
-        <id>https://Wei715547.github.io/post/er-cha-cha-zhao-shu-bst/</id>
-        <link href="https://Wei715547.github.io/post/er-cha-cha-zhao-shu-bst/">
-        </link>
-        <updated>2020-07-03T03:18:44.000Z</updated>
-        <content type="html"><![CDATA[<p>//元素类<br>
-class Element<br>
-{<br>
-public int key;<br>
-public Element (int k)<br>
-{<br>
-key = k;<br>
-}<br>
-}<br>
-//节点类<br>
-class BstNode<br>
-{</p>
-<pre><code>    public Element date ;
-
-    public BstNode leftNode;
-    public BstNode rightNode;
-    public void DisPlay( int i)
-    {
-        Console.WriteLine(&quot;Position:&quot; +i + &quot;Date:&quot; +date.key);
-        if (leftNode != null) 
-            leftNode.DisPlay(2 * i);
-        if (rightNode != null)
-            rightNode.DisPlay(2 * i+1);
-    }
-}
-
-//二叉查找树
-namespace 二叉查找树
-</code></pre>
-<p>{<br>
-class BST<br>
-{<br>
-private BstNode root;<br>
-public BstNode Root<br>
-{<br>
-get { return root; }<br>
-set { root = value; }<br>
-}<br>
-public BST()<br>
-{<br>
-root = null;<br>
-}<br>
-public BST(BstNode init )<br>
-{<br>
-root = init;<br>
-}</p>
-<pre><code>    public BstNode IterSearch(Element x)
-    {
-        for(BstNode t = root;t!=null;)
-        {
-            if (x.key == t.date.key)
-                return t;
-            if (x.key &lt; t.date.key)
-                t = t.leftNode;
-            if (x.key &gt; t.date.key)
-                t = t.rightNode;
-
-        }
-        return null;
-
-    }
-
-    public BstNode Search(BstNode sr, Element x)
-    {
-        if (sr == null)
-        {
-            Console.WriteLine(&quot;输入节点为空或未找到数据&quot;);
-            return null;
-        }
-        if (sr.date.key == x.key) return sr;
-        if (x.key &lt;sr .date.key)
-        {
-            return Search(sr.leftNode, x);
-        }
-        return Search(sr.rightNode, x);
-    }
-    public void DisPlay()
-    {
-        if(root !=null )
-        {
-            root.DisPlay(1);
-        }
-        else
-        {
-            Console.WriteLine(&quot;Is null&quot;);
-        }
-    }
-    public bool Insert(Element x)
-    {
-        BstNode   p = root;
-        BstNode q = null;
-        while(p!=null)
-        {
-            q = p;
-            if (x.key.Equals( p.date.key)) 
-                return false;
-            if (x.key &lt; p.date.key)
-                p = p.leftNode;
-            else 
-                p = p.rightNode;
-        }
-        p = new BstNode();
-        p.leftNode = null;
-        p.rightNode = null;
-        p.date = x;
-        if (root == null) root = p;
-        else if (x.key &lt; q.date.key) q.leftNode = p;
-        else q.rightNode = p;
-        return true;
-    }
-
-    public void ShowNode(BstNode root)
-    {
-        Console.WriteLine(root .date.key+&quot; &quot;);
-    }
-
-    /// &lt;summary&gt;
-    /// 中序遍历结果为排序后的数据
-    /// &lt;/summary&gt;
-    public void InOrder()
-    {
-        InOrder(Root);
-    }
-    public void InOrder(BstNode node)
-    {
-        if (node!=null )
-        {
-            InOrder(node.leftNode);
-            ShowNode(node);
-            InOrder(node.rightNode);
-        }
-    }
-}
-</code></pre>
-<p>}</p>
-<p>//实例程序<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-BST m = new BST();<br>
-//Element a, b, c, d, e, f, g, h, i, j;<br>
-Element a = new Element(5);<br>
-Element b = new Element(3);<br>
-Element c = new Element(11);<br>
-Element d = new Element(3);<br>
-Element e = new Element(15);<br>
-Element f = new Element(2);<br>
-Element g= new Element(8);<br>
-Element h = new Element(22);<br>
-Element i = new Element(20);<br>
-Element j = new Element(9);</p>
-<pre><code>        Console.WriteLine(m.Insert(a));
-        Console.WriteLine(m.Insert(b));
-        Console.WriteLine(m.Insert (c));
-        Console.WriteLine(m.Insert (d));
-        Console.WriteLine(m.Insert (e));
-        Console.WriteLine(m.Insert(f));
-        Console.WriteLine(m.Insert (g));
-        Console.WriteLine(m.Insert (i));
-        m.DisPlay();
-
-        BstNode p = m.Search(m.Root,f);
-        Console.WriteLine(&quot;找到的是&quot;+p.date.key);
-
-        m.InOrder();
-    }
-}
-
-![](https://Wei715547.github.io/post-images/1593746877703.png)</code></pre>
 ]]></content>
     </entry>
 </feed>
