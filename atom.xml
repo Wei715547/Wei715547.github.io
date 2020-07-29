@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-29T09:08:50.914Z</updated>
+    <updated>2020-07-29T10:24:52.475Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -62,6 +62,11 @@ MDI窗口设计：主窗体MDI属性设置为True，
         }
 
     }
+
+Winform线程：
+Thread th = new Thread(StartRun);//此线程执行的方法/或传入委托/表达式
+th.IsBackground = true;//后台运行
+th.Start();//方法需要传递参数时可写在Start中“objecr”参数在方法中转为子类对象
 </code></pre>
 ]]></content>
     </entry>
