@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1596018287304">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1596100026667">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@ Enable--是否可用控件
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1596018287304" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1596100026667" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -159,7 +159,22 @@ MDI窗口设计：主窗体MDI属性设置为True，
 
     }
 
-Winform线程：
+Winform线程：窗体加载时不开启跨线程检测
+private void Form1_Load(object sender, EventArgs e)
+    {
+        //允许不同线程间进行数据访问
+        Control.CheckForIllegalCrossThreadCalls = false;
+    }
+
+    private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        if(th!=null)
+        {
+            //子线程不为空时，随主线程关闭同时关闭子线程
+            th.Abort();
+        }
+    }
+
 Thread th = new Thread(StartRun);//此线程执行的方法/或传入委托/表达式
 th.IsBackground = true;//后台运行
 th.Start();//方法需要传递参数时可写在Start中“objecr”参数在方法中转为子类对象

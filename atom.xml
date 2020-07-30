@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-29T10:24:52.475Z</updated>
+    <updated>2020-07-30T09:07:20.062Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,249 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[Winform-Socket客户端]]></title>
+        <id>https://Wei715547.github.io/post/winform-socket-ke-hu-duan/</id>
+        <link href="https://Wei715547.github.io/post/winform-socket-ke-hu-duan/">
+        </link>
+        <updated>2020-07-30T09:06:19.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1596100018787.PNG" alt="" loading="lazy"><br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.ComponentModel;<br>
+using System.Data;<br>
+using System.Drawing;<br>
+using System.Linq;<br>
+using System.Net;<br>
+using System.Net.Sockets;<br>
+using System.Text;<br>
+using System.Threading;<br>
+using System.Threading.Tasks;<br>
+using System.Windows.Forms;</p>
+<p>namespace Socket客户端<br>
+{<br>
+public partial class Form1 : Form<br>
+{<br>
+public Form1()<br>
+{<br>
+InitializeComponent();<br>
+}<br>
+Socket socketSend;//负责通信的Socket<br>
+/// <summary><br>
+/// 连接服务器按钮<br>
+/// </summary><br>
+/// <param name="sender"></param><br>
+/// <param name="e"></param><br>
+private void btn_Cont_Click(object sender, EventArgs e)<br>
+{<br>
+try<br>
+{<br>
+//创建负责通信的Socket<br>
+socketSend = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);<br>
+//获取远程要连接的服务器的IP地址以及端口号<br>
+IPAddress ipaddress = IPAddress.Parse(textIP.Text);//可以将一个字符串的IP地址转化为IPaddress的对象<br>
+EndPoint point = new IPEndPoint(ipaddress, Convert.ToInt32(textPort.Text));//(ip地址，字符转端口号方法)<br>
+//连接服务器<br>
+socketSend.Connect(point);<br>
+ShowMsg(&quot;连接成功&quot;);<br>
+//开启一个子线程接收服务器发来的消息<br>
+Thread th = new Thread(Receive);<br>
+th.IsBackground = true;<br>
+th.Start();<br>
+}catch<br>
+{ }</p>
+<pre><code>    }
+    /// &lt;summary&gt;
+    /// 不停接收服务器发来的消息
+    /// &lt;/summary&gt;
+    private void Receive()
+    {
+        try
+        {
+            while (true)
+            {
+                byte[] buffer = new byte[1023 * 1023 * 2];
+                int r = socketSend.Receive(buffer);
+                if (r == 0)
+                    break;
+                string str = Encoding.UTF8.GetString(buffer, 0, r);
+                ShowMsg(socketSend.RemoteEndPoint + &quot;:&quot; + str);
+
+            }
+        }
+        catch
+        { }
+    }
+
+    private void ShowMsg(string str)
+    {
+        textLog.AppendText(str + &quot;\r\n&quot;);
+    }
+
+    /// &lt;summary&gt;
+    /// 客户端向服务器发送消息
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+    private void btn_Send_Click(object sender, EventArgs e)
+    {
+        string str = textMsg.Text.Trim();
+        byte[] date = Encoding.UTF8.GetBytes(str);
+        socketSend.Send(date);
+    }
+
+    private void Form1_Load(object sender, EventArgs e)
+    {
+        Control.CheckForIllegalCrossThreadCalls = false;
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Winform-Socket服务器]]></title>
+        <id>https://Wei715547.github.io/post/winform-socket-fu-wu-qi/</id>
+        <link href="https://Wei715547.github.io/post/winform-socket-fu-wu-qi/">
+        </link>
+        <updated>2020-07-30T09:02:08.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1596099971910.PNG" alt="" loading="lazy"><br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.ComponentModel;<br>
+using System.Data;<br>
+using System.Drawing;<br>
+using System.Linq;<br>
+using System.Net;<br>
+using System.Net.Sockets;<br>
+using System.Text;<br>
+using System.Threading;<br>
+using System.Threading.Tasks;<br>
+using System.Windows.Forms;</p>
+<p>namespace Socket服务端<br>
+{<br>
+public partial class Form1 : Form<br>
+{<br>
+public Form1()<br>
+{<br>
+InitializeComponent();<br>
+}</p>
+<pre><code>    //存储客户端IP与Socket的键值对集合
+    Dictionary&lt;string, Socket&gt; dicSocket = new Dictionary&lt;string, Socket&gt;();
+    /// &lt;summary&gt;
+    /// 开始监听按钮
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+    private void button1_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            //1.创建一个监听的Socket
+            Socket socketWatch = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            
+            //2.创建IP地址和端口号对象
+            IPAddress ip = IPAddress./*Any;//*/Parse(textIP.Text);
+            IPEndPoint point = new IPEndPoint(ip, Convert.ToInt32(textPort.Text));
+            
+            //3.让负责监听的Socket绑定IP以及端口号
+            socketWatch.Bind(point);
+            ShowMdg(&quot;监听成功&quot;);
+            
+            //4.监听队列
+            socketWatch.Listen(10);
+            
+            //5.创建负责监听的Socket,来接受客户端的连接， 创建与客户端通信的Socket (需要在子线程中循环执行)
+            Thread th = new Thread(Listen);
+            th.IsBackground = true;
+            th.Start(socketWatch);
+        }
+        catch
+        { }
+
+    }
+    /// &lt;summary&gt;
+    ///监听方法
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;o&quot;&gt;主进程中创建的负责监听的Socket以object形式传入&lt;/param&gt;
+    private void Listen(object o)
+    {
+        //转为Socket类的对象(里式转换)
+        Socket socketWatch = o as Socket;
+        while (true)//循环监听客户端的接入，为其创建负责与之通信的Socket对象，并以IP,Socket对象的键值对形式将其加入列表
+        {
+            try
+            {
+                Socket socketSend = socketWatch.Accept();//5.次方法会一直等待客户端进行连接需在子线程中执行
+                dicSocket.Add(socketSend.RemoteEndPoint.ToString(), socketSend);//客户端连接到服务器时将其IP地址与负责通信的Socket存入字典集合
+                //将远程客户端的IP地址端口号存到下拉菜单中
+                comboBox1.Items.Add(socketSend.RemoteEndPoint.ToString());
+                ShowMdg(socketSend.RemoteEndPoint.ToString() + &quot;连接成功&quot;);//显示远程客户端及端口号
+
+                //6.客户端连接成功后，服务器接收客户端发来的消息 (子线程中循环执行)
+                Thread th = new Thread(Receive);
+                th.IsBackground = true;
+                th.Start(socketSend);
+            }catch
+            { }
+        }
+    }
+    /// &lt;summary&gt;
+    /// 服务器端不停接收客户端发来的消息
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;o&quot;&gt;子线程中创建的负责与此客户端收发数据的Socket对象&lt;/param&gt;
+    private void Receive(object o)
+    {
+        Socket socketSend = o as Socket;
+        while (true)//不断接受客户端发来的消息
+        {
+            try
+            {
+                byte[] date = new byte[1024 * 1024 * 2];//字节数组容器：接收发来的消息
+                int r = socketSend.Receive(date);
+                if (r == 0)//客户端退出收到的字节数为0时结束循环，不再接收此客户端消息
+                    break;
+                string s = Encoding.UTF8.GetString(date, 0, r);
+                ShowMdg(socketSend.RemoteEndPoint.ToString() + &quot;:&quot; + s);
+            }
+            catch
+            { }//为空：出现异常时不进行反馈
+        }
+    }
+
+    private void ShowMdg(string date)
+    {
+        textLog.AppendText(date + &quot;\r\n&quot;);
+    }
+
+    private void Form1_Load(object sender, EventArgs e)
+    {
+        Control.CheckForIllegalCrossThreadCalls=false;//取消跨线程检测
+    }
+    /// &lt;summary&gt;
+    /// 服务器向客户端发送消息
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+    private void btn_Send_Click(object sender, EventArgs e)
+    {
+        string message = textMsg.Text;//向客户端传输的信息
+        byte[] data = Encoding.UTF8.GetBytes(message);//对一个字符串做编码，转为字节数组
+        //获取用户在下拉菜单中选中的IP地址(服务器给指定客户端发送消息)
+        string ip = comboBox1.SelectedItem.ToString();
+        dicSocket[ip].Send(data);
+
+        //向每个客户端发送消息
+        /*foreach (KeyValuePair&lt;string ,Socket&gt; soc in dicSocket)
+        {
+            soc.Value.Send(data);
+        }*/
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Winform控件]]></title>
         <id>https://Wei715547.github.io/post/winform-kong-jian/</id>
@@ -63,7 +306,22 @@ MDI窗口设计：主窗体MDI属性设置为True，
 
     }
 
-Winform线程：
+Winform线程：窗体加载时不开启跨线程检测
+private void Form1_Load(object sender, EventArgs e)
+    {
+        //允许不同线程间进行数据访问
+        Control.CheckForIllegalCrossThreadCalls = false;
+    }
+
+    private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        if(th!=null)
+        {
+            //子线程不为空时，随主线程关闭同时关闭子线程
+            th.Abort();
+        }
+    }
+
 Thread th = new Thread(StartRun);//此线程执行的方法/或传入委托/表达式
 th.IsBackground = true;//后台运行
 th.Start();//方法需要传递参数时可写在Start中“objecr”参数在方法中转为子类对象
@@ -501,101 +759,6 @@ IPDic.Add(&quot;Wei03&quot;, &quot;715549&quot;);</p>
 
     }
 }</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Leet Code01-03]]></title>
-        <id>https://Wei715547.github.io/post/leet-code01/</id>
-        <link href="https://Wei715547.github.io/post/leet-code01/">
-        </link>
-        <updated>2020-07-08T08:35:31.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.Collections.Generic;</p>
-<p>namespace Leet_Code<br>
-{<br>
-class Program<br>
-{<br>
-/*给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。</p>
-<pre><code>    你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
-
-
-
-    示例:
-
-    给定 nums = [2, 7, 11, 15], target = 9
-
-    因为 nums[0] + nums[1] = 2 + 7 = 9
-    所以返回[0, 1]
-
-    来源：力扣（LeetCode）
-    链接：https://leetcode-cn.com/problems/two-sum
-    著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。*/
-    static void Main(string[] args)
-    {
-        int[] nums = new int[] { 2, 15, 11, 7 };
-        int [] ans = LeetCodeone(nums, 9);
-        foreach (var item in ans)
-        {
-            Console.WriteLine(item);
-        }
-    }
-    
-    public static int [] LeetCodeone(int[] nums,int target)
-    {
-        Dictionary&lt;int, int&gt; map = new Dictionary&lt;int, int&gt;();
-        for (int i = 0; i &lt; nums.Length; i++)
-        {
-            int dis = target - nums[i];
-            if (map.ContainsKey(dis) &amp;&amp; map[dis]!=i)
-            {
-                return   new int[] { map[dis],i};
-            }
-            
-            if(!map.ContainsKey(nums[i]))
-            {
-                map.Add(nums[i], i);
-            }
-        }
-        return new int[] { 0, 0 };
-    }
-//给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
-public static int LengthOfLongestSubstring(string s)
-    {
-
-        int max = 0;
-        Queue&lt;char&gt; q = new Queue&lt;char&gt;();
-        foreach (char c in s)
-        {
-            while (q.Contains(c))
-                q.Dequeue();
-            q.Enqueue(c);
-            if (q.Count &gt; max)
-                max = q.Count;
-        }
-        return max;
-    }
-
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[红黑树]]></title>
-        <id>https://Wei715547.github.io/post/hong-hei-shu/</id>
-        <link href="https://Wei715547.github.io/post/hong-hei-shu/">
-        </link>
-        <updated>2020-07-04T02:40:18.000Z</updated>
-        <content type="html"><![CDATA[<p>1、衡树，非平衡树<br>
-2、红黑树特征：节点都用颜色，插入删除节点遵守红黑规则<br>
-红黑规则：<br>
-1.每个节点不是红色便是黑色<br>
-2.根节点总是黑色<br>
-3.如果节点时红的，则它的子节点必须是黑色的<br>
-4.从根到叶节点的每条滤路径，必须包含相同数目的黑色节点<br>
-不满足规则时的修改方法<br>
-1.改变节点的颜色<br>
-2.旋转</p>
 ]]></content>
     </entry>
 </feed>

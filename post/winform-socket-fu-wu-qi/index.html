@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Winform-Socket服务器 | Wei: Development technology accumulation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1596100026667">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+u..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1596100026667" class="site-logo">
+        <h1 class="site-title">Wei: Development technology accumulation</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Winform-Socket服务器</h2>
+            <div class="post-date">2020-07-30</div>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://Wei715547.github.io/post-images/1596099971910.PNG" alt="" loading="lazy"><br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.ComponentModel;<br>
+using System.Data;<br>
+using System.Drawing;<br>
+using System.Linq;<br>
+using System.Net;<br>
+using System.Net.Sockets;<br>
+using System.Text;<br>
+using System.Threading;<br>
+using System.Threading.Tasks;<br>
+using System.Windows.Forms;</p>
+<p>namespace Socket服务端<br>
+{<br>
+public partial class Form1 : Form<br>
+{<br>
+public Form1()<br>
+{<br>
+InitializeComponent();<br>
+}</p>
+<pre><code>    //存储客户端IP与Socket的键值对集合
+    Dictionary&lt;string, Socket&gt; dicSocket = new Dictionary&lt;string, Socket&gt;();
+    /// &lt;summary&gt;
+    /// 开始监听按钮
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+    private void button1_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            //1.创建一个监听的Socket
+            Socket socketWatch = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            
+            //2.创建IP地址和端口号对象
+            IPAddress ip = IPAddress./*Any;//*/Parse(textIP.Text);
+            IPEndPoint point = new IPEndPoint(ip, Convert.ToInt32(textPort.Text));
+            
+            //3.让负责监听的Socket绑定IP以及端口号
+            socketWatch.Bind(point);
+            ShowMdg(&quot;监听成功&quot;);
+            
+            //4.监听队列
+            socketWatch.Listen(10);
+            
+            //5.创建负责监听的Socket,来接受客户端的连接， 创建与客户端通信的Socket (需要在子线程中循环执行)
+            Thread th = new Thread(Listen);
+            th.IsBackground = true;
+            th.Start(socketWatch);
+        }
+        catch
+        { }
+
+    }
+    /// &lt;summary&gt;
+    ///监听方法
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;o&quot;&gt;主进程中创建的负责监听的Socket以object形式传入&lt;/param&gt;
+    private void Listen(object o)
+    {
+        //转为Socket类的对象(里式转换)
+        Socket socketWatch = o as Socket;
+        while (true)//循环监听客户端的接入，为其创建负责与之通信的Socket对象，并以IP,Socket对象的键值对形式将其加入列表
+        {
+            try
+            {
+                Socket socketSend = socketWatch.Accept();//5.次方法会一直等待客户端进行连接需在子线程中执行
+                dicSocket.Add(socketSend.RemoteEndPoint.ToString(), socketSend);//客户端连接到服务器时将其IP地址与负责通信的Socket存入字典集合
+                //将远程客户端的IP地址端口号存到下拉菜单中
+                comboBox1.Items.Add(socketSend.RemoteEndPoint.ToString());
+                ShowMdg(socketSend.RemoteEndPoint.ToString() + &quot;连接成功&quot;);//显示远程客户端及端口号
+
+                //6.客户端连接成功后，服务器接收客户端发来的消息 (子线程中循环执行)
+                Thread th = new Thread(Receive);
+                th.IsBackground = true;
+                th.Start(socketSend);
+            }catch
+            { }
+        }
+    }
+    /// &lt;summary&gt;
+    /// 服务器端不停接收客户端发来的消息
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;o&quot;&gt;子线程中创建的负责与此客户端收发数据的Socket对象&lt;/param&gt;
+    private void Receive(object o)
+    {
+        Socket socketSend = o as Socket;
+        while (true)//不断接受客户端发来的消息
+        {
+            try
+            {
+                byte[] date = new byte[1024 * 1024 * 2];//字节数组容器：接收发来的消息
+                int r = socketSend.Receive(date);
+                if (r == 0)//客户端退出收到的字节数为0时结束循环，不再接收此客户端消息
+                    break;
+                string s = Encoding.UTF8.GetString(date, 0, r);
+                ShowMdg(socketSend.RemoteEndPoint.ToString() + &quot;:&quot; + s);
+            }
+            catch
+            { }//为空：出现异常时不进行反馈
+        }
+    }
+
+    private void ShowMdg(string date)
+    {
+        textLog.AppendText(date + &quot;\r\n&quot;);
+    }
+
+    private void Form1_Load(object sender, EventArgs e)
+    {
+        Control.CheckForIllegalCrossThreadCalls=false;//取消跨线程检测
+    }
+    /// &lt;summary&gt;
+    /// 服务器向客户端发送消息
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+    private void btn_Send_Click(object sender, EventArgs e)
+    {
+        string message = textMsg.Text;//向客户端传输的信息
+        byte[] data = Encoding.UTF8.GetBytes(message);//对一个字符串做编码，转为字节数组
+        //获取用户在下拉菜单中选中的IP地址(服务器给指定客户端发送消息)
+        string ip = comboBox1.SelectedItem.ToString();
+        dicSocket[ip].Send(data);
+
+        //向每个客户端发送消息
+        /*foreach (KeyValuePair&lt;string ,Socket&gt; soc in dicSocket)
+        {
+            soc.Value.Send(data);
+        }*/
+    }
+}
+</code></pre>
+<p>}</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/winform-kong-jian/">
+                  <h3 class="post-title">
+                    Winform控件
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
