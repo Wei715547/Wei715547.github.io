@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>泛型集合List,Dictionary | Wei: Development technology accumulation</title>
+<title>Socket-服务器向客户端发送小文件/抖动 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,14 +18,15 @@
 
 
 
-    <meta name="description" content="List userList = new List();
-//增删查改
-//增加数据
-public void AddDate(User user)
+    <meta name="description" content="服务器端：
+/// 
+/// 选择文件按钮
+/// 
+/// 
+/// 
+private void btn_Choose_Click(object sender, EventArgs e)
 {
-userList.Add(user);
-//Save();
-Console.WriteLi..." />
+OpenFileDialog opf = ne..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -110,119 +111,106 @@ Console.WriteLi..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">泛型集合List,Dictionary</h2>
-            <div class="post-date">2020-05-15</div>
+            <h2 class="post-title">Socket-服务器向客户端发送小文件/抖动</h2>
+            <div class="post-date">2020-07-30</div>
             
             <div class="post-content" v-pre>
-              <p>List<User> userList = new List<User>();</p>
-<p>//增删查改<br>
-//增加数据<br>
-public void AddDate(User user)<br>
+              <p>服务器端：<br>
+/// <summary><br>
+/// 选择文件按钮<br>
+/// </summary><br>
+/// <param name="sender"></param><br>
+/// <param name="e"></param><br>
+private void btn_Choose_Click(object sender, EventArgs e)<br>
 {<br>
-userList.Add(user);<br>
-//Save();<br>
-Console.WriteLine(&quot;添加用户成功！&quot;);<br>
+OpenFileDialog opf = new OpenFileDialog();<br>
+opf.Title = &quot;请选择文件&quot;;<br>
+opf.InitialDirectory = @&quot;C:\Users\qweasd\Pictures\Mays\Vt&quot;;<br>
+//opf.Multiselect = true;<br>
+opf.Filter = &quot;所有文件|<em>.</em>;&quot;;<br>
+opf.ShowDialog();<br>
+textBox1.Text = opf.FileName;//返回选择文件的全路径<br>
 }<br>
-//删除数据<br>
-public void RemoveByName(string name)<br>
+/// <summary><br>
+/// 发送文件按钮<br>
+/// </summary><br>
+/// <param name="sender"></param><br>
+/// <param name="e"></param><br>
+private void btn_SendFile_Click(object sender, EventArgs e)<br>
 {<br>
-for (int i = 0; i &lt; userList .Count ; i++)<br>
+string path = textBox1.Text;<br>
+//文件流读取<br>
+using (FileStream fs = new FileStream (path,FileMode.OpenOrCreate,FileAccess.Read))<br>
 {<br>
-if (userList [i].Name ==name)<br>
-{<br>
-userList.Remove(userList[i]);<br>
-}<br>
-}<br>
-}</p>
-<pre><code>    public void RemoveByAddress(string address)
-    {
-        for (int i = 0; i &lt; userList.Count; i++)
-        {
-            if (userList[i].Address  == address )
-            {
-                userList.Remove(userList[i]);
-            }
-        }
+byte[] date = new byte[1024 * 1024 * 5];<br>
+int r = fs.Read(date, 0, date.Length);<br>
+//配置标记位<br>
+List<byte> list = new List<byte>();<br>
+list.Add(1);//在文件的字节数组前添加标记位用来判断其文件类型<br>
+list.AddRange(date);<br>
+byte[] newdate = list.ToArray();<br>
+dicSocket[comboBox1.SelectedItem.ToString()].Send(newdate, 0, r + 1, SocketFlags.None);//从0 开始多传输1位数据</p>
+<pre><code>        }
     }
 
-    //修改数据
-    public void ChangeDate(string name)
+    private void btn_DJ_Click(object sender, EventArgs e)
     {
-        bool ex = false;
-        for (int i = 0; i &lt; userList .Count ; i++)
-        {
-            if (userList[i].Name == name )
-            {
-                ex = true;
-            }
-        }
-        if (ex)
-        {
-            for (int i = 0; i &lt; userList.Count; i++)
-            {
-                if (userList[i].Name == name)
+        byte[] date = new byte[1];
+        date[0] = 2;//震动标记为2
+        dicSocket[comboBox1.SelectedItem.ToString()].Send(date);
+    }
+</code></pre>
+<p>客户端：<br>
+在接收服务器端数据的方法中进行判断<br>
+private void Receive()<br>
+{<br>
+while (true)<br>
+{<br>
+try<br>
+{<br>
+byte[] buffer = new byte[1023 * 1023 * 2];<br>
+int r = socketSend.Receive(buffer);<br>
+if (r == 0)<br>
+break;<br>
+//通过第一个标记位来判断文件类型（简单协议）<br>
+if (buffer[0] == 0)//标志位为0时，发送的是普通文本<br>
+{<br>
+string str = Encoding.UTF8.GetString(buffer, 1, r-1);<br>
+ShowMsg(socketSend.RemoteEndPoint + &quot;:&quot; + str);</p>
+<pre><code>                }else if (buffer[0]==1)
                 {
-                    Console.WriteLine(&quot;请重新输入用户名称：&quot;);
-                    string namec = Console.ReadLine();
-                    Console.WriteLine(&quot;请重新输入用户年龄：&quot;);
-                    int agec = int.Parse(Console.ReadLine());
-                    Console.WriteLine(&quot;请重新输入地址：&quot;);
-                    string addressc = Console.ReadLine();
-                    userList[i].Name = namec;
-                    userList[i].Age = agec;
-                    userList[i].Address = addressc;
-                    Console.WriteLine(&quot;修改成功&quot;);
+                    SaveFileDialog sfd = new SaveFileDialog();
+                    sfd.InitialDirectory = @&quot;C:\Users\qweasd\Pictures\Mays\Vt\Soc&quot;;
+                    sfd.Title = &quot;选择要保存到文件&quot;;
+                    sfd.Filter = &quot;所有文件|*.*&quot;;
+                    sfd.ShowDialog(this);
+                    string path = sfd.FileName;
+                    using (FileStream fs = new FileStream (path,FileMode.OpenOrCreate,FileAccess.Write))
+                    {
+                        fs.Write(buffer, 1, r - 1);
+                    }
                 }
-            } 
-        }
-        else
-        {
-            Console.WriteLine(&quot;不存在该用户！&quot;);
-        }
-    }
-    //查询数据
-    public void ShowAll()
-    {
-        if (userList.Count != 0)
-        {
-            for (int i = 0; i &lt; userList.Count; i++)
-            {
-                Console.WriteLine(userList[i]);
+                else if (buffer[0]==2)
+                {
+                    Shork();
+                }
+
+                
             }
+            catch
+            { }
         }
-        else Console.WriteLine(&quot;当前为空&quot;); 
     }
-}
-
-
-static void Main(string[] args)
+    /// &lt;summary&gt;
+    /// 震动
+    /// &lt;/summary&gt;
+    private void Shork()
     {
-        //创建字典泛型集合
-        Dictionary&lt;string, string&gt; dic = new Dictionary&lt;string, string&gt;();
-        //        键，值
-
-        //往集合中添加数据
-        dic.Add(&quot;baidu&quot;, &quot;百度网&quot;);
-        dic.Add(&quot;qq&quot;, &quot;腾讯网&quot;);
-        dic.Add(&quot;taobao&quot;, &quot;淘宝网&quot;);
-
-        //不可添加同键名的数据
-        //dic.Add(&quot;taobao&quot;, &quot;马云&quot;);
-
-        //查询数据---集合名[键名]
-        Console.WriteLine(dic[&quot;qq&quot;]);
-        Console.WriteLine(dic .Count );
-        //删除数据---集合名.Remove(键名);
-        dic.Remove(&quot;baidu&quot;);
-        //修改数据---集合名[键名] = 新值;
-        dic[&quot;qq&quot;] = &quot;马化腾&quot;;
-
-        //遍历字典集合
-        foreach (var item in dic .Keys )
+        for (int i = 0; i &lt; 500; i++)
         {
-            Console.WriteLine(&quot;{0}:{1}&quot;,item ,dic[item]);
+            this.Location = new Point(this.Location.X + 50, this.Location.Y + 50);
+            this.Location = new Point(this.Location.X - 50, this.Location.Y - 50);
         }
-        Console.ReadLine();
     }</code></pre>
 
             </div>
@@ -230,9 +218,9 @@ static void Main(string[] args)
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/photon-lian-ji-an-li/">
+                <a href="https://Wei715547.github.io/post/winform-socket-ke-hu-duan/">
                   <h3 class="post-title">
-                    Photon联机案例
+                    Winform-Socket客户端
                   </h3>
                 </a>
               </div>
