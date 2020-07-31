@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Audio Mixer | Wei: Development technology accumulation</title>
+<title>GDI生成随机验证码 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,16 @@
 
 
 
-    <meta name="description" content="void Awake()
+    <meta name="description" content="
+/// 
+/// 生成验证码
+/// 
+/// 
+/// 
+private void pictureBox1_Click(object sender, EventArgs e)
 {
-//Nomal Slider Ct
-Vo.value = FindObjectOfType().volume;
-    //Pvo = transform.Find(&quot;Player_Slider&qu..." />
+//产生随机数数组
+Random r = new Ran..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -107,38 +112,68 @@ Vo.value = FindObjectOfType().volume;
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Audio Mixer</h2>
-            <div class="post-date">2020-06-11</div>
+            <h2 class="post-title">GDI生成随机验证码</h2>
+            <div class="post-date">2020-07-31</div>
             
             <div class="post-content" v-pre>
-              <p>void Awake()<br>
+              <p><img src="https://Wei715547.github.io/post-images/1596208934558.PNG" alt="" loading="lazy"><br>
+/// <summary><br>
+/// 生成验证码<br>
+/// </summary><br>
+/// <param name="sender"></param><br>
+/// <param name="e"></param><br>
+private void pictureBox1_Click(object sender, EventArgs e)<br>
 {<br>
-//Nomal Slider Ct<br>
-Vo.value = FindObjectOfType<AudioSource>().volume;</p>
-<pre><code>    //Pvo = transform.Find(&quot;Player_Slider&quot;).GetComponent&lt;Slider&gt;();
+//产生随机数数组<br>
+Random r = new Random();<br>
+string str = null;<br>
+for (int i = 0; i &lt; 5; i++)<br>
+{</p>
+<pre><code>            int rnumber = r.Next(0, 10);
+            str += rnumber;
+        }
 
-    auM.GetFloat(&quot;MainVolume&quot;,out float v);
-    Pvo.value = v;//Audio Mixer output value  to Slider
-}
+        //创建图像与GDI对象
+        Bitmap bmp = new Bitmap(150,40);
+        Graphics g = Graphics.FromImage(bmp);
 
-private void Update()
-{
-    //Panel enable update the value
-    FindObjectOfType&lt;AudioSource&gt;().volume = Vo.value;
-    auM .SetFloat(&quot;MainVolume&quot;, Pvo.value);
-}
-</code></pre>
-<p><img src="https://Wei715547.github.io/post-images/1591860911716.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1591860919096.PNG" alt="" loading="lazy"></p>
+        //将字符随机字体及颜色画到图片上
+        for (int i = 0; i &lt; 5; i++)
+        {
+            Point p = new Point(i * 20, 0);
+            string[] font = { &quot;微软雅黑&quot;, &quot;宋体&quot;, &quot;黑体&quot;, &quot;隶书&quot;, &quot;仿宋&quot; };
+            Color[] colors = { Color.Red, Color.Blue, Color.Green, Color.DarkOliveGreen, Color.Cyan };
+            g.DrawString(str[i].ToString(),new Font(font[r.Next (0,5)],15,FontStyle.Bold),new SolidBrush(colors[r.Next(0,5)]),p);
+        }
+
+        //随机线条
+        for (int i = 0; i &lt; 25; i++)
+        {
+            Point p1 = new Point (r.Next(0,bmp.Width),r.Next(0,bmp.Height));
+            Point p2 = new Point (r.Next(0,bmp.Width),r.Next(0,bmp.Height));
+            g.DrawLine(new Pen(Brushes.Green), p1, p2);
+        }
+
+        //随机像素点
+        for (int i = 0; i &lt; 500; i++)
+        {
+            Point p = new Point(r.Next(0, bmp.Width), r.Next(0, bmp.Height));
+            bmp.SetPixel(p.X, p.Y, Color.Black);
+        }
+
+        //将图片嵌入到PcBox中
+        pictureBox1.Image = bmp;
+
+    }</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/ui-tu-biao-leng-que/">
+                <a href="https://Wei715547.github.io/post/socket-fu-wu-qi-xiang-ke-hu-duan-fa-song-xiao-wen-jian-dou-dong/">
                   <h3 class="post-title">
-                    UI图标冷却
+                    Socket-服务器向客户端发送小文件/抖动
                   </h3>
                 </a>
               </div>
