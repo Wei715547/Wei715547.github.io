@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>OSI参考模型 | Wei: Development technology accumulation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1596262687960">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="
+
+下层为上层服务
+7：应用层：
+6：表示层：1.数据格式变换。2.数据加密解密。3.数据压缩与恢复
+5：会话层：ASP,ADSP
+进程下建立连接，管理，终止会话。
+大文件传输使用校验点可使会话在通信失效时从校验点/同步点继续恢复通信，实现..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1596262687960" class="site-logo">
+        <h1 class="site-title">Wei: Development technology accumulation</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">OSI参考模型</h2>
+            <div class="post-date">2020-08-01</div>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://Wei715547.github.io/post-images/1596259676351.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1596259685462.PNG" alt="" loading="lazy"><br>
+下层为上层服务<br>
+7：应用层：<br>
+6：表示层：1.数据格式变换。2.数据加密解密。3.数据压缩与恢复<br>
+5：会话层：ASP,ADSP<br>
+进程下建立连接，管理，终止会话。<br>
+大文件传输使用校验点可使会话在通信失效时从校验点/同步点继续恢复通信，实现数据同步<br>
+4：传输层：进程间的通信，端到端，以报文/数据报形式传输 TCP,UDP协议<br>
+1.可靠传输（分段发送），不可靠传输<br>
+2.差错控制<br>
+3.流量控制 依据接收速度控制发射速度<br>
+4.复用分用<br>
+3：网络层：把分组从源端传输到目的端，为分组交换网上的不同主机提供通信服务，以数据包传输<br>
+IP协议         1.路由选择<br>
+2.流量控制<br>
+3.差错控制.<br>
+4.拥塞控制<br>
+2.数据链路层：将网络层传下来的数据包组装呈帧（字节流）<br>
+1.成帧（定义帧的开始及结束）<br>
+2.差错控制 帧错，位错<br>
+3.流量控制<br>
+4。访问接入控制，控制对信道的访问<br>
+1.物理层：传输比特流 透明传输 byte-电信号 --Rj45,802.3协议<br>
+1.定义接口特性<br>
+2.定义传输模式，单工，半双工，双工<br>
+3.定义传输速率<br>
+4.比特同步<br>
+5.比特编码</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/gdi-sheng-cheng-sui-ji-yan-zheng-ma/">
+                  <h3 class="post-title">
+                    GDI生成随机验证码
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

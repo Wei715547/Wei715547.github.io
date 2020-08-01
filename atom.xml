@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-07-31T15:22:25.466Z</updated>
+    <updated>2020-08-01T12:04:16.750Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,53 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[TCP/IP模型]]></title>
+        <id>https://Wei715547.github.io/post/tcpip-mo-xing/</id>
+        <link href="https://Wei715547.github.io/post/tcpip-mo-xing/">
+        </link>
+        <updated>2020-08-01T05:58:14.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1596261613930.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1596261986768.PNG" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[OSI参考模型]]></title>
+        <id>https://Wei715547.github.io/post/osi-can-kao-mo-xing/</id>
+        <link href="https://Wei715547.github.io/post/osi-can-kao-mo-xing/">
+        </link>
+        <updated>2020-08-01T05:24:30.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1596259676351.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1596259685462.PNG" alt="" loading="lazy"><br>
+下层为上层服务<br>
+7：应用层：<br>
+6：表示层：1.数据格式变换。2.数据加密解密。3.数据压缩与恢复<br>
+5：会话层：ASP,ADSP<br>
+进程下建立连接，管理，终止会话。<br>
+大文件传输使用校验点可使会话在通信失效时从校验点/同步点继续恢复通信，实现数据同步<br>
+4：传输层：进程间的通信，端到端，以报文/数据报形式传输 TCP,UDP协议<br>
+1.可靠传输（分段发送），不可靠传输<br>
+2.差错控制<br>
+3.流量控制 依据接收速度控制发射速度<br>
+4.复用分用<br>
+3：网络层：把分组从源端传输到目的端，为分组交换网上的不同主机提供通信服务，以数据包传输<br>
+IP协议         1.路由选择<br>
+2.流量控制<br>
+3.差错控制.<br>
+4.拥塞控制<br>
+2.数据链路层：将网络层传下来的数据包组装呈帧（字节流）<br>
+1.成帧（定义帧的开始及结束）<br>
+2.差错控制 帧错，位错<br>
+3.流量控制<br>
+4。访问接入控制，控制对信道的访问<br>
+1.物理层：传输比特流 透明传输 byte-电信号 --Rj45,802.3协议<br>
+1.定义接口特性<br>
+2.定义传输模式，单工，半双工，双工<br>
+3.定义传输速率<br>
+4.比特同步<br>
+5.比特编码</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[GDI生成随机验证码]]></title>
         <id>https://Wei715547.github.io/post/gdi-sheng-cheng-sui-ji-yan-zheng-ma/</id>
@@ -612,167 +659,6 @@ internal class Person<br>
     {
 
     }
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[里式转换-类多态]]></title>
-        <id>https://Wei715547.github.io/post/li-shi-zhuan-huan-lei-duo-tai/</id>
-        <link href="https://Wei715547.github.io/post/li-shi-zhuan-huan-lei-duo-tai/">
-        </link>
-        <updated>2020-07-21T10:40:38.000Z</updated>
-        <content type="html"><![CDATA[<p>class Program<br>
-{<br>
-public class Per<br>
-{<br>
-public void Say()<br>
-{<br>
-Console.WriteLine(&quot;Per&quot;);<br>
-}<br>
-}<br>
-public class PerSOne:Per<br>
-{<br>
-public void Say()<br>
-{<br>
-Console.WriteLine(&quot;PerSOne&quot;);<br>
-}<br>
-}<br>
-public class PerSTwo:Per<br>
-{<br>
-public void Say()<br>
-{<br>
-Console.WriteLine(&quot;PerSTwo&quot;);<br>
-}<br>
-}</p>
-<pre><code>    static void Main(string[] args)
-    {
-        //里式转换-类多态
-        Per[] per = new Per[3];
-        Random r = new Random();
-        int rs = 0;
-        for (int i = 0; i &lt; per.Length; i++)
-        {
-            rs = r.Next(0, 2);
-            switch(rs)
-            {
-                case 0:per[i] = new PerSOne();
-                    break;
-                case 1:per[i] = new PerSTwo();
-                    break;
-            }
-        }
-
-        for (int i = 0; i &lt; per.Length; i++)
-        {
-            if (per[i] is PerSOne)
-            {
-                ((PerSOne)per[i]).Say();
-            }
-            else if (per[i] is PerSTwo)
-            {
-                ((PerSTwo)per[i]).Say();
-            }
-            else
-                per[i].Say();
-            
-        }
-
-        Console.ReadKey();
-
-    }</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[解决Hash冲突的方式]]></title>
-        <id>https://Wei715547.github.io/post/jie-jue-hash-chong-tu-de-fang-shi/</id>
-        <link href="https://Wei715547.github.io/post/jie-jue-hash-chong-tu-de-fang-shi/">
-        </link>
-        <updated>2020-07-13T15:17:48.000Z</updated>
-        <content type="html"><![CDATA[<p>//解决冲突的方式</p>
-<p>//1.桶式散列法<br>
-//在数组列表中存储数组列表<br>
-//一个键(主容器数组列表索引)可存储多个值(数组列表内的“数组列表的多个值“)<br>
-class BucketHash<br>
-{</p>
-<pre><code>    private const int SIZE = 101;
-    ArrayList[] date;
-
-    public BucketHash()
-    {
-        date = new ArrayList[SIZE];
-        for (int i = 0; i &lt; SIZE; i++)
-        {
-            date[i] = new ArrayList(4);
-        }
-    }
-
-    public int Hash(string s)
-    {
-        long key = 0;
-        char[] cname = s.ToCharArray();
-        for (int i = 0; i &lt; cname.Length; i++)
-        {
-            key += 37 * key + (int)cname[i];
-        }
-        key = key % date.GetUpperBound(0);
-        if (key &lt; 0)
-            key += date.GetUpperBound(0);
-        return (int)key;
-    }
-
-    public void Insert(string s)
-    {
-        int hash_key = Hash(s);
-        if (!date[hash_key].Contains(s))
-            date[hash_key].Add(s);
-
-    }
-
-    public void Remove(string s)
-    {
-        int hash_key = Hash(s);
-        if (date[hash_key].Contains(s))
-            date[hash_key].Remove(s);
-    }
-
-    public void ShowTable()
-    {
-        for (int i = 0; i &lt; date.Length; i++)
-        {
-            if (date[i].Count&gt;0)
-            {
-                Console.Write(i+&quot;:&quot;);
-                foreach (string s in date[i])
-                {
-                    Console.Write(s);
-                }
-                Console.WriteLine();
-            }
-                
-        }
-    }
-}
-</code></pre>
-<p>}<br>
-//示例程序<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-//桶式散列法<br>
-BucketHash bkHash = new BucketHash();<br>
-for (int i = 0; i &lt; someName .Length; i++)<br>
-{<br>
-bkHash.Insert(someName[i]);<br>
-}<br>
-bkHash.ShowTable();</p>
-<pre><code>    }
-
-//2.开放地址法
-//发生冲突时，寻找下一个空的散列地址（平方探测直至找到下一个空位置）
-
-//多重散列
-//存在多种哈希函数，发生冲突时调用备选哈希函数
 </code></pre>
 ]]></content>
     </entry>
