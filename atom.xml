@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-01T12:04:16.750Z</updated>
+    <updated>2020-08-04T15:14:04.395Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,86 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[HTML]]></title>
+        <id>https://Wei715547.github.io/post/html/</id>
+        <link href="https://Wei715547.github.io/post/html/">
+        </link>
+        <updated>2020-08-04T14:13:47.000Z</updated>
+        <content type="html"><![CDATA[<p>基本结构</p>
+<hr>
+<html>
+        <head>
+               <title>网页标题</title>
+        </head>
+        <body>
+                    网页内容
+        </body>
+</html>
+—————————————————————————————————
+class1：
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>HTML</title>
+</head>
+<body>
+	<p>喵啊</p><!--段落-->
+    <p>妙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;啊</p><!--空格：&nbsp;-->
+    <h1>我是标题</h1>
+    <h2>我是标题</h2>
+    <h3>我是标题</h3>
+    <h4>我是标题</h4>
+<h5>我是标题</h5>
+    <img src="2.jpg" width="720" height="1280" border ="5px" title="漂亮" alt="Mays"/>
+    <!--属性名=值
+    src:要显示的图片路径
+    width：宽度（px）
+    heigh:高度
+    border:边框宽度
+    title:鼠标悬停时显示的字符
+    alt:图片丢失时所显示的备份文字
+    -->
+    <p><b>Hello Word</b></p>
+    <hr/><!--分割线-->
+    <p>Hello Word</p>
+<p>Hello Word</p>
+    <p>Hello Word</p>
+    <p>Hello Word</p>
+    <hr/>
+    Hello Word<br/><!--换行-->
+    Hello Word<br/>
+    5&gt;3<br/> <!--大于：&gt; 小于:&lt; &:&amp;-->
+    3&lt;5 &amp;&amp;&amp;<br/>
+    <font size="5" color="#FF0000" face="Comic Sans MS, cursive">每单只需</font> <font size="7" color="#66FFFF">8888元</font>
+    <!--以代码形式显示-->
+    <pre>
+    <code>
+    		for(i=0;i<100;i++)
+            {
+            	print("WEI");
+            }
+     </code>
+     </pre>
+     <!--图片滑行-->
+     <marquee direction="right"  behavior="slide" ><img src="2.jpg"  width="720" height="1280" /></marquee>
+</body>
+</html>
+![](https://Wei715547.github.io/post-images/1596552695480.jpg)
+![](https://Wei715547.github.io/post-images/1596553108815.PNG)
+<p>——————————————————————————————————————————</p>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Class2</title>
+</head>
+<body>
+<a href="http://www.bilibili.com"  target="_blank">哔哩哔哩</a>
+</body>
+</html>
+![](https://Wei715547.github.io/post-images/1596554028605.jpg)
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[TCP/IP模型]]></title>
         <id>https://Wei715547.github.io/post/tcpip-mo-xing/</id>
@@ -635,31 +715,6 @@ cosm.Say();<br>
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[访问修饰符]]></title>
-        <id>https://Wei715547.github.io/post/fang-wen-xiu-shi-fu/</id>
-        <link href="https://Wei715547.github.io/post/fang-wen-xiu-shi-fu/">
-        </link>
-        <updated>2020-07-24T14:20:12.000Z</updated>
-        <content type="html"><![CDATA[<p>public: 公开访问<br>
-private:私有的，只能在当前类中访问<br>
-protected:受保护的，只能在当前类或其子类中访问<br>
-internal:只能在当前程序集/项目中访问，在同一项目中internal与public权限相同<br>
-protected innternal:  protected + innternal</p>
-<p>1.可以修饰类的只有：public，internal [1.(partial):部分类-多个人需要写同一个类时使用每个人完成类的一部分。2.sealed:密封类，此类不可被继承但可继承的类。<br>
-2.子类的访问权限不能高于父类的访问权限，会暴露父类成员<br>
-例：在程序集外会通过子类访问到子类所继承的父类成员！<br>
-internal class Person<br>
-{</p>
-<pre><code>    }
-
-    public class Student : Person
-    {
-
-    }
-</code></pre>
 ]]></content>
     </entry>
 </feed>
