@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-04T15:14:04.395Z</updated>
+    <updated>2020-08-05T10:34:24.942Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -74,6 +74,8 @@ class1：
      </pre>
      <!--图片滑行-->
      <marquee direction="right"  behavior="slide" ><img src="2.jpg"  width="720" height="1280" /></marquee>
+     <br/>     
+     <a  name="C1" href="class2.html#C2">C2</a>
 </body>
 </html>
 ![](https://Wei715547.github.io/post-images/1596552695480.jpg)
@@ -85,7 +87,12 @@ class1：
 <title>Class2</title>
 </head>
 <body>
-<a href="http://www.bilibili.com"  target="_blank">哔哩哔哩</a>
+<a href="http://www.bilibili.com"  target="_blank">哔哩哔哩</a> <br/>
+<a href="mailto:1941071686@qq.com">发送邮件到WEI</a><br/>
+<a name="C2" href="Base_Tag.html#C1"> C1</a><br/>
+<a name="TOP" href="#DOWN">回到底端</a>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<a name="DOWN"  href="#TOP">回到顶端</a>
 </body>
 </html>
 ![](https://Wei715547.github.io/post-images/1596554028605.jpg)
