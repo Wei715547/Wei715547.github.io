@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-06T09:31:07.793Z</updated>
+    <updated>2020-08-06T14:30:00.421Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -131,6 +131,22 @@ class1：
     <dd>继承</dd>
     <dd>多态</dd>
 </dl>
+<br/>
+<table border="5px" cellspacing="5px" cellpadding="5px">
+	<tr>
+    <td colspan="3"> html表格</td><!--跨行-->
+    </tr>
+	<tr>
+    <td rowspan="2"><a href="www.bilibili.com">哔哩哔哩</a></td><!--跨列-->
+    <td>WEI</td>
+    <td>ZL</td>
+    </tr>
+    <tr>
+<pre><code>&lt;td&gt;www&lt;/td&gt;
+&lt;td&gt;zzz&lt;/td&gt;
+&lt;/tr&gt;
+</code></pre>
+</table>
 </body>
 </html>
 ]]></content>
