@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>字符、可变字符串，方法 | Wei: Development technology accumulation</title>
+<title>框架标签 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,16 +18,32 @@
 
 
 
-    <meta name="description" content="using System;
-using System.Text;
-namespace 字符串方法
-{
-class Program
-{
-static void Main(string[] args)
-{
-//1.
-string s = &qu..." />
+    <meta name="description" content="
+
+
+无标题文档
+
+
+
+
+ 
+
+
+
+
+————————————————————————————————————
+LEFT
+
+
+
+无标题文档
+
+
+LEFT
+WEI
+
+
+_____________________________________..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -112,92 +128,55 @@ string s = &qu..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">字符、可变字符串，方法</h2>
-            <div class="post-date">2020-05-24</div>
+            <h2 class="post-title">框架标签</h2>
+            <div class="post-date">2020-08-07</div>
             
             <div class="post-content" v-pre>
-              <p>using System;<br>
-using System.Text;</p>
-<p>namespace 字符串方法<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-//1.<br>
-string s = &quot; wei715547&quot;;<br>
-int res = s.CompareTo(&quot;wei715547&quot;);//元素相等时，返回值为0，<br>
-//调用者字母排序靠后时返回值为1，靠前是返回值为-1<br>
-Console.WriteLine(res);</p>
-<pre><code>        //2
-        string newstring = s.Replace('w', 'z');//替换字符
-        Console.WriteLine(newstring );
-        //string newstring2 = s.Replace('1', '2');
-
-        //3.字符串从指定字符位置拆分为数组
-        string[] stringArray = s.Split('1');
-        foreach (var item in stringArray )
-        {
-            Console.WriteLine(item );
-        }
-
-        //4.Substring.截取字符串
-        string newcut = s.Substring(2,5);
-        Console.WriteLine(newcut);
-
-        //5.清除字符串首尾空白
-        string clearspace = s.Trim();
-        Console.WriteLine(clearspace );
-
-        //6.返回指定字符的索引
-        int newindex = s.IndexOf('1');
-        Console.WriteLine(newindex );
-
-        //-------------------------------------------------------------
-        //可变字符串StringBuilder 
-        //create1.通过构造函数进行构建
-        StringBuilder sb = new StringBuilder(&quot;www.wei7157.github.co&quot;);
-        Console.WriteLine(sb);
-        //create2.声明空间大小
-        StringBuilder sb2 = new StringBuilder(20);
-        sb2.Append(&quot;www.wei7157.github.co&quot;);
-        Console.WriteLine(sb2);
-        //creat3.赋值同时声明空间大小
-        StringBuilder sb3 = new StringBuilder(&quot;www.wei7157.github.co&quot;, 100);
-        Console.WriteLine(sb3);
-
-
-        //字符串修改与标准字符串对比
-        sb.Append(&quot;000000&quot;);//在空余空间链接字符
-        Console.WriteLine(sb);
-        //对比常规字符串操作，运行效率更高
-        string str = &quot;www.wei7157.github.co&quot;;
-        str += &quot;000000&quot;;//在堆中创建新的字符，str索引指向新的字符，原来的字符被CLR回收（效率低）
-        Console.WriteLine(str);
-
-        //可变字符串Insert()方法
-        sb.Insert(0, &quot;http//&quot;);
-        Console.WriteLine(sb);
-        sb.Remove(0, 6);//根据索引范围移除字符
-        Console.WriteLine(sb);
-        sb.Replace('w', 'z');//字符替换
-        Console.WriteLine(sb);
-        Console.WriteLine(sb.ToString());//ToString()转变为不可变字符
-
-    }
-}
-</code></pre>
-<p>}<br>
-<img src="https://Wei715547.github.io/post-images/1595308895503.PNG" alt="" loading="lazy"></p>
-
+              <html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+<frameset rows="15%,*">
+<frame src="top.html" noresize="noresize" />
+<frameset cols="50%s,*">
+<frame src="left.html"  name="left"/> 
+<frame src="right.html"/>
+</frameset>
+</frameset><noframes></noframes>
+</html>
+————————————————————————————————————
+LEFT
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+<body bgcolor="#66FFFF">
+LEFT
+<a href="https://wei715547.github.io">WEI</a>
+</body>
+</html>
+_____________________________________________________________________________
+RIGHT
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+<body bgcolor="#FFCC00">
+RIGHT
+<a href="http://www.bilibili.com" target="left">哔哩哔哩</a>
+</body>
+</html>
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/zi-ding-yi-list-ji-he/">
+                <a href="https://Wei715547.github.io/post/html/">
                   <h3 class="post-title">
-                    自定义List集合
+                    HTML
                   </h3>
                 </a>
               </div>
