@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>选择器 | Wei: Development technology accumulation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1596899543747">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="
+
+
+无标题文档
+
+
+	p{
+		background-color: #FC9;
+	}
+	tt{
+		background-color: #0FC
+	}
+	
+	tt.tt1{
+		background-color: #F33
+	}
+	tt...." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1596899543747" class="site-logo">
+        <h1 class="site-title">Wei: Development technology accumulation</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">选择器</h2>
+            <div class="post-date">2020-08-08</div>
+            
+            <div class="post-content" v-pre>
+              <html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style type="text/css">
+<!--1.HTML选择器-->
+	p{
+		background-color: #FC9;
+	}
+	tt{
+		background-color: #0FC
+	}
+	<!--2.类选择器-->
+	tt.tt1{
+		background-color: #F33
+	}
+	tt.tt2{
+		font: xx-large
+	}
+	<!--3.ID选择器-->
+<pre><code>#p1{
+	background-color: #CF6
+}
+p#p2{
+	background-color: #00F
+}
+&lt;!--4.关联选择器--&gt;
+p em{
+	font: xx-large
+}
+&lt;!--5.组合标签--&gt;
+h1,h2,h3,td{
+	background-color: #F9F
+}
+&lt;!--6.伪元素--&gt;
+A：active{
+	text-decortion:none
+}
+A:hover{
+	font-size: xx-large
+}
+p::first-letter{
+	font-size: xx-small
+}
+p::first-line{
+	font-size: xx-large
+}
+</code></pre>
+</style>
+</head>
+<body>
+	<p id="p1">www.bilibili.com</p>
+    <p id="p1">www.bilibili.com</p>
+    <p id="p2">www.bilibili.com</p>
+    <p>www.bilibili.com</p>
+    <p>www.bilibili.com</p>
+    <tt class="tt1">12345678901234567890</tt>
+    <tt class="tt2">12345678901234567890</tt>
+    <tt>12345678901234567890</tt>
+    <tt>12345678901234567890</tt>
+    <tt>12345678901234567890</tt>
+<pre><code>&lt;p&gt;&lt;em&gt;233333333333333333&lt;/em&gt;&lt;/p&gt;
+
+&lt;h1&gt;组合选择器&lt;/h1&gt;
+&lt;h2&gt;组合选择&lt;/h2&gt;
+&lt;h3&gt;组合选择&lt;/h3&gt;
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;组合标签&lt;/td&gt;
+&lt;td&gt;组合标签&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;组合标签&lt;/td&gt;
+&lt;td&gt;组合标签&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;组合标签&lt;/td&gt;
+&lt;td&gt;组合标签&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;a href=&quot;http://www.bilibili.com&quot;&gt;哔哩哔哩&lt;/a&gt;
+</code></pre>
+</body>
+</html>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/xie-ru-css-fang-shi/">
+                  <h3 class="post-title">
+                    写入CSS方式
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
