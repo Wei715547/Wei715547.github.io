@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-09T08:45:16.651Z</updated>
+    <updated>2020-08-09T10:14:43.915Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -84,6 +84,53 @@ background-color: #FFC
     <br /><br /><br /><br /><br /><br /><br /><br />
     <br /><br /><br /><br /><br /><br /><br /><br />
     <br /><br /><br /><br /><br /><br /><br /><br />
+</body>
+</html>
+<p>布局：</p>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style type="text/css">
+	.divIndex{
+		width:900px;
+		height:2000px;
+		background-color: #9F6; 
+		margin: 0px auto;<!--两个参数是时，上下：左右-->
+	}
+	.divLog{
+			width:900px;
+			height:100px;
+			background-color: #F90
+		}
+	.divContent{
+		width:900px;
+		height:300px;
+		background-color:#3FF	
+	}
+	.divLeft{
+		width:300px;
+		height:300px;
+		background-color:#F9C;
+		float:left;
+	}
+	.divRight{
+		width:600px;
+		height:300px;
+		background-color:#CCC;
+		float:left
+	}
+</style>
+</head>
+<body>
+	<div class="divIndex">
+    	<div class="divLog">
+        </div>
+        <div class="divContent">
+        <div class="divLeft"></div>
+        <div class="divRight"></div>
+        </div>
+    </div>
 </body>
 </html>
 ]]></content>
