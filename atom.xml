@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-09T10:14:43.915Z</updated>
+    <updated>2020-08-09T15:43:48.013Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -130,6 +130,107 @@ background-color: #FFC
         <div class="divLeft"></div>
         <div class="divRight"></div>
         </div>
+    </div>
+</body>
+</html>
+<p>实例：</p>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>综合布局</title>
+<style type="text/css">
+*{
+	margin:0px;
+	font-size:12px;
+}
+	div.divIndex{
+		height: 380px;
+		width:290px;
+		background-color:#F8F8F8;
+		margin:0px auto;
+	}
+	.div1{
+		width: 290px;
+		height:35px;
+		background-color:#6FF;
+		
+		color:#FFF;
+		text-align:center
+	}
+	div.div1 p{
+		padding: 8px;
+		font-size:17px;
+	}
+	#table1{
+		width: 290px;
+	}
+	td.td1{
+		font-weight: bolder;
+	}
+	td.td2{
+		color:#246082;
+		padding:5px;
+		border-bottom-style: dashed;
+		border-bottom:qpx dashed #123456;
+	}
+	td.td3{
+		font-weight: bolder;
+		color:#F00;
+		border-bottom:1px dashed #cccccc;
+		text-align:right;
+	}
+	div.divTable{
+		margin:0px auto;
+	}
+</style>
+</head>
+<body>
+	<div class="divIndex">
+    	<table id="table1" >
+        	<tr>
+            	<td> <div class="div1"><p>.Net信息</p></div>
+            </tr>
+            <tr>
+            	<td>
+                <div class="divTable">
+                	<table width="290px">
+                    	<tr>
+                        	<td width="92" class="td1">WEI</td>
+                            <td width="157"></td>
+                        </tr>
+                        <tr>
+                        	<td class="td2">北京--2020年9-9</td>
+                            <td class="td3">预约报名中</td>
+                        </tr>
+                        <tr>
+                        	<td class="td2">北京--2020年9-9</td>
+                            <td class="td3">预约报名中</td>
+                        </tr>
+                        <tr>
+                        	<td class="td2">北京--2020年9-9</td>
+                            <td class="td3">预约报名中</td>
+                        </tr>
+                        <tr>
+                        	<td class="td1">WEI</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                        	<td class="td2">北京--2020年9-9</td>
+                            <td class="td3">预约报名中</td>
+                        </tr>
+                        <tr>
+                        	<td class="td2">北京--2020年9-9</td>
+                            <td class="td3">预约报名中</td>
+                        </tr>
+                        <tr>
+                        	<td class="td2">北京--2020年9-9</td>
+                            <td class="td3">预约报名中</td>
+                        </tr>
+                    </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 </body>
 </html>
