@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>XML | Wei: Development technology accumulation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1597221724816">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="using System;
+using System.IO;
+using System.Xml;
+namespace XML
+{
+class Program
+{
+static void Main(string[] args)
+{
+//str..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1597221724816" class="site-logo">
+        <h1 class="site-title">Wei: Development technology accumulation</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">XML</h2>
+            <div class="post-date">2020-08-12</div>
+            
+            <div class="post-content" v-pre>
+              <p>using System;<br>
+using System.IO;<br>
+using System.Xml;<br>
+namespace XML<br>
+{<br>
+class Program<br>
+{<br>
+static void Main(string[] args)<br>
+{<br>
+//string flePath = @&quot;D:\715\CSharp\xml.txt&quot;;<br>
+//1.创建XML对象<br>
+XmlDocument xmlDoc = new XmlDocument();<br>
+//2.创建第一行文件信息，加入doc中<br>
+XmlDeclaration doc = xmlDoc.CreateXmlDeclaration(&quot;1.0&quot;, &quot;utf-8&quot;, null);//版本，编码格式<br>
+xmlDoc.AppendChild(doc);<br>
+//3.创建根节点<br>
+XmlElement books = xmlDoc.CreateElement(&quot;Books&quot;);<br>
+books.SetAttribute(&quot;书目&quot;, &quot;2.0&quot;);<br>
+xmlDoc.AppendChild(books);//将根节点添加到XML表中</p>
+<pre><code>        //4.创建根节点的子节点
+        XmlElement book1 = xmlDoc.CreateElement(&quot;Book&quot;);
+        books.AppendChild(book1);
+        //创建子节点的子节点
+        XmlElement name1 = xmlDoc.CreateElement(&quot;Name&quot;);
+        XmlElement price1 = xmlDoc.CreateElement(&quot;Price&quot;);
+        name1.InnerText = &quot;Wei&quot;;
+        price1.InnerText = &quot;170&quot;;
+        book1.AppendChild(name1);
+        book1.AppendChild(price1);
+
+        //根节点的另一个子节点
+        XmlElement book2 = xmlDoc.CreateElement(&quot;Book&quot;);
+        books.AppendChild(book2);
+
+        XmlElement name2 = xmlDoc.CreateElement(&quot;Name&quot;);
+        name2.InnerText = &quot;ZZ&quot;;
+        XmlElement price2 = xmlDoc.CreateElement(&quot;Price&quot;);
+        price2.InnerText = &quot;150&quot;;
+        book2.AppendChild(name2);
+        book2.AppendChild(price2);
+
+
+        xmlDoc.Save(@&quot;D:\715\CSharp\xml.txt&quot;);
+        Console.WriteLine(&quot;保持成功&quot;);
+        Console.ReadLine();
+
+        /*//追加XML文档
+        XmlDocument xmlDoc = new XmlDocument();
+        XmlElement root;
+        if(File.Exists(@&quot;D:\715\CSharp\xml2.txt&quot;))
+        {
+            //如存在则加载XML文档
+            xmlDoc.Load(@&quot;D:\715\CSharp\xml2.txt&quot;);
+            //获取根节点
+            root = xmlDoc.DocumentElement;
+            
+        }
+        else
+        {
+            XmlDeclaration doc = xmlDoc.CreateXmlDeclaration(&quot;1.0&quot;, &quot;utf-8&quot;, null);//版本，编码格式
+            xmlDoc.AppendChild(doc);
+            //3.创建根节点
+            root = xmlDoc.CreateElement(&quot;Books&quot;);
+            root.SetAttribute(&quot;书目&quot;, &quot;2.0&quot;);
+            xmlDoc.AppendChild(root);//将根节点添加到XML表中
+        }
+
+        XmlElement book2 = xmlDoc.CreateElement(&quot;Book&quot;);
+        root.AppendChild(book2);
+
+        XmlElement name2 = xmlDoc.CreateElement(&quot;Name&quot;);
+        name2.InnerText = &quot;ZL&quot;;
+        XmlElement price2 = xmlDoc.CreateElement(&quot;Price&quot;);
+        price2.InnerText = &quot;30000&quot;;
+        book2.AppendChild(name2);
+        book2.AppendChild(price2);
+        xmlDoc.Save(@&quot;D:\715\CSharp\xml2.txt&quot;);*/
+
+        /*//读取XML文档
+        XmlDocument xmlDoc = new XmlDocument();
+        //加载文档获取根节点
+        xmlDoc.Load(@&quot;D:\715\CSharp\xml2.txt&quot;);
+        XmlElement root = xmlDoc.DocumentElement;
+        //获取子节点 返回子节点的集合
+        XmlNodeList xnl = root.ChildNodes;
+
+        foreach (XmlNode node in xnl)
+        {
+            Console.WriteLine(node.InnerText );
+        }*/
+
+        /*//Xpath:获取节点属性
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.Load(@&quot;D:\715\CSharp\xml2.xml&quot;);
+        XmlNodeList nodes = xmlDoc.SelectNodes(&quot;/Books/Book&quot;);
+
+        foreach (XmlNode node in nodes)
+        {
+            Console.WriteLine(node.Attributes[&quot;W&quot;].Value);
+        }*/
+
+        /*//删除节点
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.Load(@&quot;D:\715\CSharp\xml2.txt&quot;);
+        XmlNode sel = xmlDoc.SelectSingleNode(&quot;/Books/Book&quot;);
+        sel.RemoveAll();
+        xmlDoc.Save(@&quot;D:\715\CSharp\xml2.xml&quot;);*/
+
+    }
+}
+</code></pre>
+<p>}<br>
+<img src="https://Wei715547.github.io/post-images/1597221722705.PNG" alt="" loading="lazy"></p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/shader-graph/">
+                  <h3 class="post-title">
+                    Shader Graph
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1597056636754">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1597221724816">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -37,7 +37,7 @@ string s = &qu..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1597056636754" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1597221724816" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -140,6 +140,8 @@ Console.WriteLine(res);</p>
         {
             Console.WriteLine(item );
         }
+        string s = &quot;abc-----[[[[####wei&quot;
+        string sArray = str.Split(new char[]{'-','[','#'},StringSplitOption.RemoveEmptyEntries)//将字符数组中的元素置换为空，字符截取选项移除空项-返回字符串数组
 
         //4.Substring.截取字符串
         string newcut = s.Substring(2,5);
@@ -152,6 +154,8 @@ Console.WriteLine(res);</p>
         //6.返回指定字符的索引
         int newindex = s.IndexOf('1');
         Console.WriteLine(newindex );
+
+        //7.
 
         //-------------------------------------------------------------
         //可变字符串StringBuilder 
@@ -170,6 +174,8 @@ Console.WriteLine(res);</p>
         //字符串修改与标准字符串对比
         sb.Append(&quot;000000&quot;);//在空余空间链接字符
         Console.WriteLine(sb);
+        （可用于追加Html代码实现网页内容）
+
         //对比常规字符串操作，运行效率更高
         string str = &quot;www.wei7157.github.co&quot;;
         str += &quot;000000&quot;;//在堆中创建新的字符，str索引指向新的字符，原来的字符被CLR回收（效率低）

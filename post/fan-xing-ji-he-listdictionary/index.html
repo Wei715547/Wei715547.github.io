@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1597056636754">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1597221724816">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -19,13 +19,12 @@
 
 
     <meta name="description" content="List userList = new List();
-//增删查改
-//增加数据
-public void AddDate(User user)
-{
-userList.Add(user);
-//Save();
-Console.WriteLi..." />
+/*
+list.Add();添加单个元素
+list.AddRange();添加集合
+list.Insert();插入
+list.InsertRange()插入集合;
+list.Remo..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -35,7 +34,7 @@ Console.WriteLi..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1597056636754" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1597221724816" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -114,7 +113,17 @@ Console.WriteLi..." />
             <div class="post-date">2020-05-15</div>
             
             <div class="post-content" v-pre>
-              <p>List<User> userList = new List<User>();</p>
+              <p>List<User> userList = new List<User>();<br>
+/*<br>
+list.Add();添加单个元素<br>
+list.AddRange();添加集合<br>
+list.Insert();插入<br>
+list.InsertRange()插入集合;<br>
+list.Remove();移除<br>
+list.RemoveAt();根据下标移除<br>
+list.RemoveRange();移除一定范围<br>
+list.Content()判断是否包含<br>
+*/</p>
 <p>//增删查改<br>
 //增加数据<br>
 public void AddDate(User user)<br>
@@ -200,7 +209,12 @@ static void Main(string[] args)
         //创建字典泛型集合
         Dictionary&lt;string, string&gt; dic = new Dictionary&lt;string, string&gt;();
         //        键，值
-
+        /*
+        foreach(KeyValuePair&lt;int,string&gt;,kv in dic)
+        {
+            cw(kv.Key,kv.Value);
+        }
+        */
         //往集合中添加数据
         dic.Add(&quot;baidu&quot;, &quot;百度网&quot;);
         dic.Add(&quot;qq&quot;, &quot;腾讯网&quot;);
