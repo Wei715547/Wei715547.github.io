@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>多态（3）接口（多继承接口，提供“大量”特殊功能） | Wei: Development technology accumulation</title>
+<title>设计模式(2)-Absstract Factory | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -19,11 +19,14 @@
 
 
     <meta name="description" content="using System;
-using System.Collections.Generic;
-using System.Text;
-namespace 接口
+namespace 设计模式_抽象工厂
 {
-//Interface 没有class关键字 一般使用&quot;IXxxx..." />
+class Program
+{
+public abstract class Road
+{
+    }
+    public abstract class Buildin..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -108,120 +111,119 @@ namespace 接口
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">多态（3）接口（多继承接口，提供“大量”特殊功能）</h2>
-            <div class="post-date">2020-05-06</div>
+            <h2 class="post-title">设计模式(2)-Absstract Factory</h2>
+            <div class="post-date">2020-08-13</div>
             
             <div class="post-content" v-pre>
-              <p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
+              <p>using System;</p>
+<p>namespace 设计模式_抽象工厂<br>
 {<br>
-//Interface 没有class关键字 一般使用&quot;IXxxx&quot;命名书写</p>
-<pre><code>/// &lt;summary&gt;
-/// 注意事项
-/// 1.接口中所有方法都是抽象方法，所有接口不能被实例化
-/// 2.一个类可以实现多个接口，被实现的接口之间用”逗号，“隔开
-/// 3.一个接口可以继承多个接口（类只能单继承），接口之间也用逗号分隔
-/// &lt;/summary&gt;
-
-interface IFly
-{
-    //接口中不能包含“字段”
-    //private string s;
-
-    //但可以包含属性--(自动属性）
-    //public string Id { get; set; }
-    //string Id { get; set; }
-
-    //接口中的方法不能有“方法体”，全部都是抽象方法，但不需要abstract修饰。
-    void Fly();
-
-    //public void Hello();
-    //接口中的成员不允许添加访问修饰符，默认全是public。
-
-
-
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
+class Program<br>
 {<br>
-class Car<br>
-{<br>
-private string brand;</p>
-<pre><code>    public string Brand
-    {
-        get { return brand; }
-        set { brand = value; }
-    }
-
-    /*public Car()
-    {
-
-    }*/
-
-    public Car (string brand)
-    {
-        this.brand = brand;
-    }
-
-    public void Run()
-    {
-        Console.WriteLine(&quot;{0}品牌的汽车在奔跑&quot;, brand );
-    }
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;</p>
-<p>namespace 接口<br>
+public abstract class Road<br>
 {</p>
-<pre><code>class Batmobile:Car ,IFly   //接口（为子类提供父类没有的“附加功能”。
-{
-    public Batmobile(string brand) : base(brand)
+<pre><code>    }
+    public abstract class Building
+    {
+
+    }
+    public abstract class Tunnel
+    {
+
+    }
+    public abstract class Jungle
     {
 
     }
 
-    public void Fly()//接口中的方法与类中重名时可使用显示实现 public IFly.Fly(){}
+    public abstract class FacilitiesFactory
     {
-        Console.WriteLine(&quot;{0}正在飞行&quot;, base.Brand);
+        public abstract Road CreateRoad();
+        public abstract Building CreateBuilding();
+        public abstract Tunnel CreateTunnel();
+        public abstract Jungle CreateJungle();
+
     }
-}
-</code></pre>
-<p>}</p>
-<p>//程序<br>
-using System;</p>
-<p>namespace 接口<br>
-{</p>
-<pre><code>class Program
-{
+
+    //客户程序-GameManager
+    class GameManager
+    {
+        FacilitiesFactory facilitiesFactory;
+
+        public GameManager(FacilitiesFactory facilitiesFactory)
+        {
+            this.facilitiesFactory = facilitiesFactory;
+        }
+
+        public void BuildGameFacilities()
+        {
+            Road road = facilitiesFactory.CreateRoad();
+            Building building = facilitiesFactory.CreateBuilding();
+            Tunnel tunnel = facilitiesFactory.CreateTunnel();
+            Jungle jungle = facilitiesFactory.CreateJungle();
+        }
+
+
+    }
+
     static void Main(string[] args)
     {
-        BMWCar c1 = new BMWCar(&quot;750&quot;);
-        c1.Run();
+        GameManager gameManager = new GameManager(new MDFacilitiesFactory ());
 
-        Batmobile bat = new Batmobile(&quot;BatMan&quot;);
-        bat.Run();
-        bat.Fly();
+        gameManager.BuildGameFacilities();
+        
     }
-}
+    #region 一种工厂和抽象子类
+    public class MDFacilitiesFactory:FacilitiesFactory
+    {
+        public override Road CreateRoad()
+        {
+            return new MDRoad();
+        }
+        public override Building CreateBuilding()
+        {
+            return new MDBuilding();
+        }
+        public override Tunnel CreateTunnel()
+        {
+            return new MDTunnel();
+        }
+        public override Jungle CreateJungle()
+        {
+            return new MDJungle();
+        }
+
+    }
+
+    public  class MDRoad:Road
+    {
+
+    }
+    public  class MDBuilding:Building
+    {
+
+    }
+    public  class MDTunnel:Tunnel
+    {
+
+    }
+    public  class MDJungle:Jungle
+    {
+
+    }
 </code></pre>
-<p>}</p>
+<p>#endregion<br>
+}<br>
+}</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/duo-tai-2chou-xiang-lei-zai-zi-lei-zhong-fu-xie-suo-ji-cheng-de-chou-xiang-lei-zhong-de-chou-xiang-fang-fa/">
+                <a href="https://Wei715547.github.io/post/she-ji-mo-shi-1singleton/">
                   <h3 class="post-title">
-                    多态（2）抽象类（在子类中复写所继承的抽象类中的抽象方法）
+                    设计模式(1)Singleton
                   </h3>
                 </a>
               </div>

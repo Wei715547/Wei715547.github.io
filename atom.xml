@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-12T15:30:48.135Z</updated>
+    <updated>2020-08-13T15:43:31.364Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,114 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[设计模式(2)-Absstract Factory]]></title>
+        <id>https://Wei715547.github.io/post/she-ji-mo-shi-2-absstract-factory/</id>
+        <link href="https://Wei715547.github.io/post/she-ji-mo-shi-2-absstract-factory/">
+        </link>
+        <updated>2020-08-13T15:38:52.000Z</updated>
+        <content type="html"><![CDATA[<p>using System;</p>
+<p>namespace 设计模式_抽象工厂<br>
+{<br>
+class Program<br>
+{<br>
+public abstract class Road<br>
+{</p>
+<pre><code>    }
+    public abstract class Building
+    {
+
+    }
+    public abstract class Tunnel
+    {
+
+    }
+    public abstract class Jungle
+    {
+
+    }
+
+    public abstract class FacilitiesFactory
+    {
+        public abstract Road CreateRoad();
+        public abstract Building CreateBuilding();
+        public abstract Tunnel CreateTunnel();
+        public abstract Jungle CreateJungle();
+
+    }
+
+    //客户程序-GameManager
+    class GameManager
+    {
+        FacilitiesFactory facilitiesFactory;
+
+        public GameManager(FacilitiesFactory facilitiesFactory)
+        {
+            this.facilitiesFactory = facilitiesFactory;
+        }
+
+        public void BuildGameFacilities()
+        {
+            Road road = facilitiesFactory.CreateRoad();
+            Building building = facilitiesFactory.CreateBuilding();
+            Tunnel tunnel = facilitiesFactory.CreateTunnel();
+            Jungle jungle = facilitiesFactory.CreateJungle();
+        }
+
+
+    }
+
+    static void Main(string[] args)
+    {
+        GameManager gameManager = new GameManager(new MDFacilitiesFactory ());
+
+        gameManager.BuildGameFacilities();
+        
+    }
+    #region 一种工厂和抽象子类
+    public class MDFacilitiesFactory:FacilitiesFactory
+    {
+        public override Road CreateRoad()
+        {
+            return new MDRoad();
+        }
+        public override Building CreateBuilding()
+        {
+            return new MDBuilding();
+        }
+        public override Tunnel CreateTunnel()
+        {
+            return new MDTunnel();
+        }
+        public override Jungle CreateJungle()
+        {
+            return new MDJungle();
+        }
+
+    }
+
+    public  class MDRoad:Road
+    {
+
+    }
+    public  class MDBuilding:Building
+    {
+
+    }
+    public  class MDTunnel:Tunnel
+    {
+
+    }
+    public  class MDJungle:Jungle
+    {
+
+    }
+</code></pre>
+<p>#endregion<br>
+}<br>
+}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[设计模式(1)Singleton]]></title>
         <id>https://Wei715547.github.io/post/she-ji-mo-shi-1singleton/</id>
@@ -859,43 +967,6 @@ qs q
         <updated>2020-08-01T05:58:14.000Z</updated>
         <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1596261613930.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1596261986768.PNG" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[OSI参考模型]]></title>
-        <id>https://Wei715547.github.io/post/osi-can-kao-mo-xing/</id>
-        <link href="https://Wei715547.github.io/post/osi-can-kao-mo-xing/">
-        </link>
-        <updated>2020-08-01T05:24:30.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1596259676351.jpg" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1596259685462.PNG" alt="" loading="lazy"><br>
-下层为上层服务<br>
-7：应用层：<br>
-6：表示层：1.数据格式变换。2.数据加密解密。3.数据压缩与恢复<br>
-5：会话层：ASP,ADSP<br>
-进程下建立连接，管理，终止会话。<br>
-大文件传输使用校验点可使会话在通信失效时从校验点/同步点继续恢复通信，实现数据同步<br>
-4：传输层：进程间的通信，端到端，以报文/数据报形式传输 TCP,UDP协议<br>
-1.可靠传输（分段发送），不可靠传输<br>
-2.差错控制<br>
-3.流量控制 依据接收速度控制发射速度<br>
-4.复用分用<br>
-3：网络层：把分组从源端传输到目的端，为分组交换网上的不同主机提供通信服务，以数据包传输<br>
-IP协议         1.路由选择<br>
-2.流量控制<br>
-3.差错控制.<br>
-4.拥塞控制<br>
-2.数据链路层：将网络层传下来的数据包组装呈帧（字节流）<br>
-1.成帧（定义帧的开始及结束）<br>
-2.差错控制 帧错，位错<br>
-3.流量控制<br>
-4。访问接入控制，控制对信道的访问<br>
-1.物理层：传输比特流 透明传输 byte-电信号 --Rj45,802.3协议<br>
-1.定义接口特性<br>
-2.定义传输模式，单工，半双工，双工<br>
-3.定义传输速率<br>
-4.比特同步<br>
-5.比特编码</p>
 ]]></content>
     </entry>
 </feed>
