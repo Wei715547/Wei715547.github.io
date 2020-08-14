@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>最高分排序 | Wei: Development technology accumulation</title>
+<title>设计模式(3)-Builder | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,17 @@
 
 
 
-    <meta name="description" content="public  void SaveScore (int score)
+    <meta name="description" content="建造者模式
+using System;
+namespace 设计模式_建造者模式
 {
-List list = bestScoreArr.ToList();//先将数组转化为List
-//系统:Linq方法(using System.Linq;)
-lis..." />
+class Program
+{
+    public abstract class House
+    {
+
+    }
+    public abstr..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -107,121 +113,134 @@ lis..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">最高分排序</h2>
-            <div class="post-date">2020-05-10</div>
+            <h2 class="post-title">设计模式(3)-Builder</h2>
+            <div class="post-date">2020-08-14</div>
             
             <div class="post-content" v-pre>
-              <p>public  void SaveScore (int score)<br>
+              <p><a href = "https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/builder.html">建造者模式</a></p>
+<p>using System;</p>
+<p>namespace 设计模式_建造者模式<br>
 {<br>
-List<int> list = bestScoreArr.ToList();//先将数组转化为List<br>
-//系统:Linq方法(using System.Linq;)<br>
-list.Sort((x, y) =&gt; (-x.CompareTo(y)));//调用List的Sort方法，从大到小对list进行排序[（-x）(从小到大改为x<br>
-bestScoreArr = list.ToArray();//将排好序的list转给数组</p>
-<pre><code>    //50  20  10 加入传score为60，则将60排在低 bestScoreArr[0]
-
-    int index = -1;
-    for (int i = 0; i &lt; bestScoreArr .Count() ; i++)
+class Program<br>
+{</p>
+<pre><code>    public abstract class House
     {
-        if (score &gt;bestScoreArr [i])//score依次与数组中的数进行对比，当比一个数大时，记录这个数的索引将后面的数都向后移。
+
+    }
+    public abstract class Door
+    {
+
+    }
+    public abstract class Wall
+    {
+
+    }
+    public abstract class Windins
+    {
+
+    }
+    public abstract class Floor
+    {
+
+    }
+    public abstract class HouseCeiling
+    {
+
+    }
+
+    public abstract class Builder
+    {
+        public abstract void BuilderDoor();
+        public abstract void BuilderWall();
+        public abstract void BuilderWindows();
+        public abstract void BuilderFloor();
+        public abstract void BuilderHouseCeiling();
+
+        public abstract House GetHouse();
+    }
+
+    //客户程序
+    static void Main(string[] args)
+    {
+        House house = GameManager.CreateHouse(new RomaHouseBuilder());
+    }
+
+    public class RomanHouse:House
+    {
+
+    }
+
+    public class RomaHouseBuilder : Builder
+    {
+        public override void BuilderDoor()
         {
-            index = i;
+            throw new NotImplementedException();
+        }
+
+        public override void BuilderFloor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BuilderHouseCeiling()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BuilderWall()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BuilderWindows()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override House GetHouse()
+        {
+            throw new NotImplementedException();
         }
     }
-    if (index == -1) return;//score比数组中的值都小，不需保存，退出方法。
 
-    for (int i = bestScoreArr .Length -1; i &gt;index ; i--)//从后向前将index之后的数据依次向后移
-    {
-        bestScoreArr[i] = bestScoreArr[i - 1];
-
-    }
-    bestScoreArr[index] = score;//将score填入空出位。
-    Save();//保存。
 }
-//获取最大值方法(Linq)
-public int GetBestScore()
-{
-    return bestScoreArr.Max();
-}
-</code></pre>
-<p>//要存储的游戏数据类<br>
-public class GameDate<br>
-{<br>
-public  static bool IsAgainGame =false ;</p>
-<pre><code>private bool isFirstGame;
-private bool isMusicOn;
-
-private int[] bestScoreArr;
-public void SetBestScoreArr(int[] bestScoreArr)
-{
-    this.bestScoreArr = bestScoreArr;
-}
- public int [] GetBestScoreArr()
-{
-    return bestScoreArr;
-}
-//（其他......get;set方法省略）
-
-private int selectSkin;
-private bool[] skinUnlocked;
-private int diamondCount;
 </code></pre>
 <p>}</p>
-<pre><code>/// &lt;summary&gt;
-/// 储存数据
-/// &lt;/summary&gt;
-private void Save()
-{
-    try
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File.Create(Application.persistentDataPath + &quot;/DameData.data&quot;))
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;<br>
+using static 设计模式_建造者模式.Program;</p>
+<p>namespace 设计模式_建造者模式<br>
+{<br>
+class GameManager<br>
+{<br>
+public static House CreateHouse(Builder builder)<br>
+{<br>
+builder.BuilderDoor();<br>
+builder.BuilderDoor();</p>
+<pre><code>        builder.BuilderWall();
+        builder.BuilderWall();
 
-        {
-            data.SetBestScoreArr(bestScoreArr);
-            data.SetDiamondCount(diamondCount);
-            data.SetIsFirstGame(isFirstGame);
-            data.SetMusicOn(isMusicOn);
-            data.SetSelectSkin(selectSkin);
-            data.SetSkinUnlocked(skinUnlocked);
-            bf.Serialize(fs, data);
+        builder.BuilderWindows();
+        builder.BuilderWindows();
 
-        }
-    }
-    catch (System.Exception e)
-    {
-        Debug.Log(e.Message);
+        builder.BuilderFloor();
+        builder.BuilderHouseCeiling();
 
+        return builder.GetHouse();
     }
 }
-/// &lt;summary&gt;
-/// 读取数据
-///using System.Runtime.Serialization.Formatters.Binary;
-///using System.IO;
-/// &lt;/summary&gt;
-private void Read()
-{
-    try
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File .Open (Application.persistentDataPath + &quot;/DameData.data&quot;,FileMode.Open ))
-        {
-            data = (GameDate )bf.Deserialize(fs);
-        }
-    }
-    catch (System.Exception e)
-    {
-        Debug.Log(e.Message);
-    }
-}</code></pre>
+</code></pre>
+<p>}</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/ray/">
+                <a href="https://Wei715547.github.io/post/she-ji-mo-shi-2-absstract-factory/">
                   <h3 class="post-title">
-                    Ray
+                    设计模式(2)-Absstract Factory
                   </h3>
                 </a>
               </div>

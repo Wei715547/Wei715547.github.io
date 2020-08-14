@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-13T15:43:31.364Z</updated>
+    <updated>2020-08-14T07:12:10.368Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -12,12 +12,136 @@
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
     <entry>
+        <title type="html"><![CDATA[设计模式(3)-Builder]]></title>
+        <id>https://Wei715547.github.io/post/she-ji-mo-shi-3-builder/</id>
+        <link href="https://Wei715547.github.io/post/she-ji-mo-shi-3-builder/">
+        </link>
+        <updated>2020-08-14T06:18:04.000Z</updated>
+        <content type="html"><![CDATA[<p><a href = "https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/builder.html">建造者模式</a></p>
+<p>using System;</p>
+<p>namespace 设计模式_建造者模式<br>
+{<br>
+class Program<br>
+{</p>
+<pre><code>    public abstract class House
+    {
+
+    }
+    public abstract class Door
+    {
+
+    }
+    public abstract class Wall
+    {
+
+    }
+    public abstract class Windins
+    {
+
+    }
+    public abstract class Floor
+    {
+
+    }
+    public abstract class HouseCeiling
+    {
+
+    }
+
+    public abstract class Builder
+    {
+        public abstract void BuilderDoor();
+        public abstract void BuilderWall();
+        public abstract void BuilderWindows();
+        public abstract void BuilderFloor();
+        public abstract void BuilderHouseCeiling();
+
+        public abstract House GetHouse();
+    }
+
+    //客户程序
+    static void Main(string[] args)
+    {
+        House house = GameManager.CreateHouse(new RomaHouseBuilder());
+    }
+
+    public class RomanHouse:House
+    {
+
+    }
+
+    public class RomaHouseBuilder : Builder
+    {
+        public override void BuilderDoor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BuilderFloor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BuilderHouseCeiling()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BuilderWall()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void BuilderWindows()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override House GetHouse()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+}
+</code></pre>
+<p>}</p>
+<p>using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;<br>
+using static 设计模式_建造者模式.Program;</p>
+<p>namespace 设计模式_建造者模式<br>
+{<br>
+class GameManager<br>
+{<br>
+public static House CreateHouse(Builder builder)<br>
+{<br>
+builder.BuilderDoor();<br>
+builder.BuilderDoor();</p>
+<pre><code>        builder.BuilderWall();
+        builder.BuilderWall();
+
+        builder.BuilderWindows();
+        builder.BuilderWindows();
+
+        builder.BuilderFloor();
+        builder.BuilderHouseCeiling();
+
+        return builder.GetHouse();
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[设计模式(2)-Absstract Factory]]></title>
         <id>https://Wei715547.github.io/post/she-ji-mo-shi-2-absstract-factory/</id>
         <link href="https://Wei715547.github.io/post/she-ji-mo-shi-2-absstract-factory/">
         </link>
         <updated>2020-08-13T15:38:52.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;</p>
+        <content type="html"><![CDATA[<p><a href= "https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/abstract_factory.html">抽象工厂</a></p>
+<p>using System;</p>
 <p>namespace 设计模式_抽象工厂<br>
 {<br>
 class Program<br>
@@ -125,7 +249,8 @@ public abstract class Road<br>
         <link href="https://Wei715547.github.io/post/she-ji-mo-shi-1singleton/">
         </link>
         <updated>2020-08-12T15:29:22.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;</p>
+        <content type="html"><![CDATA[<p><a href= "https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/singleton.html">单例模式</a></p>
+<p>using System;</p>
 <p>namespace 设计模式_单例模式<br>
 {<br>
 class Program<br>
@@ -957,16 +1082,6 @@ qs q
 <span>Span标签修饰字体</span>
 </body>
 </html>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[TCP/IP模型]]></title>
-        <id>https://Wei715547.github.io/post/tcpip-mo-xing/</id>
-        <link href="https://Wei715547.github.io/post/tcpip-mo-xing/">
-        </link>
-        <updated>2020-08-01T05:58:14.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1596261613930.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1596261986768.PNG" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
