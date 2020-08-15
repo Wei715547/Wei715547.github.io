@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>字符、可变字符串，方法 | Wei: Development technology accumulation</title>
+<title>Shader框架 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,16 +18,13 @@
 
 
 
-    <meta name="description" content="using System;
-using System.Text;
-namespace 字符串方法
+    <meta name="description" content="
+Shader "Unlit/FarmWork"
 {
-class Program
-{
-static void Main(string[] args)
-{
-//1.
-string s = &qu..." />
+    Properties//公开属性
+    {
+        //_MainTex ("Texture", 2D) = "white" {}
+		_Color("_Color",..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -112,98 +109,56 @@ string s = &qu..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">字符、可变字符串，方法</h2>
-            <div class="post-date">2020-05-24</div>
+            <h2 class="post-title">Shader框架</h2>
+            <div class="post-date">2020-08-15</div>
             
             <div class="post-content" v-pre>
-              <p>using System;<br>
-using System.Text;</p>
-<p>namespace 字符串方法<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-//1.<br>
-string s = &quot; wei715547&quot;;<br>
-int res = s.CompareTo(&quot;wei715547&quot;);//元素相等时，返回值为0，<br>
-//调用者字母排序靠后时返回值为1，靠前是返回值为-1<br>
-Console.WriteLine(res);</p>
-<pre><code>        //2
-        string newstring = s.Replace('w', 'z');//替换字符
-        Console.WriteLine(newstring );
-        //string newstring2 = s.Replace('1', '2');
+              <code>
+Shader "Unlit/FarmWork"
+{
+    Properties//公开属性
+    {
+        //_MainTex ("Texture", 2D) = "white" {}
+		_Color("_Color",Color) = (1,1,1,1)//属性类型（“属性名字”，属性类型）= 属性值
+	}
+		SubShader//子着色器可以写多个
+	{
+<pre><code>	Pass//着色器具体绘制方式，同样可以有多个，（尽量写在一个中只提交一次）
+	{
+		CGPROGRAM//CG语言代码
+		#pragma vertex vert//声明顶点着色器
+		#pragme fragment frag//声明片段着色器
+		//数据类型：float/half/fixed-不同精度的浮点
+		//Integer-整型，sample-2D贴图，sampleCUBE-六面3D贴图
 
-        //3.字符串从指定字符位置拆分为数组
-        string[] stringArray = s.Split('1');
-        foreach (var item in stringArray )
-        {
-            Console.WriteLine(item );
-        }
-        string s = &quot;abc-----[[[[####wei&quot;
-        string sArray = str.Split(new char[]{'-','[','#'},StringSplitOption.RemoveEmptyEntries)//将字符数组中的元素置换为空，字符截取选项移除空项-返回字符串数组
+		float4 vert(float4 pso:POSITION) :SV_POSITION//float4:四个float值
+		{
+			float2 point = float2(10,3.8);//定义一个二维向量
+			float3 pos = float3(1,2,3);//定义一个三维向量
+			float4 pt = 1;//flota4 p = float4(1,1,1,1);//flota4 p = float4(pos,1);
+		}
 
-        //4.Substring.截取字符串
-        string newcut = s.Substring(2,5);
-        Console.WriteLine(newcut);
-
-        //5.清除字符串首尾空白
-        string clearspace = s.Trim();
-        Console.WriteLine(clearspace );
-
-        //6.返回指定字符的索引
-        int newindex = s.IndexOf('1');
-        Console.WriteLine(newindex );
-
-        //7.
-
-        //-------------------------------------------------------------
-        //可变字符串StringBuilder 
-        //create1.通过构造函数进行构建
-        StringBuilder sb = new StringBuilder(&quot;www.wei7157.github.co&quot;);
-        Console.WriteLine(sb);
-        //create2.声明空间大小
-        StringBuilder sb2 = new StringBuilder(20);
-        sb2.Append(&quot;www.wei7157.github.co&quot;);
-        Console.WriteLine(sb2);
-        //creat3.赋值同时声明空间大小
-        StringBuilder sb3 = new StringBuilder(&quot;www.wei7157.github.co&quot;, 100);
-        Console.WriteLine(sb3);
-
-
-        //字符串修改与标准字符串对比
-        sb.Append(&quot;000000&quot;);//在空余空间链接字符
-        Console.WriteLine(sb);
-        （可用于追加Html代码实现网页内容）
-
-        //对比常规字符串操作，运行效率更高
-        string str = &quot;www.wei7157.github.co&quot;;
-        str += &quot;000000&quot;;//在堆中创建新的字符，str索引指向新的字符，原来的字符被CLR回收（效率低）
-        Console.WriteLine(str);
-
-        //可变字符串Insert()方法
-        sb.Insert(0, &quot;http//&quot;);
-        Console.WriteLine(sb);
-        sb.Remove(0, 6);//根据索引范围移除字符
-        Console.WriteLine(sb);
-        sb.Replace('w', 'z');//字符替换
-        Console.WriteLine(sb);
-        Console.WriteLine(sb.ToString());//ToString()转变为不可变字符
-
+		float4 frag():SV_POSITION
+		{
+			
+		}
+        ENDCG
     }
 }
-</code></pre>
-<p>}<br>
-<img src="https://Wei715547.github.io/post-images/1595308895503.PNG" alt="" loading="lazy"></p>
+	//CostomEditer &quot;&quot;//材质面板自定义样式的脚本路径
 
+	FallBack &quot;vertexLit&quot;//以上SubShader都不支持时执行此路径的Shader，还是不支持时继续找此路径Shader里边的FallBack(都不支持变为粉色)
+</code></pre>
+<p>}</p>
+</code>
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/zi-ding-yi-list-ji-he/">
+                <a href="https://Wei715547.github.io/post/she-ji-mo-shi-3-builder/">
                   <h3 class="post-title">
-                    自定义List集合
+                    设计模式(3)-Builder
                   </h3>
                 </a>
               </div>
