@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1597555553533">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1597561274057">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@ Shader "Custom/FW"
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1597555553533" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1597561274057" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -147,17 +147,19 @@ Shader "Custom/FW"
 		//数据类型：float(32位)/half(16万 -60000~+60000)/fixed(11 -2~+2)-不同精度的浮点
 		//Integer-整型，sampler-2D贴图，sampleCUBE-六面3D贴图
 
-		float4 vert(float4 pso:POSITION) :SV_POSITION//float4:四个float值
-		{
-			float2 point = float2(10,3.8);//定义一个二维向量
-			float3 pos = float3(1,2,3);//定义一个三维向量
-			float4 pt = 1;//flota4 p = float4(1,1,1,1);//flota4 p = float4(pos,1);
-		}
+		 //返回值(坐标) 方法名（参数（坐标）:POSITON(语义)）:SV_POSOTION(返回值语义)
+	 //顶点函数：将模型坐标从模型空间(建模时原点坐标)转化到剪裁空间(栅格化)
+	  float4 vert(float4 pos:POSITION) :SV_POSITION
+	  {
+	//通过矩阵将模型空间坐标转化为屏幕剪裁空间下的坐标
+	//float4 pos = mul(UNITY_MATRIX_MVP,/*UNITY宏*/pos);//4*4矩阵相乘返回转化后的坐标
+	return UnityObjectToClipPos(pos);
+	 }
 
-		float4 frag() :SV_POSITION
-		{
-
-		}
+	float4 frag() :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
+	{
+	return float4 (0.5,1,1,1);//返回白色
+	}
 		ENDCG
 	}
 }
