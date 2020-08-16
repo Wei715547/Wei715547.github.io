@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-15T15:29:24.884Z</updated>
+    <updated>2020-08-16T05:26:00.264Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -18,22 +18,38 @@
         </link>
         <updated>2020-08-15T15:28:26.000Z</updated>
         <content type="html"><![CDATA[<code>
-Shader "Unlit/FarmWork"
+Shader "Custom/FW"
 {
-    Properties//公开属性
-    {
-        //_MainTex ("Texture", 2D) = "white" {}
-		_Color("_Color",Color) = (1,1,1,1)//属性类型（“属性名字”，属性类型）= 属性值
+	Properties//公开属性
+	{
+		//_MainTex ("Texture", 2D) = "white" {}
+		_Colorcosm("_Colorc",Color) = (1,1,1,1)//属性类型（“属性名字”，属性类型）= 属性值
+		_Vector("_Vectorc",Vector) = (1,2,3,4)//float4
+		_Int("_Intc",Int) = 2333 //float
+		_Float("_Floatc",Float) = 7.5//float
+		_Range("_Range",Range(1,11)) = 7//范围值
+		_2D("Texture",2D) = "white"{}//sampler2D
+		_Cube("Cube",Cube) = "red"{}//samplerCube
+		_3D("Texture",3D) = "black"{}//sampler3D
 	}
 		SubShader//子着色器可以写多个
 	{
 <pre><code>	Pass//着色器具体绘制方式，同样可以有多个，（尽量写在一个中只提交一次）
 	{
 		CGPROGRAM//CG语言代码
+		//在CG语言中国对公开的属性进行声明
+		fixed4 _Color//颜色0~1可用fixed存储
+		float4 _Vector
+		float _Int
+		float _Float
+		float _Range
+		sampler2D _2D
+		samplerCube _Cube
+		sampler3D _3D
 		#pragma vertex vert//声明顶点着色器
 		#pragme fragment frag//声明片段着色器
-		//数据类型：float/half/fixed-不同精度的浮点
-		//Integer-整型，sample-2D贴图，sampleCUBE-六面3D贴图
+		//数据类型：float(32位)/half(16万 -60000~+60000)/fixed(11 -2~+2)-不同精度的浮点
+		//Integer-整型，sampler-2D贴图，sampleCUBE-六面3D贴图
 
 		float4 vert(float4 pso:POSITION) :SV_POSITION//float4:四个float值
 		{
@@ -42,16 +58,16 @@ Shader "Unlit/FarmWork"
 			float4 pt = 1;//flota4 p = float4(1,1,1,1);//flota4 p = float4(pos,1);
 		}
 
-		float4 frag():SV_POSITION
+		float4 frag() :SV_POSITION
 		{
-			
+
 		}
-        ENDCG
-    }
+		ENDCG
+	}
 }
 	//CostomEditer &quot;&quot;//材质面板自定义样式的脚本路径
 
-	FallBack &quot;vertexLit&quot;//以上SubShader都不支持时执行此路径的Shader，还是不支持时继续找此路径Shader里边的FallBack(都不支持变为粉色)
+	FallBack &quot;Diffuse&quot;//以上SubShader都不支持时执行此路径的Shader，还是不支持时继续找此路径Shader里边的FallBack(都不支持变为粉色)
 </code></pre>
 <p>}</p>
 </code>]]></content>
