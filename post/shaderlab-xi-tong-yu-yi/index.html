@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Boom向量/三角函数应用 | Wei: Development technology accumulation</title>
+<title>ShaderLab-系统语义 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,15 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class Boom : MonoBehaviour
+    <meta name="description" content="
+Shader "Custom/FW03exeable"
 {
-publi..." />
+	SubShader
+	{
+		Pass
+	{
+		 CGPROGRAM
+// Upgrade NOTE: excluded shader from DX11; has stru..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -108,76 +111,70 @@ publi..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Boom向量/三角函数应用</h2>
-            <div class="post-date">2020-04-04</div>
+            <h2 class="post-title">ShaderLab-系统语义</h2>
+            <div class="post-date">2020-08-16</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class Boom : MonoBehaviour<br>
-{<br>
-public GameObject player;<br>
-private Vector3 dp;<br>
-//private Vector3 ldp;<br>
-private Vector3 liftdp;<br>
-private Vector3 rightdp;<br>
-private float dt;<br>
-private float sin;<br>
-private float rd;<br>
-// Start is called before the first frame update<br>
-void Start()<br>
-{<br>
-rd = player.GetComponent<CapsuleCollider>().radius ;<br>
-}</p>
-<pre><code>// Update is called once per frame
-void Update()
+              <code>
+Shader "Custom/FW03exeable"
 {
-    Draw();
-}
+	SubShader
+	{
+		Pass
+	{
+		 CGPROGRAM
+// Upgrade NOTE: excluded shader from DX11; has structs without semantics (struct v2f members temp)
+#pragma exclude_renderers d3d11
+		 #pragma vertex vert//声明顶点着色器
+		 #pragma fragment frag//声明片段着色器
+<pre><code>	 //定义结构体-方便传值
+	 struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
+			float4 vertex:POSITION;//获取顶点坐标
+			float3 nol:NORMAL;//获取法线方向
+			//float4 textcoord:TEXTCOORD0;//获取纹理坐标
+		};
+	struct v2f {//从顶点函数传递到片原函数的语义SV_POSITION:(剪裁空间中的顶点坐标-系统直接使用)，COLOR0/COLOR1:可以传递一组值(4个)，TEXCOORD0~7:传递纹理坐标
+				//f2s片原函数传递给系统：SV_Target:颜色值-输出到屏幕上的颜色(缓存颜色)
+			float4 position:SV_POSITION;
+			fixed3 temp:COLOR0;	//可用于传递值
+		};
 
-private void VectorCt()
-{
-    
-    dp = player.transform.position - this.transform.position;
-    dt = dp.magnitude;
-    sin = Mathf.Rad2Deg * Mathf.Asin(rd / dt);
-    //ldp = Quaternion.Euler(0, sin, 0) *dp.normalized * dt * Mathf.Cos(sin);
-    liftdp = this.transform.position + Quaternion.Euler(0, sin, 0) * dp;
-   
-    rightdp = this.transform.position + Quaternion.Euler(0, -sin, 0) * dp;
-    
-}
+	  v2f vert(a2v v)
+	  {
+		  v2f f;
+		  f.position = UnityObjectToClipPos(v.vertex);
+		  f.temp = v.nol;
+		  return f;
+	  }
+	 
 
-private void CalculateTangent()
-{
-    Vector3 playerToBoom = this.transform.position - player.transform.position;
-    Vector3 playerToExplpsionDirection = playerToBoom.normalized * rd;
-    float angle = Mathf.Acos(rd / playerToBoom.magnitude) * Mathf.Rad2Deg;
-    liftdp = player.transform.position + Quaternion.Euler(0, -angle , 0) * playerToExplpsionDirection;
-    rightdp = player.transform.position + Quaternion.Euler(0, angle, 0) * playerToExplpsionDirection;
+	fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
+	{
+	return fixed4(f.temp,1);//返回法线
+	}
+   ENDCG
+		}
 
 }
-
-private void Draw()
-{
-    //VectorCt();
-    CalculateTangent();
-    Debug.DrawLine(this.transform.position, player.transform.position);
-    Debug.DrawLine(this.transform.position, liftdp,Color .blue );
-    Debug.DrawLine(this.transform.position, rightdp,Color .red );
-}
+	FallBack &quot;Diffuse&quot;
 </code></pre>
-<p>}</p>
+<p>}<br>
+</code><br>
+光照模型公式：计算某个点的光照效果<br>
+标准光照模型：<br>
+1.自发光<br>
+2.高光反射 Specular<br>
+3.漫反射 Diffuse = 直射光颜色 * cos夹角(光与法线)<br>
+4.环境光</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/si-yuan-shu-api/">
+                <a href="https://Wei715547.github.io/post/shader-kuang-jia/">
                   <h3 class="post-title">
-                    四元数API
+                    Shader框架
                   </h3>
                 </a>
               </div>

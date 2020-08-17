@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-16T08:04:39.979Z</updated>
+    <updated>2020-08-17T08:33:06.731Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,65 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[ShaderLab-系统语义]]></title>
+        <id>https://Wei715547.github.io/post/shaderlab-xi-tong-yu-yi/</id>
+        <link href="https://Wei715547.github.io/post/shaderlab-xi-tong-yu-yi/">
+        </link>
+        <updated>2020-08-16T08:03:03.000Z</updated>
+        <content type="html"><![CDATA[<code>
+Shader "Custom/FW03exeable"
+{
+	SubShader
+	{
+		Pass
+	{
+		 CGPROGRAM
+// Upgrade NOTE: excluded shader from DX11; has structs without semantics (struct v2f members temp)
+#pragma exclude_renderers d3d11
+		 #pragma vertex vert//声明顶点着色器
+		 #pragma fragment frag//声明片段着色器
+<pre><code>	 //定义结构体-方便传值
+	 struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
+			float4 vertex:POSITION;//获取顶点坐标
+			float3 nol:NORMAL;//获取法线方向
+			//float4 textcoord:TEXTCOORD0;//获取纹理坐标
+		};
+	struct v2f {//从顶点函数传递到片原函数的语义SV_POSITION:(剪裁空间中的顶点坐标-系统直接使用)，COLOR0/COLOR1:可以传递一组值(4个)，TEXCOORD0~7:传递纹理坐标
+				//f2s片原函数传递给系统：SV_Target:颜色值-输出到屏幕上的颜色(缓存颜色)
+			float4 position:SV_POSITION;
+			fixed3 temp:COLOR0;	//可用于传递值
+		};
+
+	  v2f vert(a2v v)
+	  {
+		  v2f f;
+		  f.position = UnityObjectToClipPos(v.vertex);
+		  f.temp = v.nol;
+		  return f;
+	  }
+	 
+
+	fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
+	{
+	return fixed4(f.temp,1);//返回法线
+	}
+   ENDCG
+		}
+
+}
+	FallBack &quot;Diffuse&quot;
+</code></pre>
+<p>}<br>
+</code><br>
+光照模型公式：计算某个点的光照效果<br>
+标准光照模型：<br>
+1.自发光<br>
+2.高光反射 Specular<br>
+3.漫反射 Diffuse = 直射光颜色 * cos夹角(光与法线)<br>
+4.环境光</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Shader框架]]></title>
         <id>https://Wei715547.github.io/post/shader-kuang-jia/</id>
@@ -885,49 +944,5 @@ background-color:#609<br>
 font:xx-large<br>
 }</p>
 ]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[框架标签]]></title>
-        <id>https://Wei715547.github.io/post/kuang-jia-biao-qian/</id>
-        <link href="https://Wei715547.github.io/post/kuang-jia-biao-qian/">
-        </link>
-        <updated>2020-08-07T15:44:36.000Z</updated>
-        <content type="html"><![CDATA[<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
-</head>
-<frameset rows="15%,*">
-<frame src="top.html" noresize="noresize" />
-<frameset cols="50%s,*">
-<frame src="left.html"  name="left"/> 
-<frame src="right.html"/>
-</frameset>
-</frameset><noframes></noframes>
-</html>
-————————————————————————————————————
-LEFT
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
-</head>
-<body bgcolor="#66FFFF">
-LEFT
-<a href="https://wei715547.github.io">WEI</a>
-</body>
-</html>
-_____________________________________________________________________________
-RIGHT
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
-</head>
-<body bgcolor="#FFCC00">
-RIGHT
-<a href="http://www.bilibili.com" target="left">哔哩哔哩</a>
-</body>
-</html>]]></content>
     </entry>
 </feed>
