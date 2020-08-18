@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-17T09:01:42.586Z</updated>
+    <updated>2020-08-18T02:38:23.400Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -12,13 +12,13 @@
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
     <entry>
-        <title type="html"><![CDATA[Shader-顶点漫反射(*自身)(+环境光)]]></title>
+        <title type="html"><![CDATA[Shader-顶点漫反射(*自身)(+环境光)-逐像素反射]]></title>
         <id>https://Wei715547.github.io/post/shader-ding-dian-man-fan-she-zi-shen-huan-jing-guang/</id>
         <link href="https://Wei715547.github.io/post/shader-ding-dian-man-fan-she-zi-shen-huan-jing-guang/">
         </link>
         <updated>2020-08-17T08:30:49.000Z</updated>
         <content type="html"><![CDATA[<code>
-// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
+逐顶点漫反射：顶点之间片段颜色采用插值计算填充
 <p>Shader &quot;Custom/Shader04&quot;<br>
 {<br>
 Properties<br>
@@ -51,7 +51,7 @@ struct v2f {//从顶点函数传递到片原函数的语义SV_POSITION:(剪裁�
 	fixed3 color : COLOR1;
 };
 
-v2f vert(a2v v)
+v2f vert(a2v v)//顶点之间片段颜色采用插值计算填充
 {
 	v2f f;
 	f.position = UnityObjectToClipPos(v.vertex);//将坐标从模型空间转换到剪裁空间
@@ -77,8 +77,65 @@ return fixed4(f.color,1);//返回法线
 	FallBack &quot;Diffuse&quot;
 </code></pre>
 <p>}<br>
-</code></p>
-]]></content>
+——————————————————————————————————<br>
+逐像素漫反射：逐个像素计算漫反射计算量大<br>
+Shader &quot;Custom/PixivsRander&quot;<br>
+{<br>
+Properties<br>
+{<br>
+_Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)</p>
+<pre><code>}
+	SubShader
+{
+   Pass
+{
+	Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量
+	CGPROGRAM
+	fixed4 _Diffuse;
+</code></pre>
+<p>#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0:第一个直射光的颜色，_WorldSpaceLightPos0.xyz<br>
+// Physically based Standard lighting model, and enable shadows on all light types<br>
+//#pragma surface surf Standard fullforwardshadows<br>
+#pragma vertex vert//声明顶点着色器<br>
+#pragma fragment frag//声明片段着色器<br>
+// Use shader model 3.0 target, to get nicer looking lighting<br>
+//#pragma target 3.0</p>
+<pre><code>struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
+	float4 vertex:POSITION;//获取顶点坐标
+	float3 normal:NORMAL;
+
+};
+struct v2f {//从顶点函数传递到片原函数的语义SV_POSITION:(剪裁空间中的顶点坐标-系统直接使用)，COLOR0/COLOR1:可以传递一组值(4个)，TEXCOORD0~7:传递纹理坐标
+			//f2s片原函数传递给系统：SV_Target:颜色值-输出到屏幕上的颜色(缓存颜色)
+	float4 position:SV_POSITION;
+	fixed3 wordNormalDir : COLOR1;//向片原函数传递法线
+};
+
+v2f vert(a2v v)
+{
+	v2f f;
+	f.position = UnityObjectToClipPos(v.vertex);//将坐标从模型空间转换到剪裁空间
+	f.wordNormalDir = UnityObjectToWorldNormal(v.normal);
+	return f;
+}
+
+
+fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
+{
+	fixed3 amblent = UNITY_LIGHTMODEL_AMBIENT.rgb;//获取系统环境光		
+	fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);//第一个直射光的位置，对于顶点来说光的位置即是光的方向
+	fixed3 diffuse = _LightColor0.rgb * max(dot(f.wordNormalDir,lightDir),0) * _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角
+	fixed3 tempColor = diffuse + amblent;//+:颜色得加(亮度增强),*:融合
+	return fixed4(tempColor,1);//返回法线
+}
+	ENDCG
+}
+
+}
+	FallBack &quot;Diffuse&quot;
+</code></pre>
+<p>}</p>
+</code>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[ShaderLab-系统语义]]></title>
