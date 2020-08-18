@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Shader-顶点漫反射(*自身)(+环境光)-逐像素反射 | Wei: Development technology accumulation</title>
+<title>Shader-高光反射(顶点/像素) | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -19,12 +19,7 @@
 
 
     <meta name="description" content="
-逐顶点漫反射：顶点之间片段颜色采用插值计算填充
-Shader &quot;Custom/Shader04&quot;
-{
-Properties
-{
-_Diffuse(&quot;DiffuseColor&quot;, Color) = (..." />
+高光反射 Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：反射光与视野方向夹角。(夹角越小高光越强,大于90度时即没有高光)；pox(a,b):a的b次方，高光参数取值（1~10）高光参数越大可以看到高..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -109,17 +104,21 @@ _Diffuse(&quot;DiffuseColor&quot;, Color) = (..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Shader-顶点漫反射(*自身)(+环境光)-逐像素反射</h2>
-            <div class="post-date">2020-08-17</div>
+            <h2 class="post-title">Shader-高光反射(顶点/像素)</h2>
+            <div class="post-date">2020-08-18</div>
             
             <div class="post-content" v-pre>
               <code>
-逐顶点漫反射：顶点之间片段颜色采用插值计算填充
-<p>Shader &quot;Custom/Shader04&quot;<br>
+高光反射 Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：反射光与视野方向夹角。(夹角越小高光越强,大于90度时即没有高光)；pox(a,b):a的b次方，高光参数取值（1~10）高光参数越大可以看到高光的夹角范围越小
+<p>在顶点函数中计算<br>
+Shader &quot;Custom/HightLightRefalxRander_Vertex&quot;<br>
 {<br>
 Properties<br>
 {<br>
-_Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)</p>
+_Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)<br>
+//外部可调节高光属性<br>
+_Specular(&quot;_SpecularColor&quot;,Color) = (1,1,1,1)//高光颜色<br>
+_Gloss(&quot;Gloss&quot;,Range(8,100)) = 10//高光参数</p>
 <pre><code>}
 	SubShader
 {
@@ -128,14 +127,12 @@ _Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)</p>
 	Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量
 	CGPROGRAM
 	fixed4 _Diffuse;
+    int _Gloss;
+    fixed4 _Specular;
 </code></pre>
-<p>#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0:第一个直射光的颜色，_WorldSpaceLightPos0.xyz<br>
-// Physically based Standard lighting model, and enable shadows on all light types<br>
-//#pragma surface surf Standard fullforwardshadows<br>
+<p>#include &quot;Lighting.cginc&quot;<br>
 #pragma vertex vert//声明顶点着色器<br>
-#pragma fragment frag//声明片段着色器<br>
-// Use shader model 3.0 target, to get nicer looking lighting<br>
-//#pragma target 3.0</p>
+#pragma fragment frag//声明片段着色器</p>
 <pre><code>struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
 	float4 vertex:POSITION;//获取顶点坐标
 	float3 normal:NORMAL;
@@ -151,13 +148,17 @@ v2f vert(a2v v)//顶点之间片段颜色采用插值计算填充
 {
 	v2f f;
 	f.position = UnityObjectToClipPos(v.vertex);//将坐标从模型空间转换到剪裁空间
-	//f.temp = v.normal;
 	fixed3 amblent = UNITY_LIGHTMODEL_AMBIENT.rgb;//获取系统环境光
 	//fixed3 norDir = normalize(unity_WorldToObject(v.normal));//法线方向从世界空间转到模型空间(弃用的方法) 
 	fixed3 N = UnityObjectToWorldNormal(v.normal);//法线方向从世界空间转到模型空间 
 	fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);//第一个直射光的位置，对于顶点来说光的位置即是光的方向
-	fixed3 diffuse = _LightColor0.rgb*max(dot(N,lightDir),0)* _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角
-	f.color = diffuse+amblent;//+:颜色得加(亮度增强),*:融合
+	fixed3 diffuse = _LightColor0.rgb * max(dot(N,lightDir),0) * _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角
+
+	fixed3 reflectDir = normalize(reflect(-lightDir,N));//计算反射光方向
+	fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - UnityObjectToWorldNormal(v.vertex));//计算视点方向(世界坐标下相机位置-顶点位置)
+	fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(reflectDir, viewDir), 0), _Gloss);//夹角：反射光与视野方向夹角
+
+	f.color = diffuse + amblent + specular;//+:颜色得加(亮度增强),*:融合
 	return f;
 }
 
@@ -173,29 +174,28 @@ return fixed4(f.color,1);//返回法线
 	FallBack &quot;Diffuse&quot;
 </code></pre>
 <p>}<br>
-——————————————————————————————————<br>
-逐像素漫反射：逐个像素计算漫反射计算量大<br>
-Shader &quot;Custom/PixivsRander&quot;<br>
+—————————————————————————————————<br>
+在片原函数中计算<br>
+Shader &quot;Custom/HightLightRefalxRander_Fragment&quot;<br>
 {<br>
 Properties<br>
 {<br>
-_Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)</p>
-<pre><code>}
-	SubShader
-{
-   Pass
-{
-	Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量
-	CGPROGRAM
-	fixed4 _Diffuse;
-</code></pre>
-<p>#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0:第一个直射光的颜色，_WorldSpaceLightPos0.xyz<br>
-// Physically based Standard lighting model, and enable shadows on all light types<br>
-//#pragma surface surf Standard fullforwardshadows<br>
+_Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)<br>
+_Specular(&quot;_SpecularColor&quot;,Color) = (1,1,1,1)<br>
+_Gloss(&quot;Gloss&quot;,Range(8,100)) = 10//高光参数<br>
+}<br>
+SubShader<br>
+{<br>
+Pass<br>
+{<br>
+Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量<br>
+CGPROGRAM<br>
+fixed4 _Diffuse;<br>
+int _Gloss;<br>
+fixed4 _Specular;<br>
+#include &quot;Lighting.cginc&quot;<br>
 #pragma vertex vert//声明顶点着色器<br>
-#pragma fragment frag//声明片段着色器<br>
-// Use shader model 3.0 target, to get nicer looking lighting<br>
-//#pragma target 3.0</p>
+#pragma fragment frag//声明片段着色器</p>
 <pre><code>struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
 	float4 vertex:POSITION;//获取顶点坐标
 	float3 normal:NORMAL;
@@ -204,27 +204,37 @@ _Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)</p>
 struct v2f {//从顶点函数传递到片原函数的语义SV_POSITION:(剪裁空间中的顶点坐标-系统直接使用)，COLOR0/COLOR1:可以传递一组值(4个)，TEXCOORD0~7:传递纹理坐标
 			//f2s片原函数传递给系统：SV_Target:颜色值-输出到屏幕上的颜色(缓存颜色)
 	float4 position:SV_POSITION;
-	fixed3 wordNormalDir : COLOR1;//向片原函数传递法线
+	fixed3 worldNormal : TEXCOORD0;//传递法线方向
+	float3 worldView :TEXCOORD1;//传递顶点坐标
 };
 
-v2f vert(a2v v)
+v2f vert(a2v v)//顶点之间片段颜色采用插值计算填充
 {
 	v2f f;
 	f.position = UnityObjectToClipPos(v.vertex);//将坐标从模型空间转换到剪裁空间
-	f.wordNormalDir = UnityObjectToWorldNormal(v.normal);
+	f.worldNormal = UnityObjectToWorldNormal(v.normal);//向片原函数传递法线方向
+	f.worldView = UnityObjectToWorldNormal(v.vertex);//向片原函数传递顶点坐标
 	return f;
 }
 
 
 fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
 {
-	fixed3 amblent = UNITY_LIGHTMODEL_AMBIENT.rgb;//获取系统环境光		
+	fixed3 amblent = UNITY_LIGHTMODEL_AMBIENT.rgb;//获取系统环境光
+	//fixed3 norDir = normalize(unity_WorldToObject(v.normal));//法线方向从世界空间转到模型空间(弃用的方法) 
+	fixed3 N = f.worldNormal;//法线方向从世界空间转到模型空间 
 	fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);//第一个直射光的位置，对于顶点来说光的位置即是光的方向
-	//fixed3 diffuse = _LightColor0.rgb * max(dot(f.wordNormalDir,lightDir),0) * _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角
-    fixed3 harfLambert =dot(f.wordNormalDir, lightDir)*0.5+0.5;//半兰伯特光照模型:直射光颜色 * (cos夹角(光与法线)*0.5+0.5):使背光面不完全为黑色
-	fixed3 diffuse = _LightColor0.rgb * harfLambert * _Diffuse.rgb;
-	fixed3 tempColor = diffuse + amblent;//+:颜色得加(亮度增强),*:融合
-	return fixed4(tempColor,1);//返回法线
+	fixed3 diffuse = _LightColor0.rgb * max(dot(N,lightDir),0) * _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角
+
+	//fixed3 reflectDir = normalize(reflect(-lightDir,N));//计算反射光方向
+	fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - f.worldView);//计算视点方向(世界坐标下相机位置-顶点位置)
+	//fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(reflectDir, viewDir), 0), _Gloss);//夹角：反射光与视野方向夹角
+	fixed3 harfDir = normalize(viewDir + lightDir);//平行光与视野方向平分项
+	fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(N, harfDir), 0), _Gloss);//Blinn-Phong光照模型Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：法线与x方向夹角,x:平行光与视野方向的平分项。		
+    
+
+	fixed3 tempColor = diffuse + amblent + specular;//+:颜色得加(亮度增强),*:融合
+return fixed4(tempColor,1);//返回法线
 }
 	ENDCG
 }
@@ -233,15 +243,15 @@ fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，�
 	FallBack &quot;Diffuse&quot;
 </code></pre>
 <p>}</p>
-</code>
+<code/>
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/shaderlab-xi-tong-yu-yi/">
+                <a href="https://Wei715547.github.io/post/shader-ding-dian-man-fan-she-zi-shen-huan-jing-guang/">
                   <h3 class="post-title">
-                    ShaderLab-系统语义
+                    Shader-顶点漫反射(*自身)(+环境光)-逐像素反射
                   </h3>
                 </a>
               </div>

@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1597719304952">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1597728854367">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ Shader "Custom/FW03exeable"
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1597719304952" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1597728854367" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -163,7 +163,7 @@ Shader "Custom/FW03exeable"
 光照模型公式：计算某个点的光照效果<br>
 标准光照模型：<br>
 1.自发光<br>
-2.高光反射 Specular<br>
+2.高光反射 Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：反射光与视野方向夹角。(夹角越小高光越强,大于90度时即没有高光)；pox(a,b):a的b次方，高光参数取值（1~10）高光参数越大可以看到高光的夹角范围越小<br>
 3.漫反射 Diffuse = 直射光颜色 * cos夹角(光与法线)<br>
 4.环境光</p>
 

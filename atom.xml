@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-18T02:55:11.157Z</updated>
+    <updated>2020-08-18T05:34:26.311Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,149 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[Shader-高光反射(顶点/像素)]]></title>
+        <id>https://Wei715547.github.io/post/shader-gao-guang-fan-she-ding-dian-xiang-su/</id>
+        <link href="https://Wei715547.github.io/post/shader-gao-guang-fan-she-ding-dian-xiang-su/">
+        </link>
+        <updated>2020-08-18T03:51:59.000Z</updated>
+        <content type="html"><![CDATA[<code>
+高光反射 Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：反射光与视野方向夹角。(夹角越小高光越强,大于90度时即没有高光)；pox(a,b):a的b次方，高光参数取值（1~10）高光参数越大可以看到高光的夹角范围越小
+<p>在顶点函数中计算<br>
+Shader &quot;Custom/HightLightRefalxRander_Vertex&quot;<br>
+{<br>
+Properties<br>
+{<br>
+_Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)<br>
+//外部可调节高光属性<br>
+_Specular(&quot;_SpecularColor&quot;,Color) = (1,1,1,1)//高光颜色<br>
+_Gloss(&quot;Gloss&quot;,Range(8,100)) = 10//高光参数</p>
+<pre><code>}
+	SubShader
+{
+   Pass
+{
+	Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量
+	CGPROGRAM
+	fixed4 _Diffuse;
+    int _Gloss;
+    fixed4 _Specular;
+</code></pre>
+<p>#include &quot;Lighting.cginc&quot;<br>
+#pragma vertex vert//声明顶点着色器<br>
+#pragma fragment frag//声明片段着色器</p>
+<pre><code>struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
+	float4 vertex:POSITION;//获取顶点坐标
+	float3 normal:NORMAL;
+
+};
+struct v2f {//从顶点函数传递到片原函数的语义SV_POSITION:(剪裁空间中的顶点坐标-系统直接使用)，COLOR0/COLOR1:可以传递一组值(4个)，TEXCOORD0~7:传递纹理坐标
+			//f2s片原函数传递给系统：SV_Target:颜色值-输出到屏幕上的颜色(缓存颜色)
+	float4 position:SV_POSITION;
+	fixed3 color : COLOR1;
+};
+
+v2f vert(a2v v)//顶点之间片段颜色采用插值计算填充
+{
+	v2f f;
+	f.position = UnityObjectToClipPos(v.vertex);//将坐标从模型空间转换到剪裁空间
+	fixed3 amblent = UNITY_LIGHTMODEL_AMBIENT.rgb;//获取系统环境光
+	//fixed3 norDir = normalize(unity_WorldToObject(v.normal));//法线方向从世界空间转到模型空间(弃用的方法) 
+	fixed3 N = UnityObjectToWorldNormal(v.normal);//法线方向从世界空间转到模型空间 
+	fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);//第一个直射光的位置，对于顶点来说光的位置即是光的方向
+	fixed3 diffuse = _LightColor0.rgb * max(dot(N,lightDir),0) * _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角
+
+	fixed3 reflectDir = normalize(reflect(-lightDir,N));//计算反射光方向
+	fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - UnityObjectToWorldNormal(v.vertex));//计算视点方向(世界坐标下相机位置-顶点位置)
+	fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(reflectDir, viewDir), 0), _Gloss);//夹角：反射光与视野方向夹角
+
+	f.color = diffuse + amblent + specular;//+:颜色得加(亮度增强),*:融合
+	return f;
+}
+
+
+fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
+{
+return fixed4(f.color,1);//返回法线
+}
+	ENDCG
+}
+
+}
+	FallBack &quot;Diffuse&quot;
+</code></pre>
+<p>}<br>
+—————————————————————————————————<br>
+在片原函数中计算<br>
+Shader &quot;Custom/HightLightRefalxRander_Fragment&quot;<br>
+{<br>
+Properties<br>
+{<br>
+_Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)<br>
+_Specular(&quot;_SpecularColor&quot;,Color) = (1,1,1,1)<br>
+_Gloss(&quot;Gloss&quot;,Range(8,100)) = 10//高光参数<br>
+}<br>
+SubShader<br>
+{<br>
+Pass<br>
+{<br>
+Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量<br>
+CGPROGRAM<br>
+fixed4 _Diffuse;<br>
+int _Gloss;<br>
+fixed4 _Specular;<br>
+#include &quot;Lighting.cginc&quot;<br>
+#pragma vertex vert//声明顶点着色器<br>
+#pragma fragment frag//声明片段着色器</p>
+<pre><code>struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
+	float4 vertex:POSITION;//获取顶点坐标
+	float3 normal:NORMAL;
+
+};
+struct v2f {//从顶点函数传递到片原函数的语义SV_POSITION:(剪裁空间中的顶点坐标-系统直接使用)，COLOR0/COLOR1:可以传递一组值(4个)，TEXCOORD0~7:传递纹理坐标
+			//f2s片原函数传递给系统：SV_Target:颜色值-输出到屏幕上的颜色(缓存颜色)
+	float4 position:SV_POSITION;
+	fixed3 worldNormal : TEXCOORD0;//传递法线方向
+	float3 worldView :TEXCOORD1;//传递顶点坐标
+};
+
+v2f vert(a2v v)//顶点之间片段颜色采用插值计算填充
+{
+	v2f f;
+	f.position = UnityObjectToClipPos(v.vertex);//将坐标从模型空间转换到剪裁空间
+	f.worldNormal = UnityObjectToWorldNormal(v.normal);//向片原函数传递法线方向
+	f.worldView = UnityObjectToWorldNormal(v.vertex);//向片原函数传递顶点坐标
+	return f;
+}
+
+
+fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
+{
+	fixed3 amblent = UNITY_LIGHTMODEL_AMBIENT.rgb;//获取系统环境光
+	//fixed3 norDir = normalize(unity_WorldToObject(v.normal));//法线方向从世界空间转到模型空间(弃用的方法) 
+	fixed3 N = f.worldNormal;//法线方向从世界空间转到模型空间 
+	fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);//第一个直射光的位置，对于顶点来说光的位置即是光的方向
+	fixed3 diffuse = _LightColor0.rgb * max(dot(N,lightDir),0) * _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角
+
+	//fixed3 reflectDir = normalize(reflect(-lightDir,N));//计算反射光方向
+	fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - f.worldView);//计算视点方向(世界坐标下相机位置-顶点位置)
+	//fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(reflectDir, viewDir), 0), _Gloss);//夹角：反射光与视野方向夹角
+	fixed3 harfDir = normalize(viewDir + lightDir);//平行光与视野方向平分项
+	fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(N, harfDir), 0), _Gloss);//Blinn-Phong光照模型Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：法线与x方向夹角,x:平行光与视野方向的平分项。		
+    
+
+	fixed3 tempColor = diffuse + amblent + specular;//+:颜色得加(亮度增强),*:融合
+return fixed4(tempColor,1);//返回法线
+}
+	ENDCG
+}
+
+}
+	FallBack &quot;Diffuse&quot;
+</code></pre>
+<p>}</p>
+<code/>]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Shader-顶点漫反射(*自身)(+环境光)-逐像素反射]]></title>
         <id>https://Wei715547.github.io/post/shader-ding-dian-man-fan-she-zi-shen-huan-jing-guang/</id>
@@ -193,7 +336,7 @@ Shader "Custom/FW03exeable"
 光照模型公式：计算某个点的光照效果<br>
 标准光照模型：<br>
 1.自发光<br>
-2.高光反射 Specular<br>
+2.高光反射 Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：反射光与视野方向夹角。(夹角越小高光越强,大于90度时即没有高光)；pox(a,b):a的b次方，高光参数取值（1~10）高光参数越大可以看到高光的夹角范围越小<br>
 3.漫反射 Diffuse = 直射光颜色 * cos夹角(光与法线)<br>
 4.环境光</p>
 ]]></content>
@@ -933,99 +1076,6 @@ background-color: #FFC
             </tr>
         </table>
     </div>
-</body>
-</html>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[选择器]]></title>
-        <id>https://Wei715547.github.io/post/xuan-ze-qi/</id>
-        <link href="https://Wei715547.github.io/post/xuan-ze-qi/">
-        </link>
-        <updated>2020-08-08T14:50:00.000Z</updated>
-        <content type="html"><![CDATA[<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
-<style type="text/css">
-<!--1.HTML选择器-->
-	p{
-		background-color: #FC9;
-	}
-	tt{
-		background-color: #0FC
-	}
-	<!--2.类选择器-->
-	tt.tt1{
-		background-color: #F33
-	}
-	tt.tt2{
-		font: xx-large
-	}
-	<!--3.ID选择器-->
-<pre><code>#p1{
-	background-color: #CF6
-}
-p#p2{
-	background-color: #00F
-}
-&lt;!--4.关联选择器--&gt;
-p em{
-	font: xx-large
-}
-&lt;!--5.组合标签--&gt;
-h1,h2,h3,td{
-	background-color: #F9F
-}
-&lt;!--6.伪元素--&gt;
-A：active{
-	text-decortion:none
-}
-A:hover{
-	font-size: xx-large
-}
-p::first-letter{
-	font-size: xx-small
-}
-p::first-line{
-	font-size: xx-large
-}
-</code></pre>
-</style>
-</head>
-<body>
-	<p id="p1">www.bilibili.com</p>
-    <p id="p1">www.bilibili.com</p>
-    <p id="p2">www.bilibili.com</p>
-    <p>www.bilibili.com</p>
-    <p>www.bilibili.com</p>
-    <tt class="tt1">12345678901234567890</tt>
-    <tt class="tt2">12345678901234567890</tt>
-    <tt>12345678901234567890</tt>
-    <tt>12345678901234567890</tt>
-    <tt>12345678901234567890</tt>
-<pre><code>&lt;p&gt;&lt;em&gt;233333333333333333&lt;/em&gt;&lt;/p&gt;
-
-&lt;h1&gt;组合选择器&lt;/h1&gt;
-&lt;h2&gt;组合选择&lt;/h2&gt;
-&lt;h3&gt;组合选择&lt;/h3&gt;
-&lt;table&gt;
-&lt;tr&gt;
-&lt;td&gt;组合标签&lt;/td&gt;
-&lt;td&gt;组合标签&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;组合标签&lt;/td&gt;
-&lt;td&gt;组合标签&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;组合标签&lt;/td&gt;
-&lt;td&gt;组合标签&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;a href=&quot;http://www.bilibili.com&quot;&gt;哔哩哔哩&lt;/a&gt;
-</code></pre>
 </body>
 </html>
 ]]></content>
