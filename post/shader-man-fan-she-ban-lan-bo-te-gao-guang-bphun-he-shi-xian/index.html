@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Save Point | Wei: Development technology accumulation</title>
+<title>Shader-漫反射(半兰伯特),高光(BP)混合实现 | Wei: Development technology accumulation</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,13 @@
 
 
 
-    <meta name="description" content="//Prefab脚本
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public class SavePoint : MonoB..." />
+    <meta name="description" content="
+Shader "Custom/ShaderDiffues-Specular"
+{
+	Properties//属性
+	{
+		_Diffuse("_DiffuseColor",Color) = (1,1,1,1)//漫反射颜色
+		_Spe..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -107,105 +109,88 @@ public class SavePoint : MonoB..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Save Point</h2>
-            <div class="post-date">2020-06-13</div>
+            <h2 class="post-title">Shader-漫反射(半兰伯特),高光(BP)混合实现</h2>
+            <div class="post-date">2020-08-19</div>
             
             <div class="post-content" v-pre>
-              <p>//Prefab脚本<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class SavePoint : MonoBehaviour<br>
-{<br>
-private LayerMask player;<br>
-private Light signlLight;<br>
-// Start is called before the first frame update<br>
-void Start()<br>
-{<br>
-player = LayerMask.NameToLayer(&quot;Player&quot;);<br>
-signlLight = GetComponentInChildren<Light>();<br>
-}</p>
-<pre><code>//玩家触碰到Point时调用GM中的方法
-private void OnTriggerEnter2D(Collider2D collision)
+              <code>
+Shader "Custom/ShaderDiffues-Specular"
 {
-    if (collision.gameObject .layer ==player )
-    {
-        signlLight.color = Color.green;
-        this.gameObject.GetComponent&lt;SpriteRenderer&gt;().material.color = Color.green;
-        Debug.Log(&quot;Save&quot;);
-        
-        GameManager.instance.SavePoint();
-    }
+	Properties//属性
+	{
+		_Diffuse("_DiffuseColor",Color) = (1,1,1,1)//漫反射颜色
+		_Specular("_Specular", Color) = (1, 1, 1, 1)//高光颜色
+		_Gloss("_Gloss", Range(10, 200)) = 20//高光参数
+	}
+		SubShader
+	{
+		Pass
+		{
+			Tags {"Lighting" = "ForwardBase"} //定义LightMode,获取UNITY内部光照变量
+			CGPROGRAM
+			//在CG声明属性
+			fixed4 _Diffuse;
+			fixed4 _Specular;
+			int _Gloss;
+<pre><code>		#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0.rgb;光源颜色
+		#pragma vertex vert//声明顶点函数
+		#pragma fragment frag//声明片原函数
+		
+
+		struct a2v//应用向顶点函数传递参数
+		{
+			float4 vertex:POSITION;//模型空间顶点坐标
+			float3 normal:NORMAL;//模型空间法线方向
+		};
+		struct v2f//顶点函数向片原函数传递参数
+		{
+			float4 svPos:SV_POSITION;//顶点函数返回值：剪裁空间中的顶点坐标-系统直接使用
+			float3 worldNormal : TEXCOORD0;//顶点函数向片原函数传递世界坐标下的法线方向
+			float4 worldView:TEXCOORD1;//顶点函数向片原函数传递世界坐标下的顶点坐标
+		};
+
+		v2f vert(a2v v)//顶点函数将顶点从模型空间转到世界空间，返回值在世界坐标系下的顶点坐标
+		{
+			v2f f;//声明传参结构体,并对其中的值赋值
+			f.svPos = UnityObjectToClipPos(v.vertex);
+			f.worldNormal = UnityObjectToWorldNormal(v.normal);
+			f.worldView = (UnityObjectToWorldNormal(v.vertex), 0);
+			return f;//返回结构体
+		}
+
+		fixed4 frag(v2f f) :SV_Target//片原函数，返回值为输出到像素颜色值的缓存
+		{
+			//计算漫反射
+			fixed3 normalDir = normalize(f.worldNormal);//法线方向
+			fixed3 lightDir = normalize(UnityWorldSpaceLightDir(f.worldView));//光源方向
+			fixed3 diffuse = _LightColor0.rgb * _Diffuse * max((dot(normalDir,lightDir)*0.5+0.5), 0);//fixed3 harfLambert =dot(f.wordNormalDir, lightDir)*0.5+0.5;//半兰伯特光照模型:直射光颜色 * (cos夹角(光与法线)*0.5+0.5):使背光面不完全为黑色
+
+			//计算高光反射
+			//fixed3 reflectDir = normalize(reflect(-lightDir, normalDir));
+			fixed3 viewDir = normalize(WorldSpaceViewDir(f.worldView));//实视线方向
+			fixed3 harfDir = normalize(viewDir + lightDir);//视角与平行光的平分方向
+			fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(normalDir, harfDir),0), _Gloss);//BP模型://Blinn-Phong光照模型Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：法线与x方向夹角,x:平行光与视野方向的平分项。
+			
+			fixed3 tempColor = diffuse + specular + UNITY_LIGHTMODEL_AMBIENT.rgb;//漫反射+高光+环境光，相加混合
+			return fixed4(tempColor,1);
+		}
+		ENDCG
+	}
+
 }
+FallBack &quot;Diffuse&quot;
 </code></pre>
-<p>}</p>
-<p>//GameManager<br>
-public Vector2 playerPos ;//存储玩家位置，(通关/返回主界面时职位Vector2.zero<br>
-//instance.playerPos = Vector2.zero;//通关后位置初始化)<br>
-/存档点位置更新<br>
-public void SavePoint()<br>
-{<br>
-instance.playerPos = instance.playerMove.transform.position;//玩家位置赋值给GM中的Pos<br>
-}<br>
-//GM中的Save/Load<br>
-public GameData Save()<br>
-{<br>
-GameData date = new GameData();<br>
-date.scence = SceneManager.GetActiveScene().buildIndex;<br>
-date.deathCount = instance.deathCount;<br>
-date.bgmValue = UIManager.instence.GetBGMValue();<br>
-date.fxValue = UIManager.instence.GetFXValue();</p>
-<pre><code>    if (instance.playerPos == Vector2.zero)
-    {
-        date.posx = 0;
-        date.posy = 0;
-    }
-
-    else
-    {
-        date.posx = instance.playerPos.x;
-        date.posy = instance.playerPos.y;
-    }
-
-    return date;
-
-}
-
-public void Load(GameData date)
-{
-    instance.playerPos = new Vector2(date.posx, date.posy);
-
-    SceneManager.LoadScene(date .scence );
-    //UIManager.instence.ShowLoadPanel(date.scence);
-    instance.deathCount = date.deathCount;
-    UIManager.UpdataDeathUI(instance.deathCount);
-    GameManager.instance.time = 0;
-    UIManager.instence.SetBGMValue(date.bgmValue);
-    UIManager.instence.SetFXValue(date.fxValue);
-}
-
-//Player控制脚本
-Start
-{
-//玩家未接触到存档点GM中默认Pos=0；此时将默认未值赋值给GM中的Pos。
-    //（通关之后GM中的Pos会被PlayerWin()方法赋值为默认值）
-    if ( GameManager.instance.playerPos==Vector2.zero)
-    {
-        GameManager.instance.playerPos = playerPos;
-    }else//玩家触碰到存档点时，将GM中的位置赋值给玩家物体的Pos。
-    {
-        transform.position = GameManager.instance.playerPos;
-    }
-    }</code></pre>
+<p>}<br>
+</code></p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/dan-li/">
+                <a href="https://Wei715547.github.io/post/shader-gao-guang-fan-she-ding-dian-xiang-su/">
                   <h3 class="post-title">
-                    单例
+                    Shader-高光反射(顶点/像素)
                   </h3>
                 </a>
               </div>
