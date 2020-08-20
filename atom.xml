@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-20T06:35:32.957Z</updated>
+    <updated>2020-08-20T08:53:56.345Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,115 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[Shader-法线]]></title>
+        <id>https://Wei715547.github.io/post/shader-fa-xian/</id>
+        <link href="https://Wei715547.github.io/post/shader-fa-xian/">
+        </link>
+        <updated>2020-08-20T06:55:11.000Z</updated>
+        <content type="html"><![CDATA[<p>像素点.rgb(0<sub>1)与法线方向(-1</sub>1)转换：<br>
+pixel = (normal+1)/2<br>
+normal = pixel*2-1 (切下空间下法线方向)<br>
+<code><br>
+Shader &quot;Custom/Normal&quot;<br>
+{<br>
+Properties//属性<br>
+{<br>
+_MainTex(&quot;Main Tex&quot;,2D) = &quot;white&quot;{}//贴图代替漫反射颜色<br>
+_Color(&quot;Tex Color&quot;,Color) = (1,1,1,1)//贴图颜色:与贴图uv坐标下的像素点颜色混合<br>
+_NormalMap(&quot;Normal Map&quot;,2D) = &quot;bump&quot;{}//未添法线贴图时为默认法线<br>
+_NormalST(&quot;Normal ST&quot;,Float) = 1//法线贴图强度参数<br>
+}<br>
+SubShader<br>
+{<br>
+Pass<br>
+{<br>
+Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量<br>
+CGPROGRAM<br>
+//在CG声明属性<br>
+sampler2D _MainTex;//ShaderCG中的关键字<br>
+float4 _MainTex_ST; //主贴图的缩放与偏移“属性名称固定”_MainTex_ST.xy缩放属性；_MainTex_ST.zw偏移属性<br>
+fixed4 _Color;//与贴图叠混合颜色<br>
+sampler2D _NormalMap;<br>
+float4 _NormalMap_ST;<br>
+float _NormalST;</p>
+<pre><code>	#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0.rgb;光源颜色
+	#pragma vertex vert//声明顶点函数
+	#pragma fragment frag//声明片原函数
+
+
+	struct a2v//应用向顶点函数传递参数
+	{
+		float4 vertex:POSITION;//模型空间顶点坐标
+		//切线空间的确定是通过（存储到模型里的/模型空间）法线 与 （存储到模型里的/模型空间）切线确定的
+		float3 normal:NORMAL;//模型空间法线方向
+		float4 tangent:TANGENT;//模型空间下的切线方向：tangent.w:是用来确定切线空间中坐标轴的方向（切线空间下的Z轴方向默认为顶点的法线方向:通过控制缩放xy可改变法线强度）
+		float4 texcoord :TEXCOORD0;//获取纹理坐标
+	};
+	struct v2f//顶点函数向片原函数传递参数
+	{
+		float4 svPos:SV_POSITION;//顶点函数返回值：剪裁空间中的顶点坐标-系统直接使用
+		//float3 worldNormal : TEXCOORD0;//顶点函数向片原函数传递世界坐标下的法线方向(使用法线贴图后不需要)
+		float3 lightDir:TEXCOORD0;//切线空间下的平行光方向
+		//float4 worldView:TEXCOORD1;//顶点函数向片原函数传递世界坐标下的顶点坐标
+
+		float4 uv:TEXCOORD2;//xy用来存储_MainTex的纹理坐标，zw用来存储_NormalMap的纹理坐标
+	};
+
+	v2f vert(a2v v)//顶点函数将顶点从模型空间转到世界空间，返回值在世界坐标系下的顶点坐标
+	{
+		v2f f;//声明传参结构体,并对其中的值赋值
+		f.svPos = UnityObjectToClipPos(v.vertex);
+		//f.worldNormal = UnityObjectToWorldNormal(v.normal);
+		//f.worldView = (UnityObjectToWorldNormal(v.vertex), 0);
+		f.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;//将纹理坐标传递到片原函数 * 乘上主贴图缩放属性 + 加上主贴图的偏移属性
+		f.uv.zw = v.texcoord.xy * _NormalMap_ST.xy + _NormalMap_ST.zw;//将法线纹理坐标与其属性结合存储到uv.zw中
+
+		TANGENT_SPACE_ROTATION;//调用这个宏后(保证a2v &quot;v&quot;中存在&quot;normal&quot;&quot;tangent&quot;宏自动调用)，会得到一个矩阵&quot;rotation&quot;这个矩阵用来把模型空间下的法线转换到切线空间下
+
+		//ObjSpaceLightDir(v.vertex);//模型空间下的平行光方向
+		f.lightDir = mul(rotation, ObjSpaceLightDir(v.vertex));//将切线就下的平行光方向传到片原函数
+		return f;//返回结构体
+	}
+
+	//把与法线有关相关计算放到切线空间下（从法线贴图取到的方向坐标为切线空间下的）
+	fixed4 frag(v2f f) :SV_Target//片原函数，返回值为输出到像素颜色值的缓存
+	{
+		//计算漫反射
+		//fixed3 normalDir = normalize(f.worldNormal);//法线方向
+		fixed4 normalColor = tex2D(_NormalMap,f.uv.zw);//法线贴图在纹理坐标下的颜色值(只使用其中RGB值)
+
+		//此方法法线读取不正确//fixed3 tangentNormal = normalize(normalColor.xyz * 2 - 1);//切线空间下的法线方向
+		fixed3 tangentNormal = normalize(UnpackNormal(normalColor));//在UNITY中将法线贴图类型设置为法线贴图时可用此方法获得切线空间下的法线方向
+		//切线空间下的Z轴方向默认为顶点的法线方向:通过控制缩放xy可改变法线强度，则如下
+		tangentNormal.xy = tangentNormal.xy * _NormalST;//强度为0时使用的即是模型顶点默认的法线方向
+
+		fixed3 lightDir = normalize(f.lightDir);//单位化切线空间下的光源方向
+
+		fixed3 texColor = tex2D(_MainTex, f.uv.xy) * _Color.rgb;//获取纹理坐标下贴图像素点的颜色*与外部属性控制的贴图颜色混合
+
+		fixed3 diffuse = _LightColor0.rgb * texColor * max((dot(tangentNormal,lightDir) * 0.5 + 0.5), 0);//fixed3 harfLambert =dot(f.wordNormalDir, lightDir)*0.5+0.5;//半兰伯特光照模型:直射光颜色 * (cos夹角(光与法线)*0.5+0.5):使背光面不完全为黑色
+
+		//计算高光反射
+		//fixed3 reflectDir = normalize(reflect(-lightDir, normalDir));
+		//fixed3 viewDir = normalize(WorldSpaceViewDir(f.worldView));//实视线方向
+		//fixed3 harfDir = normalize(viewDir + lightDir);//视角与平行光的平分方向
+		//fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(normalDir, harfDir),0), _Gloss);//BP模型://Blinn-Phong光照模型Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：法线与x方向夹角,x:平行光与视野方向的平分项。
+
+		fixed3 tempColor = diffuse + UNITY_LIGHTMODEL_AMBIENT.rgb * texColor;//漫反射+高光+环境光*纹理，相加混合（环境光与纹理混合：使强光下的纹理仍保持清晰）
+		return fixed4(tempColor,1);
+	}
+	ENDCG
+}
+
+	}
+		FallBack &quot;Diffuse&quot;
+</code></pre>
+<p>}<br>
+</code><br>
+<img src="https://Wei715547.github.io/post-images/1597913629337.PNG" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Shader-纹理贴图]]></title>
         <id>https://Wei715547.github.io/post/shader-wen-li-tie-tu/</id>
@@ -912,127 +1021,6 @@ private static Singleton insrence;</p>
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[XML]]></title>
-        <id>https://Wei715547.github.io/post/xml/</id>
-        <link href="https://Wei715547.github.io/post/xml/">
-        </link>
-        <updated>2020-08-12T08:40:51.000Z</updated>
-        <content type="html"><![CDATA[<p>using System;<br>
-using System.IO;<br>
-using System.Xml;<br>
-namespace XML<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-//string flePath = @&quot;D:\715\CSharp\xml.txt&quot;;<br>
-//1.创建XML对象<br>
-XmlDocument xmlDoc = new XmlDocument();<br>
-//2.创建第一行文件信息，加入doc中<br>
-XmlDeclaration doc = xmlDoc.CreateXmlDeclaration(&quot;1.0&quot;, &quot;utf-8&quot;, null);//版本，编码格式<br>
-xmlDoc.AppendChild(doc);<br>
-//3.创建根节点<br>
-XmlElement books = xmlDoc.CreateElement(&quot;Books&quot;);<br>
-books.SetAttribute(&quot;书目&quot;, &quot;2.0&quot;);<br>
-xmlDoc.AppendChild(books);//将根节点添加到XML表中</p>
-<pre><code>        //4.创建根节点的子节点
-        XmlElement book1 = xmlDoc.CreateElement(&quot;Book&quot;);
-        books.AppendChild(book1);
-        //创建子节点的子节点
-        XmlElement name1 = xmlDoc.CreateElement(&quot;Name&quot;);
-        XmlElement price1 = xmlDoc.CreateElement(&quot;Price&quot;);
-        name1.InnerText = &quot;Wei&quot;;
-        price1.InnerText = &quot;170&quot;;
-        book1.AppendChild(name1);
-        book1.AppendChild(price1);
-
-        //根节点的另一个子节点
-        XmlElement book2 = xmlDoc.CreateElement(&quot;Book&quot;);
-        books.AppendChild(book2);
-
-        XmlElement name2 = xmlDoc.CreateElement(&quot;Name&quot;);
-        name2.InnerText = &quot;ZZ&quot;;
-        XmlElement price2 = xmlDoc.CreateElement(&quot;Price&quot;);
-        price2.InnerText = &quot;150&quot;;
-        book2.AppendChild(name2);
-        book2.AppendChild(price2);
-
-
-        xmlDoc.Save(@&quot;D:\715\CSharp\xml.txt&quot;);
-        Console.WriteLine(&quot;保持成功&quot;);
-        Console.ReadLine();
-
-        /*//追加XML文档
-        XmlDocument xmlDoc = new XmlDocument();
-        XmlElement root;
-        if(File.Exists(@&quot;D:\715\CSharp\xml2.txt&quot;))
-        {
-            //如存在则加载XML文档
-            xmlDoc.Load(@&quot;D:\715\CSharp\xml2.txt&quot;);
-            //获取根节点
-            root = xmlDoc.DocumentElement;
-            
-        }
-        else
-        {
-            XmlDeclaration doc = xmlDoc.CreateXmlDeclaration(&quot;1.0&quot;, &quot;utf-8&quot;, null);//版本，编码格式
-            xmlDoc.AppendChild(doc);
-            //3.创建根节点
-            root = xmlDoc.CreateElement(&quot;Books&quot;);
-            root.SetAttribute(&quot;书目&quot;, &quot;2.0&quot;);
-            xmlDoc.AppendChild(root);//将根节点添加到XML表中
-        }
-
-        XmlElement book2 = xmlDoc.CreateElement(&quot;Book&quot;);
-        root.AppendChild(book2);
-
-        XmlElement name2 = xmlDoc.CreateElement(&quot;Name&quot;);
-        name2.InnerText = &quot;ZL&quot;;
-        XmlElement price2 = xmlDoc.CreateElement(&quot;Price&quot;);
-        price2.InnerText = &quot;30000&quot;;
-        book2.AppendChild(name2);
-        book2.AppendChild(price2);
-        xmlDoc.Save(@&quot;D:\715\CSharp\xml2.txt&quot;);*/
-
-        /*//读取XML文档
-        XmlDocument xmlDoc = new XmlDocument();
-        //加载文档获取根节点
-        xmlDoc.Load(@&quot;D:\715\CSharp\xml2.txt&quot;);
-        XmlElement root = xmlDoc.DocumentElement;
-        //获取子节点 返回子节点的集合
-        XmlNodeList xnl = root.ChildNodes;
-
-        foreach (XmlNode node in xnl)
-        {
-            Console.WriteLine(node.InnerText );
-        }*/
-
-        /*//Xpath:获取节点属性
-        XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.Load(@&quot;D:\715\CSharp\xml2.xml&quot;);
-        XmlNodeList nodes = xmlDoc.SelectNodes(&quot;/Books/Book&quot;);
-
-        foreach (XmlNode node in nodes)
-        {
-            Console.WriteLine(node.Attributes[&quot;W&quot;].Value);
-        }*/
-
-        /*//删除节点
-        XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.Load(@&quot;D:\715\CSharp\xml2.txt&quot;);
-        XmlNode sel = xmlDoc.SelectSingleNode(&quot;/Books/Book&quot;);
-        sel.RemoveAll();
-        xmlDoc.Save(@&quot;D:\715\CSharp\xml2.xml&quot;);*/
-
-    }
-}
-</code></pre>
-<p>}<br>
-<img src="https://Wei715547.github.io/post-images/1597221722705.PNG" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
