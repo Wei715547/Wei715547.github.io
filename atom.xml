@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-20T09:22:18.274Z</updated>
+    <updated>2020-08-20T09:37:49.249Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -751,7 +751,9 @@ float3 UnityWorldToObjectDir(float3 dir)//把方向 从世界空间转到模型�
         <link href="https://Wei715547.github.io/post/shader-kuang-jia/">
         </link>
         <updated>2020-08-15T15:28:26.000Z</updated>
-        <content type="html"><![CDATA[<code>
+        <content type="html"><![CDATA[<p>渲染管线流程图：<br>
+<img src="https://Wei715547.github.io/post-images/1597916253014.jpg" alt="" loading="lazy"></p>
+<code>
 Shader "Custom/FW"
 {
 	Properties//公开属性
