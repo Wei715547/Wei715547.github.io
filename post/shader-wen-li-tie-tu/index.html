@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Shader-纹理贴图 | Wei: Development technology accumulation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1597905322217">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="
+Shader "Custom/Single_Texture"
+{
+	Properties//属性
+	{
+		_MainTex("Main Tex",2D) = "white"{}//贴图代替漫反射颜色
+		_Color("Tex Colo..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1597905322217" class="site-logo">
+        <h1 class="site-title">Wei: Development technology accumulation</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Shader-纹理贴图</h2>
+            <div class="post-date">2020-08-20</div>
+            
+            <div class="post-content" v-pre>
+              <code>
+Shader "Custom/Single_Texture"
+{
+	Properties//属性
+	{
+		_MainTex("Main Tex",2D) = "white"{}//贴图代替漫反射颜色
+		_Color("Tex Color",Color) = (1,1,1,1)//贴图颜色:与贴图uv坐标下的像素点颜色混合
+		//_Diffuse("_DiffuseColor",Color) = (1,1,1,1)//漫反射颜色
+		_Specular("_Specular", Color) = (1, 1, 1, 1)//高光颜色
+		_Gloss("_Gloss", Range(10, 200)) = 20//高光参数
+<pre><code>}
+	SubShader
+	{
+		Pass
+		{
+			Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量
+			CGPROGRAM
+		//在CG声明属性
+		sampler2D _MainTex;//ShaderCG中的关键字
+		float4 _MainTex_ST; //主贴图的缩放与偏移“属性名称固定”_MainTex_ST.xy缩放属性；_MainTex_ST.zw偏移属性
+		fixed4 _Color;//与贴图叠混合颜色
+		//fixed4 _Diffuse;
+		fixed4 _Specular;
+		int _Gloss;
+
+	#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0.rgb;光源颜色
+	#pragma vertex vert//声明顶点函数
+	#pragma fragment frag//声明片原函数
+
+
+	struct a2v//应用向顶点函数传递参数
+	{
+		float4 vertex:POSITION;//模型空间顶点坐标
+		float3 normal:NORMAL;//模型空间法线方向
+
+		float4 texcoord :TEXCOORD0;//获取纹理坐标
+	};
+	struct v2f//顶点函数向片原函数传递参数
+	{
+		float4 svPos:SV_POSITION;//顶点函数返回值：剪裁空间中的顶点坐标-系统直接使用
+		float3 worldNormal : TEXCOORD0;//顶点函数向片原函数传递世界坐标下的法线方向
+		float4 worldView:TEXCOORD1;//顶点函数向片原函数传递世界坐标下的顶点坐标
+
+		float2 uv:TEXCOORD2;
+	};
+
+	v2f vert(a2v v)//顶点函数将顶点从模型空间转到世界空间，返回值在世界坐标系下的顶点坐标
+	{
+		v2f f;//声明传参结构体,并对其中的值赋值
+		f.svPos = UnityObjectToClipPos(v.vertex);
+		f.worldNormal = UnityObjectToWorldNormal(v.normal);
+		f.worldView = (UnityObjectToWorldNormal(v.vertex), 0);
+		f.uv = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;//将纹理坐标传递到片原函数 * 乘上主贴图缩放属性 + 加上主贴图的偏移属性
+		return f;//返回结构体
+	}
+
+	fixed4 frag(v2f f) :SV_Target//片原函数，返回值为输出到像素颜色值的缓存
+	{
+		//计算漫反射
+		fixed3 normalDir = normalize(f.worldNormal);//法线方向
+		fixed3 lightDir = normalize(UnityWorldSpaceLightDir(f.worldView));//光源方向
+
+		fixed3 texColor = tex2D(_MainTex, f.uv.xy)*_Color.rgb;//获取纹理坐标下贴图像素点的颜色*与外部属性控制的贴图颜色混合
+
+		fixed3 diffuse = _LightColor0.rgb * texColor * max((dot(normalDir,lightDir) * 0.5 + 0.5), 0);//fixed3 harfLambert =dot(f.wordNormalDir, lightDir)*0.5+0.5;//半兰伯特光照模型:直射光颜色 * (cos夹角(光与法线)*0.5+0.5):使背光面不完全为黑色
+
+		//计算高光反射
+		//fixed3 reflectDir = normalize(reflect(-lightDir, normalDir));
+		fixed3 viewDir = normalize(WorldSpaceViewDir(f.worldView));//实视线方向
+		fixed3 harfDir = normalize(viewDir + lightDir);//视角与平行光的平分方向
+		fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(normalDir, harfDir),0), _Gloss);//BP模型://Blinn-Phong光照模型Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：法线与x方向夹角,x:平行光与视野方向的平分项。
+
+		fixed3 tempColor = diffuse + specular + UNITY_LIGHTMODEL_AMBIENT.rgb*texColor;//漫反射+高光+环境光*纹理，相加混合（环境光与纹理混合：使强光下的纹理仍保持清晰）
+		return fixed4(tempColor,1);
+	}
+	ENDCG
+}
+
+}
+	FallBack &quot;Diffuse&quot;
+</code></pre>
+<p>}<br>
+</code><br>
+<img src="https://Wei715547.github.io/post-images/1597905313414.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1597905320903.PNG" alt="" loading="lazy"></p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/shader-man-fan-she-ban-lan-bo-te-gao-guang-bphun-he-shi-xian/">
+                  <h3 class="post-title">
+                    Shader-漫反射(半兰伯特),高光(BP)混合实现
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
