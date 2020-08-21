@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1597916255655">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1598003513552">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -21,10 +21,7 @@
     <meta name="description" content="像素点.rgb(01)与法线方向(-11)转换：
 pixel = (normal+1)/2
 normal = pixel*2-1 (切下空间下法线方向)
-
-Shader &quot;Custom/Normal&quot;
-{
-Propert..." />
+切线空间来存储法线：模型的每个顶点都有一个属于自己的切线空间，这个切线空间的原点就是该..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -34,7 +31,7 @@ Propert..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1597916255655" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1598003513552" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -116,6 +113,9 @@ Propert..." />
               <p>像素点.rgb(0<sub>1)与法线方向(-1</sub>1)转换：<br>
 pixel = (normal+1)/2<br>
 normal = pixel*2-1 (切下空间下法线方向)<br>
+切线空间来存储法线：模型的每个顶点都有一个属于自己的切线空间，这个切线空间的原点就是该点本身，的Z轴方向默认为该顶点的法线方向，x轴是该顶点的切线方向，则y轴可由法线与切线的叉积得到(副切线)。<br>
+模型空间下的法线贴图看起来的五颜六色的是由于在模型空间下个顶点的法线方向是各异的。<br>
+切线空间下的法线贴图大部分呈现浅蓝色是由于如果一个点的法线方向不变则默认方向即为Z轴方向对应(0,0,1)转换后的像素颜色为RGB(0.5,0.5,1)浅蓝色，贴图中大部分的蓝色实际上说明顶点的大部分法线是和模型本身一样的不需要改变。<br>
 <code><br>
 Shader &quot;Custom/Normal&quot;<br>
 {<br>
@@ -213,7 +213,112 @@ float _NormalST;</p>
 </code></pre>
 <p>}<br>
 </code><br>
-<img src="https://Wei715547.github.io/post-images/1597913629337.PNG" alt="" loading="lazy"></p>
+<img src="https://Wei715547.github.io/post-images/1597913629337.PNG" alt="" loading="lazy"><br>
+————————————————————————————————————<br>
+法线与高光(在切线空间下使用BP光照模型计算高光)<br>
+<code><br>
+Shader &quot;Custom/Normal&quot;<br>
+{<br>
+Properties//属性<br>
+{<br>
+_MainTex(&quot;Main Tex&quot;,2D) = &quot;white&quot;{}//贴图代替漫反射颜色<br>
+_Color(&quot;Tex Color&quot;,Color) = (1,1,1,1)//贴图颜色:与贴图uv坐标下的像素点颜色混合<br>
+_NormalMap(&quot;Normal Map&quot;,2D) = &quot;bump&quot;{}//未添法线贴图时为默认法线<br>
+_NormalST(&quot;Normal ST&quot;,Float) = 1//法线贴图强度参数<br>
+_Specular(&quot;_Specular&quot;, Color) = (1, 1, 1, 1)//高光颜色<br>
+_Gloss(&quot;_Gloss&quot;, Range(1, 200)) = 20//高光参数<br>
+}<br>
+SubShader<br>
+{<br>
+Pass<br>
+{<br>
+Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量<br>
+CGPROGRAM<br>
+//在CG声明属性<br>
+sampler2D _MainTex;//ShaderCG中的关键字<br>
+float4 _MainTex_ST; //主贴图的缩放与偏移“属性名称固定”_MainTex_ST.xy缩放属性；_MainTex_ST.zw偏移属性<br>
+fixed4 _Color;//与贴图叠混合颜色<br>
+sampler2D _NormalMap;<br>
+float4 _NormalMap_ST;<br>
+float _NormalST;<br>
+fixed4 _Specular;<br>
+int _Gloss;</p>
+<pre><code>	#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0.rgb;光源颜色
+	#pragma vertex vert//声明顶点函数
+	#pragma fragment frag//声明片原函数
+
+
+	struct a2v//应用向顶点函数传递参数
+	{
+		float4 vertex:POSITION;//模型空间顶点坐标
+		//切线空间的确定是通过（存储到模型里的/模型空间）法线 与 （存储到模型里的/模型空间）切线确定的
+		float3 normal:NORMAL;//模型空间法线方向
+		float4 tangent:TANGENT;//模型空间下的切线方向：tangent.w:是用来确定切线空间中坐标轴的方向（切线空间下的Z轴方向默认为顶点的法线方向:通过控制缩放xy可改变法线强度）
+		float4 texcoord :TEXCOORD0;//获取纹理坐标
+	};
+	struct v2f//顶点函数向片原函数传递参数
+	{
+		float4 svPos:SV_POSITION;//顶点函数返回值：剪裁空间中的顶点坐标-系统直接使用
+		//float3 worldNormal : TEXCOORD3;//顶点函数向片原函数传递世界坐标下的法线方向(使用法线贴图后不需要)
+		float3 lightDir:TEXCOORD0;//切线空间下的平行光方向
+		float3 viewDir:TEXCOORD1;//顶点函数向片原函数传递且切线空间下的视线方向
+
+		float4 uv:TEXCOORD2;//xy用来存储_MainTex的纹理坐标，zw用来存储_NormalMap的纹理坐标
+	};
+
+	v2f vert(a2v v)//顶点函数将顶点从模型空间转到世界空间，返回值在世界坐标系下的顶点坐标
+	{
+		v2f f;//声明传参结构体,并对其中的值赋值
+		f.svPos = UnityObjectToClipPos(v.vertex);
+		//f.worldNormal = UnityObjectToWorldNormal(v.normal);
+		//f.worldView = (UnityObjectToWorldNormal(v.vertex), 0);
+		f.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;//将纹理坐标传递到片原函数 * 乘上主贴图缩放属性 + 加上主贴图的偏移属性
+		f.uv.zw = v.texcoord.xy * _NormalMap_ST.xy + _NormalMap_ST.zw;//将法线纹理坐标与其属性结合存储到uv.zw中
+
+		TANGENT_SPACE_ROTATION;//调用这个宏后(保证a2v &quot;v&quot;中存在&quot;normal&quot;&quot;tangent&quot;宏自动调用)，会得到一个矩阵&quot;rotation&quot;这个矩阵用来把模型空间下的法线转换到切线空间下
+
+		//ObjSpaceLightDir(v.vertex);//模型空间下的平行光方向
+		f.lightDir = mul(rotation, ObjSpaceLightDir(v.vertex));//将切线就下的平行光方向传到片原函数
+		f.viewDir = mul(rotation, ObjSpaceViewDir(v.vertex));//计算切线空间下的视角方向
+		return f;//返回结构体
+	}
+
+	//把与法线有关相关计算放到切线空间下（从法线贴图取到的方向坐标为切线空间下的）
+	fixed4 frag(v2f f) :SV_Target//片原函数，返回值为输出到像素颜色值的缓存
+	{
+		//计算漫反射
+		//fixed3 normalDir = normalize(f.worldNormal);//法线方向
+		fixed4 normalColor = tex2D(_NormalMap,f.uv.zw);//法线贴图在纹理坐标下的颜色值(只使用其中RGB值)
+
+		//此方法法线读取不正确//fixed3 tangentNormal = normalize(normalColor.xyz * 2 - 1);//切线空间下的法线方向
+		fixed3 tangentNormal = normalize(UnpackNormal(normalColor));//在UNITY中将法线贴图类型设置为法线贴图时可用此方法获得切线空间下的法线方向
+		//切线空间下的Z轴方向默认为顶点的法线方向:通过控制缩放xy可改变法线强度，则如下
+		tangentNormal.xy = tangentNormal.xy * _NormalST;//强度为0时使用的即是模型顶点默认的法线方向
+
+		fixed3 lightDir = normalize(f.lightDir);//单位化切线空间下的光源方向
+
+		fixed3 texColor = tex2D(_MainTex, f.uv.xy) * _Color.rgb;//获取纹理坐标下贴图像素点的颜色*与外部属性控制的贴图颜色混合
+
+		fixed3 diffuse = _LightColor0.rgb * texColor * max((dot(lightDir,tangentNormal) * 0.5 + 0.5), 0);//fixed3 harfLambert =dot(f.wordNormalDir, lightDir)*0.5+0.5;//半兰伯特光照模型:直射光颜色 * (cos夹角(光与法线)*0.5+0.5):使背光面不完全为黑色
+
+		//计算高光反射
+		//fixed3 reflectDir = normalize(reflect(-lightDir, normalDir));
+		fixed3 viewDir = normalize(f.viewDir);//实视线方向
+		fixed3 harfDir = normalize(viewDir + lightDir);//视角与平行光的平分方向
+		fixed3 specular = _LightColor0.rgb * texColor * _Specular.rgb * pow(max(dot(tangentNormal, harfDir),0), _Gloss);//BP模型://Blinn-Phong光照模型Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：法线与x方向夹角,x:平行光与视野方向的平分项。
+
+		fixed3 tempColor = diffuse + specular + UNITY_LIGHTMODEL_AMBIENT.rgb * texColor;//漫反射+高光+环境光*纹理，相加混合（环境光与纹理混合：使强光下的纹理仍保持清晰）
+		return fixed4(tempColor,1);
+	}
+	ENDCG
+}
+
+	}
+		FallBack &quot;Diffuse&quot;
+</code></pre>
+<p>}<br>
+</code><br>
+<img src="https://Wei715547.github.io/post-images/1598002656882.PNG" alt="" loading="lazy"></p>
 
             </div>
             
