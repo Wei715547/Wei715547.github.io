@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-21T10:00:36.658Z</updated>
+    <updated>2020-08-21T16:20:41.767Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,144 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[设计模式-观察者模式(事件监听/广播C#委托链)]]></title>
+        <id>https://Wei715547.github.io/post/she-ji-mo-shi-guan-cha-zhe-mo-shi-shi-jian-jian-ting-guang-bo-cwei-tuo-lian/</id>
+        <link href="https://Wei715547.github.io/post/she-ji-mo-shi-guan-cha-zhe-mo-shi-shi-jian-jian-ting-guang-bo-cwei-tuo-lian/">
+        </link>
+        <updated>2020-08-21T16:06:03.000Z</updated>
+        <content type="html"><![CDATA[<p>各类委托：用于添加不同类型方法<br>
+public delegate void CallBack();<br>
+public delegate void CallBack<T>(T arg);<br>
+public delegate void CallBack&lt;T, X&gt;(T arg1, X arg2);<br>
+public delegate void CallBack&lt;T, X, Y&gt;(T arg1, X arg2, Y arg3);<br>
+public delegate void CallBack&lt;T, X, Y, Z&gt;(T arg1, X arg2, Y arg3, Z arg4);<br>
+public delegate void CallBack&lt;T, X, Y, Z, W&gt;(T arg1, X arg2, Y arg3, Z arg4, W arg5);<br>
+事件类型枚举：<br>
+public enum EventDefine<br>
+{<br>
+ShowGamePanel,<br>
+DecidePath,<br>
+AddScore,<br>
+UpdateScoreText,<br>
+PlayerMove,<br>
+AddDiamond,<br>
+UpdateDiamondText,<br>
+ShowGameOverPale,<br>
+ShowShopPanle,<br>
+ShowMainPanle,<br>
+ChageSkin,<br>
+ShowResetPanel,<br>
+ShowRankPanel,<br>
+PlayBuyyonSound,<br>
+}<br>
+事件中心类：<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class EventCenter<br>
+{<br>
+//存储的 事件表（事件类型，对应方法类型的委托链）<br>
+private static Dictionary&lt;EventDefine, Delegate&gt; m_EventTable = new Dictionary&lt;EventDefine, Delegate&gt;();</p>
+<p>//在委托链上添加广播该事件时要调用的方法<br>
+private static void OnListenerAdding(EventDefine eventType, Delegate callBack)<br>
+{<br>
+if (!m_EventTable.ContainsKey(eventType))<br>
+{<br>
+m_EventTable.Add(eventType, null);<br>
+}<br>
+Delegate d = m_EventTable[eventType];<br>
+if (d != null &amp;&amp; d.GetType() != callBack.GetType())<br>
+{<br>
+throw new Exception(string.Format(&quot;尝试为事件{0}添加不同类型的委托，当前事件所对应的委托是{1}，要添加的委托类型为{2}&quot;, eventType, d.GetType(), callBack.GetType()));<br>
+}<br>
+}<br>
+//把监听该事件时所调用的方法从委托链上移除<br>
+private static void OnListenerRemoving(EventDefine eventType, Delegate callBack)<br>
+{<br>
+if (m_EventTable.ContainsKey(eventType))<br>
+{<br>
+Delegate d = m_EventTable[eventType];<br>
+if (d == null)<br>
+{<br>
+throw new Exception(string.Format(&quot;移除监听错误：事件{0}没有对应的委托&quot;, eventType));<br>
+}<br>
+else if (d.GetType() != callBack.GetType())<br>
+{<br>
+throw new Exception(string.Format(&quot;移除监听错误：尝试为事件{0}移除不同类型的委托，当前委托类型为{1}，要移除的委托类型为{2}&quot;, eventType, d.GetType(), callBack.GetType()));<br>
+}<br>
+}<br>
+else<br>
+{<br>
+throw new Exception(string.Format(&quot;移除监听错误：没有事件码{0}&quot;, eventType));<br>
+}<br>
+}<br>
+//把监听该事件时所调用的方法从委托链上移除<br>
+private static void OnListenerRemoved(EventDefine eventType)<br>
+{<br>
+if (m_EventTable[eventType] == null)<br>
+{<br>
+m_EventTable.Remove(eventType);<br>
+}<br>
+}<br>
+//no parameters<br>
+public static void AddListener(EventDefine eventType, CallBack callBack)<br>
+{<br>
+OnListenerAdding(eventType, callBack);<br>
+m_EventTable[eventType] = (CallBack)m_EventTable[eventType] + callBack;<br>
+}<br>
+//Single parameters<br>
+public static void AddListener<T>(EventDefine eventType, CallBack<T> callBack)<br>
+{<br>
+OnListenerAdding(eventType, callBack);<br>
+m_EventTable[eventType] = (CallBack<T>)m_EventTable[eventType] + callBack;<br>
+}<br>
+//two parameters<br>
+public static void AddListener&lt;T, X&gt;(EventDefine eventType, CallBack&lt;T, X&gt; callBack)<br>
+{<br>
+OnListenerAdding(eventType, callBack);<br>
+m_EventTable[eventType] = (CallBack&lt;T, X&gt;)m_EventTable[eventType] + callBack;<br>
+}</p>
+<pre><code>//no parameters
+public static void RemoveListener(EventDefine eventType, CallBack callBack)
+{
+    OnListenerRemoving(eventType, callBack);
+    m_EventTable[eventType] = (CallBack)m_EventTable[eventType] - callBack;
+    OnListenerRemoved(eventType);
+}
+//single parameters
+public static void RemoveListener&lt;T&gt;(EventDefine eventType, CallBack&lt;T&gt; callBack)
+{
+    OnListenerRemoving(eventType, callBack);
+    m_EventTable[eventType] = (CallBack&lt;T&gt;)m_EventTable[eventType] - callBack;
+    OnListenerRemoved(eventType);
+}
+//two parameters
+public static void RemoveListener&lt;T, X&gt;(EventDefine eventType, CallBack&lt;T, X&gt; callBack)
+{
+    OnListenerRemoving(eventType, callBack);
+    m_EventTable[eventType] = (CallBack&lt;T, X&gt;)m_EventTable[eventType] - callBack;
+    OnListenerRemoved(eventType);
+}
+</code></pre>
+<p>}</p>
+<hr>
+<p>UI脚本中代码：<br>
+void Start()<br>
+{<br>
+EventCenter.AddListener(EventDefine.ShowShopPanle, Show);<br>
+}<br>
+private void OnDestroy()<br>
+{<br>
+EventCenter.RemoveListener (EventDefine.ShowShopPanle, Show);<br>
+}</p>
+<pre><code>private void Show()
+{
+    gameObject.SetActive(true);
+}</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Shader-透明度]]></title>
         <id>https://Wei715547.github.io/post/shader-tou-ming-du/</id>
@@ -1040,115 +1178,6 @@ builder.BuilderDoor();</p>
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[设计模式(2)-Absstract Factory]]></title>
-        <id>https://Wei715547.github.io/post/she-ji-mo-shi-2-absstract-factory/</id>
-        <link href="https://Wei715547.github.io/post/she-ji-mo-shi-2-absstract-factory/">
-        </link>
-        <updated>2020-08-13T15:38:52.000Z</updated>
-        <content type="html"><![CDATA[<p><a href= "https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/abstract_factory.html">抽象工厂</a></p>
-<p>using System;</p>
-<p>namespace 设计模式_抽象工厂<br>
-{<br>
-class Program<br>
-{<br>
-public abstract class Road<br>
-{</p>
-<pre><code>    }
-    public abstract class Building
-    {
-
-    }
-    public abstract class Tunnel
-    {
-
-    }
-    public abstract class Jungle
-    {
-
-    }
-
-    public abstract class FacilitiesFactory
-    {
-        public abstract Road CreateRoad();
-        public abstract Building CreateBuilding();
-        public abstract Tunnel CreateTunnel();
-        public abstract Jungle CreateJungle();
-
-    }
-
-    //客户程序-GameManager
-    class GameManager
-    {
-        FacilitiesFactory facilitiesFactory;
-
-        public GameManager(FacilitiesFactory facilitiesFactory)
-        {
-            this.facilitiesFactory = facilitiesFactory;
-        }
-
-        public void BuildGameFacilities()
-        {
-            Road road = facilitiesFactory.CreateRoad();
-            Building building = facilitiesFactory.CreateBuilding();
-            Tunnel tunnel = facilitiesFactory.CreateTunnel();
-            Jungle jungle = facilitiesFactory.CreateJungle();
-        }
-
-
-    }
-
-    static void Main(string[] args)
-    {
-        GameManager gameManager = new GameManager(new MDFacilitiesFactory ());
-
-        gameManager.BuildGameFacilities();
-        
-    }
-    #region 一种工厂和抽象子类
-    public class MDFacilitiesFactory:FacilitiesFactory
-    {
-        public override Road CreateRoad()
-        {
-            return new MDRoad();
-        }
-        public override Building CreateBuilding()
-        {
-            return new MDBuilding();
-        }
-        public override Tunnel CreateTunnel()
-        {
-            return new MDTunnel();
-        }
-        public override Jungle CreateJungle()
-        {
-            return new MDJungle();
-        }
-
-    }
-
-    public  class MDRoad:Road
-    {
-
-    }
-    public  class MDBuilding:Building
-    {
-
-    }
-    public  class MDTunnel:Tunnel
-    {
-
-    }
-    public  class MDJungle:Jungle
-    {
-
-    }
-</code></pre>
-<p>#endregion<br>
-}<br>
-}</p>
 ]]></content>
     </entry>
 </feed>

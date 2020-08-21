@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>设计模式-观察者模式(事件监听/广播C#委托链) | Wei: Development technology accumulation</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1598026830005">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="各类委托：用于添加不同类型方法
+public delegate void CallBack();
+public delegate void CallBack(T arg);
+public delegate void CallBack&lt;..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1598026830005" class="site-logo">
+        <h1 class="site-title">Wei: Development technology accumulation</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">设计模式-观察者模式(事件监听/广播C#委托链)</h2>
+            <div class="post-date">2020-08-22</div>
+            
+            <div class="post-content" v-pre>
+              <p>各类委托：用于添加不同类型方法<br>
+public delegate void CallBack();<br>
+public delegate void CallBack<T>(T arg);<br>
+public delegate void CallBack&lt;T, X&gt;(T arg1, X arg2);<br>
+public delegate void CallBack&lt;T, X, Y&gt;(T arg1, X arg2, Y arg3);<br>
+public delegate void CallBack&lt;T, X, Y, Z&gt;(T arg1, X arg2, Y arg3, Z arg4);<br>
+public delegate void CallBack&lt;T, X, Y, Z, W&gt;(T arg1, X arg2, Y arg3, Z arg4, W arg5);<br>
+事件类型枚举：<br>
+public enum EventDefine<br>
+{<br>
+ShowGamePanel,<br>
+DecidePath,<br>
+AddScore,<br>
+UpdateScoreText,<br>
+PlayerMove,<br>
+AddDiamond,<br>
+UpdateDiamondText,<br>
+ShowGameOverPale,<br>
+ShowShopPanle,<br>
+ShowMainPanle,<br>
+ChageSkin,<br>
+ShowResetPanel,<br>
+ShowRankPanel,<br>
+PlayBuyyonSound,<br>
+}<br>
+事件中心类：<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class EventCenter<br>
+{<br>
+//存储的 事件表（事件类型，对应方法类型的委托链）<br>
+private static Dictionary&lt;EventDefine, Delegate&gt; m_EventTable = new Dictionary&lt;EventDefine, Delegate&gt;();</p>
+<p>//在委托链上添加广播该事件时要调用的方法<br>
+private static void OnListenerAdding(EventDefine eventType, Delegate callBack)<br>
+{<br>
+if (!m_EventTable.ContainsKey(eventType))<br>
+{<br>
+m_EventTable.Add(eventType, null);<br>
+}<br>
+Delegate d = m_EventTable[eventType];<br>
+if (d != null &amp;&amp; d.GetType() != callBack.GetType())<br>
+{<br>
+throw new Exception(string.Format(&quot;尝试为事件{0}添加不同类型的委托，当前事件所对应的委托是{1}，要添加的委托类型为{2}&quot;, eventType, d.GetType(), callBack.GetType()));<br>
+}<br>
+}<br>
+//把监听该事件时所调用的方法从委托链上移除<br>
+private static void OnListenerRemoving(EventDefine eventType, Delegate callBack)<br>
+{<br>
+if (m_EventTable.ContainsKey(eventType))<br>
+{<br>
+Delegate d = m_EventTable[eventType];<br>
+if (d == null)<br>
+{<br>
+throw new Exception(string.Format(&quot;移除监听错误：事件{0}没有对应的委托&quot;, eventType));<br>
+}<br>
+else if (d.GetType() != callBack.GetType())<br>
+{<br>
+throw new Exception(string.Format(&quot;移除监听错误：尝试为事件{0}移除不同类型的委托，当前委托类型为{1}，要移除的委托类型为{2}&quot;, eventType, d.GetType(), callBack.GetType()));<br>
+}<br>
+}<br>
+else<br>
+{<br>
+throw new Exception(string.Format(&quot;移除监听错误：没有事件码{0}&quot;, eventType));<br>
+}<br>
+}<br>
+//把监听该事件时所调用的方法从委托链上移除<br>
+private static void OnListenerRemoved(EventDefine eventType)<br>
+{<br>
+if (m_EventTable[eventType] == null)<br>
+{<br>
+m_EventTable.Remove(eventType);<br>
+}<br>
+}<br>
+//no parameters<br>
+public static void AddListener(EventDefine eventType, CallBack callBack)<br>
+{<br>
+OnListenerAdding(eventType, callBack);<br>
+m_EventTable[eventType] = (CallBack)m_EventTable[eventType] + callBack;<br>
+}<br>
+//Single parameters<br>
+public static void AddListener<T>(EventDefine eventType, CallBack<T> callBack)<br>
+{<br>
+OnListenerAdding(eventType, callBack);<br>
+m_EventTable[eventType] = (CallBack<T>)m_EventTable[eventType] + callBack;<br>
+}<br>
+//two parameters<br>
+public static void AddListener&lt;T, X&gt;(EventDefine eventType, CallBack&lt;T, X&gt; callBack)<br>
+{<br>
+OnListenerAdding(eventType, callBack);<br>
+m_EventTable[eventType] = (CallBack&lt;T, X&gt;)m_EventTable[eventType] + callBack;<br>
+}</p>
+<pre><code>//no parameters
+public static void RemoveListener(EventDefine eventType, CallBack callBack)
+{
+    OnListenerRemoving(eventType, callBack);
+    m_EventTable[eventType] = (CallBack)m_EventTable[eventType] - callBack;
+    OnListenerRemoved(eventType);
+}
+//single parameters
+public static void RemoveListener&lt;T&gt;(EventDefine eventType, CallBack&lt;T&gt; callBack)
+{
+    OnListenerRemoving(eventType, callBack);
+    m_EventTable[eventType] = (CallBack&lt;T&gt;)m_EventTable[eventType] - callBack;
+    OnListenerRemoved(eventType);
+}
+//two parameters
+public static void RemoveListener&lt;T, X&gt;(EventDefine eventType, CallBack&lt;T, X&gt; callBack)
+{
+    OnListenerRemoving(eventType, callBack);
+    m_EventTable[eventType] = (CallBack&lt;T, X&gt;)m_EventTable[eventType] - callBack;
+    OnListenerRemoved(eventType);
+}
+</code></pre>
+<p>}</p>
+<hr>
+<p>UI脚本中代码：<br>
+void Start()<br>
+{<br>
+EventCenter.AddListener(EventDefine.ShowShopPanle, Show);<br>
+}<br>
+private void OnDestroy()<br>
+{<br>
+EventCenter.RemoveListener (EventDefine.ShowShopPanle, Show);<br>
+}</p>
+<pre><code>private void Show()
+{
+    gameObject.SetActive(true);
+}</code></pre>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/shader-tou-ming-du/">
+                  <h3 class="post-title">
+                    Shader-透明度
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
