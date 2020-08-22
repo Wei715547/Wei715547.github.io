@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1598081505848">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1598096204861">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -31,7 +31,7 @@ public delegate void CallBack&lt;..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1598081505848" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1598096204861" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -225,7 +225,41 @@ public static void RemoveListener&lt;T, X&gt;(EventDefine eventType, CallBack&lt
     OnListenerRemoved(eventType);
 }
 </code></pre>
-<p>}</p>
+<p>}<br>
+//no parameters<br>
+public static void Broadcast(EventDefine eventType)<br>
+{<br>
+Delegate d;<br>
+if (m_EventTable.TryGetValue(eventType, out d))<br>
+{<br>
+CallBack callBack = d as CallBack;<br>
+if (callBack != null)<br>
+{<br>
+callBack();<br>
+}<br>
+else<br>
+{<br>
+throw new Exception(string.Format(&quot;广播事件错误：事件{0}对应委托具有不同的类型&quot;, eventType));<br>
+}<br>
+}<br>
+}<br>
+//single parameters<br>
+public static void Broadcast<T>(EventDefine eventType, T arg)<br>
+{<br>
+Delegate d;<br>
+if (m_EventTable.TryGetValue(eventType, out d))<br>
+{<br>
+CallBack<T> callBack = d as CallBack<T>;<br>
+if (callBack != null)<br>
+{<br>
+callBack(arg);<br>
+}<br>
+else<br>
+{<br>
+throw new Exception(string.Format(&quot;广播事件错误：事件{0}对应委托具有不同的类型&quot;, eventType));<br>
+}<br>
+}<br>
+}</p>
 <hr>
 <p>UI脚本中代码：<br>
 void Start()<br>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-22T07:31:51.508Z</updated>
+    <updated>2020-08-22T11:37:02.019Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -223,7 +223,41 @@ public static void RemoveListener&lt;T, X&gt;(EventDefine eventType, CallBack&lt
     OnListenerRemoved(eventType);
 }
 </code></pre>
-<p>}</p>
+<p>}<br>
+//no parameters<br>
+public static void Broadcast(EventDefine eventType)<br>
+{<br>
+Delegate d;<br>
+if (m_EventTable.TryGetValue(eventType, out d))<br>
+{<br>
+CallBack callBack = d as CallBack;<br>
+if (callBack != null)<br>
+{<br>
+callBack();<br>
+}<br>
+else<br>
+{<br>
+throw new Exception(string.Format(&quot;广播事件错误：事件{0}对应委托具有不同的类型&quot;, eventType));<br>
+}<br>
+}<br>
+}<br>
+//single parameters<br>
+public static void Broadcast<T>(EventDefine eventType, T arg)<br>
+{<br>
+Delegate d;<br>
+if (m_EventTable.TryGetValue(eventType, out d))<br>
+{<br>
+CallBack<T> callBack = d as CallBack<T>;<br>
+if (callBack != null)<br>
+{<br>
+callBack(arg);<br>
+}<br>
+else<br>
+{<br>
+throw new Exception(string.Format(&quot;广播事件错误：事件{0}对应委托具有不同的类型&quot;, eventType));<br>
+}<br>
+}<br>
+}</p>
 <hr>
 <p>UI脚本中代码：<br>
 void Start()<br>

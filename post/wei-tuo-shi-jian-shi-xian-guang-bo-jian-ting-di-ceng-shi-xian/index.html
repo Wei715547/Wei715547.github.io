@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1598081505848">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1598096204861">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ class Cat//被观察者（广播着）
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1598081505848" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1598096204861" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -186,6 +186,53 @@ c.CatComing();<br>
 }<br>
 }<br>
 }</p>
+<hr>
+<p>例二：<br>
+广播者<br>
+public class PstPanel : MonoBehaviour ,IEndDragHandler,IBeginDragHandler<br>
+{</p>
+<pre><code>public Action&lt;int&gt; OnPageChange;//事件/委托链：公开变量用于外部订阅
+
+ public void ScrollToPage(int page)//执行这个方法的“事件”
+{
+    isMoving = true;
+    currentPage =page;
+    runTime = 0;
+    startPos = rect.horizontalNormalizedPosition;//范围(0~1)
+
+    if(OnPageChange!=null)// OnPageChange?.Invoke(this.currentPage);
+    {//作用同于广播此事件(委托连不为空则调用)
+        OnPageChange(this.currentPage);
+    }
+}
+监听者
+public class UIManager : MonoBehaviour
+</code></pre>
+<p>{<br>
+public static UIManager Instence;</p>
+<pre><code>private GameObject pstPanel;
+private PstPanel evevt;//广播者类
+private int currentCount;
+// Start is called before the first frame update
+private void Awake()
+{
+    if (Instence!=null)
+    {
+        Destroy(gameObject);
+        return;
+    }
+    Instence = this;
+    DontDestroyOnLoad(gameObject);
+
+    pstPanel = GameObject.Find(&quot;PstPanel&quot;);//挂着广播者类的游戏中的父物体
+    evevt = pstPanel.GetComponentInChildren&lt;PstPanel&gt;();//广播者类
+    evevt.OnPageChange += OnPageChnageShow;//将事件发生时要调用的方法添加到广播者的委托链上
+}
+//事件发生时调用的方法
+public void OnPageChnageShow(int index)
+{
+    Debug.Log(&quot;PageChange&quot;+index);
+}</code></pre>
 
             </div>
             
