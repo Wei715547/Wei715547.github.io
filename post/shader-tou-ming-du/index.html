@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1598096204861">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1598272328968">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -33,7 +33,7 @@ _C..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1598096204861" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1598272328968" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -124,16 +124,17 @@ _AlphaScale(&quot;_AlphaScale&quot;,Float) = 1<br>
 }<br>
 SubShader<br>
 {<br>
-Tags{&quot;Queue&quot; = &quot;Transparent&quot; &quot;IngnoreProjector&quot; = &quot;True&quot; &quot;RanderType&quot; = &quot;Transparent&quot;}//Pass块参数标签</p>
-<pre><code>		Pass
-		{
-			Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量
+Tags{&quot;Queue&quot; = &quot;Transparent&quot;/<em>模型渲染队列</em>/ &quot;IngnoreProjector&quot; = &quot;True&quot; &quot;RanderType&quot; = &quot;Transparent&quot;}//Pass块参数标签<br>
+<img src="https://Wei715547.github.io/post-images/1598164914894.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1598166460428.PNG" alt="" loading="lazy"><br>
+Pass<br>
+{<br>
+Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量</p>
+<pre><code>			ZWrite Off//深度写入关闭
+			Blend SrcAlpha OneMinusSrcAlpha//混合模式：透明区域与透明物体后颜色混合
 
-			ZWrite Off//深度写入关闭
-			Blend SrcAlpha OneMinusSrcAlpha//模式
-
-			CGPROGRAM
-		//在CG声明属性
+	*		CGPROGRAM
+	*	//在CG声明属性
 		sampler2D _MainTex;//ShaderCG中的关键字
 		float4 _MainTex_ST; //主贴图的缩放与偏移“属性名称固定”_MainTex_ST.xy缩放属性；_MainTex_ST.zw偏移属性
 		fixed4 _Color;//与贴图叠混合颜色
