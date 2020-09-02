@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-08-25T15:44:43.444Z</updated>
+    <updated>2020-09-02T15:41:59.176Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,485 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Wei: Development technology accumulation</rights>
+    <entry>
+        <title type="html"><![CDATA[UGUI 背包模块(事件订阅/渗透)]]></title>
+        <id>https://Wei715547.github.io/post/ugui-bei-bao-mo-kuai-shi-jian-ding-yue-shen-tou/</id>
+        <link href="https://Wei715547.github.io/post/ugui-bei-bao-mo-kuai-shi-jian-ding-yue-shen-tou/">
+        </link>
+        <updated>2020-09-02T14:26:34.000Z</updated>
+        <content type="html"><![CDATA[<p>UI搭建：<img src="https://Wei715547.github.io/post-images/1599057822367.PNG" alt="" loading="lazy"><br>
+————————————————————————————————<br>
+代码：</p>
+<p>装备共有属性类：<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public enum ArticleType//装备种类<br>
+{<br>
+Weapon,<br>
+Drag,<br>
+Collect,<br>
+Pick<br>
+}</p>
+<p>public class Article //装备属性类(装备共有参数)<br>
+{<br>
+public string name;//装备名称<br>
+public string spritPath;//装备UI图路径<br>
+public ArticleType articleType;//装备类型<br>
+public int count;//装备数量</p>
+<pre><code>//构造函数
+public Article(string name,string spritPath,ArticleType articleType,int count)
+{
+    this.name = name;
+    this.spritPath = spritPath;
+    this.articleType = articleType;
+    this.count = count;
+}
+</code></pre>
+<p>}<br>
+——————————————————————————————<br>
+装备“物品”类<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;</p>
+<p>public class ArticleItem : MonoBehaviour<br>
+{<br>
+private Image articleSprit;<br>
+private Text count;<br>
+public Article article;<br>
+private UIDrag UIDrag;//实现拖拽的类<br>
+private Canvas canvas;//物体上的Canvas组件，用于物体显示在上层<br>
+//private CanvasGroup canvasGroup;//拖拽此物体是取消其射线检测,代替事件渗透<br>
+private int defortSort;<br>
+//private Transform Origentparent;</p>
+<pre><code>private Vector3 currentLocalPosition;
+private float moveTimer;
+public float moveTime = 0.2f;
+
+private bool isMoving = false;
+
+private Action onMoveEnd;
+
+// Start is called before the first frame update
+void Awake()
+{
+    articleSprit = transform.GetComponent&lt;Image&gt;();
+    count = transform.Find(&quot;ItemCount&quot;).GetComponent&lt;Text&gt;();
+    //将对应拖拽状态时要掉用的方法注册到拖拽类的委托链
+    UIDrag = transform.GetComponent&lt;UIDrag&gt;();
+    UIDrag.onStartDrag += OnStartDrag;
+    UIDrag.onDrag += OnDrag;
+    UIDrag.onEndDrag += OnEndDrag;
+    
+    canvas = transform.GetComponent&lt;Canvas&gt;();
+    defortSort = canvas.sortingOrder;
+    //canvasGroup = transform.GetComponent&lt;CanvasGroup&gt;();
+    
+    //currentLocalPosition = transform.localPosition;
+}
+private void Start()
+{
+    transform.localPosition = Vector3.zero;
+    currentLocalPosition = transform.localPosition;
+}
+private void Update()
+{
+    MoveBack();
+}
+//Lerpg固定时间内完成执行
+private void MoveBack()
+{
+    if (isMoving)
+    {
+        moveTimer += Time.deltaTime * (1 / moveTime);//0.2秒后为1
+        transform.localPosition = Vector3.Lerp(currentLocalPosition, Vector3.zero, moveTimer);
+        if (moveTimer &gt;= 1)
+        {
+            isMoving = false;
+            //MoveToOrigin方法导致的事件完成后执行自身委托
+            onMoveEnd?.Invoke();
+        }
+    }
+}
+//执行Lerp
+public void MoveToOrigin(Action onMoveEnd)
+{
+    isMoving = true;
+    moveTimer = 0;
+    currentLocalPosition = transform.localPosition;
+    this.onMoveEnd = onMoveEnd;//将之后要执行的方法方到自身委托链上
+}
+//设置装备属性(UI图标，数量等)
+public void SetArticle(Article article)
+{
+    this.article = article;
+
+    //显示数据
+    articleSprit.sprite = Resources.Load&lt;Sprite&gt;(this.article.spritPath);
+    count.text = this.article.count.ToString();
+}
+//开始拖拽时执行
+public void OnStartDrag()
+{
+    canvas.sortingOrder = defortSort + 1;//显示在同级上层
+    //transform.SetParent(transform.parent.parent);
+    BagPanel.instence.curretnAricle = this;//正在拖拽的为此物体
+}
+public void OnDrag()
+{
+
+}
+//拖拽结束时执行
+public void OnEndDrag()
+{
+    //结束拖拽时所选格子不为空时，物品进入格子，
+    if (BagPanel.instence.currtenHoverGrid != null &amp;&amp; !BagPanel.instence.currtenHoverGrid.gameObject.Equals(transform.parent.gameObject))
+    {
+        BagPanel.instence.currtenHoverGrid.DragIntoGride(BagPanel.instence.curretnAricle);//格子的方法
+        canvas.sortingOrder = defortSort;//恢复层级
+    }
+    else//为空则返回
+    {
+        //transform.SetParent(Origentparent);
+        //使用委托实现结束后执行
+        MoveToOrigin(() =&gt; { canvas.sortingOrder = defortSort; });//表达式内为方法结束后要执行的语句
+    }
+    BagPanel.instence.curretnAricle = null;//结束拖拽时正在拖拽的物体为空
+}    
+</code></pre>
+<p>}<br>
+——————————————————————————————<br>
+实现拖拽的类：<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.EventSystems;</p>
+<p>public class UIDrag : MonoBehaviour,IBeginDragHandler,ICanvasRaycastFilter ,IDragHandler,IEndDragHandler<br>
+{<br>
+private Vector3 mousePosition;<br>
+private RectTransform rect;</p>
+<pre><code>public Action onDrag;
+public Action onStartDrag;
+public Action onEndDrag;
+
+private bool isDraging = false;
+
+private void Awake()
+{
+    rect = GetComponent&lt;RectTransform&gt;();
+    if (rect ==null)
+    {
+        throw new System.Exception(&quot;只能拖拽UI物体&quot;);
+    }
+}
+//使用事件渗透监听不到拖拽事件时可用下面代码
+/*private void Update()
+{
+    if (isDraging)
+    {
+        *//*rect.anchoredPosition += (Vector2)(Input.mousePosition - mousePosition);
+        mousePosition = Input.mousePosition;
+        //transform.position = eventData.position; //中心随光标移动
+        //锚点的位置加上鼠标移动
+        //rect.anchoredPosition += eventData.delta;
+        //if (onDrag != null) onDrag();
+        onDrag?.Invoke();*//*
+    }
+    if(Input .GetMouseButtonUp(0)&amp;&amp;isDraging==true)
+    {
+        onEndDrag?.Invoke();
+        isDraging = false;
+    }
+}*/
+
+public void OnBeginDrag(PointerEventData eventData)
+{
+    mousePosition = Input.mousePosition;
+    onStartDrag?.Invoke();
+    isDraging = true;
+}
+//事件渗透接口：渗透过当前事件向下进行事件检测（背包系统渗透装备UI图标向下检测所在物品栏）
+public bool IsRaycastLocationValid(Vector2 sp, Camera eventCamera)//事件渗透接口：返回值TRUE时：检测，返回值为FALES：渗透事件。
+{
+    return !isDraging;
+}
+//事件渗透监听不到此接口事件(实际监听的到)，但要保留接口实现拖拽
+public void OnDrag(PointerEventData eventData)//参数为相机与点击物体的射线检测点
+{
+    rect.anchoredPosition += (Vector2)(Input.mousePosition - mousePosition);
+    mousePosition = Input.mousePosition;
+    //transform.position = eventData.position; //中心随光标移动
+    //锚点的位置加上鼠标移动
+    //rect.anchoredPosition += eventData.delta;
+    //if (onDrag != null) onDrag();
+    onDrag?.Invoke();
+}
+//事件渗透监听不到此接口事件(实际监听的到)
+public void OnEndDrag(PointerEventData eventData)
+{
+    onEndDrag?.Invoke();
+    isDraging = false;
+}
+</code></pre>
+<p>}<br>
+——————————————————————————————<br>
+格子类：<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.EventSystems;<br>
+using UnityEngine.UI;</p>
+<p>public class BagGrde : MonoBehaviour , IPointerEnterHandler,IPointerExitHandler<br>
+{<br>
+private ArticleItem articleItem;</p>
+<pre><code>private Image bgImage;
+private Color defortColor;
+
+public ArticleItem ArticleItem
+{
+    get { return articleItem; }
+}
+
+private void Awake()
+{
+    bgImage = transform.GetComponent&lt;Image&gt;();
+    defortColor = bgImage.color;
+}
+//设置格子内的装备物品方法
+public void SetArticleItem(ArticleItem articleItem)
+{
+    this.articleItem = articleItem;//此格子装着的物品
+    this.articleItem.gameObject.SetActive(true);
+    //将此物品栏设置父物体
+    this.articleItem.transform.SetParent(transform);
+
+    //防止发生变化
+    //设置位置
+    //this.articleItem.transform.localPosition = Vector3.zero;
+    this.articleItem.MoveToOrigin(() =&gt;//用物品类里面的方法实现拖拽到格子时的缓动效果
+   {//设置5px的边界值
+       this.articleItem.GetComponent&lt;RectTransform&gt;().offsetMin = new Vector2(5, 5);
+       this.articleItem.GetComponent&lt;RectTransform&gt;().offsetMax = new Vector2(-5, -5);
+   });
+    //设置大小
+    this.articleItem.transform.localScale = Vector3.one;
+    //设置
+    //this.articleItem.GetComponent&lt;RectTransform&gt;().offsetMin = new Vector2(5, 5);
+    //this.articleItem.GetComponent&lt;RectTransform&gt;().offsetMax = new Vector2(-5, -5);
+}
+//清空格子
+public void ClearGride()
+{
+    articleItem.gameObject.SetActive(false);
+    articleItem.transform.SetParent(null);
+    articleItem = null;
+}
+
+//物品填入格子
+public void DragIntoGride(ArticleItem articleItem)
+{
+    //物品原来所在的格子
+    BagGrde lastGride = articleItem.transform.parent.GetComponent&lt;BagGrde&gt;();
+    if (this.articleItem==null)//如果这个格子中没有物品
+    {
+        //清空之前的格子
+        lastGride.ClearGride();
+
+        //设置拖拽到的此格子
+        SetArticleItem(articleItem);
+        //lastGride.ClearGride();
+    }
+    else//此格子不为空时将物品进行交换
+    {
+        //当前格子内物品设置到之前的格子
+        lastGride.SetArticleItem(this.articleItem);
+        //设置拖拽过来的新物品到的此格子
+        SetArticleItem(articleItem);
+    }
+}
+//鼠标进入格子时接口调用的函数
+public void OnPointerEnter(PointerEventData eventData)
+{
+    if(BagPanel.instence .curretnAricle!=null)//拖拽的物品不为空时
+    {
+        BagPanel.instence.currtenHoverGrid = this;//光标进入此格子则选中此格子
+        bgImage.color = Color.white;//该变选中格子的颜色
+    }
+    //此格子布为空时显示此格子物品的信息界面
+    if (this.articleItem != null)
+    {
+        UIManager.Instence.articleInformation.gameObject.SetActive(true);
+        UIManager.Instence.articleInformation.panel.transform.position = transform.position;
+        UIManager.Instence.articleInformation.info.text = this.articleItem.article.name + &quot;\n&quot; + this.articleItem.article.count.ToString ();
+    }
+}
+//光标退出时
+public void OnPointerExit(PointerEventData eventData)
+{
+    BagPanel.instence.currtenHoverGrid = null;
+    bgImage.color = defortColor;
+    //隐藏信息界面
+    UIManager.Instence.articleInformation.gameObject.SetActive(false);
+    UIManager.Instence.articleInformation.panel.transform.position = Vector3.zero;
+    UIManager.Instence.articleInformation.info.text = &quot; &quot;;
+}
+</code></pre>
+<p>}<br>
+———————————————————————————————————<br>
+背包模块类：<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;</p>
+<p>public class BagPanel : MonoBehaviour<br>
+{</p>
+<pre><code>private List&lt;Article&gt; articlesList = new List&lt;Article&gt;();//背包中所有物品的属性
+
+private List&lt;GameObject&gt; articleObjectPool = new List&lt;GameObject&gt;();//储存物品预制件的对象池
+
+public GameObject articleItemPrafab;//物品UI预制件
+private BagGrde[] bagGrdes;//物品栏
+
+public BagGrde currtenHoverGrid;//当前鼠标所悬浮所在格子
+public ArticleItem curretnAricle;//当前拖拽物品
+//单例
+public static BagPanel instence;//单例，在外部访问公开属性
+
+//private Button btn_Back;
+// Start is called before the first frame update
+void Awake()
+{
+    /*if (instence !=null)
+    {
+        Destroy(gameObject);
+        return;
+    }*/
+    instence = this;
+    //DontDestroyOnLoad(gameObject);
+
+    //btn_Back = transform.Find(&quot;btn_Back&quot;).GetComponent&lt;Button&gt;();
+    //btn_Back.onClick.AddListener(UIManager.Instence.ExtBagPanel);
+    InitArticleDate();
+    bagGrdes = transform.GetComponentsInChildren&lt;BagGrde&gt;();//获取所有格子
+    LoadDate();//初始加载全部数据
+}
+</code></pre>
+<p>/*    private void Start()<br>
+{<br>
+LoadDate();<br>
+}*/<br>
+//加载全部数据<br>
+public void LoadDate()<br>
+{<br>
+ClearGrideAndHideItems();<br>
+for (int i = 0; i &lt; articlesList.Count; i++)<br>
+{<br>
+//将列表中所有物品的属性生成对应物品装入空着的格子<br>
+GetBagGrid().SetArticleItem(LoadArticleItem(articlesList[i]));<br>
+}<br>
+}<br>
+//按类加载的重载方法<br>
+public void LoadDate(ArticleType articleType)<br>
+{<br>
+ClearGrideAndHideItems();<br>
+for (int i = 0; i &lt; articlesList.Count; i++)<br>
+{<br>
+if (articlesList[i].articleType == articleType)<br>
+{<br>
+//将列表中某类物品生成对应物品装入空着的格子<br>
+GetBagGrid().SetArticleItem(LoadArticleItem(articlesList[i]));<br>
+}<br>
+}<br>
+}<br>
+//获取空着的格子<br>
+public BagGrde GetBagGrid()<br>
+{<br>
+for (int i = 0; i &lt; bagGrdes.Length; i++)<br>
+{<br>
+if (bagGrdes[i].ArticleItem == null)<br>
+return bagGrdes[i];<br>
+}<br>
+return null;<br>
+}<br>
+//加载ArticleItem物品：根据属性创建对应装备物品<br>
+public ArticleItem LoadArticleItem(Article article)<br>
+{<br>
+GameObject go = GetGameObject();<br>
+ArticleItem articleItem = go.GetComponent<ArticleItem>();<br>
+articleItem.SetArticle(article);<br>
+return articleItem;<br>
+}<br>
+//获取GameObject：获取对象池中空闲物品预制件<br>
+public GameObject GetGameObject()<br>
+{<br>
+for (int i = 0; i &lt; articleObjectPool.Count; i++)<br>
+{<br>
+if (articleObjectPool[i].activeSelf==false)<br>
+{<br>
+articleObjectPool[i].SetActive(true);<br>
+return articleObjectPool[i];<br>
+}<br>
+}<br>
+GameObject go = Instantiate(articleItemPrafab);<br>
+articleObjectPool.Add(go);<br>
+return go;</p>
+<pre><code>}
+//重新加载背包时物品栏清空
+public void ClearGrideAndHideItems()
+{
+    for (int i = 0; i &lt; bagGrdes.Length; i++)
+    {
+        if (bagGrdes[i].ArticleItem!=null)
+        {
+            bagGrdes[i].ClearGride();
+        }
+    }
+}
+
+//初始化物品数据：加载拥有的制备数据应从服务器获取，此处实验性加载部分装备
+public void InitArticleDate()
+{
+    //武器
+    articlesList.Add(new Article(&quot;刀刀&quot;,&quot;at0&quot;, ArticleType.Weapon, 2));
+    articlesList.Add(new Article(&quot;剑剑&quot;, &quot;at1&quot;, ArticleType.Weapon, 1));
+    articlesList.Add(new Article(&quot;春药&quot;, &quot;at2&quot;, ArticleType.Drag, 7));
+    articlesList.Add(new Article(&quot;夏药&quot;, &quot;at3&quot;, ArticleType.Drag, 6));
+    articlesList.Add(new Article(&quot;秋药&quot;, &quot;at4&quot;, ArticleType.Drag, 5));
+    articlesList.Add(new Article(&quot;冬药&quot;, &quot;at5&quot;, ArticleType.Drag, 4));
+    articlesList.Add(new Article(&quot;典藏种子&quot;, &quot;at6&quot;, ArticleType.Collect, 1001));
+    articlesList.Add(new Article(&quot;玻璃碎片&quot;, &quot;at7&quot;, ArticleType.Pick, 12));
+}
+
+
+#region 点击标签事件(所有标签都在同一个标签组-只有一个标签可选。勾选标签是执行)
+public void OnAllToggleValueChange(bool v)//v为标签是否被勾选
+{
+    if (v) LoadDate();
+}
+public void OnWepanToggleValueChange(bool v)
+{
+    if (v) LoadDate(ArticleType.Weapon);
+}
+public void OnDragToggleValueChange(bool v)
+{
+    if (v) LoadDate(ArticleType.Drag);
+}
+public void OnClctorToggleValueChange(bool v)
+{
+    if (v) LoadDate(ArticleType.Collect);
+}
+public void OnPickToggleValueChange(bool v)
+{
+    if (v) LoadDate(ArticleType.Pick);
+}
+#endregion
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Shader_反射]]></title>
         <id>https://Wei715547.github.io/post/shader_-fan-she/</id>
@@ -1235,133 +1714,5 @@ return fixed4(tempColor,1);//返回法线
 </code></pre>
 <p>}</p>
 <code/>]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Shader-顶点漫反射(*自身)(+环境光)-逐像素反射]]></title>
-        <id>https://Wei715547.github.io/post/shader-ding-dian-man-fan-she-zi-shen-huan-jing-guang/</id>
-        <link href="https://Wei715547.github.io/post/shader-ding-dian-man-fan-she-zi-shen-huan-jing-guang/">
-        </link>
-        <updated>2020-08-17T08:30:49.000Z</updated>
-        <content type="html"><![CDATA[<code>
-逐顶点漫反射：顶点之间片段颜色采用插值计算填充
-<p>Shader &quot;Custom/Shader04&quot;<br>
-{<br>
-Properties<br>
-{<br>
-_Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)</p>
-<pre><code>}
-	SubShader
-{
-   Pass
-{
-	Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量
-	CGPROGRAM
-	fixed4 _Diffuse;
-</code></pre>
-<p>#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0:第一个直射光的颜色，_WorldSpaceLightPos0.xyz<br>
-// Physically based Standard lighting model, and enable shadows on all light types<br>
-//#pragma surface surf Standard fullforwardshadows<br>
-#pragma vertex vert//声明顶点着色器<br>
-#pragma fragment frag//声明片段着色器<br>
-// Use shader model 3.0 target, to get nicer looking lighting<br>
-//#pragma target 3.0</p>
-<pre><code>struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
-	float4 vertex:POSITION;//获取顶点坐标
-	float3 normal:NORMAL;
-
-};
-struct v2f {//从顶点函数传递到片原函数的语义SV_POSITION:(剪裁空间中的顶点坐标-系统直接使用)，COLOR0/COLOR1:可以传递一组值(4个)，TEXCOORD0~7:传递纹理坐标
-			//f2s片原函数传递给系统：SV_Target:颜色值-输出到屏幕上的颜色(缓存颜色)
-	float4 position:SV_POSITION;
-	fixed3 color : COLOR1;
-};
-
-v2f vert(a2v v)//顶点之间片段颜色采用插值计算填充
-{
-	v2f f;
-	f.position = UnityObjectToClipPos(v.vertex);//将坐标从模型空间转换到剪裁空间
-	//f.temp = v.normal;
-	fixed3 amblent = UNITY_LIGHTMODEL_AMBIENT.rgb;//获取系统环境光
-	//fixed3 norDir = normalize(unity_WorldToObject(v.normal));//法线方向从世界空间转到模型空间(弃用的方法) 
-	fixed3 N = UnityObjectToWorldNormal(v.normal);//法线方向从世界空间转到模型空间 
-	fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);//第一个直射光的位置，对于顶点来说光的位置即是光的方向
-	fixed3 diffuse = _LightColor0.rgb*max(dot(N,lightDir),0)* _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角
-	f.color = diffuse+amblent;//+:颜色得加(亮度增强),*:融合
-	return f;
-}
-
-
-fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
-{
-return fixed4(f.color,1);//返回法线
-}
-	ENDCG
-}
-
-}
-	FallBack &quot;Diffuse&quot;
-</code></pre>
-<p>}<br>
-——————————————————————————————————<br>
-逐像素漫反射：逐个像素计算漫反射计算量大<br>
-Shader &quot;Custom/PixivsRander&quot;<br>
-{<br>
-Properties<br>
-{<br>
-_Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)</p>
-<pre><code>}
-	SubShader
-{
-   Pass
-{
-	Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量
-	CGPROGRAM
-	fixed4 _Diffuse;
-</code></pre>
-<p>#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0:第一个直射光的颜色，_WorldSpaceLightPos0.xyz<br>
-// Physically based Standard lighting model, and enable shadows on all light types<br>
-//#pragma surface surf Standard fullforwardshadows<br>
-#pragma vertex vert//声明顶点着色器<br>
-#pragma fragment frag//声明片段着色器<br>
-// Use shader model 3.0 target, to get nicer looking lighting<br>
-//#pragma target 3.0</p>
-<pre><code>struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
-	float4 vertex:POSITION;//获取顶点坐标
-	float3 normal:NORMAL;
-
-};
-struct v2f {//从顶点函数传递到片原函数的语义SV_POSITION:(剪裁空间中的顶点坐标-系统直接使用)，COLOR0/COLOR1:可以传递一组值(4个)，TEXCOORD0~7:传递纹理坐标
-			//f2s片原函数传递给系统：SV_Target:颜色值-输出到屏幕上的颜色(缓存颜色)
-	float4 position:SV_POSITION;
-	fixed3 wordNormalDir : COLOR1;//向片原函数传递法线
-};
-
-v2f vert(a2v v)
-{
-	v2f f;
-	f.position = UnityObjectToClipPos(v.vertex);//将坐标从模型空间转换到剪裁空间
-	f.wordNormalDir = UnityObjectToWorldNormal(v.normal);
-	return f;
-}
-
-
-fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
-{
-	fixed3 amblent = UNITY_LIGHTMODEL_AMBIENT.rgb;//获取系统环境光		
-	fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);//第一个直射光的位置，对于顶点来说光的位置即是光的方向
-	//fixed3 diffuse = _LightColor0.rgb * max(dot(f.wordNormalDir,lightDir),0) * _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角
-    fixed3 harfLambert =dot(f.wordNormalDir, lightDir)*0.5+0.5;//半兰伯特光照模型:直射光颜色 * (cos夹角(光与法线)*0.5+0.5):使背光面不完全为黑色
-	fixed3 diffuse = _LightColor0.rgb * harfLambert * _Diffuse.rgb;
-	fixed3 tempColor = diffuse + amblent;//+:颜色得加(亮度增强),*:融合
-	return fixed4(tempColor,1);//返回法线
-}
-	ENDCG
-}
-
-}
-	FallBack &quot;Diffuse&quot;
-</code></pre>
-<p>}</p>
-</code>]]></content>
     </entry>
 </feed>
