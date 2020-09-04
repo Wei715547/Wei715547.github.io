@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1599061302644">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1599200501420">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ _MainTex(&quot;Main Tex&quot;,2D) = &quot;white&quot;{}//贴图代替漫反射..
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1599061302644" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1599200501420" class="site-logo">
         <h1 class="site-title">Wei: Development technology accumulation</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -170,6 +170,7 @@ samplerCUBE _CubeMap;<br>
 		//f.worldNormal = UnityObjectToWorldNormal(v.normal);
 		//f.worldView = (UnityObjectToWorldNormal(v.vertex), 0);
 		f.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;//将纹理坐标传递到片原函数 * 乘上主贴图缩放属性 + 加上主贴图的偏移属性
+        //f.uv.xy = TRANSFORM_TEX(v.uv,_MainTex);//将纹理坐标传递到片原函数 * 乘上主贴图缩放属性 + 加上主贴图的偏移属性
 		f.uv.zw = v.texcoord.xy * _NormalMap_ST.xy + _NormalMap_ST.zw;//将法线纹理坐标与其属性结合存储到uv.zw中
 
 		TANGENT_SPACE_ROTATION;//调用这个宏后(保证a2v &quot;v&quot;中存在&quot;normal&quot;&quot;tangent&quot;宏自动调用)，会得到一个矩阵&quot;rotation&quot;这个矩阵用来把模型空间下的法线转换到切线空间下

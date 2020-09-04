@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>Wei: Development technology accumulation</title>
-    <updated>2020-09-02T15:44:49.325Z</updated>
+    <updated>2020-09-04T06:21:48.509Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -265,6 +265,8 @@ public void SetArticleItem(ArticleItem articleItem)
     this.articleItem.gameObject.SetActive(true);
     //将此物品栏设置父物体
     this.articleItem.transform.SetParent(transform);
+    //刷新背包时直接设置位置，取消物品UI缓动效果
+    articleItem.transform.localPosition = Vector3.zero;
 
     //防止发生变化
     //设置位置
@@ -555,6 +557,7 @@ samplerCUBE _CubeMap;<br>
 		//f.worldNormal = UnityObjectToWorldNormal(v.normal);
 		//f.worldView = (UnityObjectToWorldNormal(v.vertex), 0);
 		f.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;//将纹理坐标传递到片原函数 * 乘上主贴图缩放属性 + 加上主贴图的偏移属性
+        //f.uv.xy = TRANSFORM_TEX(v.uv,_MainTex);//将纹理坐标传递到片原函数 * 乘上主贴图缩放属性 + 加上主贴图的偏移属性
 		f.uv.zw = v.texcoord.xy * _NormalMap_ST.xy + _NormalMap_ST.zw;//将法线纹理坐标与其属性结合存储到uv.zw中
 
 		TANGENT_SPACE_ROTATION;//调用这个宏后(保证a2v &quot;v&quot;中存在&quot;normal&quot;&quot;tangent&quot;宏自动调用)，会得到一个矩阵&quot;rotation&quot;这个矩阵用来把模型空间下的法线转换到切线空间下
