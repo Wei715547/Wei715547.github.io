@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-09-07T15:26:31.308Z</updated>
+    <updated>2020-09-08T09:20:21.689Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,386 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[Shader,屏幕后处理(Post Effect)]]></title>
+        <id>https://Wei715547.github.io/post/shaderping-mu-hou-chu-li-post-effect/</id>
+        <link href="https://Wei715547.github.io/post/shaderping-mu-hou-chu-li-post-effect/">
+        </link>
+        <updated>2020-09-08T07:34:21.000Z</updated>
+        <content type="html"><![CDATA[<p>挂在主相机上的脚本：<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+[ExecuteInEditMode]//在编译器下执行脚本（不用点击开始即执行）<br>
+public class Post : MonoBehaviour<br>
+{<br>
+public Material EffectMat;//承载后处理Shader的材质</p>
+<pre><code>private void OnRenderImage(RenderTexture source, RenderTexture destination)//该函数在所有的渲染完成后由monobehavior自动调用。
+//官方解释：该函数允许我们使用着色器滤波操作来修改最终的图像，输入原图像source，输出的图像放在desitination里。
+{
+    if (EffectMat !=null)
+    {
+        Graphics.Blit(source, destination, EffectMat);//该函数的作用就是通过一个shader将原图的像素放置到destionation中。
+    }
+}
+</code></pre>
+<p>}<br>
+——————————————————————————————————————<br>
+<img src="https://Wei715547.github.io/post-images/1599552275469.PNG" alt="" loading="lazy"><br>
+Shader1画面溶解流动效果：<br>
+Shader &quot;Shader104/Distortion&quot;<br>
+{<br>
+Properties<br>
+{<br>
+_MainTex(&quot;Texture&quot;, 2D) = &quot;white&quot; {}<br>
+_DisplaceTex(&quot;Displacement Texture&quot;, 2D) = &quot;white&quot; {}<br>
+_Magnitude(&quot;Magnitude&quot;, Range(0,0.1)) = 1</p>
+<pre><code>}
+
+SubShader
+{
+    Tags
+    {
+        &quot;Queue&quot; = &quot;Transparent&quot;
+    }
+
+    Pass{
+        Blend SrcAlpha OneMinusSrcAlpha
+
+        CGPROGRAM
+        #pragma vertex vert
+        #pragma fragment frag
+
+        #include &quot;UnityCG.cginc&quot;
+
+        struct appdata
+        {
+            float4 vertex : POSITION;
+            float2 uv : TEXCOORD0;
+        };
+
+        struct v2f
+        {
+            float4 vertex : SV_POSITION;
+            float2 uv : TEXCOORD0;
+        };
+
+        v2f vert(appdata v)
+        {
+            v2f o;
+            o.vertex = UnityObjectToClipPos(v.vertex);
+            o.uv = v.uv;
+            return o;
+        };
+
+        sampler2D _MainTex;
+        sampler2D _DisplaceTex;//噪波贴图
+        float _Magnitude;
+
+        float4 frag(v2f i): SV_Target//画面流动效果
+        {
+            float2 distuv = float2(i.uv.x + _Time.x * 2, i.uv.y + _Time.x * 2);
+            float2 disp = tex2D(_DisplaceTex, distuv).xy;//噪波贴图的.rg
+            disp = ((disp * 2) - 1) * _Magnitude;
+            float4 col = tex2D(_MainTex, i.uv + disp);
+            return col;
+        }
+        ENDCG
+    }
+}
+</code></pre>
+<p>}<br>
+————————————————————————————————————————<br>
+<img src="https://Wei715547.github.io/post-images/1599552284677.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1599552463055.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1599553049020.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1599553279813.PNG" alt="" loading="lazy"><br>
+Shader2屏幕黑白、反色、RGB分离、像素效果：<br>
+Shader &quot;Shader104/GreyScale&quot;<br>
+{<br>
+Properties<br>
+{<br>
+_MainTex(&quot;Texture&quot;, 2D) = &quot;white&quot; {}<br>
+_Slider(&quot;Slider&quot;,Range(0,1)) = 0.5<br>
+}</p>
+<pre><code>SubShader
+{
+	Tags
+	{
+		&quot;PreviewType&quot; = &quot;Plane&quot;
+	}
+	Pass
+	{
+		CGPROGRAM
+		#pragma vertex vert
+		#pragma fragment frag
+
+		#include &quot;UnityCG.cginc&quot;
+
+		struct appdata
+		{
+			float4 vertex : POSITION;
+			float2 uv: TEXCOORD0;
+		};
+
+		struct v2f
+		{
+			float4 vertex : SV_POSITION;
+			float2 uv: TEXCOORD0;
+		};
+
+		sampler2D _MainTex;
+		float _Slider;
+
+		v2f vert(appdata v)
+		{
+			v2f o;
+			o.vertex = UnityObjectToClipPos(v.vertex);
+			o.uv = v.uv;
+			return o;
+		}
+
+		float4 frag(v2f i) : SV_Target
+		{
+            /*pixelate像素效果对UV进行变换
+            float2 uv = i.uv;
+            uv.x *= _PixelateAmt;
+            uv.y *= _PixelateAmt;
+            uv.x = round(uv.x);
+            uv.y = round(uv.y);
+            uv.x /= _PixelateAmt;
+            uv.y /= _PixelateAmt;*/
+			float4 color = tex2D(_MainTex,i.uv);//默认混合颜色(白色)：不进行后处理
+			float average = 0.212 * color.r + 0.7152 * color.g + 0.0722 * color.b;//颜色黑白化
+			if (i.uv.x &gt; _Slider)//大于Slidr的部分进行后处理
+				return float4(average, average, average, 1);
+                //return float4(1-color.r, 1-color.g, 1-color.b, 1);//反色
+			else
+				return color;
+             /*chromatic aberration RGB分离
+            float4 red = tex2D(_MainTex , i.uv - _Offset);           
+            float4 green = tex2D(_MainTex, i.uv);
+            float4 blue = tex2D(_MainTex, i.uv + _Offset);
+            float4 color = float4(red.r,green.g,blue.b,1);
+            return color;*/
+		}
+		ENDCG
+	}
+}
+</code></pre>
+<p>}<br>
+————————————————————————————————————————<br>
+<img src="https://Wei715547.github.io/post-images/1599552847954.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1599553788615.PNG" alt="" loading="lazy"><br>
+Shader3Kernal矩阵边缘检测、渐变着色:<br>
+Shader &quot;Shader104/Kernal&quot;<br>
+{<br>
+Properties<br>
+{<br>
+_MainTex (&quot;Texture&quot;, 2D) = &quot;white&quot; {}<br>
+_Matrix00 (&quot;Matrix00&quot;,float) = 1<br>
+_Matrix01 (&quot;Matrix01&quot;,float) = 1<br>
+_Matrix02 (&quot;Matrix02&quot;,float) = 1<br>
+_Matrix10 (&quot;Matrix10&quot;,float) = 1<br>
+_Matrix11 (&quot;Matrix11&quot;,float) = -8<br>
+_Matrix12 (&quot;Matrix12&quot;,float) = 1<br>
+_Matrix20 (&quot;Matrix20&quot;,float) = 1<br>
+_Matrix21 (&quot;Matrix21&quot;,float) = 1<br>
+_Matrix22 (&quot;Matrix22&quot;,float) = 1<br>
+_Slider(&quot;Slider&quot;,Range(0,1)) = 0.5<br>
+_Threshold(&quot;_Threshold&quot;,Range(0,1)) = 0.1<br>
+_EdgeColor(&quot;_EdgeColor&quot;,Color) = (1,1,1,1)<br>
+_BackColor(&quot;_BackColor&quot;,Color) = (0,0,0,0)</p>
+<pre><code>}
+SubShader
+{
+    Tags
+    {
+        &quot;PreviewType&quot; = &quot;Plane&quot;
+    }
+
+    Pass
+    {
+        CGPROGRAM
+        #pragma vertex vert
+        #pragma fragment frag
+        
+        #include &quot;UnityCG.cginc&quot;
+
+        struct appdata
+        {
+            float4 vertex : POSITION;
+            float2 uv : TEXCOORD0;
+        };
+
+        struct v2f
+        {
+            float2 uv : TEXCOORD0;
+            float4 vertex : SV_POSITION;
+        };
+
+        v2f vert (appdata v)
+        {
+            v2f o;
+            o.vertex = UnityObjectToClipPos(v.vertex);
+            o.uv = v.uv;
+            return o;
+        }
+        
+        sampler2D _MainTex;
+        float4 _MainTex_TexelSize;
+        float _Matrix00;
+        float _Matrix01;
+        float _Matrix02;
+        float _Matrix10;
+        float _Matrix11;
+        float _Matrix12;
+        float _Matrix20;
+        float _Matrix21;
+        float _Matrix22;
+        float _Slider;
+        float _Threshold;
+        float4 _EdgeColor;//边缘色
+        float4 _BackColor;//背景色
+
+        float4 box(sampler2D tex, float2 uv, float4 size)//检测函数
+        {
+            float4 c = tex2D(tex, uv + float2(-size.x, size.y))*_Matrix00 + tex2D(tex, uv + float2(0, size.y))*_Matrix01 
+            + tex2D(tex, uv + float2(size.x, size.y)) *_Matrix02 + tex2D(tex, uv + float2(-size.x, 0)) * _Matrix10
+            + tex2D(tex, uv + float2(0, 0))*_Matrix11 + tex2D(tex, uv + float2(size.x, 0))*_Matrix12 
+            + tex2D(tex, uv + float2(-size.x, -size.y))*_Matrix20 + tex2D(tex, uv + float2(0, -size.y))*_Matrix21
+            + tex2D(tex, uv + float2(size.x, -size.y))*_Matrix22;
+
+            return c / (_Matrix00+_Matrix01+_Matrix02+_Matrix10+_Matrix11+_Matrix12+_Matrix20+_Matrix21+_Matrix22);
+        }
+
+        float4 frag (v2f i) : SV_Target
+        {
+            float4 color = tex2D(_MainTex, i.uv);
+            if(i.uv.x&gt;_Slider)
+			{//边缘检测
+                color = box(_MainTex, i.uv, _MainTex_TexelSize);
+                if (color.r &lt;= _Threshold &amp;&amp; color.g &lt;= _Threshold &amp;&amp; color.b &lt;= _Threshold)//渐变着色
+                    return _EdgeColor;
+                else
+                    return _BackColor;
+            }
+            else
+                if (color.r &lt;= _Threshold &amp;&amp; color.g &lt;= _Threshold &amp;&amp; color.b &lt;= _Threshold)//渐变着色
+                    return color;
+                else
+                    return float4(1, 1, 1, 1);//未上色部分为白色
+        }
+        ENDCG
+    }
+}
+</code></pre>
+<p>}<br>
+————————————————————————————————————<br>
+<img src="https://Wei715547.github.io/post-images/1599556756456.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1599556177672.PNG" alt="" loading="lazy"><br>
+Shader深度值渲染/范围扫描：<br>
+相机脚本：<br>
+using UnityEngine;<br>
+using System.Collections;<br>
+using System.Collections.Generic;</p>
+<p>[ExecuteInEditMode]<br>
+public class ReplacementShaderEffect : MonoBehaviour<br>
+{<br>
+public Color color;<br>
+public float slider;<br>
+public Shader ReplacementShader;</p>
+<pre><code>void OnValidate()
+{
+    Shader.SetGlobalColor(&quot;_Color_1&quot;, color);//获取Shader中未公开的全局变量
+}
+
+private void Update()
+{
+    Shader.SetGlobalFloat(&quot;_Temp&quot;, slider);//获取Shader中未公开的全局变量
+}
+
+void OnEnable()
+{
+    if (ReplacementShader != null)
+        GetComponent&lt;Camera&gt;().SetReplacementShader(ReplacementShader, &quot;&quot;);
+}
+
+void OnDisable()
+{
+    GetComponent&lt;Camera&gt;().ResetReplacementShader();
+}
+</code></pre>
+<p>}<br>
+————————————————————————————————<br>
+Shader程序：<br>
+Shader &quot;Shader102/Depth&quot;<br>
+{<br>
+SubShader<br>
+{<br>
+Tags<br>
+{<br>
+&quot;RenderType&quot; = &quot;Opaque&quot;<br>
+}</p>
+<pre><code>	ZWrite On
+
+
+	Pass
+	{
+		CGPROGRAM
+		#pragma vertex vert
+		#pragma fragment frag
+
+		#include &quot;UnityCG.cginc&quot;
+
+		struct appdata
+		{
+			float4 vertex : POSITION;
+		};
+
+		struct v2f
+		{
+			float4 vertex : SV_POSITION;
+			float depth : DEPTH;
+		};
+
+		v2f vert(appdata v)
+		{
+			v2f o;
+			o.vertex = UnityObjectToClipPos(v.vertex);
+			o.depth = -(mul(UNITY_MATRIX_MV, v.vertex).z) * _ProjectionParams.w;//相机坐标空间下的深度值
+			return o;
+		}
+		//未公开的全局变量
+		float4 _Color_1;
+		float _Temp;
+        //根据深度值切换渲染方式
+		/*fixed4 frag(v2f i) : SV_Target
+		{
+			float invert = 1 - i.depth;//近处颜色为白色
+
+		if (i.depth &lt;_Temp / 2)//不同深度下实现不同的渲染方式
+			return fixed4(invert, invert, invert, 1);
+		else
+			return fixed4(invert*1.5, 0.3, 0.3,1) ;
+		}*/
+        //范围扫描
+        fixed4 frag(v2f i) : SV_Target
+		{
+			float invert = 1 - i.depth;//近处颜色为白色
+
+		if (abs(i.depth- _Temp / 2)&lt;0.005)//深度范围绝对值内扫描的渲染方式
+			return fixed4(invert*2, 0.2, 0.2, 1);
+		else//正常渲染方式
+			return fixed4(invert, 0.3, 0.3,1) ;
+		}
+		ENDCG
+	}
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[UGUI 背包模块(事件订阅/渗透)]]></title>
         <id>https://Wei715547.github.io/post/ugui-bei-bao-mo-kuai-shi-jian-ding-yue-shen-tou/</id>
@@ -1574,148 +1954,5 @@ FallBack &quot;Diffuse&quot;
 <p>}<br>
 </code></p>
 ]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Shader-高光反射(顶点/像素)]]></title>
-        <id>https://Wei715547.github.io/post/shader-gao-guang-fan-she-ding-dian-xiang-su/</id>
-        <link href="https://Wei715547.github.io/post/shader-gao-guang-fan-she-ding-dian-xiang-su/">
-        </link>
-        <updated>2020-08-18T03:51:59.000Z</updated>
-        <content type="html"><![CDATA[<code>
-高光反射 Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：反射光与视野方向夹角。(夹角越小高光越强,大于90度时即没有高光)；pox(a,b):a的b次方，高光参数取值（1~10）高光参数越大可以看到高光的夹角范围越小
-<p>在顶点函数中计算<br>
-Shader &quot;Custom/HightLightRefalxRander_Vertex&quot;<br>
-{<br>
-Properties<br>
-{<br>
-_Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)<br>
-//外部可调节高光属性<br>
-_Specular(&quot;_SpecularColor&quot;,Color) = (1,1,1,1)//高光颜色<br>
-_Gloss(&quot;Gloss&quot;,Range(8,100)) = 10//高光参数</p>
-<pre><code>}
-	SubShader
-{
-   Pass
-{
-	Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量
-	CGPROGRAM
-	fixed4 _Diffuse;
-    int _Gloss;
-    fixed4 _Specular;
-</code></pre>
-<p>#include &quot;Lighting.cginc&quot;<br>
-#pragma vertex vert//声明顶点着色器<br>
-#pragma fragment frag//声明片段着色器</p>
-<pre><code>struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
-	float4 vertex:POSITION;//获取顶点坐标
-	float3 normal:NORMAL;
-
-};
-struct v2f {//从顶点函数传递到片原函数的语义SV_POSITION:(剪裁空间中的顶点坐标-系统直接使用)，COLOR0/COLOR1:可以传递一组值(4个)，TEXCOORD0~7:传递纹理坐标
-			//f2s片原函数传递给系统：SV_Target:颜色值-输出到屏幕上的颜色(缓存颜色)
-	float4 position:SV_POSITION;
-	fixed3 color : COLOR1;
-};
-
-v2f vert(a2v v)//顶点之间片段颜色采用插值计算填充
-{
-	v2f f;
-	f.position = UnityObjectToClipPos(v.vertex);//将坐标从模型空间转换到剪裁空间
-	fixed3 amblent = UNITY_LIGHTMODEL_AMBIENT.rgb;//获取系统环境光
-	//fixed3 norDir = normalize(unity_WorldToObject(v.normal));//法线方向从世界空间转到模型空间(弃用的方法) 
-	fixed3 N = UnityObjectToWorldNormal(v.normal);//法线方向从世界空间转到模型空间 
-	fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);//第一个直射光的位置，对于顶点来说光的位置即是光的方向
-	fixed3 diffuse = _LightColor0.rgb * max(dot(N,lightDir),0) * _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角
-
-	fixed3 reflectDir = normalize(reflect(-lightDir,N));//计算反射光方向
-	fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - UnityObjectToWorldNormal(v.vertex));//计算视点方向(世界坐标下相机位置-顶点位置)
-	fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(reflectDir, viewDir), 0), _Gloss);//夹角：反射光与视野方向夹角
-
-	f.color = diffuse + amblent + specular;//+:颜色得加(亮度增强),*:融合
-	return f;
-}
-
-
-fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
-{
-return fixed4(f.color,1);//返回法线
-}
-	ENDCG
-}
-
-}
-	FallBack &quot;Diffuse&quot;
-</code></pre>
-<p>}<br>
-—————————————————————————————————<br>
-在片原函数中计算<br>
-Shader &quot;Custom/HightLightRefalxRander_Fragment&quot;<br>
-{<br>
-Properties<br>
-{<br>
-_Diffuse(&quot;DiffuseColor&quot;, Color) = (1,1,1,1)<br>
-_Specular(&quot;_SpecularColor&quot;,Color) = (1,1,1,1)<br>
-_Gloss(&quot;Gloss&quot;,Range(8,100)) = 10//高光参数<br>
-}<br>
-SubShader<br>
-{<br>
-Pass<br>
-{<br>
-Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量<br>
-CGPROGRAM<br>
-fixed4 _Diffuse;<br>
-int _Gloss;<br>
-fixed4 _Specular;<br>
-#include &quot;Lighting.cginc&quot;<br>
-#pragma vertex vert//声明顶点着色器<br>
-#pragma fragment frag//声明片段着色器</p>
-<pre><code>struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
-	float4 vertex:POSITION;//获取顶点坐标
-	float3 normal:NORMAL;
-
-};
-struct v2f {//从顶点函数传递到片原函数的语义SV_POSITION:(剪裁空间中的顶点坐标-系统直接使用)，COLOR0/COLOR1:可以传递一组值(4个)，TEXCOORD0~7:传递纹理坐标
-			//f2s片原函数传递给系统：SV_Target:颜色值-输出到屏幕上的颜色(缓存颜色)
-	float4 position:SV_POSITION;
-	fixed3 worldNormal : TEXCOORD0;//传递法线方向
-	float3 worldView :TEXCOORD1;//传递顶点坐标
-};
-
-v2f vert(a2v v)//顶点之间片段颜色采用插值计算填充
-{
-	v2f f;
-	f.position = UnityObjectToClipPos(v.vertex);//将坐标从模型空间转换到剪裁空间
-	f.worldNormal = UnityObjectToWorldNormal(v.normal);//向片原函数传递法线方向
-	f.worldView = UnityObjectToWorldNormal(v.vertex);//向片原函数传递顶点坐标
-	return f;
-}
-
-
-fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
-{
-	fixed3 amblent = UNITY_LIGHTMODEL_AMBIENT.rgb;//获取系统环境光
-	//fixed3 norDir = normalize(unity_WorldToObject(v.normal));//法线方向从世界空间转到模型空间(弃用的方法) 
-	fixed3 N = f.worldNormal;//法线方向从世界空间转到模型空间 
-	fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);//第一个直射光的位置，对于顶点来说光的位置即是光的方向
-	fixed3 diffuse = _LightColor0.rgb * max(dot(N,lightDir),0) * _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角
-
-	//fixed3 reflectDir = normalize(reflect(-lightDir,N));//计算反射光方向
-	fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - f.worldView);//计算视点方向(世界坐标下相机位置-顶点位置)
-	//fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(reflectDir, viewDir), 0), _Gloss);//夹角：反射光与视野方向夹角
-	fixed3 harfDir = normalize(viewDir + lightDir);//平行光与视野方向平分项
-	fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(N, harfDir), 0), _Gloss);//Blinn-Phong光照模型Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：法线与x方向夹角,x:平行光与视野方向的平分项。		
-    
-
-	fixed3 tempColor = diffuse + amblent + specular;//+:颜色得加(亮度增强),*:融合
-return fixed4(tempColor,1);//返回法线
-}
-	ENDCG
-}
-
-}
-	FallBack &quot;Diffuse&quot;
-</code></pre>
-<p>}</p>
-<code/>]]></content>
     </entry>
 </feed>
