@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-09-08T15:05:01.315Z</updated>
+    <updated>2020-09-12T03:40:52.059Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,131 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[Unet局域网连接]]></title>
+        <id>https://Wei715547.github.io/post/unet-ju-yu-wang-lian-jie/</id>
+        <link href="https://Wei715547.github.io/post/unet-ju-yu-wang-lian-jie/">
+        </link>
+        <updated>2020-09-12T03:14:28.000Z</updated>
+        <content type="html"><![CDATA[<p>NetWorkManager:<br>
+<img src="https://Wei715547.github.io/post-images/1599881098982.PNG" alt="" loading="lazy"></p>
+<p>Player:<br>
+<img src="https://Wei715547.github.io/post-images/1599881197525.PNG" alt="" loading="lazy"><br>
+PlayerCT Cood:<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.Networking;</p>
+<p>//[System.Obsolete]<br>
+public class PlayerCT : NetworkBehaviour<br>
+{</p>
+<pre><code>public int rotateSpeed = 120;
+public int moveSpeed = 3;
+
+public GameObject Bullet;
+public Transform firePoint;
+
+// Update is called once per frame
+void Update()
+{
+    if (isLocalPlayer == false)//控制本地角色
+        return;
+    float h = Input.GetAxis(&quot;Horizontal&quot;);
+    float v = Input.GetAxis(&quot;Vertical&quot;);
+
+    transform.Rotate(Vector3.up * h * rotateSpeed * Time.deltaTime); 
+    transform.Translate(Vector3.forward * v * moveSpeed * Time.deltaTime);
+
+    if (Input.GetKeyDown(KeyCode.Space))
+    {
+        CmdFire();
+    }
+
+}
+[Command]//客户端发起调用，服务端执行
+void CmdFire()//服务端调用的方法以Cmd开头
+{
+    GameObject bullet = Instantiate(Bullet, firePoint.position, firePoint.rotation);
+    bullet.GetComponent&lt;Rigidbody&gt;().velocity = transform.forward * 10;//Bulet预制体添加Network Transform监测刚体组件（初始监测一次施加速度）
+    Destroy(bullet, 2f);//2s后销毁
+
+    NetworkServer.Spawn(bullet);//服务端执行同步到客户端
+}
+
+public override void OnStartLocalPlayer()//回调函数：加角色时执行
+{
+    GetComponent&lt;MeshRenderer&gt;().material.color = Color.blue;
+    //firePoint = transform.Find(&quot;FirePoint&quot;).GetComponent&lt;Transform&gt;();
+}
+</code></pre>
+<p>}</p>
+<hr>
+<p>Player Health Cood:<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+using UnityEngine.Networking;</p>
+<p>[System.Obsolete]<br>
+public class Health : NetworkBehaviour<br>
+{<br>
+private Slider hpSl;<br>
+public const int hp = 100;<br>
+[SyncVar(hook =&quot;OnChangeHealth&quot;)]//特性：变量数据同步到客户端，变量变化时调用方法“方法名”<br>
+private int currentHp = hp;<br>
+private void Start()<br>
+{<br>
+hpSl = transform.Find(&quot;Canvas/HpSlider&quot;).GetComponent <Slider >();</p>
+<pre><code>}
+public void TakeDamage(int damege)
+{
+    if (isServer == false)//服务端执行，同步到客户端
+        return;
+    currentHp -= damege;
+    if (currentHp &lt;=0)
+    {
+        currentHp = hp;
+        Debug.Log(&quot;Dead&quot;);
+        //Destroy(this.gameObject);
+        RpcRespown();//角色复位
+    }
+    
+}
+void OnChangeHealth(int health)//[SyncVar hook=&quot;方法&quot;]特性标记的变量值发生变化时执行
+{
+    hpSl.value = health / (float)hp;
+}
+[ClientRpc]//客户端调用
+void RpcRespown()//客户端调用以Rpc开头
+{
+    if (isLocalPlayer == false)//本地角色执行
+        return;
+    transform.position = Vector3.zero;
+}
+</code></pre>
+<p>}</p>
+<hr>
+<p><img src="https://Wei715547.github.io/post-images/1599881655946.PNG" alt="" loading="lazy"><br>
+Bullet Cood:<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class Bullet : MonoBehaviour<br>
+{<br>
+[System.Obsolete]<br>
+private void OnCollisionEnter(Collision collision)<br>
+{<br>
+GameObject hit = collision.gameObject;<br>
+Health health = hit.GetComponent<Health>();<br>
+if (health !=null)<br>
+{<br>
+health.TakeDamage(Random.Range(10, 21));<br>
+Destroy(this.gameObject);<br>
+}<br>
+}<br>
+}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Shader,屏幕后处理(Post Effect)]]></title>
         <id>https://Wei715547.github.io/post/shaderping-mu-hou-chu-li-post-effect/</id>
@@ -1889,83 +2014,6 @@ Shader "Custom/Single_Texture"
 </code><br>
 <img src="https://Wei715547.github.io/post-images/1597905313414.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1597905320903.PNG" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Shader-漫反射(半兰伯特),高光(BP)混合实现]]></title>
-        <id>https://Wei715547.github.io/post/shader-man-fan-she-ban-lan-bo-te-gao-guang-bphun-he-shi-xian/</id>
-        <link href="https://Wei715547.github.io/post/shader-man-fan-she-ban-lan-bo-te-gao-guang-bphun-he-shi-xian/">
-        </link>
-        <updated>2020-08-19T08:39:01.000Z</updated>
-        <content type="html"><![CDATA[<code>
-Shader "Custom/ShaderDiffues-Specular"
-{
-	Properties//属性
-	{
-		_Diffuse("_DiffuseColor",Color) = (1,1,1,1)//漫反射颜色
-		_Specular("_Specular", Color) = (1, 1, 1, 1)//高光颜色
-		_Gloss("_Gloss", Range(10, 200)) = 20//高光参数
-	}
-		SubShader
-	{
-		Pass
-		{
-			Tags {"Lighting" = "ForwardBase"} //定义LightMode,获取UNITY内部光照变量
-			CGPROGRAM
-			//在CG声明属性
-			fixed4 _Diffuse;
-			fixed4 _Specular;
-			int _Gloss;
-<pre><code>		#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0.rgb;光源颜色
-		#pragma vertex vert//声明顶点函数
-		#pragma fragment frag//声明片原函数
-		
-
-		struct a2v//应用向顶点函数传递参数
-		{
-			float4 vertex:POSITION;//模型空间顶点坐标
-			float3 normal:NORMAL;//模型空间法线方向
-		};
-		struct v2f//顶点函数向片原函数传递参数
-		{
-			float4 svPos:SV_POSITION;//顶点函数返回值：剪裁空间中的顶点坐标-系统直接使用
-			float3 worldNormal : TEXCOORD0;//顶点函数向片原函数传递世界坐标下的法线方向
-			float4 worldView:TEXCOORD1;//顶点函数向片原函数传递世界坐标下的顶点坐标
-		};
-
-		v2f vert(a2v v)//顶点函数将顶点从模型空间转到世界空间，返回值在世界坐标系下的顶点坐标
-		{
-			v2f f;//声明传参结构体,并对其中的值赋值
-			f.svPos = UnityObjectToClipPos(v.vertex);
-			f.worldNormal = UnityObjectToWorldNormal(v.normal);
-			f.worldView = (UnityObjectToWorldNormal(v.vertex), 0);
-			return f;//返回结构体
-		}
-
-		fixed4 frag(v2f f) :SV_Target//片原函数，返回值为输出到像素颜色值的缓存
-		{
-			//计算漫反射
-			fixed3 normalDir = normalize(f.worldNormal);//法线方向
-			fixed3 lightDir = normalize(UnityWorldSpaceLightDir(f.worldView));//光源方向
-			fixed3 diffuse = _LightColor0.rgb * _Diffuse * max((dot(normalDir,lightDir)*0.5+0.5), 0);//fixed3 harfLambert =dot(f.wordNormalDir, lightDir)*0.5+0.5;//半兰伯特光照模型:直射光颜色 * (cos夹角(光与法线)*0.5+0.5):使背光面不完全为黑色
-
-			//计算高光反射
-			//fixed3 reflectDir = normalize(reflect(-lightDir, normalDir));
-			fixed3 viewDir = normalize(WorldSpaceViewDir(f.worldView));//实视线方向
-			fixed3 harfDir = normalize(viewDir + lightDir);//视角与平行光的平分方向
-			fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(normalDir, harfDir),0), _Gloss);//BP模型://Blinn-Phong光照模型Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：法线与x方向夹角,x:平行光与视野方向的平分项。
-			
-			fixed3 tempColor = diffuse + specular + UNITY_LIGHTMODEL_AMBIENT.rgb;//漫反射+高光+环境光，相加混合
-			return fixed4(tempColor,1);
-		}
-		ENDCG
-	}
-
-}
-FallBack &quot;Diffuse&quot;
-</code></pre>
-<p>}<br>
-</code></p>
 ]]></content>
     </entry>
 </feed>
