@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Grass批量生成 | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1600096895940">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+[ExecuteInEditMode]
+public class Procedu..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1600096895940" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Grass批量生成</h2>
+            <div class="post-date">2020-09-14</div>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://Wei715547.github.io/post-images/1600096518618.PNG" alt="" loading="lazy"><br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+[ExecuteInEditMode]<br>
+public class ProceduralGrass : MonoBehaviour<br>
+{<br>
+#region Terrain Data<br>
+[Range(0, 1000)]<br>
+public int terrainSize = 250;          //地形大小<br>
+[Range(0, 100f)]<br>
+public float terrainHeight = 10f;          //地形高度<br>
+public Material terrainMat;          //地形材质</p>
+<pre><code>private float xOffset;
+private float zOffset;
+
+[Range(1f, 100f)]
+public float scaleFatter = 10f;          //地形缩放
+[Range(1f, 100f)]
+public float offsetFatter = 10f;          //地形偏移
+
+List&lt;Vector3&gt; vertexs = new List&lt;Vector3&gt;();          //顶点列表，存储网格顶点信息
+List&lt;int&gt; triangles = new List&lt;int&gt;();          //三角形面列表，存储网格三角形信息
+float[,] perlinNoise;          //存储每个顶点的高度值
+
+Vector3[] terrainNormals;          //存储地形的顶点法线的一维数组
+Vector3[,] terrainNormals2D;          //存储地形的顶点法线的二维数组
+#endregion 
+//___________________________________________________________________________
+#region Grass Data
+[Range(0, 100)]
+public int grassRowCount = 50;          //草根集,定义草的广度
+[Range(1, 1000)]
+public int grassCountPerPatch = 100;          //定义每一堆 草根集 的草密度
+public Material grassMat;           //草的材质
+public Mesh grassMesh;          //草的网格
+List&lt;Vector3&gt; grassVerts = new List&lt;Vector3&gt;();          //存储草的顶点
+
+Vector3[] grassNormals;          //存储草的顶点法线
+List&lt;Vector3&gt; grassNormalList = new List&lt;Vector3&gt;();          //存储草的顶点法线列表
+#endregion
+
+void Start()
+{
+    xOffset = transform.position.x;
+    zOffset = transform.position.z;
+    terrainNormals = new Vector3[terrainSize * terrainSize];//顶点法线数组容量250*250
+    terrainNormals2D = new Vector3[terrainSize, terrainSize];//2D顶点法线数组容量250*250
+    perlinNoise = new float[terrainSize, terrainSize];//顶点高度数组容量250*250
+    GenerateTerrain();//生成地形
+
+    GenerateGrassArea(grassRowCount, grassCountPerPatch);//生成草地（广度，密度）
+
+    
+}
+
+void CreateVertsAndTris()
+{
+    //遍历每一个顶点，并用列表 vertexs 和 triangles 存储
+    for (int i = 0; i &lt; terrainSize; i++)
+    {
+        for (int j = 0; j &lt; terrainSize; j++)
+        {
+            float noiseHeight = GeneratePerlinNoise(i, j);//顶点随机高度
+            perlinNoise[i, j] = noiseHeight;//该坐标下的顶点高度存入数组
+
+            vertexs.Add(new Vector3(i, noiseHeight * terrainHeight, j));//顶点坐标（x,y,z）
+
+            //不算上坐标轴的顶点
+            if (i == 0 || j == 0)
+                continue;
+
+            //每三个顶点作为一个索引建立三角形
+            triangles.Add(terrainSize * i + j);
+            triangles.Add(terrainSize * i + j - 1);
+            triangles.Add(terrainSize * (i - 1) + j - 1);
+            triangles.Add(terrainSize * (i - 1) + j - 1);
+            triangles.Add(terrainSize * (i - 1) + j);
+            triangles.Add(terrainSize * i + j);
+        }
+    }
+
+    //清空grassVerts的数据    
+    grassVerts.Clear();
+}
+
+//生成地形高度的随机 Perlin 值
+float GeneratePerlinNoise(int i, int j)
+{
+    float xCoord = (float)(i + xOffset) / terrainSize * scaleFatter + offsetFatter;
+    float zCoord = (float)(j + zOffset) / terrainSize * scaleFatter + offsetFatter;
+
+    return Mathf.PerlinNoise(xCoord, zCoord);
+}
+
+//生成地形网格数据
+void GenerateTerrain()
+{
+    CreateVertsAndTris();
+
+    //计算UV(二维向量-顶点坐标作为法线方向)
+    Vector2[] uvs = new Vector2[vertexs.Count];
+    for (int i = 0; i &lt; vertexs.Count; i++)
+    {
+        uvs[i] = new Vector2(vertexs[i].x, vertexs[i].z);
+    }
+
+    //添加一个 MyTerrain 的物体，并添加 MeshFilter / MeshRenderer 两个组件
+    //MeshFilter 存储物体的网格信息
+    //MeshRenderer 负责接收这些信息并把这些信息渲染出来
+    GameObject Myterrain = new GameObject(&quot;Terrain0&quot;);
+    Myterrain.transform.position = this.gameObject.transform.position;
+    Myterrain.AddComponent&lt;MeshFilter&gt;();
+    MeshRenderer renderer = Myterrain.AddComponent&lt;MeshRenderer&gt;();
+    //开启地面的阴影投射和接受
+    renderer.receiveShadows = true;
+    renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+    //添加Mesh Collider
+    MeshCollider collider = Myterrain.AddComponent&lt;MeshCollider&gt;();
+
+    //添加材质
+    renderer.sharedMaterial = terrainMat;
+
+    //创建一个 Mesh 网格
+    Mesh groundMesh = new Mesh//网格构造函数
+    {
+        //输入网格顶点数据
+        vertices = vertexs.ToArray(),
+        //输入网格三角面数据
+        triangles = triangles.ToArray(),
+        uv = uvs
+    };
+
+    //为了得到正确的光照需要重新计算得到正确的法线信息
+    groundMesh.RecalculateNormals();
+    terrainNormals = groundMesh.normals;
+
+    //将存储地形法线数组从一维数组转为二维，便于索引
+    for (int i = 0; i &lt; terrainSize; i++)
+    {
+        for (int j = 0; j &lt; terrainSize; j++)
+        {
+            terrainNormals2D[i, j] = terrainNormals[i * terrainSize + j];
+        }
+    }
+    //网格赋值到渲染器/碰撞体
+    Myterrain.GetComponent&lt;MeshFilter&gt;().mesh = groundMesh;
+    collider.sharedMesh = groundMesh;
+}
+
+void GenerateGrassArea(int rowCount, int perPatchSize)
+{
+    //最大顶点数为 65000
+    List&lt;int&gt; indices = new List&lt;int&gt;();
+    for (int i = 0; i &lt; 65000; i++)
+    {
+        indices.Add(i);
+    }
+
+    //初始位置
+    Vector3 currentPos = transform.position;
+    //草根集 每一次循环偏移的距离
+    Vector3 patchSize = new Vector3(terrainSize / rowCount, 0, terrainSize / rowCount);
+
+    //每一堆 草根集 进行循环
+    for (int i = 0; i &lt; rowCount; i++)
+    {
+        for (int j = 0; j &lt; rowCount; j++)
+        {
+            GenerateGrass(currentPos, patchSize, perPatchSize);
+            currentPos.x += patchSize.x;
+        }
+        currentPos.x = transform.position.x;
+        currentPos.z += patchSize.z;
+    }
+
+    //生成 GrassLayerGruop 来成为父级管理物理
+    GameObject grassLayerGroup1 = new GameObject(&quot;GrassLayerGroup1&quot;);
+    //生成 GrassLayer 物体来存储草数据
+    GameObject grassLayer;
+    MeshFilter grassMeshFilter;
+    //Mesh grassMesh;
+    MeshRenderer grassMeshRenderer;
+    int a = 0;
+
+    //当 grassVerts.Count 的数量即草的全部顶点数超过 65000 个时
+    //创立多个网格处理
+    while (grassVerts.Count &gt; 65000)
+    {
+        Debug.Log(&quot;More65000&quot;);
+        grassMesh = new Mesh();
+        grassMesh.vertices = grassVerts.GetRange(0, 65000).ToArray();
+        //存储每个草顶点的法线（当顶点超过 65000个）
+        grassNormals = new Vector3[65000];
+        grassNormalList.GetRange(0, 65000);
+        for (int i = 0; i &lt; 65000; i++)
+        {
+            grassNormals[i] = grassNormalList[i];
+        }
+
+        //设置子网格的索引缓冲区,相关官方文档：https://docs.unity3d.com/ScriptReference/Mesh.SetIndices.html
+        //每一个创建的网格的顶点数目不会超过 65000 个
+        grassMesh.SetIndices(indices.ToArray(), MeshTopology.Points, 0);
+
+        //创建一个新的 GameObject 来承载这些点
+        grassLayer = new GameObject(&quot;GrassLayer &quot; + a++);
+        grassLayer.transform.SetParent(grassLayerGroup1.transform);
+        grassMeshFilter = grassLayer.AddComponent&lt;MeshFilter&gt;();
+        grassMeshRenderer = grassLayer.AddComponent&lt;MeshRenderer&gt;();
+        //关闭草地的阴影投射和接受
+        grassMeshRenderer.receiveShadows = false;
+        grassMeshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        grassMeshRenderer.sharedMaterial = grassMat;
+        grassMesh.normals = grassNormals;
+        grassMeshFilter.mesh = grassMesh;
+        //移除前 65000 个顶点
+        grassVerts.RemoveRange(0, 65000);
+        grassNormalList.RemoveRange(0, 65000);
+    }
+    #region 草的数量少于6500时
+    //当 grassVerts.Count 的数量即草的全部顶点数没有超过 65000 个时
+    grassLayer = new GameObject(&quot;GrassLayer&quot; + a);
+    grassLayer.transform.SetParent(grassLayerGroup1.transform);
+    grassMeshFilter = grassLayer.AddComponent&lt;MeshFilter&gt;();
+    grassMeshRenderer = grassLayer.AddComponent&lt;MeshRenderer&gt;();
+    
+    //关闭草地的阴影投射和接受
+    grassMeshRenderer.receiveShadows = false;
+    grassMeshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+    grassMesh = new Mesh
+    {
+        vertices = grassVerts.ToArray()
+    };
+
+    //存储每个草顶点的法线（当顶点没有超过 65000个）
+    grassNormals = new Vector3[grassMesh.vertexCount];
+    grassNormalList.GetRange(0, grassMesh.vertexCount);
+    for (int i = 0; i &lt; grassMesh.vertexCount; i++)
+    {
+        grassNormals[i] = grassNormalList[i];
+    }
+    grassMesh.normals = grassNormals;
+    //设立子网格数据
+    grassMesh.SetIndices(indices.GetRange(0, grassVerts.Count).ToArray(), MeshTopology.Points, 0);
+
+    grassMeshFilter.mesh = grassMesh;
+    grassMeshRenderer.sharedMaterial = grassMat;
+    #endregion
+}
+
+//生成草
+void GenerateGrass(Vector3 vertPos, Vector3 patchSize, int grassCountPerPatch)
+{
+    //每一堆 草根集 里的草进行循环
+    for (int i = 0; i &lt; grassCountPerPatch; i++)
+    {
+        //Random.value 返回 0~1 之间的随机值
+        //得到在两个 草根集 之间的草的随机位置并用索引值
+        float randomX = Random.value * patchSize.x;
+        float randomZ = Random.value * patchSize.z;
+
+        int indexX = (int)((vertPos.x - transform.position.x) + randomX);
+        int indexZ = (int)((vertPos.z - transform.position.z) + randomZ);
+
+        //防止草种出地形
+        if (indexX &gt;= terrainSize)
+        {
+            Debug.Log(&quot;Full&quot;);
+            indexX = (int)terrainSize - 1;
+        }
+
+        if (indexZ &gt;= terrainSize)
+        {
+            Debug.Log(&quot;Full&quot;);
+            indexZ = (int)terrainSize - 1;
+        }
+
+        //添加每一个草的顶点位置到 grassVert 列表里
+        grassVerts.Add(new Vector3(vertPos.x + randomX, perlinNoise[indexX, indexZ] * terrainHeight, vertPos.z + randomZ));//包括草地Mesh网格顶点高度值
+
+        //添加每一个草的顶点法线到 grassNormalList 列表里
+        grassNormalList.Add(terrainNormals2D[indexX, indexZ]);//草地Mesh网格顶点法线，与同坐标的地面网格法线相同
+    }
+}
+</code></pre>
+<p>}</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/unet-ju-yu-wang-lian-jie/">
+                  <h3 class="post-title">
+                    Unet局域网连接
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
