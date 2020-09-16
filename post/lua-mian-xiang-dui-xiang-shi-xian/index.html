@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>拖拽接口 | WeiBlog</title>
+<title>Lua面向对象实现 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,11 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using Uni..." />
+    <meta name="description" content="print(&quot;封装__&quot;)
+Object = {}
+Object.ID = 1
+function Object:Text()--&quot;:&quot;自动传入调用这个函数的对象，作为第一个参数传入方法
+print(s..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -107,85 +107,78 @@ using Uni..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">拖拽接口</h2>
-            <div class="post-date">2020-05-26</div>
+            <h2 class="post-title">Lua面向对象实现</h2>
+            <div class="post-date">2020-09-16</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.EventSystems;<br>
-using UnityEngine.UI;<br>
-public class ItemOnnDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler<br>
-{<br>
-public Transform originatParent;<br>
-public Inventory myBag;<br>
-private int currentItemID;</p>
-<pre><code>public void OnBeginDrag(PointerEventData eventData)
-{
-    originatParent = transform.parent;
-    currentItemID = originatParent.GetComponent&lt;Slot&gt;().slotID;
-    transform.SetParent(transform.parent.parent);
-    transform.position = eventData.position;
-    GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = false;
-}
-
-public void OnDrag(PointerEventData eventData)
-{
-    transform.position = eventData.position;
-    //print(eventData.pointerCurrentRaycast.gameObject.name);
-}
-
-public void OnEndDrag(PointerEventData eventData)
-{
-    if (eventData.pointerCurrentRaycast.gameObject != null)
-    {
-        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Item Image&quot;)//物品栏有物品时
-        {
-            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform.parent.parent);
-            transform.position = eventData.pointerCurrentRaycast.gameObject.transform.parent.parent.position;
-
-            //交换存储位置
-            var temp = myBag.itemList[currentItemID];
-            myBag.itemList[currentItemID] = myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID];
-            myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID] = temp;
-            //交换存储位置
-
-            eventData.pointerCurrentRaycast.gameObject.transform.parent.SetParent(originatParent);
-            eventData.pointerCurrentRaycast.gameObject.transform.parent.position = originatParent.position;
-            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
-            return;
-        }
-        if (eventData.pointerCurrentRaycast.gameObject.name == &quot;Slot(Clone)&quot;)
-        {
-            //物品栏为空时
-            transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform);
-            transform.position = eventData.pointerCurrentRaycast.gameObject.transform.position;
-
-            myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID] = myBag.itemList[currentItemID];
-            if (eventData.pointerCurrentRaycast.gameObject.GetComponent&lt;Slot&gt;().slotID != currentItemID)
-                myBag.itemList[currentItemID] = null;
-
-            GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
-            return;
-        }
-    }
-    //其他任何位置返回原位
-    transform.SetParent(originatParent);
-    transform.position = originatParent.position;
-    GetComponent&lt;CanvasGroup&gt;().blocksRaycasts = true;
-}
-</code></pre>
-<p>}</p>
+              <p>print(&quot;<strong><strong><strong><strong><strong><strong>封装</strong></strong></strong></strong></strong></strong>__&quot;)<br>
+Object = {}<br>
+Object.ID = 1<br>
+function Object:Text()--&quot;:&quot;自动传入调用这个函数的对象，作为第一个参数传入方法<br>
+print(self.ID)--“self”代表默认传入的第一个参数<br>
+end</p>
+<p>function Object:new( )--类用于创建对象的方法--构造函数<br>
+--function Object:new(o)--充当构造函数，返回空表，将本身设为空表的原表来继承类的属性与函数<br>
+--local obj= o or {}--o填写时在填入子类的属性/函数基础上创建对象，不填时为空继承父类默认所有属性/函数创建对象（）p1 = Object:new(weight = 100) 或 p1 = Object:new()<br>
+local obj = {}<br>
+--原表的__index指向自身<br>
+self.__index =self--__index:当在自己的表中找不到目标属性时，就会在元表的__index中寻找<br>
+setmetatable(obj ,self)<br>
+--setmetatable (obj,{__index=self})--与上两句作用相同<br>
+return obj<br>
+end</p>
+<p>local myObj = Object:new()<br>
+print(myObj)<br>
+print(myObj.ID)<br>
+myObj:Text()--myObj调用则传入myObj</p>
+<p>print(&quot;_<strong><strong><strong><strong><strong><strong><strong><strong>继承</strong></strong></strong></strong></strong></strong></strong></strong>&quot;)</p>
+<p>--构造用于继承的方法<br>
+function Object:subClass(className)--声明类的方法<br>
+--_G表存储所有的全局变量<br>
+_G[className] = {}<br>
+local obj = _G[className]<br>
+self.__index = self<br>
+--为子类定义一个父类属性base<br>
+obj.base = self<br>
+setmetatable(obj,self)<br>
+end</p>
+<p>Object:subClass(&quot;Person&quot;)<br>
+--print(Person)--此时是通过类名访问属性，类似静态变量<br>
+--Person:Text()<br>
+--通过对象访问属性<br>
+local p1 = Person:new ()--Person继承自Object的new方法。self使Person为第一变量传入<br>
+p1:Text()--原表中不存在，会继续查找原表的原表</p>
+<p>print(&quot;____________多态————————————————————————————&quot;)</p>
+<p>Object:subClass(&quot;GameObject&quot;)--声明游戏对象类<br>
+GameObject.posX = 0<br>
+GameObject.posY = 0<br>
+function GameObject:Move()<br>
+self .posX = self.posX+1<br>
+self.posY = self.posY+1<br>
+print(self.posX)<br>
+print(self.posX)</p>
+<p>end</p>
+<p>GameObject:subClass(&quot;Player&quot;)--声明角色类</p>
+<p>function Player:Move()--与父类方法“重名&quot;即相当于重写方法<br>
+--此时base指GameObject类，使用“：”调用相当于把基类作为第一参数传入方法中，则此时创建pl2时会输出2，2<br>
+--self.base:Move()<br>
+--因此为了避免把基类表传入方法中，不使用“：”调用<br>
+self.base.Move(self)--使用.进行调用自行填入第一个传入的参数<br>
+print(&quot;子类重写&quot;)<br>
+end</p>
+<p>local pl1 = Player:new()--角色类对象<br>
+pl1:Move()</p>
+<p>local pl2 = Player:new()<br>
+pl2:Move()</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/zi-fu-chuan-fang-fa/">
+                <a href="https://Wei715547.github.io/post/grass-pi-liang-sheng-cheng/">
                   <h3 class="post-title">
-                    字符、可变字符串，方法
+                    Grass批量生成
                   </h3>
                 </a>
               </div>
