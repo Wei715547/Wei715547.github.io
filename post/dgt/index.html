@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>里式转换-类多态 | WeiBlog</title>
+<title>DGT | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,17 +18,8 @@
 
 
 
-    <meta name="description" content="class Program
-{
-public class Per
-{
-public void Say()
-{
-Console.WriteLine(&quot;Per&quot;);
-}
-}
-public class PerSOne:Per
-..." />
+    <meta name="description" content="1.//变量插值方法
+DOTween.To(() =&gt; dtV, x =&gt; dtV = x, new Vector3(10, 10, 10), 2);//            DoTween.To(表达式1()目标变量，表达式..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -113,79 +104,104 @@ public class PerSOne:Per
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">里式转换-类多态</h2>
-            <div class="post-date">2020-07-21</div>
+            <h2 class="post-title">DGT</h2>
+            <div class="post-date">2020-09-22</div>
             
             <div class="post-content" v-pre>
-              <p>class Program<br>
+              <p>1.//变量插值方法<br>
+DOTween.To(() =&gt; dtV, x =&gt; dtV = x, new Vector3(10, 10, 10), 2);//            DoTween.To(表达式1()目标变量，表达式2(目标变量=变量，变量值)，变化时间，)<br>
+//当前位置到世界坐标下移动<br>
+bgt.transform.DOMove(s, 0.5f, true ).OnComplete(() =&gt;<br>
 {<br>
-public class Per<br>
+UM.bagPanel.SetActive(false);<br>
+UM.UI_btns.SetActive(true);<br>
+});<br>
+2.//当前位置到局部坐标下移动<br>
+bgt.transform.DOLocalMove(s, 0.5f, true ).OnComplete(() =&gt;<br>
 {<br>
-public void Say()<br>
+UM.bagPanel.SetActive(false);<br>
+UM.UI_btns.SetActive(true);<br>
+});<br>
+3.//DGT倒放<br>
+bgt.transform.DOMove(e, 0.25f, true );<br>
+//Tweener对象保存DG返回的动画，设置动画不被销毁时可倒叙播放<br>
+Tweener tweener = bgg.transform.DOMove(pe, 0.5f, true);//重复执行时会创建多个动画对象耗费性能，（不接收动画对象直接运行）<br>
+tweener.SetAutoKill(false);<br>
+tweener.Pause();//暂停<br>
+//bgt.transform.DOPlayForward();//+<br>
+bgt.transform.DOPlayBackwards();//-<br>
+4.//From()<br>
+bgt.transform.DOMoveX(5, 1f)//默认从初始位置移动到5，<br>
+bgt.transform.DOMoveX(5, 1f).From();//添加From()从5移动到初始位置<br>
+bgt.transform.DOMoveX(5, 1f).From(true);//填入参数时：从相“对位”置移动到初始位置<br>
+5.//曲线/事件函数<br>
+Tweener//DG返回对象<br>
+tweener.SetEase(Ease.InBack);//设置曲线(枚举类型)<br>
+public enum Ease<br>
 {<br>
-Console.WriteLine(&quot;Per&quot;);<br>
+Unset = 0,<br>
+Linear = 1,<br>
+InSine = 2,<br>
+OutSine = 3,<br>
+InOutSine = 4,<br>
+InQuad = 5,<br>
+OutQuad = 6,<br>
+InOutQuad = 7,<br>
+InCubic = 8,<br>
+OutCubic = 9,<br>
+InOutCubic = 10,<br>
+InQuart = 11,<br>
+OutQuart = 12,<br>
+InOutQuart = 13,<br>
+InQuint = 14,<br>
+OutQuint = 15,<br>
+InOutQuint = 16,<br>
+InExpo = 17,<br>
+OutExpo = 18,<br>
+InOutExpo = 19,<br>
+InCirc = 20,<br>
+OutCirc = 21,<br>
+InOutCirc = 22,<br>
+InElastic = 23,<br>
+OutElastic = 24,<br>
+InOutElastic = 25,<br>
+InBack = 26,<br>
+OutBack = 27,<br>
+InOutBack = 28,<br>
+InBounce = 29,<br>
+OutBounce = 30,<br>
+InOutBounce = 31,<br>
+Flash = 32,<br>
+InFlash = 33,<br>
+OutFlash = 34,<br>
+InOutFlash = 35,<br>
+INTERNAL_Zero = 36,<br>
+INTERNAL_Custom = 37<br>
 }<br>
-}<br>
-public class PerSOne:Per<br>
+tweener.SetLoops(2);//设置循环次数<br>
+tweener.OnComplete(() =&gt;//表达式形式在大括号中直接写入语句/或直接传入“方法”<br>
 {<br>
-public void Say()<br>
-{<br>
-Console.WriteLine(&quot;PerSOne&quot;);<br>
-}<br>
-}<br>
-public class PerSTwo:Per<br>
-{<br>
-public void Say()<br>
-{<br>
-Console.WriteLine(&quot;PerSTwo&quot;);<br>
-}<br>
-}</p>
-<pre><code>    static void Main(string[] args)
-    {
-        //里式转换-类多态
-        Per[] per = new Per[3];
-        Random r = new Random();
-        int rs = 0;
-        for (int i = 0; i &lt; per.Length; i++)
-        {
-            rs = r.Next(0, 2);
-            switch(rs)
-            {
-                case 0:per[i] = new PerSOne();
-                    break;
-                case 1:per[i] = new PerSTwo();
-                    break;
-            }
-        }
-
-        for (int i = 0; i &lt; per.Length; i++)
-        {
-            if (per[i] is PerSOne)
-            {
-                ((PerSOne)per[i]).Say();
-            }
-            else if (per[i] is PerSTwo)
-            {
-                ((PerSTwo)per[i]).Say();
-            }
-            else
-                per[i].Say();
-            
-        }
-
-        Console.ReadKey();
-
-    }
-   // 拆装箱的两种数据必须具有继承关系int-string非继承关系不会发生拆装箱</code></pre>
+UM.bagPanel.SetActive(false);<br>
+UM.UI_btns.SetActive(true);<br>
+});<br>
+6.//生命周期//与其他脚本语言相似常用OnComplete()<br>
+7.//文字动画<br>
+text.DOText(&quot;文字动画&quot;,2f)/参数：文本动画时间<br>
+8.//相机震动<br>
+transform.DOShakePosition(1);//参数震动强度<br>
+transform.DOShakePosition(1,new Vector3(1,1,0));//参数震动强度，方向约束Vector3(3,3,0)约束的值也可以控制强度<br>
+9.//颜色/阿尔法通道(UI)<br>
+text.DOColor(Color.cyan, 1f);<br>
+text.DOFade(1, 1f);</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/jie-jue-hash-chong-tu-de-fang-shi/">
+                <a href="https://Wei715547.github.io/post/lua-mian-xiang-dui-xiang-shi-xian/">
                   <h3 class="post-title">
-                    解决Hash冲突的方式
+                    Lua面向对象实现
                   </h3>
                 </a>
               </div>
