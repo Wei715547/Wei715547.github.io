@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Winform控件 | WeiBlog</title>
+<title>24. | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,13 +18,12 @@
 
 
 
-    <meta name="description" content="控件：
-1.属性：Name--后台获取前台对象，需要使用的属性。
-visible--是否显示控件
-Enable--是否可用控件
-2.事件: 注册事件
-触发事件
-3.在Program-Main函数中创建的窗口为主窗口程序，次窗口关闭时整个应用..." />
+    <meta name="description" content="class SL
+{
+public bool JudgePoint24(int[] nums)
+{
+List list = new List();
+foreach (int i in nums) list.Add((double)i); /..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -109,85 +108,66 @@ Enable--是否可用控件
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Winform控件</h2>
-            <div class="post-date">2020-07-28</div>
+            <h2 class="post-title">24.</h2>
+            <div class="post-date">2020-09-25</div>
             
             <div class="post-content" v-pre>
-              <p>控件：<br>
-1.属性：Name--后台获取前台对象，需要使用的属性。<br>
-visible--是否显示控件<br>
-Enable--是否可用控件<br>
-2.事件: 注册事件<br>
-触发事件<br>
-3.在Program-Main函数中创建的窗口为主窗口程序，次窗口关闭时整个应用程序庀</p>
-<pre><code>5.TextBox控件 WordWrap:指示文本框是否换行
-                        PasswordChar:文本框输入时显示固定字符
-                        SoocllBar:是否显示滚动条
-                        事件：TextChange:文本框内容发生改变时调用方法
-6.Timer 事件：Enable默认为False,启用更改为True; Tick:每隔固定时间调用方法
-
-7.RadioButton：多选按钮--存在多个时只可选一个，使用GroupBox分组可选择多个
-
-8.MenuStrip：菜单栏（多组按钮）
-MDI窗口设计：主窗体MDI属性设置为True，
-                        子窗体  from.MdiParent(from1);-设置父窗体。
-                        子窗体排列：在主窗体方法中调用--LayoutMdi(MdiLayout.TileHorizontal);(横向排列）
-                        LayoutMdi(MdiLayout.TileVertical);(纵向排列）
-9.ListBox：listBox1.Items.Add()--列表项，listBox1.SelectedIndex--当前所选中列表中项目的索引
-事件:
-    private void listBox1_DoubleClick(object sender, EventArgs e)
-    {
-        SoundPlayer sp = new SoundPlayer();//多媒体音乐播放器类
-        sp.SoundLocation = musicFullPath[listBox1.SelectedIndex];//音乐文件的全路径
-        sp.Play();
-    }
-10.打开文件：private void btn_Openfile_Click(object sender, EventArgs e)
-    {
-        OpenFileDialog opf = new OpenFileDialog();
-        opf.Title = &quot;请选择文件&quot;;
-        opf.InitialDirectory = @&quot;C:\Users\qweasd\Music&quot;;
-        opf.Multiselect = true;
-        opf.Filter = &quot;音乐文件|*.wav|所有文件|*.*;&quot;;
-        opf.ShowDialog();
-        //获得在该文件夹下选择的所有文件的全路径
-        string[] musicFiles = opf.FileNames;
-        for (int i = 0; i &lt; musicFiles.Length; i++)
-        {
-            listBox1.Items.Add(Path.GetFileName(musicFiles[i]));//从全路径中截取文件名方法，将文件名显示在ListBox中
-            musicFullPath.Add(musicFiles[i]);//所有选中音乐的全文件路径列表
-        }
-
-    }
-
-Winform线程：窗体加载时不开启跨线程检测
-private void Form1_Load(object sender, EventArgs e)
-    {
-        //允许不同线程间进行数据访问
-        Control.CheckForIllegalCrossThreadCalls = false;
-    }
-
-    private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-    {
-        if(th!=null)
-        {
-            //子线程不为空时，随主线程关闭同时关闭子线程
-            th.Abort();
-        }
-    }
-
-Thread th = new Thread(StartRun);//此线程执行的方法/或传入委托/表达式
-th.IsBackground = true;//后台运行
-th.Start();//方法需要传递参数时可写在Start中“objecr”参数在方法中转为子类对象
-</code></pre>
+              <p>class SL<br>
+{<br>
+public bool JudgePoint24(int[] nums)<br>
+{<br>
+List<double> list = new List<double>();<br>
+foreach (int i in nums) list.Add((double)i); //为dfs做准备<br>
+return dfs(list);<br>
+}<br>
+private bool dfs(List<double> list)<br>
+{<br>
+if (list.Count == 1)<br>
+{//一个数时判断相等<br>
+if (Math.Abs(list[0] - 24.0) &lt; 0.001) return true; //考虑除法造成的小数点<br>
+return false;<br>
+}<br>
+for (int i = 0; i &lt; list.Count; ++i)<br>
+{<br>
+for (int j = i + 1; j &lt; list.Count; ++j)<br>
+{<br>
+foreach (double c in generatePossibleResults(list[i], list[j]))<br>
+{<br>
+List<double> nextRound = new List<double>();<br>
+nextRound.Add(c); //遍历两个数的所有可能性<br>
+for (int k = 0; k &lt; list.Count; ++k)<br>
+{ //添加剩余项到next round<br>
+if (k == i || k == j) continue;<br>
+nextRound.Add(list[k]);<br>
+}<br>
+if (dfs(nextRound)) return true;<br>
+}<br>
+}<br>
+}<br>
+return false;<br>
+}<br>
+//生成两个数所有的组合<br>
+private List<double> generatePossibleResults(double a, double b)<br>
+{<br>
+List<double> res = new List<double>();<br>
+res.Add(a + b);<br>
+res.Add(a - b);<br>
+res.Add(b - a);<br>
+res.Add(a * b);<br>
+res.Add(a / b);<br>
+res.Add(b / a);<br>
+return res;<br>
+}<br>
+}</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/md5-jia-mi/">
+                <a href="https://Wei715547.github.io/post/dgt/">
                   <h3 class="post-title">
-                    MD5加密
+                    DGT
                   </h3>
                 </a>
               </div>
