@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-09-25T15:20:29.980Z</updated>
+    <updated>2020-09-26T09:19:45.831Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -17,54 +17,55 @@
         <link href="https://Wei715547.github.io/post/24/">
         </link>
         <updated>2020-09-25T15:20:11.000Z</updated>
-        <content type="html"><![CDATA[<p>class SL<br>
-{<br>
-public bool JudgePoint24(int[] nums)<br>
-{<br>
-List<double> list = new List<double>();<br>
-foreach (int i in nums) list.Add((double)i); //为dfs做准备<br>
-return dfs(list);<br>
-}<br>
-private bool dfs(List<double> list)<br>
-{<br>
-if (list.Count == 1)<br>
-{//一个数时判断相等<br>
-if (Math.Abs(list[0] - 24.0) &lt; 0.001) return true; //考虑除法造成的小数点<br>
-return false;<br>
-}<br>
-for (int i = 0; i &lt; list.Count; ++i)<br>
-{<br>
-for (int j = i + 1; j &lt; list.Count; ++j)<br>
-{<br>
-foreach (double c in generatePossibleResults(list[i], list[j]))<br>
-{<br>
-List<double> nextRound = new List<double>();<br>
-nextRound.Add(c); //遍历两个数的所有可能性<br>
-for (int k = 0; k &lt; list.Count; ++k)<br>
-{ //添加剩余项到next round<br>
-if (k == i || k == j) continue;<br>
-nextRound.Add(list[k]);<br>
-}<br>
-if (dfs(nextRound)) return true;<br>
-}<br>
-}<br>
-}<br>
-return false;<br>
-}<br>
-//生成两个数所有的组合<br>
-private List<double> generatePossibleResults(double a, double b)<br>
-{<br>
-List<double> res = new List<double>();<br>
-res.Add(a + b);<br>
-res.Add(a - b);<br>
-res.Add(b - a);<br>
-res.Add(a * b);<br>
-res.Add(a / b);<br>
-res.Add(b / a);<br>
-return res;<br>
-}<br>
-}</p>
-]]></content>
+        <content type="html"><![CDATA[<cood>
+class SL
+    {
+        public bool JudgePoint24(int[] nums)
+        {
+            List<double> list = new List<double>();
+            foreach (int i in nums) list.Add((double)i); //为dfs做准备
+            return dfs(list);
+        }
+        private bool dfs(List<double> list)
+        {
+            if (list.Count == 1)
+            {//一个数时判断相等
+                if (Math.Abs(list[0] - 24.0) < 0.001) return true; //考虑除法造成的小数点
+                return false;
+            }
+            for (int i = 0; i < list.Count; ++i)
+            {
+                for (int j = i + 1; j < list.Count; ++j)
+                {
+                    foreach (double c in generatePossibleResults(list[i], list[j]))
+                    {
+                        List<double> nextRound = new List<double>();
+                        nextRound.Add(c); //遍历两个数的所有可能性
+                        for (int k = 0; k < list.Count; ++k)
+                        { //添加剩余项到next round
+                            if (k == i || k == j) continue;
+                            nextRound.Add(list[k]);
+                        }
+                        if (dfs(nextRound)) return true;
+                    }
+                }
+            }
+            return false;
+        }
+        //生成两个数所有的组合
+        private List<double> generatePossibleResults(double a, double b)
+        {
+            List<double> res = new List<double>();
+            res.Add(a + b);
+            res.Add(a - b);
+            res.Add(b - a);
+            res.Add(a * b);
+            res.Add(a / b);
+            res.Add(b / a);
+            return res;
+        }
+    }
+    <cood>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[DGT]]></title>
