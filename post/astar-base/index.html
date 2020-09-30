@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1601436161717">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1601438363256">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -43,7 +43,7 @@ publ..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1601436161717" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1601438363256" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -159,10 +159,26 @@ public AStartNode(int x,int y, NodeTyp type)
 }
 </code></pre>
 <p>}</p>
-<p>//管理器类（单例）<br>
-public class AStartManager<br>
+<p>//单例基类<br>
+public class BaseManager<T><br>
+where T:new()//限定T有一个无参数的构造函数<br>
 {<br>
-private static AStartManager instence;<br>
+private static T instence;</p>
+<pre><code>public static T Instence
+{
+    get
+    {
+        if (instence == null)
+            instence = new T();
+        return instence;
+    }
+}
+</code></pre>
+<p>}</p>
+<p>//管理器类（单例）<br>
+public class AStartManager :BaseManager<AStarManager><br>
+{<br>
+/*private static AStartManager instence;<br>
 public static AStartManager Instence<br>
 {<br>
 get<br>
@@ -171,38 +187,38 @@ if (instence == null)<br>
 instence = new AStartManager();<br>
 return instence;<br>
 }<br>
+}<br>
+*/<br>
+//地图大小<br>
+private int mapw;<br>
+private int maph;<br>
+//所有格子容器<br>
+public AStartNode[,] nodes;<br>
+//开启类表<br>
+private List<AStartNode> openList = new List<AStartNode>();<br>
+//关闭类表<br>
+private List<AStartNode> closeList = new List<AStartNode>();<br>
+/// <summary><br>
+/// 初始化地图信息<br>
+/// </summary><br>
+/// <param name="mapw"></param><br>
+/// <param name="maph"></param><br>
+public void InitMapInfo(int mapw, int maph)<br>
+{<br>
+this.mapw = mapw;<br>
+this.maph = maph;<br>
+nodes = new AStartNode[mapw, maph];<br>
+for (int i = 0; i &lt; mapw; i++)<br>
+{<br>
+for (int j = 0; j &lt; maph; j++)<br>
+{<br>
+//格子20%概率为阻挡<br>
+AStartNode node = new AStartNode(i, j, Random.Range(0, 101) &lt; 20 ? NodeTyp.Unable : NodeTyp.Able);<br>
+nodes[i, j] = node;<br>
+}<br>
+}<br>
 }</p>
-<pre><code>//地图大小
-private int mapw;
-private int maph;
-//所有格子容器
-public AStartNode[,] nodes;
-//开启类表
-private List&lt;AStartNode&gt; openList = new List&lt;AStartNode&gt;();
-//关闭类表
-private List&lt;AStartNode&gt; closeList = new List&lt;AStartNode&gt;();
-/// &lt;summary&gt;
-/// 初始化地图信息
-/// &lt;/summary&gt;
-/// &lt;param name=&quot;mapw&quot;&gt;&lt;/param&gt;
-/// &lt;param name=&quot;maph&quot;&gt;&lt;/param&gt;
-public void InitMapInfo(int mapw, int maph)
-{
-    this.mapw = mapw;
-    this.maph = maph;
-    nodes = new AStartNode[mapw, maph];
-    for (int i = 0; i &lt; mapw; i++)
-    {
-        for (int j = 0; j &lt; maph; j++)
-        {
-            //格子20%概率为阻挡
-            AStartNode node = new AStartNode(i, j, Random.Range(0, 101) &lt; 20 ? NodeTyp.Unable : NodeTyp.Able);
-            nodes[i, j] = node;
-        }
-    }
-}
-
-/// &lt;summary&gt;
+<pre><code>/// &lt;summary&gt;
 /// 寻路方法
 /// &lt;/summary&gt;
 /// &lt;param name=&quot;startPos&quot;&gt;&lt;/param&gt;
