@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>AStar-Base | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1601435524280">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="
+
+//节点类
+//节点类型枚举
+public enum NodeTyp
+{
+//可用格子
+Able,
+//不可用格子
+Unable
+}
+public class AStartNode
+{
+//格子坐标
+public int x;
+publ..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1601435524280" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">AStar-Base</h2>
+            <div class="post-date">2020-09-30</div>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://Wei715547.github.io/post-images/1601434274880.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1601434281055.jpg" alt="" loading="lazy"></p>
+<p>//节点类<br>
+//节点类型枚举<br>
+public enum NodeTyp<br>
+{<br>
+//可用格子<br>
+Able,<br>
+//不可用格子<br>
+Unable<br>
+}<br>
+public class AStartNode<br>
+{<br>
+//格子坐标<br>
+public int x;<br>
+public int y;</p>
+<pre><code>//寻路消耗
+public float f;
+
+//起点距离
+public float g;
+//终点距离
+public float h;
+
+//父对象
+public AStartNode father;
+//格子类型
+public NodeTyp type;
+
+public AStartNode(int x,int y, NodeTyp type)
+{
+    this.x = x;
+    this.y = y;
+    this.type = type;
+}
+</code></pre>
+<p>}</p>
+<p>//管理器类（单例）<br>
+public class AStartManager<br>
+{<br>
+private static AStartManager instence;<br>
+public static AStartManager Instence<br>
+{<br>
+get<br>
+{<br>
+if (instence == null)<br>
+instence = new AStartManager();<br>
+return instence;<br>
+}<br>
+}</p>
+<pre><code>//地图大小
+private int mapw;
+private int maph;
+//所有格子容器
+public AStartNode[,] nodes;
+//开启类表
+private List&lt;AStartNode&gt; openList = new List&lt;AStartNode&gt;();
+//关闭类表
+private List&lt;AStartNode&gt; closeList = new List&lt;AStartNode&gt;();
+/// &lt;summary&gt;
+/// 初始化地图信息
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;mapw&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;maph&quot;&gt;&lt;/param&gt;
+public void InitMapInfo(int mapw, int maph)
+{
+    this.mapw = mapw;
+    this.maph = maph;
+    nodes = new AStartNode[mapw, maph];
+    for (int i = 0; i &lt; mapw; i++)
+    {
+        for (int j = 0; j &lt; maph; j++)
+        {
+            //格子20%概率为阻挡
+            AStartNode node = new AStartNode(i, j, Random.Range(0, 101) &lt; 20 ? NodeTyp.Unable : NodeTyp.Able);
+            nodes[i, j] = node;
+        }
+    }
+}
+
+/// &lt;summary&gt;
+/// 寻路方法
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;startPos&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;endPos&quot;&gt;&lt;/param&gt;
+/// &lt;returns&gt;&lt;/returns&gt;
+public List&lt;AStartNode&gt; FindPath(Vector2 startPos, Vector2 endPos)
+{
+
+    /*/判断传入顶点是否合法*/
+    //1.1传入顶点噪mapz范围内
+    if (startPos.x &lt; 0 || startPos.x &gt;= mapw || startPos.y &lt; 0 || startPos.y &gt;= maph
+       || endPos.x &lt; 0 || endPos.x &gt;= mapw || endPos.y &lt; 0 || endPos.y &gt;= maph)
+    {
+        Debug.Log(&quot;OutRange&quot;);
+        return null;
+    }
+    AStartNode start = nodes[(int)startPos.x, (int)startPos.y];
+    AStartNode end = nodes[(int)endPos.x, (int)endPos.y];
+    //2.传入顶点不为阻挡
+    //不合法则返回null
+    if (start.type == NodeTyp.Unable ||
+       end.type == NodeTyp.Unable)
+    {
+        Debug.Log(&quot;非法位置&quot;);
+        return null;
+    }
+
+    //清空上一次相关数据，避免影响此次计算
+
+    //清空开始/关闭类表
+    openList.Clear();
+    closeList.Clear();
+
+    //把开始点放入关闭类表中
+    start.father = null;
+    start.g = 0;
+    start.h = 0;
+    start.f = 0;
+    closeList.Add(start);
+    while (true)
+    {
+        //从起点开始寻找周围的点
+        //左上
+        FindNearlyNodeToOpenList(start.x - 1, start.y - 1, 1.4f, start, end);
+        //上
+        FindNearlyNodeToOpenList(start.x, start.y - 1, 1f, start, end);
+        //右上
+        FindNearlyNodeToOpenList(start.x + 1, start.y - 1, 1.4f, start, end);
+        //左
+        FindNearlyNodeToOpenList(start.x - 1, start.y, 1f, start, end);
+        //右
+        FindNearlyNodeToOpenList(start.x + 1, start.y, 1f, start, end);
+        //左下
+        FindNearlyNodeToOpenList(start.x - 1, start.y + 1, 1.4f, start, end);
+        //下
+        FindNearlyNodeToOpenList(start.x, start.y + 1, 1f, start, end);
+        //右下
+        FindNearlyNodeToOpenList(start.x + 1, start.y + 1, 1.4f, start, end);
+        //判断周围的点是否合法，是否在开启或关闭类表，不是则放入开始了表
+
+        //死路判定：开启类表为空时中非那不可达
+        if (openList.Count == 0)
+        {
+            Debug.Log(&quot;死路&quot;);
+            return null;
+        }
+        //选出开启类表中寻路消耗最小的点
+        openList.Sort(SortOpenList);//排序后openList[0]为f值最小的点
+                                    //放入关闭类表中然后从开始了表中移除
+        closeList.Add(openList[0]);
+        //找到的点作为下一次寻找开始的起点
+        start = openList[0];
+        openList.RemoveAt(0);
+        //如果这个点是终点则返回出去
+        //不是终点则继续寻找
+        if (start == end)
+        {
+            List&lt;AStartNode&gt; path = new List&lt;AStartNode&gt;();
+            path.Add(end);
+            while (end.father != null)
+            {
+                path.Add(end.father);
+                end = end.father;
+            }
+            path.Reverse();
+            return path;
+        }
+
+    }
+}
+/// &lt;summary&gt;
+/// 排序函数
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;a&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;b&quot;&gt;&lt;/param&gt;
+/// &lt;returns&gt;&lt;/returns&gt;
+private int SortOpenList(AStartNode a, AStartNode b)
+{
+    if (a.f &gt; b.f)
+        return 1;
+    else if (a.f == b.f)
+        return 1;
+    else
+        return -1;
+}
+/// &lt;summary&gt;
+/// 把临近点放入开启类表中的函数
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;x&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;y&quot;&gt;&lt;/param&gt;
+private void FindNearlyNodeToOpenList(int x, int y, float g, AStartNode fatherNode, AStartNode endNode)
+{
+    //边界判定
+    if (x &lt; 0 || x &gt;= mapw ||
+        y &lt; 0 || y &gt;= maph)
+        return;
+    //在map范围内在取点
+    AStartNode node = nodes[x, y];
+    if (node == null || node.type == NodeTyp.Unable
+        || openList.Contains(node) || closeList.Contains(node))
+        return;
+
+    //计算f值：f=g+h
+    //记录父对象
+    node.father = fatherNode;
+    //计算g（距离起点距离）值：父对象里欠点距离+距离父对象距离
+    node.g = fatherNode.g + g;
+    //计算h值（距离终点距离）：曼哈顿街区算法二维坐标差值
+    node.h = Mathf.Abs(endNode.x - node.x) + Mathf.Abs(endNode.y - node.y);
+    node.f = node.g + node.h;
+    //通过验证则存入开始了表中
+    openList.Add(node);
+}
+</code></pre>
+<p>}</p>
+<p><img src="https://Wei715547.github.io/post-images/1601435509787.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1601435519694.PNG" alt="" loading="lazy"><br>
+//测试脚本<br>
+public class TextA : MonoBehaviour<br>
+{<br>
+public int beginX = -2;<br>
+public int beginY = -2;</p>
+<pre><code>public int offSetX = 2;
+public int OffSetY = 2;
+
+public int mapW = 5;
+public int mapY = 5;
+
+public Material bnary;
+public Material start;
+public Material path;
+public Material normal;
+
+//存储格子容器（x_y,GameObject）
+private Dictionary&lt;string, GameObject&gt; cubes = new Dictionary&lt;string, GameObject&gt;();
+
+private Vector2 beginPos = Vector2.right * -1;
+private Vector2 endPos;
+
+//存储路径节点
+List&lt;AStartNode&gt; pathList = new List&lt;AStartNode&gt;();
+
+// Start is called before the first frame update
+void Start()
+{
+    AStartManager.Instence.InitMapInfo(mapW, mapY);
+    for (int i = 0; i &lt; mapW; i++)
+    {
+        for (int j = 0; j &lt; mapY; j++)
+        {
+            GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            obj.transform.position = new Vector3(beginX + i * offSetX, beginY + j * OffSetY, 0);
+            obj.name = i + &quot;_&quot; + j;
+            cubes.Add(obj.name, obj);
+            //判断格子是否阻挡
+            AStartNode node = AStartManager.Instence.nodes[i, j];
+            if(node.type == NodeTyp.Unable)
+            {
+                obj.GetComponent&lt;MeshRenderer&gt;().material= bnary ;
+                Debug.Log(&quot;Br&quot;);
+            }
+        }
+    }
+}
+
+// Update is called once per frame
+void Update()
+{
+    if(Input.GetMouseButtonDown(0))
+    {
+        //射线检测返回值
+        RaycastHit hit;
+        //相机视角从鼠标位置发出的射线
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //射线检测，检测到物体返回true
+        if (Physics.Raycast(ray, out hit, 1000))
+        {
+            //得到点击到的立方体
+            //hit.collider.gameObject;
+            //记录开始点与结束点
+            if(beginPos == Vector2.right*-1)
+            {
+                //清理上一次路径
+                if (pathList != null)
+                {
+                    for (int i = 0; i &lt; pathList.Count; i++)
+                    {
+                        cubes[pathList[i].x + &quot;_&quot; + pathList[i].y].GetComponent&lt;MeshRenderer&gt;().material = normal;
+                    }
+                }
+
+                string[] str = hit.collider.gameObject.name.Split('_');
+                beginPos = new Vector2(int.Parse(str[0]), int.Parse(str[1]));
+                hit.collider.gameObject.GetComponent&lt;MeshRenderer&gt;().material = start;
+            }
+            else
+            {
+                string[] str = hit.collider.gameObject.name.Split('_');
+                endPos = new Vector2(int.Parse(str[0]), int.Parse(str[1]));
+                //hit.collider.gameObject.GetComponent&lt;MeshRenderer&gt;().material = end;
+
+                pathList = AStartManager.Instence.FindPath(beginPos, endPos);
+                if(pathList !=null)
+                {
+                    for (int i = 0; i &lt; pathList.Count; i++)
+                    {
+                        cubes[pathList[i].x + &quot;_&quot; + pathList[i].y].GetComponent&lt;MeshRenderer&gt;().material = path;
+                    }
+                }
+                //清除开始点
+                beginPos = Vector2.right * -1;
+            }
+        }
+    }
+}
+</code></pre>
+<p>}</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/astar/">
+                  <h3 class="post-title">
+                    AStar
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

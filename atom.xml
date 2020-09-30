@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-09-26T10:08:05.209Z</updated>
+    <updated>2020-09-30T03:12:11.829Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,342 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[AStar-Base]]></title>
+        <id>https://Wei715547.github.io/post/astar-base/</id>
+        <link href="https://Wei715547.github.io/post/astar-base/">
+        </link>
+        <updated>2020-09-30T02:50:05.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1601434274880.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1601434281055.jpg" alt="" loading="lazy"></p>
+<p>//节点类<br>
+//节点类型枚举<br>
+public enum NodeTyp<br>
+{<br>
+//可用格子<br>
+Able,<br>
+//不可用格子<br>
+Unable<br>
+}<br>
+public class AStartNode<br>
+{<br>
+//格子坐标<br>
+public int x;<br>
+public int y;</p>
+<pre><code>//寻路消耗
+public float f;
+
+//起点距离
+public float g;
+//终点距离
+public float h;
+
+//父对象
+public AStartNode father;
+//格子类型
+public NodeTyp type;
+
+public AStartNode(int x,int y, NodeTyp type)
+{
+    this.x = x;
+    this.y = y;
+    this.type = type;
+}
+</code></pre>
+<p>}</p>
+<p>//管理器类（单例）<br>
+public class AStartManager<br>
+{<br>
+private static AStartManager instence;<br>
+public static AStartManager Instence<br>
+{<br>
+get<br>
+{<br>
+if (instence == null)<br>
+instence = new AStartManager();<br>
+return instence;<br>
+}<br>
+}</p>
+<pre><code>//地图大小
+private int mapw;
+private int maph;
+//所有格子容器
+public AStartNode[,] nodes;
+//开启类表
+private List&lt;AStartNode&gt; openList = new List&lt;AStartNode&gt;();
+//关闭类表
+private List&lt;AStartNode&gt; closeList = new List&lt;AStartNode&gt;();
+/// &lt;summary&gt;
+/// 初始化地图信息
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;mapw&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;maph&quot;&gt;&lt;/param&gt;
+public void InitMapInfo(int mapw, int maph)
+{
+    this.mapw = mapw;
+    this.maph = maph;
+    nodes = new AStartNode[mapw, maph];
+    for (int i = 0; i &lt; mapw; i++)
+    {
+        for (int j = 0; j &lt; maph; j++)
+        {
+            //格子20%概率为阻挡
+            AStartNode node = new AStartNode(i, j, Random.Range(0, 101) &lt; 20 ? NodeTyp.Unable : NodeTyp.Able);
+            nodes[i, j] = node;
+        }
+    }
+}
+
+/// &lt;summary&gt;
+/// 寻路方法
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;startPos&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;endPos&quot;&gt;&lt;/param&gt;
+/// &lt;returns&gt;&lt;/returns&gt;
+public List&lt;AStartNode&gt; FindPath(Vector2 startPos, Vector2 endPos)
+{
+
+    /*/判断传入顶点是否合法*/
+    //1.1传入顶点噪mapz范围内
+    if (startPos.x &lt; 0 || startPos.x &gt;= mapw || startPos.y &lt; 0 || startPos.y &gt;= maph
+       || endPos.x &lt; 0 || endPos.x &gt;= mapw || endPos.y &lt; 0 || endPos.y &gt;= maph)
+    {
+        Debug.Log(&quot;OutRange&quot;);
+        return null;
+    }
+    AStartNode start = nodes[(int)startPos.x, (int)startPos.y];
+    AStartNode end = nodes[(int)endPos.x, (int)endPos.y];
+    //2.传入顶点不为阻挡
+    //不合法则返回null
+    if (start.type == NodeTyp.Unable ||
+       end.type == NodeTyp.Unable)
+    {
+        Debug.Log(&quot;非法位置&quot;);
+        return null;
+    }
+
+    //清空上一次相关数据，避免影响此次计算
+
+    //清空开始/关闭类表
+    openList.Clear();
+    closeList.Clear();
+
+    //把开始点放入关闭类表中
+    start.father = null;
+    start.g = 0;
+    start.h = 0;
+    start.f = 0;
+    closeList.Add(start);
+    while (true)
+    {
+        //从起点开始寻找周围的点
+        //左上
+        FindNearlyNodeToOpenList(start.x - 1, start.y - 1, 1.4f, start, end);
+        //上
+        FindNearlyNodeToOpenList(start.x, start.y - 1, 1f, start, end);
+        //右上
+        FindNearlyNodeToOpenList(start.x + 1, start.y - 1, 1.4f, start, end);
+        //左
+        FindNearlyNodeToOpenList(start.x - 1, start.y, 1f, start, end);
+        //右
+        FindNearlyNodeToOpenList(start.x + 1, start.y, 1f, start, end);
+        //左下
+        FindNearlyNodeToOpenList(start.x - 1, start.y + 1, 1.4f, start, end);
+        //下
+        FindNearlyNodeToOpenList(start.x, start.y + 1, 1f, start, end);
+        //右下
+        FindNearlyNodeToOpenList(start.x + 1, start.y + 1, 1.4f, start, end);
+        //判断周围的点是否合法，是否在开启或关闭类表，不是则放入开始了表
+
+        //死路判定：开启类表为空时中非那不可达
+        if (openList.Count == 0)
+        {
+            Debug.Log(&quot;死路&quot;);
+            return null;
+        }
+        //选出开启类表中寻路消耗最小的点
+        openList.Sort(SortOpenList);//排序后openList[0]为f值最小的点
+                                    //放入关闭类表中然后从开始了表中移除
+        closeList.Add(openList[0]);
+        //找到的点作为下一次寻找开始的起点
+        start = openList[0];
+        openList.RemoveAt(0);
+        //如果这个点是终点则返回出去
+        //不是终点则继续寻找
+        if (start == end)
+        {
+            List&lt;AStartNode&gt; path = new List&lt;AStartNode&gt;();
+            path.Add(end);
+            while (end.father != null)
+            {
+                path.Add(end.father);
+                end = end.father;
+            }
+            path.Reverse();
+            return path;
+        }
+
+    }
+}
+/// &lt;summary&gt;
+/// 排序函数
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;a&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;b&quot;&gt;&lt;/param&gt;
+/// &lt;returns&gt;&lt;/returns&gt;
+private int SortOpenList(AStartNode a, AStartNode b)
+{
+    if (a.f &gt; b.f)
+        return 1;
+    else if (a.f == b.f)
+        return 1;
+    else
+        return -1;
+}
+/// &lt;summary&gt;
+/// 把临近点放入开启类表中的函数
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;x&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;y&quot;&gt;&lt;/param&gt;
+private void FindNearlyNodeToOpenList(int x, int y, float g, AStartNode fatherNode, AStartNode endNode)
+{
+    //边界判定
+    if (x &lt; 0 || x &gt;= mapw ||
+        y &lt; 0 || y &gt;= maph)
+        return;
+    //在map范围内在取点
+    AStartNode node = nodes[x, y];
+    if (node == null || node.type == NodeTyp.Unable
+        || openList.Contains(node) || closeList.Contains(node))
+        return;
+
+    //计算f值：f=g+h
+    //记录父对象
+    node.father = fatherNode;
+    //计算g（距离起点距离）值：父对象里欠点距离+距离父对象距离
+    node.g = fatherNode.g + g;
+    //计算h值（距离终点距离）：曼哈顿街区算法二维坐标差值
+    node.h = Mathf.Abs(endNode.x - node.x) + Mathf.Abs(endNode.y - node.y);
+    node.f = node.g + node.h;
+    //通过验证则存入开始了表中
+    openList.Add(node);
+}
+</code></pre>
+<p>}</p>
+<p><img src="https://Wei715547.github.io/post-images/1601435509787.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1601435519694.PNG" alt="" loading="lazy"><br>
+//测试脚本<br>
+public class TextA : MonoBehaviour<br>
+{<br>
+public int beginX = -2;<br>
+public int beginY = -2;</p>
+<pre><code>public int offSetX = 2;
+public int OffSetY = 2;
+
+public int mapW = 5;
+public int mapY = 5;
+
+public Material bnary;
+public Material start;
+public Material path;
+public Material normal;
+
+//存储格子容器（x_y,GameObject）
+private Dictionary&lt;string, GameObject&gt; cubes = new Dictionary&lt;string, GameObject&gt;();
+
+private Vector2 beginPos = Vector2.right * -1;
+private Vector2 endPos;
+
+//存储路径节点
+List&lt;AStartNode&gt; pathList = new List&lt;AStartNode&gt;();
+
+// Start is called before the first frame update
+void Start()
+{
+    AStartManager.Instence.InitMapInfo(mapW, mapY);
+    for (int i = 0; i &lt; mapW; i++)
+    {
+        for (int j = 0; j &lt; mapY; j++)
+        {
+            GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            obj.transform.position = new Vector3(beginX + i * offSetX, beginY + j * OffSetY, 0);
+            obj.name = i + &quot;_&quot; + j;
+            cubes.Add(obj.name, obj);
+            //判断格子是否阻挡
+            AStartNode node = AStartManager.Instence.nodes[i, j];
+            if(node.type == NodeTyp.Unable)
+            {
+                obj.GetComponent&lt;MeshRenderer&gt;().material= bnary ;
+                Debug.Log(&quot;Br&quot;);
+            }
+        }
+    }
+}
+
+// Update is called once per frame
+void Update()
+{
+    if(Input.GetMouseButtonDown(0))
+    {
+        //射线检测返回值
+        RaycastHit hit;
+        //相机视角从鼠标位置发出的射线
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //射线检测，检测到物体返回true
+        if (Physics.Raycast(ray, out hit, 1000))
+        {
+            //得到点击到的立方体
+            //hit.collider.gameObject;
+            //记录开始点与结束点
+            if(beginPos == Vector2.right*-1)
+            {
+                //清理上一次路径
+                if (pathList != null)
+                {
+                    for (int i = 0; i &lt; pathList.Count; i++)
+                    {
+                        cubes[pathList[i].x + &quot;_&quot; + pathList[i].y].GetComponent&lt;MeshRenderer&gt;().material = normal;
+                    }
+                }
+
+                string[] str = hit.collider.gameObject.name.Split('_');
+                beginPos = new Vector2(int.Parse(str[0]), int.Parse(str[1]));
+                hit.collider.gameObject.GetComponent&lt;MeshRenderer&gt;().material = start;
+            }
+            else
+            {
+                string[] str = hit.collider.gameObject.name.Split('_');
+                endPos = new Vector2(int.Parse(str[0]), int.Parse(str[1]));
+                //hit.collider.gameObject.GetComponent&lt;MeshRenderer&gt;().material = end;
+
+                pathList = AStartManager.Instence.FindPath(beginPos, endPos);
+                if(pathList !=null)
+                {
+                    for (int i = 0; i &lt; pathList.Count; i++)
+                    {
+                        cubes[pathList[i].x + &quot;_&quot; + pathList[i].y].GetComponent&lt;MeshRenderer&gt;().material = path;
+                    }
+                }
+                //清除开始点
+                beginPos = Vector2.right * -1;
+            }
+        }
+    }
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[AStar]]></title>
+        <id>https://Wei715547.github.io/post/astar/</id>
+        <link href="https://Wei715547.github.io/post/astar/">
+        </link>
+        <updated>2020-09-30T02:50:05.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1601434274880.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1601434281055.jpg" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[24.]]></title>
         <id>https://Wei715547.github.io/post/24/</id>
@@ -61,6 +397,55 @@ res.Add(b - a);<br>
 res.Add(a * b);<br>
 res.Add(a / b);<br>
 res.Add(b / a);<br>
+return res;<br>
+}<br>
+}</p>
+<pre><code>C#改JAVA
+</code></pre>
+<p>class Solution<br>
+{<br>
+public boolean judgePoint24(int[] nums)<br>
+{<br>
+ArrayList<Double> list = new ArrayList&lt;&gt;();<br>
+for (int n:nums)<br>
+{<br>
+list.add((double)n);<br>
+}<br>
+return Prm(list);<br>
+}<br>
+public boolean Prm(ArrayList<Double> list)<br>
+{<br>
+if (list.size() == 1)<br>
+{<br>
+return Math.abs(list.get(0) - 24) &lt; 1e-6;<br>
+}<br>
+for (int i = 0; i &lt; list.size(); i++)<br>
+{<br>
+for (int j = i + 1; j &lt; list.size(); j++)<br>
+{<br>
+for (double k:AllTowRes(list.get(i), list.get(j)))<br>
+{<br>
+ArrayList<Double> nextRound = new ArrayList&lt;&gt;();<br>
+nextRound.add(k);<br>
+for (int v = 0; v &lt; list.size(); v++)<br>
+{<br>
+if (v == i || v == j) continue;<br>
+nextRound.add(list.get(v));<br>
+}<br>
+if (Prm(nextRound)) return true;<br>
+}<br>
+}<br>
+}<br>
+return false;<br>
+}<br>
+public ArrayList<Double> AllTowRes(double a, double b)<br>
+{<br>
+ArrayList<Double> res = new ArrayList&lt;&gt;();<br>
+res.add(a + b);<br>
+res.add(a - b);<br>
+res.add(b - a);<br>
+if (b != 0) res.add(a / b);<br>
+if (a != 0) res.add(b / a);<br>
 return res;<br>
 }<br>
 }</p>
@@ -1637,298 +2022,6 @@ samplerCUBE _CubeMap;<br>
 		FallBack &quot;Diffuse&quot;
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[UI滚动窗口Scroll View(自动/手动)缓动缩放]]></title>
-        <id>https://Wei715547.github.io/post/ui-gun-dong-chuang-kou-scroll-viewzi-dong-shou-dong-huan-dong-suo-fang/</id>
-        <link href="https://Wei715547.github.io/post/ui-gun-dong-chuang-kou-scroll-viewzi-dong-shou-dong-huan-dong-suo-fang/">
-        </link>
-        <updated>2020-08-24T12:24:01.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1598272075912.PNG" alt="" loading="lazy"><br>
-//基础手动/自动滚动代码<br>
-using System;<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.EventSystems;<br>
-using UnityEngine.UI;</p>
-<p>public class PstPanel : MonoBehaviour ,IEndDragHandler,IBeginDragHandler<br>
-{<br>
-protected ScrollRect rect;<br>
-RectTransform content;<br>
-public int pageCount;<br>
-public float[] pagePos;//存储各滚动页的坐标</p>
-<pre><code>public float runTime = 0;//控制滚动快慢的记录系统时间
-public float holdTime = 0.2f;//控制滚动快慢的时间
-public float startPos;//滚动窗口rect.horizontalNormalizedPosition属性线性变化的开始值
-public int currentPage = 0;//当前滚动窗口要显示页面
-
-public bool isMoving = false;
-
-public bool isAutoRoll;
-public float autoHodeTime = 2;//自动股东间隔时间
-private float AutoRunTimer=0;//控制自动滚动间隔的记录系统时间
-
-private bool isDrag = false;
-
-public Action&lt;int&gt; OnPageChange;//事件/委托链：公开变量用于外部订阅
-
-// Start is called before the first frame update
-protected virtual void Start()
-{
-    Init();
-}
-
-private void Init()
-{
-    rect = GetComponent&lt;ScrollRect&gt;();
-    content = transform.Find(&quot;Viewport/Content&quot;).GetComponent&lt;RectTransform&gt;();
-    pageCount = content.childCount;
-    if (pageCount == 1)
-    {
-        throw new System.Exception(&quot;UnAutoR&quot;);
-    }
-    pagePos = new float[pageCount];
-    for (int i = 0; i &lt; pagePos.Length; i++)
-    {
-        pagePos[i] = i * (1.0f / (float)(pageCount - 1));//计算并存储每个页面的坐标
-    }
-}
-
-// Update is called once per frame
-protected virtual void Update()
-{
-    LisenerMove();//监听移动方法
-    LisenerAutoRoll();//监听自动移动方法
-}
-
-private void LisenerMove()//每帧执行：使窗口显示目标页面
-{
-    if (isMoving)
-    {
-        runTime += Time.deltaTime / holdTime;
-        rect.horizontalNormalizedPosition = Mathf.Lerp(rect.horizontalNormalizedPosition, pagePos[currentPage], runTime);//runTime=1时立即移动到目标值
-        if (runTime &gt;= 1)
-        {
-            isMoving = false;
-        }
-    }
-}
-
-public void LisenerAutoRoll()
-{
-    if (isDrag) return;
-    if (isAutoRoll)//间隔时间调用滚动方法
-    {
-        AutoRunTimer += Time.deltaTime;
-        if(AutoRunTimer&gt;=autoHodeTime)
-        {
-            AutoRunTimer = 0;
-            currentPage++ ;
-            currentPage %= pageCount;
-            ScrollToPage(currentPage);
-        }
-    }
-}
-/// &lt;summary&gt;
-/// 滚动到指定页面方法
-/// &lt;/summary&gt;
-/// &lt;param name=&quot;page&quot;&gt;要滚动到的页面&lt;/param&gt;
-public void ScrollToPage(int page)
-{
-    isMoving = true;
-    currentPage =page;
-    runTime = 0;
-    startPos = rect.horizontalNormalizedPosition;//范围(0~1)
-    if(OnPageChange!=null)// OnPageChange?.Invoke(this.currentPage);
-    {//作用同于广播此事件(委托连不为空则调用)
-        OnPageChange(this.currentPage);
-    }
-}
-
-public void OnEndDrag(PointerEventData eventData)//结束拖拽接口实现：重置自动滚动时间，判断当前停留位置更接近那个页面并移动到目标页面
-{
-    isDrag = false;
-    AutoRunTimer = 0;
-    ToEndPos();
-}
-/// &lt;summary&gt;
-/// 拖拽结束时一定到目标位置    
-/// &lt;/summary&gt;
-private void ToEndPos()
-{
-    int pageIndex = 0;
-    for (int i = 1; i &lt; pagePos.Length; i++)
-    {
-        if (Mathf.Abs(pagePos[i] - rect.horizontalNormalizedPosition) &lt; Mathf.Abs(pagePos[pageIndex] - rect.horizontalNormalizedPosition))
-        {
-            pageIndex = i;
-        }
-    }
-    ScrollToPage(pageIndex);
-}
-
-public void OnBeginDrag(PointerEventData eventData)//开始拖拽接口实现
-{
-    isDrag = true;
-}
-</code></pre>
-<p>}</p>
-<p>//通过代码继承与多态对父类代码复用与扩展添加缓动效果<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class PageScale : PstPanel<br>
-{<br>
-public GameObject[] items;<br>
-public float currentScle = 1f;<br>
-public float otherScle = 0.6f;<br>
-public int lastPage;<br>
-public int nextPage;<br>
-public float percent;<br>
-protected override void Start()<br>
-{<br>
-base.Start();<br>
-items = new GameObject[pageCount];<br>
-for (int i = 0; i &lt; pageCount; i++)<br>
-{<br>
-items[i] = transform.Find(&quot;Viewport/Content&quot;).transform.GetChild(i).gameObject;<br>
-}<br>
-}</p>
-<pre><code>protected override void Update()
-{
-    base.Update();
-    LissenterScale();
-    //SetItenSize(currentPage);
-}
-/// &lt;summary&gt;
-/// 监听Scale
-/// &lt;/summary&gt;
-public void LissenterScale()
-{
-    //获取当前上一页，下一页
-    for (int i = 0; i &lt; pagePos.Length; i++)
-    {
-        if(pagePos[i]&lt;=rect.horizontalNormalizedPosition)
-        {
-            lastPage = i;
-        }            
-    }
-    for (int i = 0; i &lt; pagePos.Length; i++)
-    {
-        if(pagePos[i]&gt;rect.horizontalNormalizedPosition)
-        {
-            nextPage = i;
-            break;
-        }
-    }
-
-    if (lastPage == nextPage)
-        return;
-    percent = (rect.horizontalNormalizedPosition - pagePos[lastPage]) / (pagePos[nextPage] - pagePos[lastPage]);//当前页到下一页0~1变动
-    items[lastPage].transform.localScale = Vector3.Lerp(Vector3.one * currentScle, Vector3.one * otherScle, percent);//按比例返回a,b间的值0返回a，1返回b
-    items[nextPage].transform.localScale = Vector3.Lerp(Vector3.one * currentScle, Vector3.one * otherScle, 1-percent);
-
-    for (int i = 0; i &lt; items.Length; i++)
-    {
-        if (i!=lastPage&amp;&amp;i!=nextPage)
-            items[i].transform.localScale = Vector3.one * otherScle;
-    }
-}
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Shader_渐变与遮罩纹理]]></title>
-        <id>https://Wei715547.github.io/post/shader_-jian-bian-yu-zhe-zhao-wen-li/</id>
-        <link href="https://Wei715547.github.io/post/shader_-jian-bian-yu-zhe-zhao-wen-li/">
-        </link>
-        <updated>2020-08-22T07:30:11.000Z</updated>
-        <content type="html"><![CDATA[<p>Shader &quot;Custom/Jianbian_Zhezhao&quot;<br>
-{<br>
-Properties//属性<br>
-{<br>
-_Diffuse(&quot;_DiffuseColor&quot;,Color) = (1,1,1,1)//漫反射颜色<br>
-_Specular(&quot;_Specular&quot;, Color) = (1, 1, 1, 1)//高光颜色<br>
-_Gloss(&quot;_Gloss&quot;, Range(10, 200)) = 20//高光参数<br>
-_Fad(&quot;_Fad&quot;,Color) = (1,1,1,1)//渐变贴图：作用于漫反射：fixed3 fad = tex2D(_Fad,float2()halfLambert,halfLambert).rgb(以半兰伯特值作为坐标获得在渐变贴图上的颜色代替半兰伯特值)<br>
-_SpecularMask(&quot;_SpecularMask&quot;,Color) = (1,1,1,1)//高光遮罩贴图<br>
-_SpecularScale(&quot;_SpecularScale&quot;,float) = 1//高光遮罩强度<br>
-}<br>
-SubShader<br>
-{<br>
-Pass<br>
-{<br>
-Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量<br>
-CGPROGRAM<br>
-//在CG声明属性<br>
-fixed4 _Diffuse;<br>
-fixed4 _Specular;<br>
-int _Gloss;<br>
-fixed4 _Fad;<br>
-fixed4 _SpecularMask;<br>
-float _SpecularScale;</p>
-<pre><code>		#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0.rgb;光源颜色
-		#pragma vertex vert//声明顶点函数
-		#pragma fragment frag//声明片原函数
-		
-
-		struct a2v//应用向顶点函数传递参数
-		{
-			float4 vertex:POSITION;//模型空间顶点坐标
-			float3 normal:NORMAL;//模型空间法线方向
-		};
-		struct v2f//顶点函数向片原函数传递参数
-		{
-			float4 svPos:SV_POSITION;//顶点函数返回值：剪裁空间中的顶点坐标-系统直接使用
-			float3 worldNormal : TEXCOORD0;//顶点函数向片原函数传递世界坐标下的法线方向
-			float4 worldView:TEXCOORD1;//顶点函数向片原函数传递世界坐标下的顶点坐标
-		};
-
-		v2f vert(a2v v)//顶点函数将顶点从模型空间转到世界空间，返回值在世界坐标系下的顶点坐标
-		{
-			v2f f;//声明传参结构体,并对其中的值赋值
-			f.svPos = UnityObjectToClipPos(v.vertex);
-			f.worldNormal = UnityObjectToWorldNormal(v.normal);
-			f.worldView = (UnityObjectToWorldNormal(v.vertex), 0);
-			return f;//返回结构体
-		}
-
-		fixed4 frag(v2f f) :SV_Target//片原函数，返回值为输出到像素颜色值的缓存
-		{
-			//计算漫反射
-			fixed3 amblent = UNITY_LIGHTMODEL_AMBIENT.rgb;//获取系统环境光		
-			fixed3 normalDir = normalize(f.worldNormal);
-			fixed3 lightDir = normalize(_WorldSpaceLightPos0.xyz);//第一个直射光的位置，对于顶点来说光的位置即是光的方向
-			//漫反射渐变贴图
-			//fixed3 fad = tex2D(_Fad,float2()halfLambert,halfLambert).rgb
-			//fixed3 diffuse = _LightColor0.rgb*_DiffuseColor*fad;
-
-			fixed3 harfLambert = max( dot(normalDir, lightDir)*0.5+0.5,0)*_Fad.rgb;//半兰伯特光照模型:直射光颜色 * (cos夹角(光与法线)*0.5+0.5):使背光面不完全为黑色,半兰伯特模型*渐变贴图.rgb
-			fixed3 diffuse = _LightColor0.rgb * harfLambert * _Diffuse.rgb;//根据漫反射公式：直射光颜色 * cos夹角(光与法线)获取颜色 dot(a,b):点乘获取两向量的夹角cos
-
-			//计算高光反射
-			//fixed3 reflectDir = normalize(reflect(-lightDir, normalDir));
-			fixed3 viewDir = normalize(WorldSpaceViewDir(f.worldView));//实视线方向
-			fixed3 harfDir = normalize(viewDir + lightDir);//视角与平行光的平分方向
-
-			//fixed specularMask = tex2D(_SpecularMask,f.uv.xy).r * _SpecularScale;//高光遮罩贴图的某通道值 * 遮罩强度 与高光反射模型相乘控制高光遮罩强度
-
-			fixed specularMask = _SpecularMask.rgb*_SpecularScale;
-			fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(dot(normalDir, harfDir),0), _Gloss)*specularMask;//BP模型://Blinn-Phong光照模型Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：法线与x方向夹角,x:平行光与视野方向的平分项。
-			fixed3 tempColor = diffuse + specular + UNITY_LIGHTMODEL_AMBIENT.rgb;//漫反射+高光+环境光，相加混合
-			return fixed4(tempColor,1);
-		}
-		ENDCG
-	}
-
-}
-FallBack &quot;Diffuse&quot;
-</code></pre>
-<p>}<br>
-<img src="https://Wei715547.github.io/post-images/1598081504394.PNG" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>

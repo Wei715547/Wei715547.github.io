@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1601114878316">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1601435524280">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -33,7 +33,7 @@ foreach (int i in nums) list.Add((double)i); /..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1601114878316" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1601435524280" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -156,6 +156,55 @@ res.Add(b - a);<br>
 res.Add(a * b);<br>
 res.Add(a / b);<br>
 res.Add(b / a);<br>
+return res;<br>
+}<br>
+}</p>
+<pre><code>C#改JAVA
+</code></pre>
+<p>class Solution<br>
+{<br>
+public boolean judgePoint24(int[] nums)<br>
+{<br>
+ArrayList<Double> list = new ArrayList&lt;&gt;();<br>
+for (int n:nums)<br>
+{<br>
+list.add((double)n);<br>
+}<br>
+return Prm(list);<br>
+}<br>
+public boolean Prm(ArrayList<Double> list)<br>
+{<br>
+if (list.size() == 1)<br>
+{<br>
+return Math.abs(list.get(0) - 24) &lt; 1e-6;<br>
+}<br>
+for (int i = 0; i &lt; list.size(); i++)<br>
+{<br>
+for (int j = i + 1; j &lt; list.size(); j++)<br>
+{<br>
+for (double k:AllTowRes(list.get(i), list.get(j)))<br>
+{<br>
+ArrayList<Double> nextRound = new ArrayList&lt;&gt;();<br>
+nextRound.add(k);<br>
+for (int v = 0; v &lt; list.size(); v++)<br>
+{<br>
+if (v == i || v == j) continue;<br>
+nextRound.add(list.get(v));<br>
+}<br>
+if (Prm(nextRound)) return true;<br>
+}<br>
+}<br>
+}<br>
+return false;<br>
+}<br>
+public ArrayList<Double> AllTowRes(double a, double b)<br>
+{<br>
+ArrayList<Double> res = new ArrayList&lt;&gt;();<br>
+res.add(a + b);<br>
+res.add(a - b);<br>
+res.add(b - a);<br>
+if (b != 0) res.add(a / b);<br>
+if (a != 0) res.add(b / a);<br>
 return res;<br>
 }<br>
 }</p>
