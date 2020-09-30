@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-09-30T03:13:50.969Z</updated>
+    <updated>2020-09-30T03:22:56.425Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -335,16 +335,6 @@ void Update()
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[AStar]]></title>
-        <id>https://Wei715547.github.io/post/astar/</id>
-        <link href="https://Wei715547.github.io/post/astar/">
-        </link>
-        <updated>2020-09-30T02:50:05.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1601434274880.jpg" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1601434281055.jpg" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
     <entry>
@@ -2020,6 +2010,207 @@ samplerCUBE _CubeMap;<br>
 
 	}
 		FallBack &quot;Diffuse&quot;
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[UI滚动窗口Scroll View(自动/手动)缓动缩放]]></title>
+        <id>https://Wei715547.github.io/post/ui-gun-dong-chuang-kou-scroll-viewzi-dong-shou-dong-huan-dong-suo-fang/</id>
+        <link href="https://Wei715547.github.io/post/ui-gun-dong-chuang-kou-scroll-viewzi-dong-shou-dong-huan-dong-suo-fang/">
+        </link>
+        <updated>2020-08-24T12:24:01.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1598272075912.PNG" alt="" loading="lazy"><br>
+//基础手动/自动滚动代码<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.EventSystems;<br>
+using UnityEngine.UI;</p>
+<p>public class PstPanel : MonoBehaviour ,IEndDragHandler,IBeginDragHandler<br>
+{<br>
+protected ScrollRect rect;<br>
+RectTransform content;<br>
+public int pageCount;<br>
+public float[] pagePos;//存储各滚动页的坐标</p>
+<pre><code>public float runTime = 0;//控制滚动快慢的记录系统时间
+public float holdTime = 0.2f;//控制滚动快慢的时间
+public float startPos;//滚动窗口rect.horizontalNormalizedPosition属性线性变化的开始值
+public int currentPage = 0;//当前滚动窗口要显示页面
+
+public bool isMoving = false;
+
+public bool isAutoRoll;
+public float autoHodeTime = 2;//自动股东间隔时间
+private float AutoRunTimer=0;//控制自动滚动间隔的记录系统时间
+
+private bool isDrag = false;
+
+public Action&lt;int&gt; OnPageChange;//事件/委托链：公开变量用于外部订阅
+
+// Start is called before the first frame update
+protected virtual void Start()
+{
+    Init();
+}
+
+private void Init()
+{
+    rect = GetComponent&lt;ScrollRect&gt;();
+    content = transform.Find(&quot;Viewport/Content&quot;).GetComponent&lt;RectTransform&gt;();
+    pageCount = content.childCount;
+    if (pageCount == 1)
+    {
+        throw new System.Exception(&quot;UnAutoR&quot;);
+    }
+    pagePos = new float[pageCount];
+    for (int i = 0; i &lt; pagePos.Length; i++)
+    {
+        pagePos[i] = i * (1.0f / (float)(pageCount - 1));//计算并存储每个页面的坐标
+    }
+}
+
+// Update is called once per frame
+protected virtual void Update()
+{
+    LisenerMove();//监听移动方法
+    LisenerAutoRoll();//监听自动移动方法
+}
+
+private void LisenerMove()//每帧执行：使窗口显示目标页面
+{
+    if (isMoving)
+    {
+        runTime += Time.deltaTime / holdTime;
+        rect.horizontalNormalizedPosition = Mathf.Lerp(rect.horizontalNormalizedPosition, pagePos[currentPage], runTime);//runTime=1时立即移动到目标值
+        if (runTime &gt;= 1)
+        {
+            isMoving = false;
+        }
+    }
+}
+
+public void LisenerAutoRoll()
+{
+    if (isDrag) return;
+    if (isAutoRoll)//间隔时间调用滚动方法
+    {
+        AutoRunTimer += Time.deltaTime;
+        if(AutoRunTimer&gt;=autoHodeTime)
+        {
+            AutoRunTimer = 0;
+            currentPage++ ;
+            currentPage %= pageCount;
+            ScrollToPage(currentPage);
+        }
+    }
+}
+/// &lt;summary&gt;
+/// 滚动到指定页面方法
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;page&quot;&gt;要滚动到的页面&lt;/param&gt;
+public void ScrollToPage(int page)
+{
+    isMoving = true;
+    currentPage =page;
+    runTime = 0;
+    startPos = rect.horizontalNormalizedPosition;//范围(0~1)
+    if(OnPageChange!=null)// OnPageChange?.Invoke(this.currentPage);
+    {//作用同于广播此事件(委托连不为空则调用)
+        OnPageChange(this.currentPage);
+    }
+}
+
+public void OnEndDrag(PointerEventData eventData)//结束拖拽接口实现：重置自动滚动时间，判断当前停留位置更接近那个页面并移动到目标页面
+{
+    isDrag = false;
+    AutoRunTimer = 0;
+    ToEndPos();
+}
+/// &lt;summary&gt;
+/// 拖拽结束时一定到目标位置    
+/// &lt;/summary&gt;
+private void ToEndPos()
+{
+    int pageIndex = 0;
+    for (int i = 1; i &lt; pagePos.Length; i++)
+    {
+        if (Mathf.Abs(pagePos[i] - rect.horizontalNormalizedPosition) &lt; Mathf.Abs(pagePos[pageIndex] - rect.horizontalNormalizedPosition))
+        {
+            pageIndex = i;
+        }
+    }
+    ScrollToPage(pageIndex);
+}
+
+public void OnBeginDrag(PointerEventData eventData)//开始拖拽接口实现
+{
+    isDrag = true;
+}
+</code></pre>
+<p>}</p>
+<p>//通过代码继承与多态对父类代码复用与扩展添加缓动效果<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class PageScale : PstPanel<br>
+{<br>
+public GameObject[] items;<br>
+public float currentScle = 1f;<br>
+public float otherScle = 0.6f;<br>
+public int lastPage;<br>
+public int nextPage;<br>
+public float percent;<br>
+protected override void Start()<br>
+{<br>
+base.Start();<br>
+items = new GameObject[pageCount];<br>
+for (int i = 0; i &lt; pageCount; i++)<br>
+{<br>
+items[i] = transform.Find(&quot;Viewport/Content&quot;).transform.GetChild(i).gameObject;<br>
+}<br>
+}</p>
+<pre><code>protected override void Update()
+{
+    base.Update();
+    LissenterScale();
+    //SetItenSize(currentPage);
+}
+/// &lt;summary&gt;
+/// 监听Scale
+/// &lt;/summary&gt;
+public void LissenterScale()
+{
+    //获取当前上一页，下一页
+    for (int i = 0; i &lt; pagePos.Length; i++)
+    {
+        if(pagePos[i]&lt;=rect.horizontalNormalizedPosition)
+        {
+            lastPage = i;
+        }            
+    }
+    for (int i = 0; i &lt; pagePos.Length; i++)
+    {
+        if(pagePos[i]&gt;rect.horizontalNormalizedPosition)
+        {
+            nextPage = i;
+            break;
+        }
+    }
+
+    if (lastPage == nextPage)
+        return;
+    percent = (rect.horizontalNormalizedPosition - pagePos[lastPage]) / (pagePos[nextPage] - pagePos[lastPage]);//当前页到下一页0~1变动
+    items[lastPage].transform.localScale = Vector3.Lerp(Vector3.one * currentScle, Vector3.one * otherScle, percent);//按比例返回a,b间的值0返回a，1返回b
+    items[nextPage].transform.localScale = Vector3.Lerp(Vector3.one * currentScle, Vector3.one * otherScle, 1-percent);
+
+    for (int i = 0; i &lt; items.Length; i++)
+    {
+        if (i!=lastPage&amp;&amp;i!=nextPage)
+            items[i].transform.localScale = Vector3.one * otherScle;
+    }
+}
 </code></pre>
 <p>}</p>
 ]]></content>
