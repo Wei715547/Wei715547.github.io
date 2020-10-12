@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" >
 
-<title>洗牌算法 | WeiBlog</title>
+<title>洗牌算法，洪水填充算法 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1602471679786">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1602493529787">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -37,7 +37,7 @@ f..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1602471679786" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1602493529787" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -112,7 +112,7 @@ f..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">洗牌算法</h2>
+            <h2 class="post-title">洗牌算法，洪水填充算法</h2>
             <div class="post-date">2020-10-12</div>
             
             <div class="post-content" v-pre>
@@ -138,13 +138,58 @@ return dateArray;<br>
 }<br>
 }<br>
 //应用程序<br>
+<img src="https://Wei715547.github.io/post-images/1602493526529.PNG" alt="" loading="lazy"><br>
 shuffleCoords = new Queue<Coord>(Utilities.ShuffleCoords(allTilesCoord.ToArray()));<br>
 public Coord GetRandomCoord()<br>
 {<br>
 Coord randomCoord = shuffleCoords.Dequeue();<br>
 shuffleCoords.Enqueue(randomCoord);<br>
 return randomCoord;<br>
-}</p>
+}<br>
+——————————————————————————————————————————————————<br>
+/// <summary><br>
+/// 洪水填充算法<br>
+/// </summary><br>
+/// <param name="_mapObstacles">地图上的位置是否存在障碍物</param><br>
+/// <param name="_currentObsCount">应该时候能承担障碍物数量</param><br>
+/// <returns>是否可以在此处生成障碍物</returns><br>
+public bool MapIsFullyAccessible(bool[,] _mapObstacles, int _currentObsCount)<br>
+{<br>
+bool[,] mapFlag = new bool[_mapObstacles.GetLength(0), _mapObstacles.GetLength(1)];<br>
+Queue<Coord> queue = new Queue<Coord>();//存储所有筛选后的坐标<br>
+queue.Enqueue(mapCenter);<br>
+mapFlag[mapCenter.x, mapCenter.y] = true;//中心点标记为已检测<br>
+int accessibleCount = 1;//可以行走的格子数量<br>
+while(queue.Count&gt;0)<br>
+{<br>
+Coord currentTile = queue.Dequeue();<br>
+for (int x = -1; x &lt;=1; x++)<br>
+{<br>
+for (int y = -1; y &lt;=1; y++)<br>
+{<br>
+int neighborX = currentTile.x + x;<br>
+int neighborY = currentTile.y + y;</p>
+<pre><code>                if (x==0||y==0)//检测上下左右四个相邻的位置是否可行
+                {
+                    if(neighborX &gt;=0&amp;&amp;neighborX&lt;_mapObstacles.GetLength(0)
+                        &amp;&amp; neighborY&gt;=0&amp;&amp;neighborY&lt;_mapObstacles.GetLength(1))//范围限定在地图范围内
+                    {
+                        //该位置未检测，且不存在障碍物时
+                        if(!mapFlag[neighborX,neighborY]&amp;&amp;!_mapObstacles[neighborX,neighborY])
+                        {
+                            mapFlag[neighborX, neighborY] = true;
+                            accessibleCount++;
+                            queue.Enqueue(new Coord(neighborX, neighborY));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    int walkableCount = (int)(mapSize.x * mapSize.y - _currentObsCount);//地图上应该可行走位置的数量
+    return accessibleCount == walkableCount;//联通路径总的可行走数量与目标值相同时则可依据_mapObstacles中位置生成障碍物
+}
+</code></pre>
 
             </div>
             
