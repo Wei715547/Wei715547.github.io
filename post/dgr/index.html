@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ComponenDemo | WeiBlog</title>
+<title>DgR | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,9 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-/// 
-/// Component类提供了查找（当前物体，子类，父类）组件的功能..." />
+    <meta name="description" content="1.单一职责原则：类的职责要单一，不能将太多的职责放到一个类中。
+2.开闭原则：软件实体对扩展时开放的，但对修改是关闭的，即在不修改一个软件实体的基础上去扩展器功能。
+3.里转转换原则：在软件系统中一个可以接受基类对象的地方必然可以接受其子..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -107,57 +105,26 @@ using UnityEngine;
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">ComponenDemo</h2>
-            <div class="post-date">2020-04-04</div>
+            <h2 class="post-title">DgR</h2>
+            <div class="post-date">2020-10-03</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-/// <summary><br>
-/// Component类提供了查找（当前物体，子类，父类）组件的功能。<br>
-/// </summary><br>
-public class ComponentDemo : MonoBehaviour<br>
-{<br>
-private void OnGUI()<br>
-{<br>
-if (GUILayout.Button(&quot;Transtorm&quot;))<br>
-{<br>
-this.transform.position = new Vector3(0, 0, 10);<br>
-}<br>
-if (GUILayout .Button (&quot;GetComponent&quot;))<br>
-{<br>
-this.GetComponent<MeshRenderer>().material.color = Color.red;<br>
-}<br>
-if(GUILayout.Button (&quot;GetComponents&quot;))<br>
-{<br>
-var allConmponent = this.GetComponents<Component>();<br>
-foreach (var item in allConmponent )<br>
-{<br>
-print(item.GetType());<br>
-}<br>
-}<br>
-if (GUILayout.Button(&quot;GetComponentsInChildren&quot;))<br>
-{<br>
-//获取后代物体的指定类型组件（从自身开始）<br>
-//var sun = this.GetComponentInChildren<MeshRenderer>();//返回包含MeshRanderer组件的子对象<br>
-var allConmponent = this.GetComponentsInChildren<MeshRenderer>();//返回所有包含MeshRanderer组件的子对象<br>
-foreach (var item in allConmponent)<br>
-{<br>
-item.material.color = Color.blue;<br>
-}<br>
-}<br>
-}<br>
-}</p>
+              <p>1.单一职责原则：类的职责要单一，不能将太多的职责放到一个类中。<br>
+2.开闭原则：软件实体对扩展时开放的，但对修改是关闭的，即在不修改一个软件实体的基础上去扩展器功能。<br>
+3.里转转换原则：在软件系统中一个可以接受基类对象的地方必然可以接受其子类对象（父类中装入子类）<br>
+4.依赖倒转原则：要针对抽象对象编程，而不是对具体类编程。<br>
+5.接口隔离原则：使用多个专门的接口 来取代一个统一的接口。<br>
+6.合成复用原则：在系统中应多使用组合聚合关系，尽量少使用或不使用继承关系。<br>
+7.迪米特法则：一个软件实体对其他实体的引用越少越好，或者说如果两个类不必彼此自黑通信，那么，两个类就不应当直接发生作用，而是通过引入中间体发生间接交互。</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/jumpandluo-di-jian-ce/">
+                <a href="https://Wei715547.github.io/post/astar-base/">
                   <h3 class="post-title">
-                    jump&amp;落地检测
+                    AStar-Base
                   </h3>
                 </a>
               </div>

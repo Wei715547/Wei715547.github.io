@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>ComponenDemo | WeiBlog</title>
+<title>洗牌算法 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,16 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+    <meta name="description" content="public class Utilities
+{
 /// 
-/// Component类提供了查找（当前物体，子类，父类）组件的功能..." />
+/// 洗牌算法，
+/// 
+/// 随机重排的数组
+/// 
+public static Coord[] ShuffleCoords(Coord[] dateArray)
+{
+f..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -107,47 +112,38 @@ using UnityEngine;
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">ComponenDemo</h2>
-            <div class="post-date">2020-04-04</div>
+            <h2 class="post-title">洗牌算法</h2>
+            <div class="post-date">2020-10-12</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
+              <p>public class Utilities<br>
+{<br>
 /// <summary><br>
-/// Component类提供了查找（当前物体，子类，父类）组件的功能。<br>
+/// 洗牌算法，<br>
 /// </summary><br>
-public class ComponentDemo : MonoBehaviour<br>
+/// <param name="dateArray">随机重排的数组</param><br>
+/// <returns></returns><br>
+public static Coord[] ShuffleCoords(Coord[] dateArray)<br>
 {<br>
-private void OnGUI()<br>
+for (int i = 0; i &lt; dateArray.Length; i++)<br>
 {<br>
-if (GUILayout.Button(&quot;Transtorm&quot;))<br>
-{<br>
-this.transform.position = new Vector3(0, 0, 10);<br>
+//将每次随机到的元素放到首位，第二次随机从“队首+1~最后元素”开始随机，这样每次随机到的即不为同一元素<br>
+int random = Random.Range(i, dateArray.Length);<br>
+//SWAP<br>
+Coord temp = dateArray[random];<br>
+dateArray[random] = dateArray[i];<br>
+dateArray[i] = temp;<br>
 }<br>
-if (GUILayout .Button (&quot;GetComponent&quot;))<br>
-{<br>
-this.GetComponent<MeshRenderer>().material.color = Color.red;<br>
-}<br>
-if(GUILayout.Button (&quot;GetComponents&quot;))<br>
-{<br>
-var allConmponent = this.GetComponents<Component>();<br>
-foreach (var item in allConmponent )<br>
-{<br>
-print(item.GetType());<br>
+return dateArray;<br>
 }<br>
 }<br>
-if (GUILayout.Button(&quot;GetComponentsInChildren&quot;))<br>
+//应用程序<br>
+shuffleCoords = new Queue<Coord>(Utilities.ShuffleCoords(allTilesCoord.ToArray()));<br>
+public Coord GetRandomCoord()<br>
 {<br>
-//获取后代物体的指定类型组件（从自身开始）<br>
-//var sun = this.GetComponentInChildren<MeshRenderer>();//返回包含MeshRanderer组件的子对象<br>
-var allConmponent = this.GetComponentsInChildren<MeshRenderer>();//返回所有包含MeshRanderer组件的子对象<br>
-foreach (var item in allConmponent)<br>
-{<br>
-item.material.color = Color.blue;<br>
-}<br>
-}<br>
-}<br>
+Coord randomCoord = shuffleCoords.Dequeue();<br>
+shuffleCoords.Enqueue(randomCoord);<br>
+return randomCoord;<br>
 }</p>
 
             </div>
@@ -155,9 +151,9 @@ item.material.color = Color.blue;<br>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/jumpandluo-di-jian-ce/">
+                <a href="https://Wei715547.github.io/post/dgr/">
                   <h3 class="post-title">
-                    jump&amp;落地检测
+                    DgR
                   </h3>
                 </a>
               </div>

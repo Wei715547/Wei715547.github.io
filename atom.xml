@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-09-30T03:59:29.184Z</updated>
+    <updated>2020-10-12T03:02:37.446Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,58 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[洗牌算法]]></title>
+        <id>https://Wei715547.github.io/post/xi-pai-suan-fa/</id>
+        <link href="https://Wei715547.github.io/post/xi-pai-suan-fa/">
+        </link>
+        <updated>2020-10-12T02:57:36.000Z</updated>
+        <content type="html"><![CDATA[<p>public class Utilities<br>
+{<br>
+/// <summary><br>
+/// 洗牌算法，<br>
+/// </summary><br>
+/// <param name="dateArray">随机重排的数组</param><br>
+/// <returns></returns><br>
+public static Coord[] ShuffleCoords(Coord[] dateArray)<br>
+{<br>
+for (int i = 0; i &lt; dateArray.Length; i++)<br>
+{<br>
+//将每次随机到的元素放到首位，第二次随机从“队首+1~最后元素”开始随机，这样每次随机到的即不为同一元素<br>
+int random = Random.Range(i, dateArray.Length);<br>
+//SWAP<br>
+Coord temp = dateArray[random];<br>
+dateArray[random] = dateArray[i];<br>
+dateArray[i] = temp;<br>
+}<br>
+return dateArray;<br>
+}<br>
+}<br>
+//应用程序<br>
+shuffleCoords = new Queue<Coord>(Utilities.ShuffleCoords(allTilesCoord.ToArray()));<br>
+public Coord GetRandomCoord()<br>
+{<br>
+Coord randomCoord = shuffleCoords.Dequeue();<br>
+shuffleCoords.Enqueue(randomCoord);<br>
+return randomCoord;<br>
+}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[DgR]]></title>
+        <id>https://Wei715547.github.io/post/dgr/</id>
+        <link href="https://Wei715547.github.io/post/dgr/">
+        </link>
+        <updated>2020-10-03T10:54:03.000Z</updated>
+        <content type="html"><![CDATA[<p>1.单一职责原则：类的职责要单一，不能将太多的职责放到一个类中。<br>
+2.开闭原则：软件实体对扩展时开放的，但对修改是关闭的，即在不修改一个软件实体的基础上去扩展器功能。<br>
+3.里转转换原则：在软件系统中一个可以接受基类对象的地方必然可以接受其子类对象（父类中装入子类）<br>
+4.依赖倒转原则：要针对抽象对象编程，而不是对具体类编程。<br>
+5.接口隔离原则：使用多个专门的接口 来取代一个统一的接口。<br>
+6.合成复用原则：在系统中应多使用组合聚合关系，尽量少使用或不使用继承关系。<br>
+7.迪米特法则：一个软件实体对其他实体的引用越少越好，或者说如果两个类不必彼此自黑通信，那么，两个类就不应当直接发生作用，而是通过引入中间体发生间接交互。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[AStar-Base]]></title>
         <id>https://Wei715547.github.io/post/astar-base/</id>
@@ -1906,327 +1958,6 @@ public void OnPickToggleValueChange(bool v)
     if (v) LoadDate(ArticleType.Pick);
 }
 #endregion
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Shader_反射]]></title>
-        <id>https://Wei715547.github.io/post/shader_-fan-she/</id>
-        <link href="https://Wei715547.github.io/post/shader_-fan-she/">
-        </link>
-        <updated>2020-08-25T15:41:56.000Z</updated>
-        <content type="html"><![CDATA[<p>Shader &quot;Custom/Reflection&quot;<br>
-{<br>
-Properties//属性<br>
-{<br>
-_MainTex(&quot;Main Tex&quot;,2D) = &quot;white&quot;{}//贴图代替漫反射颜色<br>
-_Color(&quot;Tex Color&quot;,Color) = (1,1,1,1)//贴图颜色:与贴图uv坐标下的像素点颜色混合<br>
-_NormalMap(&quot;Normal Map&quot;,2D) = &quot;bump&quot;{}//未添法线贴图时为默认法线<br>
-_NormalST(&quot;Normal ST&quot;,Float) = 1//法线贴图强度参数<br>
-_Specular(&quot;_Specular&quot;, Color) = (1, 1, 1, 1)//高光颜色<br>
-_Gloss(&quot;_Gloss&quot;, Range(1, 200)) = 20//高光参数<br>
-_ReflectAmount(&quot;_ReflectAmount&quot;,Range(0,1)) = 1<br>
-_CubeMap(&quot;_CubeMap&quot;,Cube) = &quot;_Skybox&quot;{}//天空和贴图<br>
-}<br>
-SubShader<br>
-{<br>
-Pass<br>
-{<br>
-Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量<br>
-CGPROGRAM<br>
-//在CG声明属性<br>
-sampler2D _MainTex;//ShaderCG中的关键字<br>
-float4 _MainTex_ST; //主贴图的缩放与偏移“属性名称固定”_MainTex_ST.xy缩放属性；_MainTex_ST.zw偏移属性<br>
-fixed4 _Color;//与贴图叠混合颜色<br>
-sampler2D _NormalMap;<br>
-float4 _NormalMap_ST;<br>
-float _NormalST;<br>
-fixed4 _Specular;<br>
-int _Gloss;<br>
-fixed _ReflectAmount;<br>
-samplerCUBE _CubeMap;<br>
-#include &quot;Lighting.cginc&quot;//引入UNITY内置文件，获取光照变量 _LightColor0.rgb;光源颜色<br>
-#pragma vertex vert//声明顶点函数<br>
-#pragma fragment frag//声明片原函数</p>
-<pre><code>	struct a2v//应用向顶点函数传递参数
-	{
-		float4 vertex:POSITION;//模型空间顶点坐标
-		//切线空间的确定是通过（存储到模型里的/模型空间）法线 与 （存储到模型里的/模型空间）切线确定的
-		float3 normal:NORMAL;//模型空间法线方向
-		float4 tangent:TANGENT;//模型空间下的切线方向：tangent.w:是用来确定切线空间中坐标轴的方向（切线空间下的Z轴方向默认为顶点的法线方向:通过控制缩放xy可改变法线强度）
-		float4 texcoord :TEXCOORD0;//获取纹理坐标
-	};
-	struct v2f//顶点函数向片原函数传递参数
-	{
-		float4 svPos:SV_POSITION;//顶点函数返回值：剪裁空间中的顶点坐标-系统直接使用
-		//float3 worldNormal : TEXCOORD3;//顶点函数向片原函数传递世界坐标下的法线方向(使用法线贴图后不需要)
-		float3 lightDir:TEXCOORD0;//切线空间下的平行光方向
-		float3 viewDir:TEXCOORD1;//顶点函数向片原函数传递且切线空间下的视线方向
-
-		float4 uv:TEXCOORD2;//xy用来存储_MainTex的纹理坐标，zw用来存储_NormalMap的纹理坐标
-		float3 WorldRefl:TEXCOORD3;
-	};
-
-	v2f vert(a2v v)//顶点函数将顶点从模型空间转到世界空间，返回值在世界坐标系下的顶点坐标
-	{
-		v2f f;//声明传参结构体,并对其中的值赋值
-		f.svPos = UnityObjectToClipPos(v.vertex);
-		//f.worldNormal = UnityObjectToWorldNormal(v.normal);
-		//f.worldView = (UnityObjectToWorldNormal(v.vertex), 0);
-		f.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;//将纹理坐标传递到片原函数 * 乘上主贴图缩放属性 + 加上主贴图的偏移属性
-        //f.uv.xy = TRANSFORM_TEX(v.uv,_MainTex);//将纹理坐标传递到片原函数 * 乘上主贴图缩放属性 + 加上主贴图的偏移属性
-		f.uv.zw = v.texcoord.xy * _NormalMap_ST.xy + _NormalMap_ST.zw;//将法线纹理坐标与其属性结合存储到uv.zw中
-
-		TANGENT_SPACE_ROTATION;//调用这个宏后(保证a2v &quot;v&quot;中存在&quot;normal&quot;&quot;tangent&quot;宏自动调用)，会得到一个矩阵&quot;rotation&quot;这个矩阵用来把模型空间下的法线转换到切线空间下
-
-		//ObjSpaceLightDir(v.vertex);//模型空间下的平行光方向
-		f.lightDir = mul(rotation, ObjSpaceLightDir(v.vertex));//将切线就下的平行光方向传到片原函数
-		f.viewDir = mul(rotation, ObjSpaceViewDir(v.vertex));//计算切线空间下的视角方向
-		return f;//返回结构体
-	}
-
-	//把与法线有关相关计算放到切线空间下（从法线贴图取到的方向坐标为切线空间下的）
-	fixed4 frag(v2f f) :SV_Target//片原函数，返回值为输出到像素颜色值的缓存
-	{
-		//计算漫反射
-		//fixed3 normalDir = normalize(f.worldNormal);//法线方向
-		fixed4 normalColor = tex2D(_NormalMap,f.uv.zw);//法线贴图在纹理坐标下的颜色值(只使用其中RGB值)
-
-		//此方法法线读取不正确//fixed3 tangentNormal = normalize(normalColor.xyz * 2 - 1);//切线空间下的法线方向
-		fixed3 tangentNormal = normalize(UnpackNormal(normalColor));//在UNITY中将法线贴图类型设置为法线贴图时可用此方法获得切线空间下的法线方向
-		//切线空间下的Z轴方向默认为顶点的法线方向:通过控制缩放xy可改变法线强度，则如下
-		tangentNormal.xy = tangentNormal.xy * _NormalST;//强度为0时使用的即是模型顶点默认的法线方向
-
-		fixed3 lightDir = normalize(f.lightDir);//单位化切线空间下的光源方向
-
-		fixed3 texColor = tex2D(_MainTex, f.uv.xy) * _Color.rgb;//获取纹理坐标下贴图像素点的颜色*与外部属性控制的贴图颜色混合
-
-		
-
-		fixed3 diffuse = _LightColor0.rgb * texColor * max((dot(lightDir,tangentNormal) * 0.5 + 0.5), 0);//fixed3 harfLambert =dot(f.wordNormalDir, lightDir)*0.5+0.5;//半兰伯特光照模型:直射光颜色 * (cos夹角(光与法线)*0.5+0.5):使背光面不完全为黑色
-
-		//计算高光反射
-		//fixed3 reflectDir = normalize(reflect(-lightDir, normalDir));
-		fixed3 viewDir = normalize(f.viewDir);//实视线方向
-		fixed3 harfDir = normalize(viewDir + lightDir);//视角与平行光的平分方向
-		fixed3 specular = _LightColor0.rgb * texColor * _Specular.rgb * pow(max(dot(tangentNormal, harfDir),0), _Gloss);//BP模型://Blinn-Phong光照模型Specular = 直射光*pow(max(cos夹角,0)*高光参数) ，夹角：法线与x方向夹角,x:平行光与视野方向的平分项。
-
-
-		fixed3 worleRefl = reflect(-viewDir,tangentNormal);
-		fixed3 reflection = texCUBE(_CubeMap,worleRefl).rgb;
-
-		fixed3 tempColor = lerp(diffuse, reflection,_ReflectAmount) + specular + UNITY_LIGHTMODEL_AMBIENT.rgb * texColor;//漫反射+高光+环境光*纹理，相加混合（环境光与纹理混合：使强光下的纹理仍保持清晰）
-		
-
-		return fixed4(tempColor,1);
-	}
-	ENDCG
-}
-
-	}
-		FallBack &quot;Diffuse&quot;
-</code></pre>
-<p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[UI滚动窗口Scroll View(自动/手动)缓动缩放]]></title>
-        <id>https://Wei715547.github.io/post/ui-gun-dong-chuang-kou-scroll-viewzi-dong-shou-dong-huan-dong-suo-fang/</id>
-        <link href="https://Wei715547.github.io/post/ui-gun-dong-chuang-kou-scroll-viewzi-dong-shou-dong-huan-dong-suo-fang/">
-        </link>
-        <updated>2020-08-24T12:24:01.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1598272075912.PNG" alt="" loading="lazy"><br>
-//基础手动/自动滚动代码<br>
-using System;<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.EventSystems;<br>
-using UnityEngine.UI;</p>
-<p>public class PstPanel : MonoBehaviour ,IEndDragHandler,IBeginDragHandler<br>
-{<br>
-protected ScrollRect rect;<br>
-RectTransform content;<br>
-public int pageCount;<br>
-public float[] pagePos;//存储各滚动页的坐标</p>
-<pre><code>public float runTime = 0;//控制滚动快慢的记录系统时间
-public float holdTime = 0.2f;//控制滚动快慢的时间
-public float startPos;//滚动窗口rect.horizontalNormalizedPosition属性线性变化的开始值
-public int currentPage = 0;//当前滚动窗口要显示页面
-
-public bool isMoving = false;
-
-public bool isAutoRoll;
-public float autoHodeTime = 2;//自动股东间隔时间
-private float AutoRunTimer=0;//控制自动滚动间隔的记录系统时间
-
-private bool isDrag = false;
-
-public Action&lt;int&gt; OnPageChange;//事件/委托链：公开变量用于外部订阅
-
-// Start is called before the first frame update
-protected virtual void Start()
-{
-    Init();
-}
-
-private void Init()
-{
-    rect = GetComponent&lt;ScrollRect&gt;();
-    content = transform.Find(&quot;Viewport/Content&quot;).GetComponent&lt;RectTransform&gt;();
-    pageCount = content.childCount;
-    if (pageCount == 1)
-    {
-        throw new System.Exception(&quot;UnAutoR&quot;);
-    }
-    pagePos = new float[pageCount];
-    for (int i = 0; i &lt; pagePos.Length; i++)
-    {
-        pagePos[i] = i * (1.0f / (float)(pageCount - 1));//计算并存储每个页面的坐标
-    }
-}
-
-// Update is called once per frame
-protected virtual void Update()
-{
-    LisenerMove();//监听移动方法
-    LisenerAutoRoll();//监听自动移动方法
-}
-
-private void LisenerMove()//每帧执行：使窗口显示目标页面
-{
-    if (isMoving)
-    {
-        runTime += Time.deltaTime / holdTime;
-        rect.horizontalNormalizedPosition = Mathf.Lerp(rect.horizontalNormalizedPosition, pagePos[currentPage], runTime);//runTime=1时立即移动到目标值
-        if (runTime &gt;= 1)
-        {
-            isMoving = false;
-        }
-    }
-}
-
-public void LisenerAutoRoll()
-{
-    if (isDrag) return;
-    if (isAutoRoll)//间隔时间调用滚动方法
-    {
-        AutoRunTimer += Time.deltaTime;
-        if(AutoRunTimer&gt;=autoHodeTime)
-        {
-            AutoRunTimer = 0;
-            currentPage++ ;
-            currentPage %= pageCount;
-            ScrollToPage(currentPage);
-        }
-    }
-}
-/// &lt;summary&gt;
-/// 滚动到指定页面方法
-/// &lt;/summary&gt;
-/// &lt;param name=&quot;page&quot;&gt;要滚动到的页面&lt;/param&gt;
-public void ScrollToPage(int page)
-{
-    isMoving = true;
-    currentPage =page;
-    runTime = 0;
-    startPos = rect.horizontalNormalizedPosition;//范围(0~1)
-    if(OnPageChange!=null)// OnPageChange?.Invoke(this.currentPage);
-    {//作用同于广播此事件(委托连不为空则调用)
-        OnPageChange(this.currentPage);
-    }
-}
-
-public void OnEndDrag(PointerEventData eventData)//结束拖拽接口实现：重置自动滚动时间，判断当前停留位置更接近那个页面并移动到目标页面
-{
-    isDrag = false;
-    AutoRunTimer = 0;
-    ToEndPos();
-}
-/// &lt;summary&gt;
-/// 拖拽结束时一定到目标位置    
-/// &lt;/summary&gt;
-private void ToEndPos()
-{
-    int pageIndex = 0;
-    for (int i = 1; i &lt; pagePos.Length; i++)
-    {
-        if (Mathf.Abs(pagePos[i] - rect.horizontalNormalizedPosition) &lt; Mathf.Abs(pagePos[pageIndex] - rect.horizontalNormalizedPosition))
-        {
-            pageIndex = i;
-        }
-    }
-    ScrollToPage(pageIndex);
-}
-
-public void OnBeginDrag(PointerEventData eventData)//开始拖拽接口实现
-{
-    isDrag = true;
-}
-</code></pre>
-<p>}</p>
-<p>//通过代码继承与多态对父类代码复用与扩展添加缓动效果<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class PageScale : PstPanel<br>
-{<br>
-public GameObject[] items;<br>
-public float currentScle = 1f;<br>
-public float otherScle = 0.6f;<br>
-public int lastPage;<br>
-public int nextPage;<br>
-public float percent;<br>
-protected override void Start()<br>
-{<br>
-base.Start();<br>
-items = new GameObject[pageCount];<br>
-for (int i = 0; i &lt; pageCount; i++)<br>
-{<br>
-items[i] = transform.Find(&quot;Viewport/Content&quot;).transform.GetChild(i).gameObject;<br>
-}<br>
-}</p>
-<pre><code>protected override void Update()
-{
-    base.Update();
-    LissenterScale();
-    //SetItenSize(currentPage);
-}
-/// &lt;summary&gt;
-/// 监听Scale
-/// &lt;/summary&gt;
-public void LissenterScale()
-{
-    //获取当前上一页，下一页
-    for (int i = 0; i &lt; pagePos.Length; i++)
-    {
-        if(pagePos[i]&lt;=rect.horizontalNormalizedPosition)
-        {
-            lastPage = i;
-        }            
-    }
-    for (int i = 0; i &lt; pagePos.Length; i++)
-    {
-        if(pagePos[i]&gt;rect.horizontalNormalizedPosition)
-        {
-            nextPage = i;
-            break;
-        }
-    }
-
-    if (lastPage == nextPage)
-        return;
-    percent = (rect.horizontalNormalizedPosition - pagePos[lastPage]) / (pagePos[nextPage] - pagePos[lastPage]);//当前页到下一页0~1变动
-    items[lastPage].transform.localScale = Vector3.Lerp(Vector3.one * currentScle, Vector3.one * otherScle, percent);//按比例返回a,b间的值0返回a，1返回b
-    items[nextPage].transform.localScale = Vector3.Lerp(Vector3.one * currentScle, Vector3.one * otherScle, 1-percent);
-
-    for (int i = 0; i &lt; items.Length; i++)
-    {
-        if (i!=lastPage&amp;&amp;i!=nextPage)
-            items[i].transform.localScale = Vector3.one * otherScle;
-    }
-}
 </code></pre>
 <p>}</p>
 ]]></content>
