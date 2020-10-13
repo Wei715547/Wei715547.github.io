@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-10-12T10:46:11.732Z</updated>
+    <updated>2020-10-13T03:37:34.787Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -12,7 +12,7 @@
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, WeiBlog</rights>
     <entry>
-        <title type="html"><![CDATA[洗牌算法，洪水填充算法]]></title>
+        <title type="html"><![CDATA[洗牌算法，洪水填充算法，重置内置运算符]]></title>
         <id>https://Wei715547.github.io/post/xi-pai-suan-fa/</id>
         <link href="https://Wei715547.github.io/post/xi-pai-suan-fa/">
         </link>
@@ -90,7 +90,28 @@ int neighborY = currentTile.y + y;</p>
     int walkableCount = (int)(mapSize.x * mapSize.y - _currentObsCount);//地图上应该可行走位置的数量
     return accessibleCount == walkableCount;//联通路径总的可行走数量与目标值相同时则可依据_mapObstacles中位置生成障碍物
 }
+------------------------重置内置运算符“operator”--------------------------
+public struct Coord
 </code></pre>
+<p>{<br>
+public int x;<br>
+public int y;</p>
+<pre><code>public Coord(int _x, int _y)
+{
+    this.x = _x;
+    this.y = _y;
+}
+//operator：重置内置运算符，C#要求成对重载比较运算符
+public static bool operator !=(Coord _c1,Coord _c2)
+{
+    return !(_c1 == _c2);
+}
+public static bool operator ==(Coord _c1,Coord _c2)
+{
+    return (_c1.x == _c2.x &amp;&amp; _c1.y == _c2.y);
+}
+</code></pre>
+<p>}</p>
 ]]></content>
     </entry>
     <entry>
