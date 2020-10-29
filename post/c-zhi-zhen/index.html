@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Unity面试易考题-排序 | WeiBlog</title>
+<title>C指针 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,8 +18,10 @@
 
 
 
-    <meta name="description" content="
-..." />
+    <meta name="description" content="定义：type * p_address; (type:数据类型)
+p_address = &amp; valu; (&amp;取引用)
+*p_address； 表示地址中的值（解引用）
+值帧/数组  int array[3] = [7,1,..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -104,20 +106,67 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Unity面试易考题-排序</h2>
-            <div class="post-date">2020-05-09</div>
+            <h2 class="post-title">C指针</h2>
+            <div class="post-date">2020-10-29</div>
             
             <div class="post-content" v-pre>
-              <figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589001203393.jpg" alt="" loading="lazy"></figure>
+              <p>定义：type * p_address; (type:数据类型)<br>
+p_address = &amp; valu; (&amp;取引用)<br>
+*p_address； 表示地址中的值（解引用）</p>
+<p>值帧/数组  int array[3] = [7,1,5];<br>
+int* p_array = array;<br>
+(int类型(4字节)数组array所指向的是array[0]的地址，即&amp;array[0],<br>
+一旦将array赋值给p_array，此时array和p_array都指向数组的第一个元素的地址，可以通过指针像数组一样操作数组，p_array[0] , array[0]含义相同)<br>
+指针运算：p_array++ 和p_array+1都指向数组的下一个元素（int类型占4个字节+1地址偏移4位(C++不会进行数组越界检测)）<br>
+如上所有数组索引表达式可以写成指针镓屁啊你量形式：<br>
+array[1] 与 <em>(p_array+1)相同<br>
+数组声明：type array [n];<br>
+array含义1：代表这个数组其类型时type[n];<br>
+array含义2：代表一个“常量”指针，指针类型时type</em> ,指向的类型是type，指向的存区域是数组第一个元素(0号单元)，该指针占有单独的内存区域，指针值不可修改，即类似array++的表达式错误。<br>
+指针与引用：声明：double x = 7.5;<br>
+double*  = &amp;x;<br>
+//引用声明 （引用声明时必须指定引用对象，且绑定关系不可改变）<br>
+double&amp; y = x;<br>
+上述“&amp;”“<em>”为定义引用与指针，非取址与解引用。通过</em>p与y都可对x值进行更改；<br>
+指针与函数：指针作为函数参数<br>
+void swap (int * a ,int * b)//<br>
+{<br>
+int temp = *a;<br>
+*a = *b;<br>
+*b = temp;<br>
+}<br>
+int a = 10;<br>
+int b - 20;<br>
+swap(&amp;a,&amp;b); //C#,ref<br>
+指针指向函数：<br>
+void (*funcp)()//声明一个无参数无返回值的函数指针<br>
+funcp = &amp;TheFunction;//<br>
+funcp = TheFunction；//函数指针赋值<br>
+funcp();//与函数调用书写方式无异，下式表示更明确<br>
+(<em>funcp)()；//间接调用<br>
+动态内存分配：（在“堆”区开辟空间，由程序员管理，开辟/释放）new typr,（new返回type类型的指针）<br>
+int</em> p_int;<br>
+p_int = new int ;//或p_int = new(int)<br>
+delete p_int</p>
+<p>int* p_arrayint ;<br>
+p_arrayint - new int[10]//声明数组内存空间，不能分配时返回NULL<br>
+delete[] p_arrayint;<br>
+分配到的内存系统不会自动回收，需要调用delete[] p_arrayint;来释放内存。<br>
+不释放则导致内存泄漏。<br>
+C++内存分区模型：<br>
+代码区：存放函数体的二进制代码，有系统进行管理。<br>
+全局区：存放全局变量和静态变量以及常量。<br>
+栈区：由编译器自动分配释放，存放函数参数值，局部变量等。<br>
+堆区：由程序员分配释放，若不释放，程序结束时由系统进行回收。</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-cxiang-guan/">
+                <a href="https://Wei715547.github.io/post/xi-pai-suan-fa/">
                   <h3 class="post-title">
-                    Unity面试易考题 - C#相关
+                    洗牌算法，洪水填充算法，重置内置运算符
                   </h3>
                 </a>
               </div>
