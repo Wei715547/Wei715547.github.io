@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1603962566129">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1604223035062">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -21,9 +21,8 @@
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class VectorAPI : MonoBehaviour
-{
-..." />
+//ab =|a| |b|cos(x),ab夹角
+//b在a上的投影：|b|cos..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -33,7 +32,7 @@ public class VectorAPI : MonoBehaviour
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1603962566129" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1604223035062" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -114,8 +113,17 @@ public class VectorAPI : MonoBehaviour
             <div class="post-content" v-pre>
               <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class VectorAPI : MonoBehaviour<br>
+using UnityEngine;<br>
+//a<em>b =|a| |b|cos(x),ab夹角<br>
+//b在a上的投影：|b|cos(x) = (a</em>b)/|a| = b<em>a(A),//单位矢量a<br>
+/</em><br>
+a为平面法线，求b在平面上的投影<br>
+b在a向量上的投影向量为c = Vector.Dot(a,b)/a.magintude ()*a.normalized<br>
+则b在平面上的投影为：b-c;<br>
+*/<br>
+//点乘Vector3.Dot();<br>
+//叉乘Vector3.Cross();<br>
+public class VectorAPI : MonoBehaviour<br>
 {<br>
 public AnimationCurve cuver;<br>
 private float x;<br>

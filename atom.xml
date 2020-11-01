@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-10-29T09:14:04.995Z</updated>
+    <updated>2020-11-01T09:30:42.966Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -50,21 +50,26 @@ void (*funcp)()//声明一个无参数无返回值的函数指针<br>
 funcp = &amp;TheFunction;//<br>
 funcp = TheFunction；//函数指针赋值<br>
 funcp();//与函数调用书写方式无异，下式表示更明确<br>
-(<em>funcp)()；//间接调用<br>
+(*funcp)()；//间接调用</p>
+<p>C++内存分区模型：<br>
+程序运行前存在<br>
+//代码区：存放函数体的二进制代码，有系统进行管理。<br>
+存放及其指令<br>
+特点：共享，只读。<br>
+全局区：存放全局变量和静态变量以及常量。<br>
+常量包括：字符串常量，const修饰变量：修饰 的全局变量，(const修饰的局部变量不再全局区)。<br>
+//运行后<br>
+栈区：（指针本质局部变量放在栈上，保存堆区数据的地址）由编译器自动分配释放，存放函数参数值，形参，局部变量等。（不要返回局部变量的地址，栈区开辟的数据由编译器自动释放）：函数中的局部变量存放在栈区，栈区的数据在“函数”执行完成后会自动释放，在此、次访问时地址中的数据已发生改变。（只保留一次）<br>
+堆区：由程序员分配释放，若不释放，程序结束时由系统进行回收。由new type;与delete申请/释放。<br>
 动态内存分配：（在“堆”区开辟空间，由程序员管理，开辟/释放）new typr,（new返回type类型的指针）<br>
-int</em> p_int;<br>
+int* p_int;<br>
 p_int = new int ;//或p_int = new(int)<br>
 delete p_int</p>
 <p>int* p_arrayint ;<br>
 p_arrayint - new int[10]//声明数组内存空间，不能分配时返回NULL<br>
 delete[] p_arrayint;<br>
 分配到的内存系统不会自动回收，需要调用delete[] p_arrayint;来释放内存。<br>
-不释放则导致内存泄漏。<br>
-C++内存分区模型：<br>
-代码区：存放函数体的二进制代码，有系统进行管理。<br>
-全局区：存放全局变量和静态变量以及常量。<br>
-栈区：由编译器自动分配释放，存放函数参数值，局部变量等。<br>
-堆区：由程序员分配释放，若不释放，程序结束时由系统进行回收。</p>
+不释放则导致内存泄漏。</p>
 ]]></content>
     </entry>
     <entry>
