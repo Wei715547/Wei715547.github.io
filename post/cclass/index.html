@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>C++:类 | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1604495236542">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="声明：
+class 类名
+{
+public:
+外部调用方法
+属性get,set;
+private:
+属性
+}
+//在类外部定义“类中声明的方法”（必须加以“::”作为域限定符，用于声明函数属于哪个类）
+函数返回值  类名::函数名（参数）
+..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1604495236542" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">C++:类</h2>
+            <div class="post-date">2020-11-03</div>
+            
+            <div class="post-content" v-pre>
+              <p>声明：<br>
+class 类名<br>
+{<br>
+public:<br>
+外部调用方法<br>
+属性get,set;<br>
+private:<br>
+属性<br>
+}<br>
+//在类外部定义“类中声明的方法”（必须加以“::”作为域限定符，用于声明函数属于哪个类）<br>
+函数返回值  类名::函数名（参数）<br>
+{<br>
+方法体；//在类内实现定义的函数系统能够默认为内联函数。<br>
+}<br>
+内联函数(避免方法在栈空间中频繁存取释放)：只有在类外定义的成员函数规模较且调用频率较高时，才将成员函数指定为内联函数，(返回值2加inline ,类中的声明同样加上inline)。<br>
+成员访问：<br>
+1.对象名.成员名；<br>
+2.指针-&gt;成员名<br>
+3.引用名.成员名<br>
+类：get,set方法：读写类的私有成员（保护作用）。<br>
+类：成员函数：</p>
+<p>类的成员函数声明与实现，分离；<br>
+在头文件&quot;.h&quot;文件中进行类的声明；<br>
+在源代码/程序文件&quot;.cpp&quot;文件中进行类成员函数的实现；<br>
+在主函数&quot;main.cpp&quot;文件中使用类 的成员函数；</p>
+<p>Re.h文件<br>
+cood&lt;&gt;<br>
+using namespace std;<br>
+calss Re<br>
+{<br>
+public:<br>
+int Area();<br>
+int Perimeter;<br>
+int getLength();<br>
+void setLength(int Len);<br>
+int getWidth();<br>
+void setWidth（int Wid）;<br>
+private:<br>
+int length,width,<br>
+}</p>
+<p>Re.cpp文件：<br>
+#include &quot;Re.h&quot;//引入要实现类的头文件<br>
+int Re::Area()<br>
+{<br>
+return length*width;<br>
+}<br>
+int Re::getLength ()<br>
+{<br>
+return length;<br>
+}<br>
+void Re::setLength(int Len)<br>
+{<br>
+length = Len;<br>
+}</p>
+<p>main.cpp主函数<br>
+#include &quot;Re.h&quot;//引入使用类头文件,预编译时使用Re.h中的内容替换引用<br>
+using namespace std;<br>
+int main (int arge,char *argv[])<br>
+{</p>
+<p>}<br>
+构造函数：类名（）；{}<br>
+1）无返回值，非void<br>
+2）可以有多个构造函数，根据参数类型重载<br>
+3）类对象创建时自动调用（new调用，delete调用析构函数）<br>
+1、在类类内定义<br>
+class Re<br>
+{<br>
+public:<br>
+Re()//构造<br>
+{<br>
+length = 1;<br>
+width = 1;<br>
+}<br>
+}<br>
+2、在类外定义<br>
+Re::Re()<br>
+{<br>
+length = 1;<br>
+width = 1;<br>
+}<br>
+带参数构造函数：类名（类型 形参）；<br>
+class Re<br>
+{<br>
+public:<br>
+Re(int Len,int Wid)//构造<br>
+{<br>
+length = Len;<br>
+width = Wid;<br>
+}<br>
+}<br>
+参数初始化表对数据成员初始化：<br>
+class Re<br>
+{<br>
+public:<br>
+Re(int Len,int Wid):length(Len),width(Wid) {}//&quot;{}&quot;不能省略<br>
+private:<br>
+int length,windle;<br>
+}<br>
+默认参数值构造函数：用户不指定是，编译器使用默认值<br>
+Re(int Len = 1,int Wid = 2)//构造<br>
+{<br>
+length = Len;<br>
+width = Wid;<br>
+}<br>
+析构函数：~与类名相同 （）前面加上“~”<br>
+1）与构造函数对应用于释放对象所占用内存(并不是删除对象)，由delete调用<br>
+2）析构函数同样没有返回值，但也没有参数由于没有参数也不能重载，一个类存在多个构造函数但只存在一个析构函数。<br>
+3）析构函数也可用于最后一次使用类对象后执行的操作（写在方法体中）<br>
+4）后创建的对象先被释放<br>
+class Re<br>
+{<br>
+public:<br>
+Re(){}<br>
+~Re(){}<br>
+}</p>
+<pre><code>new malloc区别
+</code></pre>
+<p>1、	new分配内存按照数据类型进行分配，malloc分配内存按照指定的大小分配；<br>
+malloc 是函数，开辟内存需要传入字节数，如 malloc(100)；表示在堆上开辟了 100 个字 节的内存，返回 void*，表示分配的堆内存的起始地址，因此 malloc 的返回值需要强转成指 定类型的地址；new 是运算符，开辟内存需要指定类型，返回指定类型的地址，因此不需要 进行强转。<br>
+2、	malloc 和 new 都是在堆上开辟内存的，malloc 只负责开辟内存，没有初始化功能，需要 用户自己初始化；new 不但开辟内存，还可以进行初始化，<br>
+3、	malloc 开辟内存失败返回 NULL，new 开辟内存失败抛出 bad_alloc 类型的异常，需要捕 获异常才能判断内存开辟成功或失败，new 运算符其实是 operator new 函数的调用，它底 层调用的也是 malloc 来开辟内存的，new 它比 malloc 多的就是初始化功能，对于类类型来 说，所谓初始化，就是调用相应的构造函数。<br>
+4、	new分配的内存要用delete销毁，malloc要用free来销毁；delete销毁的时候会调用对象的析构函数，而free则不会。</p>
+<pre><code>共有数据
+常量数据成员：const在不同位置标示不同含义：
+const int aa//使用const的普通数据成员常量
+const int * bb//在int前使用const的指针数据成员
+int *const cc//在int后使用const的指针数据成员
+const int *const dd//在int类型前后使用const的指针数据成员
+const int &amp;cc //使用const的引用类型成员
+1）aa为整型常量，初始化后不能被改变，（在类中，必须在构造函数的初始化列表中进行初始化（不能在类定义时初始化：const int aa = 5//错误））
+2）在指针数据类型前时：指针指向的值不能改变
+3）在指针数据类型后时：指针变量时不能改变
+4）在指针数据类型前后时：指针指向值与指针值都不改变
+常量创建后不能将整型常量的地址赋值给一个int*指针，应赋值给cosnt int*指针。
+const int mm = 30；
+int *pp = &amp;mm;//应改为：const int *pp = &amp;mm; 
+</code></pre>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/c-zhi-zhen/">
+                  <h3 class="post-title">
+                    C指针
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

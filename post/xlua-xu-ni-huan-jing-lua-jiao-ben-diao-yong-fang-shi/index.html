@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1604223035062">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1604495236542">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -33,7 +33,7 @@ usi..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1604223035062" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1604495236542" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -157,37 +157,73 @@ local go = UnityEngine.GameObject.Instantiate(self.diamands,self.transform.posit
 go.transform.SetParent(go.transform,self.cavas)<br>
 end<br>
 end)</p>
-<pre><code>--2.修复Attack方法
+<p>--****************************************************************<br>
+--2.修复Attack方法<br>
+xlua.private_accessible(CS.Gun)--要访问类中的私有变量时<br>
+xlua.hotfix(CS.Gun,'Attack',function(self)</p>
+<pre><code>if UnityEngine.Input.GetMouseButtonDown(0) then
+	if UnityEngine.EventSystems.EventSystem.current:IsPointerOverGameObject() then
+		return
+	end
 </code></pre>
-<p>xlua.private_accessible(CS.Gun)--要访问类中的私有变量时<br>
-xlua.hotfix(CS.Gun,'Attack',function(self)<br>
-if UnityEngine.Input.GetMouseButtonDown(0) then<br>
-if self.gold&lt;1+(self.gunLevel-1)<em>2 or gold ==0 than<br>
+<p>--[[<br>
+if self.gold&lt;1+(self.gunLevel-1)*2 or gold ==0 then<br>
 return<br>
 end<br>
-self.bullectAudio.clip = self.bullectAudios[self.gunLevel-1]<br>
---self.bullectAudio.Play(self)成员变量调用内部方法方式1<br>
-self.bullectAudio:Play()--方式2<br>
-if self.Butterfly then<br>
-UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation</em>UnityEngine.Quaternion.Euler(0,0,20))<br>
-UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation*UnityEngine.Quaternion.Euler(0,0,-20))<br>
-end</p>
-<pre><code>	UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation)
+--]]</p>
+<pre><code>	--削弱Level3
+	if self.gunLevel==3 and self.diamands&lt;3 then
+		return
+	elseif self.gunLevel~=3 then
+		if self.gold&lt;1+(self.gunLevel-1)*2 or gold ==0 then
+			return
+		end
+	end
+
+	self.bullectAudio.clip = self.bullectAudios[self.gunLevel-1]
+	--self.bullectAudio.Play(self)成员变量调用内部方法方式1
+	self.bullectAudio:Play()--方式2
+	if self.Butterfly then
+		UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation*UnityEngine.Quaternion.Euler(0,0,20))
+		UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation*UnityEngine.Quaternion.Euler(0,0,-20))
+	end
+
+	UnityEngine.GameObject.Instantiate(self.Bullects[self.gunLevel-1],self.attackPos.position,self.attackPos.rotation)
 
 	if not self.canShootForFree then
-		self:GoldChange(-1,-(self.gunLevel-1)*2)--一般情况下引用非静态方法时，使用成员变量+：来引用
+		if self.gunLevel==3 then
+			self:DiamandsChange(-3)
+		else
+			self:GoldChange(-1,-(self.gunLevel-1)*2)
+		end
 	end
 	self.attackCD = 0
 	self.attack = false
 end
 </code></pre>
-<p>end)<br>
---*******************************************************************<br>
+<p>end)</p>
+<p>--*************************************************************<br>
+--3.金币扣除双修改<br>
+xlua.private_accessible(CS.Fire)<br>
+xlua.hotfix(CS.Fire,'Start',function(self)<br>
+self.reduceDiamands = 8;<br>
+end)</p>
+<pre><code>xlua.private_accessible(CS.Ice)
+xlua.hotfix(CS.Ice,'Start',function(self)
+	self.reduceDiamands = 8;
+end)
+
+xlua.private_accessible(CS.ButterFly)
+xlua.hotfix(CS.ButterFly,'Start',function(self)
+	self.reduceDiamands = 5;
+end)
+</code></pre>
+<p>--*******************************************************************<br>
 --4.Prace<br>
-local util = require 'util'--加载XLua自带方法集<br>
-xlua.private_accessible(CS.Boss)--可访问类的私有变量<br>
-util.hotfix_ex(CS.Boss,'Start',function(self)--在C#脚本的基础上附加代码（谨慎使用次饭饭执较慢）<br>
-self.Start(self)--执行原C#中的方法<br>
+local util = require 'util'--工具库<br>
+xlua.private_accessible(CS.Boss)<br>
+util.hotfix_ex(CS.Boss,'Start',function(self)--在C#脚本的基础上附加代码（谨慎使用次饭饭执行慢）<br>
+self.Start(self)<br>
 self.m_reduceGold = self.m_reduceGold-20<br>
 end)</p>
 <p>xlua.private_accessible(CS.DeffendBoss)<br>
@@ -217,7 +253,189 @@ self.DiamandsChange(self,number)</p>
 	return
 end
 </code></pre>
-<p>end)<br>
+<p>end)</p>
+<p>--****************************************************<br>
+--6.0Fish生成方式</p>
+<p>--利用C#类中的静态方法加载AB资源</p>
+<p>local canCreateNewFish = true<br>
+local changeMapTimeval = 0</p>
+<p>xlua.hotfix(CS.CreateFish,'Start',function(self)<br>
+self.hotFixScript:LoadResource('level3fish3','gamaobjectenemy.ab')<br>
+self.hotFixScript:LoadResource('SeaWave','gameobjectwave.ab')<br>
+end)</p>
+<p>xlua.private_accessible(CS.CreateFish)<br>
+xlua.hotfix(CS.CreateFish,'Update',function(self)</p>
+<pre><code>--生成海浪
+if canCreateNewFish then
+	if changeMapTimeval&gt;=5 then
+		go = CS.HotFixScript.GetGameObject(&quot;SeaWave&quot;)
+		UnityEngine.GameObject.Instantiate(go)
+		canCreateNewFish = false
+		changeMapTimeval = 0
+	else
+		changeMapTimeval=changeMapTimeval+UnityEngine.Time.deltaTime
+	end
+else
+	return
+end
+
+self:CreateALotOfFish()
+
+--单种鱼的生成
+    if self.ItemtimeVal &gt;= 0.5 then
+
+        --位置随机数
+        self.num = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(0, 4))--Lua只有一种数值类型此处取浮点型下界
+        --游戏物体随机数
+        self.ItemNum = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(1, 101))
+
+		local halfLength=self.fishList.Length/2
+
+		local littlefishTypeIndex = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(0,halfLength))
+		local bigfishTypeIndex = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(halfLength,self.fishList.Length))
+		local itemTypeIndex = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(0,self.item.Length))
+
+        --产生气泡
+        if self.ItemNum &lt; 20 then
+
+            self:CreateGameObject(self.item[3])
+
+        end
+
+
+        if self.ItemNum &lt;= 42 then
+			for i=0,2,1 do
+				self:CreateGameObject(self.fishList[littlefishTypeIndex]);
+			end
+			self:CreateGameObject(self.item[itemTypeIndex])
+
+        --第二种鱼30% 43-72
+        elseif self.ItemNum &gt;= 43 and self.ItemNum &lt; 72 then
+			for i=0,1,1 do
+				self:CreateGameObject(self.fishList[bigfishTypeIndex]);
+			end
+			self:CreateGameObject(self.item[itemTypeIndex])
+</code></pre>
+<p>--2.0新的鱼/AB包<br>
+elseif self.ItemNum &gt;= 73 and self.ItemNum &lt; 83 then<br>
+newFish = CS.HotFixScript.GetGameObject('level3fish3')<br>
+self:CreateGameObject(newFish)</p>
+<pre><code>        elseif self.ItemNum &gt;= 84 and self.ItemNum &lt; 86 then
+			self:CreateGameObject(self.boss)
+
+        elseif self.ItemNum &gt;= 87 and self.ItemNum &lt;= 88 then
+
+            self:CreateGameObject(self.boss2)
+
+
+        elseif self.ItemNum ==100 then
+
+
+            self:CreateGameObject(self.boss3)
+
+        else
+
+            self:CreateGameObject(self.item[0]);
+
+        end
+
+        self.ItemtimeVal = 0;
+
+    else
+        self.ItemtimeVal = self.ItemtimeVal + UnityEngine.Time.deltaTime;
+    end
+</code></pre>
+<p>end)</p>
+<p>--************************************************************<br>
+--7.0重写捕捉成功概率<br>
+xlua.private_accessible(CS.Fish)<br>
+xlua.hotfix(CS.Fish,'TakeDamage',function(self,attackValue)<br>
+if CS.Gun.Instance.Fire then</p>
+<pre><code>        attackValue = attackValue*2
+end
+	local catchValue = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(0,100))
+    if catchValue&lt;=(50-(self.hp-attackValue))/2 then
+
+        self.isDead = true;
+        for i=0,8,1 do
+
+            UnityEngine.GameObject.Instantiate(self.pao, self.transform.position, UnityEngine.Quaternion.Euler(self.transform.eulerAngles + UnityEngine.Vector3(0, 45 * i, 0)))
+        end
+
+        self.gameObjectAni:SetTrigger(&quot;Die&quot;);
+        self:Invoke(&quot;Prize&quot;, 0.7);
+    end
+</code></pre>
+<p>end)</p>
+<p>--Boss Cath概率<br>
+xlua.hotfix(CS.Boss,'TakeDamage',function(self,attackValue)<br>
+if CS.Gun.Instance.Fire then</p>
+<pre><code>        attackValue = attackValue*2
+    end
+
+    local catchValue = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(0,100))
+
+    if catchValue &lt;= (attackValue*3-self.hp/10) then
+
+        UnityEngine.GameObject.Instantiate(self.deadEeffect, self.transform.position, self.transform.rotation)
+        CS.Gun.Instance:GoldChange(self.GetGold * 10);
+        CS.Gun.Instance:DiamandsChange(self.GetDiamands * 10)
+
+        for i=0,10,1 do
+
+            local itemGo = UnityEngine.GameObject.Instantiate(self.gold, self.transform.position, UnityEngine.Quaternion.Euler(self.transform.eulerAngles + UnityEngine.Vector3(0, 18 + 36 * (i - 1), 0)))
+            itemGo:GetComponent('Gold').bossPrize = true
+        end
+        for i=0,10,1 do
+			local itemGo1 = UnityEngine.GameObject.Instantiate(self.diamands, self.transform.position, UnityEngine.Quaternion.Euler(self.transform.eulerAngles + UnityEngine.Vector3(0, 36 + 36 * (i - 1), 0)))
+            itemGo1:GetComponent('Gold').bossPrize = true
+        end
+        UnityEngine.Object.Destroy(self.gameObject)
+    end
+</code></pre>
+<p>end)</p>
+<p>--*************************************************************<br>
+--8.0Gun控制方式修改<br>
+xlua.hotfix(CS.Gun,'RotateGun',function(self)<br>
+if UnityEngine.Input.GetKey(UnityEngine.KeyCode.A) then<br>
+self.transform:Rotate(UnityEngine.Vector3.forward * self.rotateSpeed);<br>
+elseif UnityEngine.Input.GetKey(UnityEngine.KeyCode.D) then<br>
+self.transform:Rotate(-UnityEngine.Vector3.forward * self.rotateSpeed);<br>
+end<br>
+self:ClampAngle()<br>
+end)</p>
+<p>xlua.private_accessible(CS.GunImage)<br>
+xlua.hotfix(CS.GunImage,'RotateGun',function(self)<br>
+if UnityEngine.Input.GetKey(UnityEngine.KeyCode.A) then<br>
+self.transform:Rotate(UnityEngine.Vector3.forward * self.rotateSpeed);<br>
+elseif UnityEngine.Input.GetKey(UnityEngine.KeyCode.D) then<br>
+self.transform:Rotate(-UnityEngine.Vector3.forward * self.rotateSpeed);<br>
+end<br>
+self:ClampAngle()<br>
+end)</p>
+<p>--*************************************************************<br>
+--9.0新的类</p>
+<p>xlua.private_accessible(CS.HotFixEmpty)<br>
+xlua.hotfix(CS.HotFixEmpty,'Start',function(self)<br>
+self:Invoke(&quot;BehaviourMethod&quot;,8)<br>
+end)</p>
+<p>xlua.hotfix(CS.HotFixEmpty,'Update',function(self)<br>
+self.transform:Translate(-self.transform.right<em>4</em>UnityEngine.Time.deltaTime,UnityEngine.Space.World)<br>
+end)</p>
+<p>xlua.hotfix(CS.HotFixEmpty,'OnTriggerEnter',function(self,other)<br>
+if other.tag~=&quot;Untagged&quot; and other.tag~=&quot;Wall&quot; then<br>
+UnityEngine.Object.Destroy(other.gameObject)<br>
+end<br>
+end)</p>
+<p>xlua.hotfix(CS.HotFixEmpty,'BehaviourMethod',function(self)<br>
+CS.Gun.Instance.level = CS.Gun.Instance.level+1<br>
+if CS.Gun.Instance.level==4 then<br>
+CS.Gun.Instance.level=1<br>
+end<br>
+canCreateNewFish = true<br>
+CS.Gun.Instance.changeAudio = true<br>
+UnityEngine.Object.Destroy(self.gameObject)<br>
+end)<br>
 \\\\\\\\\\\\\\\\\\\\\\\\\\<br>
 \fishDispose.lua.txt</p>
 <p>xlua.hotfix(CS.Treasour,'CreatePrize',nil)</p>

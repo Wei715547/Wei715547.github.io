@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-11-01T09:30:42.966Z</updated>
+    <updated>2020-11-04T13:07:22.534Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,151 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[C++:类]]></title>
+        <id>https://Wei715547.github.io/post/cclass/</id>
+        <link href="https://Wei715547.github.io/post/cclass/">
+        </link>
+        <updated>2020-11-03T12:37:47.000Z</updated>
+        <content type="html"><![CDATA[<p>声明：<br>
+class 类名<br>
+{<br>
+public:<br>
+外部调用方法<br>
+属性get,set;<br>
+private:<br>
+属性<br>
+}<br>
+//在类外部定义“类中声明的方法”（必须加以“::”作为域限定符，用于声明函数属于哪个类）<br>
+函数返回值  类名::函数名（参数）<br>
+{<br>
+方法体；//在类内实现定义的函数系统能够默认为内联函数。<br>
+}<br>
+内联函数(避免方法在栈空间中频繁存取释放)：只有在类外定义的成员函数规模较且调用频率较高时，才将成员函数指定为内联函数，(返回值2加inline ,类中的声明同样加上inline)。<br>
+成员访问：<br>
+1.对象名.成员名；<br>
+2.指针-&gt;成员名<br>
+3.引用名.成员名<br>
+类：get,set方法：读写类的私有成员（保护作用）。<br>
+类：成员函数：</p>
+<p>类的成员函数声明与实现，分离；<br>
+在头文件&quot;.h&quot;文件中进行类的声明；<br>
+在源代码/程序文件&quot;.cpp&quot;文件中进行类成员函数的实现；<br>
+在主函数&quot;main.cpp&quot;文件中使用类 的成员函数；</p>
+<p>Re.h文件<br>
+cood&lt;&gt;<br>
+using namespace std;<br>
+calss Re<br>
+{<br>
+public:<br>
+int Area();<br>
+int Perimeter;<br>
+int getLength();<br>
+void setLength(int Len);<br>
+int getWidth();<br>
+void setWidth（int Wid）;<br>
+private:<br>
+int length,width,<br>
+}</p>
+<p>Re.cpp文件：<br>
+#include &quot;Re.h&quot;//引入要实现类的头文件<br>
+int Re::Area()<br>
+{<br>
+return length*width;<br>
+}<br>
+int Re::getLength ()<br>
+{<br>
+return length;<br>
+}<br>
+void Re::setLength(int Len)<br>
+{<br>
+length = Len;<br>
+}</p>
+<p>main.cpp主函数<br>
+#include &quot;Re.h&quot;//引入使用类头文件,预编译时使用Re.h中的内容替换引用<br>
+using namespace std;<br>
+int main (int arge,char *argv[])<br>
+{</p>
+<p>}<br>
+构造函数：类名（）；{}<br>
+1）无返回值，非void<br>
+2）可以有多个构造函数，根据参数类型重载<br>
+3）类对象创建时自动调用（new调用，delete调用析构函数）<br>
+1、在类类内定义<br>
+class Re<br>
+{<br>
+public:<br>
+Re()//构造<br>
+{<br>
+length = 1;<br>
+width = 1;<br>
+}<br>
+}<br>
+2、在类外定义<br>
+Re::Re()<br>
+{<br>
+length = 1;<br>
+width = 1;<br>
+}<br>
+带参数构造函数：类名（类型 形参）；<br>
+class Re<br>
+{<br>
+public:<br>
+Re(int Len,int Wid)//构造<br>
+{<br>
+length = Len;<br>
+width = Wid;<br>
+}<br>
+}<br>
+参数初始化表对数据成员初始化：<br>
+class Re<br>
+{<br>
+public:<br>
+Re(int Len,int Wid):length(Len),width(Wid) {}//&quot;{}&quot;不能省略<br>
+private:<br>
+int length,windle;<br>
+}<br>
+默认参数值构造函数：用户不指定是，编译器使用默认值<br>
+Re(int Len = 1,int Wid = 2)//构造<br>
+{<br>
+length = Len;<br>
+width = Wid;<br>
+}<br>
+析构函数：~与类名相同 （）前面加上“~”<br>
+1）与构造函数对应用于释放对象所占用内存(并不是删除对象)，由delete调用<br>
+2）析构函数同样没有返回值，但也没有参数由于没有参数也不能重载，一个类存在多个构造函数但只存在一个析构函数。<br>
+3）析构函数也可用于最后一次使用类对象后执行的操作（写在方法体中）<br>
+4）后创建的对象先被释放<br>
+class Re<br>
+{<br>
+public:<br>
+Re(){}<br>
+~Re(){}<br>
+}</p>
+<pre><code>new malloc区别
+</code></pre>
+<p>1、	new分配内存按照数据类型进行分配，malloc分配内存按照指定的大小分配；<br>
+malloc 是函数，开辟内存需要传入字节数，如 malloc(100)；表示在堆上开辟了 100 个字 节的内存，返回 void*，表示分配的堆内存的起始地址，因此 malloc 的返回值需要强转成指 定类型的地址；new 是运算符，开辟内存需要指定类型，返回指定类型的地址，因此不需要 进行强转。<br>
+2、	malloc 和 new 都是在堆上开辟内存的，malloc 只负责开辟内存，没有初始化功能，需要 用户自己初始化；new 不但开辟内存，还可以进行初始化，<br>
+3、	malloc 开辟内存失败返回 NULL，new 开辟内存失败抛出 bad_alloc 类型的异常，需要捕 获异常才能判断内存开辟成功或失败，new 运算符其实是 operator new 函数的调用，它底 层调用的也是 malloc 来开辟内存的，new 它比 malloc 多的就是初始化功能，对于类类型来 说，所谓初始化，就是调用相应的构造函数。<br>
+4、	new分配的内存要用delete销毁，malloc要用free来销毁；delete销毁的时候会调用对象的析构函数，而free则不会。</p>
+<pre><code>共有数据
+常量数据成员：const在不同位置标示不同含义：
+const int aa//使用const的普通数据成员常量
+const int * bb//在int前使用const的指针数据成员
+int *const cc//在int后使用const的指针数据成员
+const int *const dd//在int类型前后使用const的指针数据成员
+const int &amp;cc //使用const的引用类型成员
+1）aa为整型常量，初始化后不能被改变，（在类中，必须在构造函数的初始化列表中进行初始化（不能在类定义时初始化：const int aa = 5//错误））
+2）在指针数据类型前时：指针指向的值不能改变
+3）在指针数据类型后时：指针变量时不能改变
+4）在指针数据类型前后时：指针指向值与指针值都不改变
+常量创建后不能将整型常量的地址赋值给一个int*指针，应赋值给cosnt int*指针。
+const int mm = 30；
+int *pp = &amp;mm;//应改为：const int *pp = &amp;mm; 
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[C指针]]></title>
         <id>https://Wei715547.github.io/post/c-zhi-zhen/</id>
@@ -30,8 +175,11 @@ array[1] 与 <em>(p_array+1)相同<br>
 数组声明：type array [n];<br>
 array含义1：代表这个数组其类型时type[n];<br>
 array含义2：代表一个“常量”指针，指针类型时type</em> ,指向的类型是type，指向的存区域是数组第一个元素(0号单元)，该指针占有单独的内存区域，指针值不可修改，即类似array++的表达式错误。<br>
+引用：(本质常量指针)<br>
+数据类型 &amp;别名 = 原名<br>
+type &amp;b = a;<br>
 指针与引用：声明：double x = 7.5;<br>
-double*  = &amp;x;<br>
+double* p = &amp;x;<br>
 //引用声明 （引用声明时必须指定引用对象，且绑定关系不可改变）<br>
 double&amp; y = x;<br>
 上述“&amp;”“<em>”为定义引用与指针，非取址与解引用。通过</em>p与y都可对x值进行更改；<br>
@@ -1211,399 +1359,6 @@ if (health !=null)<br>
 health.TakeDamage(Random.Range(10, 21));<br>
 Destroy(this.gameObject);<br>
 }<br>
-}<br>
-}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Shader,屏幕后处理(Post Effect)]]></title>
-        <id>https://Wei715547.github.io/post/shaderping-mu-hou-chu-li-post-effect/</id>
-        <link href="https://Wei715547.github.io/post/shaderping-mu-hou-chu-li-post-effect/">
-        </link>
-        <updated>2020-09-08T07:34:21.000Z</updated>
-        <content type="html"><![CDATA[<p>挂在主相机上的脚本：<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-[ExecuteInEditMode]//在编译器下执行脚本（不用点击开始即执行）<br>
-public class Post : MonoBehaviour<br>
-{<br>
-public Material EffectMat;//承载后处理Shader的材质</p>
-<pre><code>private void OnRenderImage(RenderTexture source, RenderTexture destination)//该函数在所有的渲染完成后由monobehavior自动调用。
-//官方解释：该函数允许我们使用着色器滤波操作来修改最终的图像，输入原图像source，输出的图像放在desitination里。
-{
-    if (EffectMat !=null)
-    {
-        Graphics.Blit(source, destination, EffectMat);//该函数的作用就是通过一个shader将原图的像素放置到destionation中。
-    }
-}
-</code></pre>
-<p>}<br>
-——————————————————————————————————————<br>
-<img src="https://Wei715547.github.io/post-images/1599552275469.PNG" alt="" loading="lazy"><br>
-Shader1画面溶解流动效果：<br>
-Shader &quot;Shader104/Distortion&quot;<br>
-{<br>
-Properties<br>
-{<br>
-_MainTex(&quot;Texture&quot;, 2D) = &quot;white&quot; {}<br>
-_DisplaceTex(&quot;Displacement Texture&quot;, 2D) = &quot;white&quot; {}<br>
-_Magnitude(&quot;Magnitude&quot;, Range(0,0.1)) = 1</p>
-<pre><code>}
-
-SubShader
-{
-    Tags
-    {
-        &quot;Queue&quot; = &quot;Transparent&quot;
-    }
-
-    Pass{
-        Blend SrcAlpha OneMinusSrcAlpha
-
-        CGPROGRAM
-        #pragma vertex vert
-        #pragma fragment frag
-
-        #include &quot;UnityCG.cginc&quot;
-
-        struct appdata
-        {
-            float4 vertex : POSITION;
-            float2 uv : TEXCOORD0;
-        };
-
-        struct v2f
-        {
-            float4 vertex : SV_POSITION;
-            float2 uv : TEXCOORD0;
-        };
-
-        v2f vert(appdata v)
-        {
-            v2f o;
-            o.vertex = UnityObjectToClipPos(v.vertex);
-            o.uv = v.uv;
-            return o;
-        };
-
-        sampler2D _MainTex;
-        sampler2D _DisplaceTex;//噪波贴图
-        float _Magnitude;
-
-        float4 frag(v2f i): SV_Target//画面流动效果
-        {
-            float2 distuv = float2(i.uv.x + _Time.x * 2, i.uv.y + _Time.x * 2);
-            float2 disp = tex2D(_DisplaceTex, distuv).xy;//噪波贴图的.rg
-            disp = ((disp * 2) - 1) * _Magnitude;
-            float4 col = tex2D(_MainTex, i.uv + disp);
-            return col;
-        }
-        ENDCG
-    }
-}
-</code></pre>
-<p>}<br>
-————————————————————————————————————————<br>
-<img src="https://Wei715547.github.io/post-images/1599552284677.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1599552463055.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1599553049020.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1599553279813.PNG" alt="" loading="lazy"><br>
-Shader2屏幕黑白、反色、RGB分离、像素效果：<br>
-Shader &quot;Shader104/GreyScale&quot;<br>
-{<br>
-Properties<br>
-{<br>
-_MainTex(&quot;Texture&quot;, 2D) = &quot;white&quot; {}<br>
-_Slider(&quot;Slider&quot;,Range(0,1)) = 0.5<br>
-}</p>
-<pre><code>SubShader
-{
-	Tags
-	{
-		&quot;PreviewType&quot; = &quot;Plane&quot;
-	}
-	Pass
-	{
-		CGPROGRAM
-		#pragma vertex vert
-		#pragma fragment frag
-
-		#include &quot;UnityCG.cginc&quot;
-
-		struct appdata
-		{
-			float4 vertex : POSITION;
-			float2 uv: TEXCOORD0;
-		};
-
-		struct v2f
-		{
-			float4 vertex : SV_POSITION;
-			float2 uv: TEXCOORD0;
-		};
-
-		sampler2D _MainTex;
-		float _Slider;
-
-		v2f vert(appdata v)
-		{
-			v2f o;
-			o.vertex = UnityObjectToClipPos(v.vertex);
-			o.uv = v.uv;
-			return o;
-		}
-
-		float4 frag(v2f i) : SV_Target
-		{
-            /*pixelate像素效果对UV进行变换
-            float2 uv = i.uv;
-            uv.x *= _PixelateAmt;
-            uv.y *= _PixelateAmt;
-            uv.x = round(uv.x);
-            uv.y = round(uv.y);
-            uv.x /= _PixelateAmt;
-            uv.y /= _PixelateAmt;*/
-			float4 color = tex2D(_MainTex,i.uv);//默认混合颜色(白色)：不进行后处理
-			float average = 0.212 * color.r + 0.7152 * color.g + 0.0722 * color.b;//颜色黑白化
-			if (i.uv.x &gt; _Slider)//大于Slidr的部分进行后处理
-				return float4(average, average, average, 1);
-                //return float4(1-color.r, 1-color.g, 1-color.b, 1);//反色
-			else
-				return color;
-             /*chromatic aberration RGB分离
-            float4 red = tex2D(_MainTex , i.uv - _Offset);           
-            float4 green = tex2D(_MainTex, i.uv);
-            float4 blue = tex2D(_MainTex, i.uv + _Offset);
-            float4 color = float4(red.r,green.g,blue.b,1);
-            return color;*/
-		}
-		ENDCG
-	}
-}
-</code></pre>
-<p>}<br>
-————————————————————————————————————————<br>
-<img src="https://Wei715547.github.io/post-images/1599552847954.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1599553788615.PNG" alt="" loading="lazy"><br>
-Shader3Kernal矩阵边缘检测、渐变着色:<br>
-Shader &quot;Shader104/Kernal&quot;<br>
-{<br>
-Properties<br>
-{<br>
-_MainTex (&quot;Texture&quot;, 2D) = &quot;white&quot; {}<br>
-_Matrix00 (&quot;Matrix00&quot;,float) = 1<br>
-_Matrix01 (&quot;Matrix01&quot;,float) = 1<br>
-_Matrix02 (&quot;Matrix02&quot;,float) = 1<br>
-_Matrix10 (&quot;Matrix10&quot;,float) = 1<br>
-_Matrix11 (&quot;Matrix11&quot;,float) = -8<br>
-_Matrix12 (&quot;Matrix12&quot;,float) = 1<br>
-_Matrix20 (&quot;Matrix20&quot;,float) = 1<br>
-_Matrix21 (&quot;Matrix21&quot;,float) = 1<br>
-_Matrix22 (&quot;Matrix22&quot;,float) = 1<br>
-_Slider(&quot;Slider&quot;,Range(0,1)) = 0.5<br>
-_Threshold(&quot;_Threshold&quot;,Range(0,1)) = 0.1<br>
-_EdgeColor(&quot;_EdgeColor&quot;,Color) = (1,1,1,1)<br>
-_BackColor(&quot;_BackColor&quot;,Color) = (0,0,0,0)</p>
-<pre><code>}
-SubShader
-{
-    Tags
-    {
-        &quot;PreviewType&quot; = &quot;Plane&quot;
-    }
-
-    Pass
-    {
-        CGPROGRAM
-        #pragma vertex vert
-        #pragma fragment frag
-        
-        #include &quot;UnityCG.cginc&quot;
-
-        struct appdata
-        {
-            float4 vertex : POSITION;
-            float2 uv : TEXCOORD0;
-        };
-
-        struct v2f
-        {
-            float2 uv : TEXCOORD0;
-            float4 vertex : SV_POSITION;
-        };
-
-        v2f vert (appdata v)
-        {
-            v2f o;
-            o.vertex = UnityObjectToClipPos(v.vertex);
-            o.uv = v.uv;
-            return o;
-        }
-        
-        sampler2D _MainTex;
-        float4 _MainTex_TexelSize;
-        float _Matrix00;
-        float _Matrix01;
-        float _Matrix02;
-        float _Matrix10;
-        float _Matrix11;
-        float _Matrix12;
-        float _Matrix20;
-        float _Matrix21;
-        float _Matrix22;
-        float _Slider;
-        float _Threshold;
-        float4 _EdgeColor;//边缘色
-        float4 _BackColor;//背景色
-
-        float4 box(sampler2D tex, float2 uv, float4 size)//检测函数
-        {
-            float4 c = tex2D(tex, uv + float2(-size.x, size.y))*_Matrix00 + tex2D(tex, uv + float2(0, size.y))*_Matrix01 
-            + tex2D(tex, uv + float2(size.x, size.y)) *_Matrix02 + tex2D(tex, uv + float2(-size.x, 0)) * _Matrix10
-            + tex2D(tex, uv + float2(0, 0))*_Matrix11 + tex2D(tex, uv + float2(size.x, 0))*_Matrix12 
-            + tex2D(tex, uv + float2(-size.x, -size.y))*_Matrix20 + tex2D(tex, uv + float2(0, -size.y))*_Matrix21
-            + tex2D(tex, uv + float2(size.x, -size.y))*_Matrix22;
-
-            return c / (_Matrix00+_Matrix01+_Matrix02+_Matrix10+_Matrix11+_Matrix12+_Matrix20+_Matrix21+_Matrix22);
-        }
-
-        float4 frag (v2f i) : SV_Target
-        {
-            float4 color = tex2D(_MainTex, i.uv);
-            if(i.uv.x&gt;_Slider)
-			{//边缘检测
-                color = box(_MainTex, i.uv, _MainTex_TexelSize);
-                if (color.r &lt;= _Threshold &amp;&amp; color.g &lt;= _Threshold &amp;&amp; color.b &lt;= _Threshold)//渐变着色
-                    return _EdgeColor;
-                else
-                    return _BackColor;
-            }
-            else
-                if (color.r &lt;= _Threshold &amp;&amp; color.g &lt;= _Threshold &amp;&amp; color.b &lt;= _Threshold)//渐变着色
-                    return color;
-                else
-                    return float4(1, 1, 1, 1);//未上色部分为白色
-        }
-        ENDCG
-    }
-}
-</code></pre>
-<p>}<br>
-————————————————————————————————————<br>
-<img src="https://Wei715547.github.io/post-images/1599556756456.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1599556177672.PNG" alt="" loading="lazy"><br>
-Shader深度值渲染/范围扫描：<br>
-相机脚本：<br>
-using UnityEngine;<br>
-using System.Collections;<br>
-using System.Collections.Generic;</p>
-<p>[ExecuteInEditMode]<br>
-public class ReplacementShaderEffect : MonoBehaviour<br>
-{<br>
-public Color color;<br>
-public float slider;<br>
-public Shader ReplacementShader;</p>
-<pre><code>void OnValidate()
-{
-    Shader.SetGlobalColor(&quot;_Color_1&quot;, color);//获取Shader中未公开的全局变量
-}
-
-private void Update()
-{
-    Shader.SetGlobalFloat(&quot;_Temp&quot;, slider);//获取Shader中未公开的全局变量
-}
-
-void OnEnable()
-{
-    if (ReplacementShader != null)
-        GetComponent&lt;Camera&gt;().SetReplacementShader(ReplacementShader, &quot;&quot;);
-}
-
-void OnDisable()
-{
-    GetComponent&lt;Camera&gt;().ResetReplacementShader();
-}
-</code></pre>
-<p>}<br>
-————————————————————————————————<br>
-Shader程序：<br>
-Shader &quot;Shader102/Depth&quot;<br>
-{<br>
-SubShader<br>
-{<br>
-Tags<br>
-{<br>
-&quot;RenderType&quot; = &quot;Opaque&quot;<br>
-}</p>
-<pre><code>	ZWrite On
-
-
-	Pass
-	{
-		CGPROGRAM
-		#pragma vertex vert
-		#pragma fragment frag
-
-		#include &quot;UnityCG.cginc&quot;
-
-		struct appdata
-		{
-			float4 vertex : POSITION;
-		};
-
-		struct v2f
-		{
-			float4 vertex : SV_POSITION;
-			float depth : DEPTH;
-		};
-
-		v2f vert(appdata v)
-		{
-			v2f o;
-			o.vertex = UnityObjectToClipPos(v.vertex);
-			o.depth = -(mul(UNITY_MATRIX_MV, v.vertex).z) * _ProjectionParams.w;//相机坐标空间下的深度值
-			return o;
-		}
-		//未公开的全局变量
-		float4 _Color_1;
-		float _Temp;
-        //根据深度值切换渲染方式
-		/*fixed4 frag(v2f i) : SV_Target
-		{
-			float invert = 1 - i.depth;//近处颜色为白色
-
-		if (i.depth &lt;_Temp / 2)//不同深度下实现不同的渲染方式
-			return fixed4(invert, invert, invert, 1);
-		else
-			return fixed4(invert*1.5, 0.3, 0.3,1) ;
-		}*/
-        //范围扫描
-        fixed4 frag(v2f i) : SV_Target
-		{
-			float invert = 1 - i.depth;//近处颜色为白色
-
-		if (abs(i.depth- _Temp / 2)&lt;0.005)//深度范围绝对值内扫描的渲染方式
-			return fixed4(invert*2, 0.2, 0.2, 1);
-		else//正常渲染方式
-			return fixed4(invert, 0.3, 0.3,1) ;
-		}
-		ENDCG
-	}
-}
-</code></pre>
-<p>}<br>
-数值动画/代码：<br>
-timer += Time.deltaTime;<br>
-if (timer &gt;2.0f)<br>
-{<br>
-ht += Time.deltaTime*(1/5f);<br>
-slider = Mathf.Lerp(0f, 10f, 0.5f * ht);<br>
-if (ht&gt;=1f)<br>
-{<br>
-ht = 0;<br>
-slider = 0;<br>
-timer = 0;<br>
 }<br>
 }</p>
 ]]></content>
