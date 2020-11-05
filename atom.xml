@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-11-04T13:07:22.534Z</updated>
+    <updated>2020-11-05T09:20:48.893Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -12,7 +12,7 @@
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, WeiBlog</rights>
     <entry>
-        <title type="html"><![CDATA[C++:类]]></title>
+        <title type="html"><![CDATA[C++Class]]></title>
         <id>https://Wei715547.github.io/post/cclass/</id>
         <link href="https://Wei715547.github.io/post/cclass/">
         </link>
@@ -139,20 +139,51 @@ malloc 是函数，开辟内存需要传入字节数，如 malloc(100)；表示�
 2、	malloc 和 new 都是在堆上开辟内存的，malloc 只负责开辟内存，没有初始化功能，需要 用户自己初始化；new 不但开辟内存，还可以进行初始化，<br>
 3、	malloc 开辟内存失败返回 NULL，new 开辟内存失败抛出 bad_alloc 类型的异常，需要捕 获异常才能判断内存开辟成功或失败，new 运算符其实是 operator new 函数的调用，它底 层调用的也是 malloc 来开辟内存的，new 它比 malloc 多的就是初始化功能，对于类类型来 说，所谓初始化，就是调用相应的构造函数。<br>
 4、	new分配的内存要用delete销毁，malloc要用free来销毁；delete销毁的时候会调用对象的析构函数，而free则不会。</p>
-<pre><code>共有数据
-常量数据成员：const在不同位置标示不同含义：
-const int aa//使用const的普通数据成员常量
-const int * bb//在int前使用const的指针数据成员
-int *const cc//在int后使用const的指针数据成员
-const int *const dd//在int类型前后使用const的指针数据成员
-const int &amp;cc //使用const的引用类型成员
-1）aa为整型常量，初始化后不能被改变，（在类中，必须在构造函数的初始化列表中进行初始化（不能在类定义时初始化：const int aa = 5//错误））
-2）在指针数据类型前时：指针指向的值不能改变
-3）在指针数据类型后时：指针变量时不能改变
-4）在指针数据类型前后时：指针指向值与指针值都不改变
-常量创建后不能将整型常量的地址赋值给一个int*指针，应赋值给cosnt int*指针。
-const int mm = 30；
-int *pp = &amp;mm;//应改为：const int *pp = &amp;mm; 
+<p>CONST<br>
+共有数据<br>
+常量数据成员：const在不同位置标示不同含义：<br>
+const int aa//使用const的普通数据成员常量<br>
+const int * bb//在int前使用const的指针数据成员<br>
+int <em>const cc//在int后使用const的指针数据成员<br>
+const int <em>const dd//在int类型前后使用const的指针数据成员<br>
+const int &amp;cc //使用const的引用类型成员<br>
+1）aa为整型常量，初始化后不能被改变，（在类中，必须在构造函数的初始化列表中进行初始化（不能在类定义时初始化：const int aa = 5//错误））<br>
+2）在指针数据类型前时：指针指向的值不能改变<br>
+3）在指针数据类型后时：指针变量值不能改变<br>
+4）在指针数据类型前后时：指针指向值与指针值都不改变<br>
+常量创建后不能将整型常量的地址赋值给一个int</em>指针，应赋值给cosnt int</em>指针。<br>
+const int mm = 30；<br>
+int *pp = &amp;mm;//应改为：const int *pp = &amp;mm<br>
+C++允许创建指针常量，所指向的普通变量不是常量：<br>
+int mm = 30;<br>
+const int *pp = &amp;mm;//可以将非常量赋值给指针常量，但不能通过pp改变mm值。<br>
+常成员函数：<br>
+声明：<br>
+void showDate() const;//const在参数列表后。<br>
+定义：<br>
+void Class::showDate() cosnt//在调用时不需加const<br>
+{<br>
+方法体;<br>
+}<br>
+常类对象：<br>
+声明<br>
+Re const r1 = {len = 2; wid = 3;}//定义常队形时必须进行初始化，而且其数据成员不能被更新（数据成员变为const）。<br>
+注意：如果一个对象被声明为常对象，则通过该常对象只能调用它的常成员函数（不能调用非const型成员函数）(系统自动隐式调用的)构造/析构除外).<br>
+静态成员：<br>
+声明：<br>
+static flot AccounntSum;<br>
+初始化：<br>
+float AccountRecord::AccountSum = 0;//C++中静态成员必须在类外进行，不能在构造函数中(C#中可定义静态构造函数用于初始化静态成员)</p>
+<pre><code>1）静态字段 仅仅存储一份 所有对象共享 常驻内存中
+2）静态方法只能访问静态成员（非静态成员依赖于对象生成） ，非静态方法静态非静态都可以访问，
+3）*不能实例化，只能包含静态成员， 静态类不能被继承（工具类）
+ /* 静态适用
+    * 利：单独空间存储，所有对象共享，可直接被类名调用
+    * 弊：静态方法中只能访问静态成员，共享数据被多个对象访问时会出现并发。
+    * 适用场合：
+    * 1.所有对象需要共享的数据。
+    * 2.在没有对象是就要访问成员。
+    * 3.工具类适合做静态类（常用，不需要过多数据）
 </code></pre>
 ]]></content>
     </entry>
