@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>TransformDemo | WeiBlog</title>
+<title>点击事件 UI/Scene | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -20,9 +20,9 @@
 
     <meta name="description" content="using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
-/// 
-/// Transform提供了 查找（父，根，子（索引/名称））变换组..." />
+using UnityEngine.Even..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -107,102 +107,118 @@ using UnityEngine;
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">TransformDemo</h2>
-            <div class="post-date">2020-04-04</div>
+            <h2 class="post-title">点击事件 UI/Scene</h2>
+            <div class="post-date">2020-11-11</div>
             
             <div class="post-content" v-pre>
               <p>using System.Collections;<br>
 using System.Collections.Generic;<br>
+using UnityEditor;<br>
 using UnityEngine;<br>
-/// <summary><br>
-/// Transform提供了 查找（父，根，子（索引/名称））变换组件功能， 改变位置，角度，大小功能<br>
-/// </summary><br>
-public class TransformDemo : MonoBehaviour<br>
+using UnityEngine.EventSystems;</p>
+<p>public class AniRayTest : MonoBehaviour<br>
 {<br>
-public Transform tf;<br>
-private void OnGUI()<br>
-{<br>
-//<strong><strong><strong><strong><strong><strong><strong>查找变换组件</strong></strong></strong></strong></strong></strong></strong>****<br>
-if (GUILayout .Button (&quot;foreach - transform&quot;))<br>
-{</p>
-<pre><code>        foreach (Transform  child in transform )
-        {
-            //child 为 每个子物体的组件
-            print(child.name);
-        }
-    }
-    if (GUILayout.Button(&quot;root&quot;))
+List<RaycastResult> list = new List<RaycastResult>();</p>
+<pre><code>// Update is called once per frame
+void Update()
+{
+    /// 鼠标左键没有点击，就不执行判断逻辑
+    if (!Input.GetMouseButtonDown(0))
     {
-        //获取根物体变换组件
-        Transform rootTF = this.transform.root;
-    }
-    if (GUILayout.Button(&quot;parent&quot;))
-    {
-        //获取父物体变换组件
-        Transform parentTF = this.transform.parent ;
-    }
-    if (GUILayout.Button(&quot;Setparent&quot;))
-    {
-        //设置父物体
-        //当前物体视为WordPosition
-        //this.transform.SetParent(tf,ture);
-
-        //当前物体的位置视为localPosition
-        this.transform.SetParent(tf,false );
-    }
-    if (GUILayout.Button(&quot;Find-child&quot;))
-    {
-        //根据名称获取子物体
-        //Transform childTF = this.transform.Find(&quot;子物体名称&quot;);
-        Transform childTF = this.transform.Find(&quot;子物体名称/子物体名称&quot;);
-    }
-    if (GUILayout.Button(&quot;Find-child-indexl&quot;))
-    {
-        int count = this.transform.childCount;
-        //根据索引获取子物体
-        for (int i = 0; i &lt; count ; i++)
-        {
-            Transform childTF = this.transform.GetChild(i);
-        }           
+        return;
     }
 
-    //**************改变位置 角度******************
-    if (GUILayout.Button(&quot;pos/scale&quot;))
+    ///相应的GameObject对象
+    GameObject go = null;
+
+    ///判断是否点再ui上
+    if (EventSystem.current.IsPointerOverGameObject())
     {
-        //物体相对与世界坐标系原点的位置
-        //this.transform .position 
-
-        //物体相对于父物体轴心点的位置
-        //this.transform .localPosition 
-
-        //相对于父物体缩放比例
-        //this.transform .localScale 
-
-        //理解为：物体与模型缩放比例（自身缩放比例*父物体缩放比例）
-        //this .transform .localScale 
-        //如：父物体LocalScale为3 当前物体localScale为2
-        //    localScale 则为6          
+        go = ClickUI();
     }
-    if (GUILayout.Button(&quot;Translate&quot;))
+    else
     {
-        //向 自身坐标系 Z轴移动1米
-        //this.transform.Translate(0, 0, 1);
+        go = ClickScene();
+    }
 
-        //向 世界坐标系 Z轴移动1米
-        this.transform.Translate(0, 0, 1,Space .World );
-    }
-    if (GUILayout.Button(&quot;Rotate&quot;))
+    if (go == null)
     {
-        //向 自身坐标系 Yz轴旋转10度
-        //this.transform.Rotate(0, 10, 0);
+        Debug.Log(&quot;Click Nothing&quot;);
+    }
+    else
+    {
+        // 高亮点中GameObject
+        EditorGUIUtility.PingObject(go);
+        Selection.activeObject = go;
+        Debug.Log(go, go);
+    }
 
-        //向 世界坐标系 Y轴旋转10度
-        this.transform.Rotate (0, 10, 0, Space.World);
-    }
-    if (GUILayout.RepeatButton(&quot;RotateAround&quot;))
+}
+
+/// &lt;summary&gt;
+/// 点中ui
+/// &lt;/summary&gt;
+private GameObject ClickUI()
+{
+    //场景中的EventSystem
+
+    PointerEventData eventData = new PointerEventData(EventSystem.current);
+
+    //鼠标位置
+    eventData.position = Input.mousePosition;
+
+    //调用所有GraphicsRacaster里面的Raycast，然后内部会进行排序，
+    //直接拿出来，取第一个就可以用了
+    EventSystem.current.RaycastAll(eventData, list);
+
+    //这个函数抄的unity源码的，就是取第一个值
+    var raycast = FindFirstRaycast(list);
+
+    //获取父类中事件注册接口
+    //如Button，Toggle之类的，毕竟我们想知道哪个Button被点击了，而不是哪张Image被点击了
+    //当然可以细分为IPointerClickHandler, IBeginDragHandler之类细节一点的，各位可以自己取尝试
+    var go = ExecuteEvents.GetEventHandler&lt;IEventSystemHandler&gt;(raycast.gameObject);
+
+    //既然没拿到button之类的，说明只有Image挡住了，取点中结果即可
+    if (go == null)
     {
-        this.transform.RotateAround(Vector3.zero, Vector3.forward , 1);
+        go = raycast.gameObject;
     }
+    return go;
+
+
+}
+
+/// &lt;summary&gt;
+/// Return the first valid RaycastResult.
+/// &lt;/summary&gt;
+private RaycastResult FindFirstRaycast(List&lt;RaycastResult&gt; candidates)
+{
+    for (var i = 0; i &lt; candidates.Count; ++i)
+    {
+        if (candidates[i].gameObject == null)
+            continue;
+
+        return candidates[i];
+    }
+    return new RaycastResult();
+}
+
+/// &lt;summary&gt;
+/// 点中场景中对象
+/// 然后无聊嘛，顺便把点场景的也顺手做了，不过这部分网上介绍挺多的，就不展开说了。
+/// &lt;/summary&gt;
+private GameObject ClickScene()
+{
+    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    RaycastHit hit;
+    if (Physics.Raycast(ray, out hit))
+    {
+        GameObject go = hit.collider.gameObject;
+        return go;
+    }
+
+    return null;
 }
 </code></pre>
 <p>}</p>
@@ -212,9 +228,9 @@ if (GUILayout .Button (&quot;foreach - transform&quot;))<br>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/lifeceyle/">
+                <a href="https://Wei715547.github.io/post/cclass/">
                   <h3 class="post-title">
-                    LifeCeyle
+                    C++Class
                   </h3>
                 </a>
               </div>

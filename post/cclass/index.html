@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1604568043961">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1605099058565">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -39,7 +39,7 @@ private:
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1604568043961" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1605099058565" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -286,6 +286,24 @@ float AccountRecord::AccountSum = 0;//C++中静态成员必须在类外进行，
     * 2.在没有对象是就要访问成员。
     * 3.工具类适合做静态类（常用，不需要过多数据）
 </code></pre>
+<p>继承，派生：<br>
+继承的语法：<code>class 子类 : 继承方式 父类</code><br>
+多继承语法：：class 派生类 ：继承方式1 基类1，继承方式2 基类2....<br>
+{<br>
+派生类新成员；<br>
+}</p>
+<p><strong>继承方式一共有三种：</strong></p>
+<ul>
+<li>公共继承</li>
+<li>保护继承</li>
+<li>私有继承<br>
+<img src="https://Wei715547.github.io/post-images/1604666547871.png" alt="" loading="lazy"></li>
+</ul>
+<p>**问题：**从父类继承过来的成员，哪些属于子类对象中？<br>
+父类中私有成员也是被子类继承下去了，只是由编译器给隐藏后访问不到（子类的sizeof包括子类成员以及所有父类成员//包括私有成员）<br>
+父类的方法也是单独储存的，子类调用时由this指针指向调用的对象实现调用。</p>
+<p>**问题：父类和子类的构造和析构顺序是谁先谁后？<br>
+继承中 先调用父类构造函数，再调用子类构造函数，析构顺序与构造相反</p>
 
             </div>
             
