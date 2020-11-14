@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>设计模式(3)-Builder | WeiBlog</title>
+<title>Graphic Raycaster：检测所有Canvas上的UI | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,17 +18,9 @@
 
 
 
-    <meta name="description" content="建造者模式
-using System;
-namespace 设计模式_建造者模式
-{
-class Program
-{
-    public abstract class House
-    {
+    <meta name="description" content="
 
-    }
-    public abstr..." />
+The Graphic Raycaster is used to raycast against a Canvas. The Raycaster looks at all Graphics on the canvas and deter..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -113,134 +105,22 @@ class Program
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">设计模式(3)-Builder</h2>
-            <div class="post-date">2020-08-14</div>
+            <h2 class="post-title">Graphic Raycaster：检测所有Canvas上的UI</h2>
+            <div class="post-date">2020-11-14</div>
             
             <div class="post-content" v-pre>
-              <p><a href = "https://design-patterns.readthedocs.io/zh_CN/latest/creational_patterns/builder.html">建造者模式</a></p>
-<p>using System;</p>
-<p>namespace 设计模式_建造者模式<br>
-{<br>
-class Program<br>
-{</p>
-<pre><code>    public abstract class House
-    {
-
-    }
-    public abstract class Door
-    {
-
-    }
-    public abstract class Wall
-    {
-
-    }
-    public abstract class Windins
-    {
-
-    }
-    public abstract class Floor
-    {
-
-    }
-    public abstract class HouseCeiling
-    {
-
-    }
-
-    public abstract class Builder
-    {
-        public abstract void BuilderDoor();
-        public abstract void BuilderWall();
-        public abstract void BuilderWindows();
-        public abstract void BuilderFloor();
-        public abstract void BuilderHouseCeiling();
-
-        public abstract House GetHouse();
-    }
-
-    //客户程序
-    static void Main(string[] args)
-    {
-        House house = GameManager.CreateHouse(new RomaHouseBuilder());
-    }
-
-    public class RomanHouse:House
-    {
-
-    }
-
-    public class RomaHouseBuilder : Builder
-    {
-        public override void BuilderDoor()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void BuilderFloor()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void BuilderHouseCeiling()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void BuilderWall()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void BuilderWindows()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override House GetHouse()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-}
-</code></pre>
-<p>}</p>
-<p>using System;<br>
-using System.Collections.Generic;<br>
-using System.Text;<br>
-using static 设计模式_建造者模式.Program;</p>
-<p>namespace 设计模式_建造者模式<br>
-{<br>
-class GameManager<br>
-{<br>
-public static House CreateHouse(Builder builder)<br>
-{<br>
-builder.BuilderDoor();<br>
-builder.BuilderDoor();</p>
-<pre><code>        builder.BuilderWall();
-        builder.BuilderWall();
-
-        builder.BuilderWindows();
-        builder.BuilderWindows();
-
-        builder.BuilderFloor();
-        builder.BuilderHouseCeiling();
-
-        return builder.GetHouse();
-    }
-}
-</code></pre>
-<p>}</p>
+              <p><img src="https://Wei715547.github.io/post-images/1605357183735.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1605357192515.PNG" alt="" loading="lazy"></p>
+<p>The Graphic Raycaster is used to raycast against a Canvas. The Raycaster looks at all Graphics on the canvas and determines if any of them have been hit.</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/she-ji-mo-shi-2-absstract-factory/">
+                <a href="https://Wei715547.github.io/post/dian-ji-shi-jian-uiscene/">
                   <h3 class="post-title">
-                    设计模式(2)-Absstract Factory
+                    点击事件 UI/Scene
                   </h3>
                 </a>
               </div>

@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1605099058565">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1605357295737">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@ using Un..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1605099058565" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1605357295737" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -310,7 +310,7 @@ public void OnBeginDrag(PointerEventData eventData)
 //事件渗透接口：渗透过当前事件向下进行事件检测（背包系统渗透装备UI图标向下检测所在物品栏）
 public bool IsRaycastLocationValid(Vector2 sp, Camera eventCamera)//事件渗透接口：返回值TRUE时：检测，返回值为FALES：渗透事件。
 {
-    return !isDraging;
+    return !isDraging;//拖拽时事件渗透当前拖拽的物体渗透当前事件继续检测
 }
 //事件渗透监听不到此接口事件(实际监听的到)，但要保留接口实现拖拽
 public void OnDrag(PointerEventData eventData)//参数为相机与点击物体的射线检测点
