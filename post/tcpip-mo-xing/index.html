@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1605682211155">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1605958688967">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -31,7 +31,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1605682211155" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1605958688967" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -115,8 +115,39 @@
 <a href ="https://blog.csdn.net/weixin_45067603/article/details/106980441">【计算机网络笔记Part3 数据链路层（Data Link Layer）】 <a><br>
 <a  href = " https://blog.csdn.net/weixin_45067603/article/details/106993253">【计算机网络笔记Part4 网络层（Network Layer）】 <a><br>
 <a href ="  https://blog.csdn.net/weixin_45067603/article/details/107034202">【计算机网络笔记Part5 传输层（Transport Layer）】 <a><br>
-<a    href = "https://blog.csdn.net/weixin_45067603/article/details/107053479">【计算机网络笔记Part6 应用层（Application Layer）】<a><br>
-<img src="https://Wei715547.github.io/post-images/1596261613930.PNG" alt="" loading="lazy"><br>
+<a    href = "https://blog.csdn.net/weixin_45067603/article/details/107053479">【计算机网络笔记Part6 应用层（Application Layer）】<a></p>
+<p>三次握手：</p>
+<ol>
+<li>客户端发送SYN请求<br>
+(SYN(同部位)=1，seq(序号32位)=x(随时)，此时确认号ack无意义(客户端还未收到服务器数据)）请求，<br>
+进入SYN_SEND状态</li>
+<li>服务端收到SYN请求，并返回一个ACK<br>
+(SYN=1,ACK=1,seq=y(随机),ack(ACK为1确认号有效)=x+1)应答，并发送一个SYN其请求，<br>
+服务器进入SYN_RECV状态</li>
+<li>客户端收到服务端的SYN请求和ACK应答，发送ACK应答<br>
+(SYN=0,ACK=1,seq=x+1(接下来要发送的为x+1)，ack=y+1(期待服务器发来的下一个序号为y+1))，<br>
+客户端进入ESTABLISHED状态，<br>
+服务端收到应答后进入ESTABLISHED。<br>
+如果没有收到应答，数据包都会根据TCP的重传机制进行重传。</li>
+</ol>
+<p>四次挥手：</p>
+<ol>
+<li>客户端发送(连接释放报文段)FIN包，主动断开TCP连接，<br>
+FIN(结束位)=1，seq=u(报文段第一个字节的序号/报文段标识)<br>
+客户端进入FIN_WAIT1状态<br>
+2.服务端收到FIN包后返回应答ACK确认报文段，<br>
+ACK=1, seq=v, ack=u+1<br>
+进入CLOSE_WAIT半关闭状态<br>
+客户端收到确认时进入FIN_WAIT2状态</li>
+<li>服务器发送完数据，就发出连接释放报文段，主动关闭TCP连接<br>
+FIN=1,ACK=1,seq=w, ack=u+1(客户端等待期间未发送数据)<br>
+进入LAST_ACK状态</li>
+<li>客户端回送一个确认报文，<br>
+ACK=1, seq=u+1,ack=w+1<br>
+进入TIME_WAIT状态(等待计时器设置的2MSL(最长报文段寿命)后彻底断开连接)</li>
+<li>服务器收到ACK应答后，进入CLOSED状态。</li>
+</ol>
+<p><img src="https://Wei715547.github.io/post-images/1596261613930.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1596261986768.PNG" alt="" loading="lazy"></p>
 
             </div>
