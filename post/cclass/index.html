@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606101394704">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606137503135">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -39,7 +39,7 @@ private:
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1606101394704" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1606137503135" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -227,6 +227,8 @@ width = Wid;<br>
 2）析构函数同样没有返回值，但也没有参数由于没有参数也不能重载，一个类存在多个构造函数但只存在一个析构函数。<br>
 3）析构函数也可用于最后一次使用类对象后执行的操作（写在方法体中）<br>
 4）后创建的对象先被释放<br>
+5）静态局部对象在函数执行结束时不调用析构函数，只在main函数结束或调用exit函数时才调用。<br>
+6）对于全局对象，当程序离开其作区域时调用i构造函数。<br>
 class Re<br>
 {<br>
 public:<br>
@@ -304,6 +306,51 @@ float AccountRecord::AccountSum = 0;//C++中静态成员必须在类外进行，
 父类的方法也是单独储存的，子类调用时由this指针指向调用的对象实现调用。</p>
 <p>**问题：父类和子类的构造和析构顺序是谁先谁后？<br>
 继承中 先调用父类构造函数，再调用子类构造函数，析构顺序与构造相反</p>
+<p>派生类构造函数：<br>
+派生类名::派生类名（arg_derived_list）：基类名（arg_base_list）<br>
+{<br>
+//派生类新增数据成员初始化语句；<br>
+}<br>
+派生类存在与基类同名函数时使用，基类::函数名()来调用基类同名函数 （::作用域符）</p>
+<p><strong>多态</strong></p>
+<p>1）虚函数<br>
+class 基类<br>
+{<br>
+public:<br>
+virtural 函数返回值 虚函数名（形式参数表）<br>
+{<br>
+函数体<br>
+}<br>
+}<br>
+class 派生类： public 基类<br>
+{<br>
+public:<br>
+virtual 函数返回值 虚函数名（形参表）//virtual可不写出，派生类中与基类同名函数默认为虚函数<br>
+{<br>
+函数体；<br>
+}<br>
+}<br>
+C++中不采用虚函数时，通过定义多个指向各派生类的指针来调用派生类中同名的函数。<br>
+pt&gt;函数名();<br>
+虚函数，指针指向派生类时，调用同名方法为运行期绑定（动态）非编译期绑定。<br>
+运行期绑定只通过指针/引用来操作，采用定向直接调用函数将采用编译期绑定来调用虚函数</p>
+<p>构造函数与析构函数<br>
+构造函数不能时虚函数，析构函数可以是虚函数。<br>
+<strong>（1）为什么父类的析构函数必须是虚函数？</strong><br>
+当我们动态申请一个子类对象时，使用基类指针指向该对象，如果不用虚函数，子类的析构函数不能得到调用，也就是为了在释放基类指针时可以释放掉子类的空间，防止内存泄漏.<br>
+析构函数声明为虚函数后，通过指针来删除所指向的对象时，编译器进行运行期绑定，由于基类型指针实际指向的是派生类对象，则派生类析构函数被调用，随后基类析构函数被调用，(析构函数调用时沿着继承树自下而上进行，通过将析构函数声明为虚函数，来保证下层派生类析构函数得到调用，防止内存泄漏)<br>
+<strong>（2）为什么C++默认的析构函数不是虚函数？</strong><br>
+因为虚函数需要额外的虚函数表和虚表指针，占用额外的内存。而对于不会被继承的类来说，其析构函数如果是虚函数，就会浪费内存。</p>
+<p>纯虚函数：在虚函数声明的结尾加上“=0”<br>
+基类<br>
+public:<br>
+virtual float SurfaceArea()=0;<br>
+vitual float Volme()=0;<br>
+派生类<br>
+float Cube::SurfaceArea()<br>
+[<br>
+函数体<br>
+]</p>
 
             </div>
             
