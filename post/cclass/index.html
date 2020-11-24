@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606137503135">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606205119564">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -39,7 +39,7 @@ private:
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1606137503135" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1606205119564" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -312,7 +312,7 @@ float AccountRecord::AccountSum = 0;//C++中静态成员必须在类外进行，
 //派生类新增数据成员初始化语句；<br>
 }<br>
 派生类存在与基类同名函数时使用，基类::函数名()来调用基类同名函数 （::作用域符）</p>
-<p><strong>多态</strong></p>
+<p><strong>多态</strong>（C++以(纯)/虚函数实现多态:C#则在C++的虚函数基础上分出虚函数，抽象类接口(纯虚函数）</p>
 <p>1）虚函数<br>
 class 基类<br>
 {<br>
@@ -341,12 +341,23 @@ pt&gt;函数名();<br>
 析构函数声明为虚函数后，通过指针来删除所指向的对象时，编译器进行运行期绑定，由于基类型指针实际指向的是派生类对象，则派生类析构函数被调用，随后基类析构函数被调用，(析构函数调用时沿着继承树自下而上进行，通过将析构函数声明为虚函数，来保证下层派生类析构函数得到调用，防止内存泄漏)<br>
 <strong>（2）为什么C++默认的析构函数不是虚函数？</strong><br>
 因为虚函数需要额外的虚函数表和虚表指针，占用额外的内存。而对于不会被继承的类来说，其析构函数如果是虚函数，就会浪费内存。</p>
-<p>纯虚函数：在虚函数声明的结尾加上“=0”<br>
+<p><strong>纯虚函数</strong>：在虚函数声明的结尾加上“=0”（派生类必须实现基类的纯虚数）（公共接口）<br>
+一个类只要拥有一个纯虚函数，它就是抽象类（包含纯虚函数的类时无法创建对象的）<br>
 基类<br>
 public:<br>
 virtual float SurfaceArea()=0;<br>
 vitual float Volme()=0;<br>
 派生类<br>
+public Cube:public Base<br>
+{<br>
+public:<br>
+Cube(float len):length(len){}<br>
+float SurfaceArea();<br>
+float Volume();</p>
+<pre><code>private:
+float length;
+</code></pre>
+<p>};<br>
 float Cube::SurfaceArea()<br>
 [<br>
 函数体<br>
