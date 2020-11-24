@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>C++构造/析构 | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606218306034">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="4.2 对象的初始化和清理
+
+生活中我们买的电子产品都基本会有出厂设置，在某一天我们不用时候也会删除一些自己信息数据保证安全
+C++中的面向对象来源于生活，每个对象也都会有初始设置以及 对象销毁前的清理数据的设置。
+
+4.2.1 构造函数和..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1606218306034" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">C++构造/析构</h2>
+            <div class="post-date">2020-11-24</div>
+            
+            <div class="post-content" v-pre>
+              <h3 id="42-对象的初始化和清理">4.2 对象的初始化和清理</h3>
+<ul>
+<li>生活中我们买的电子产品都基本会有出厂设置，在某一天我们不用时候也会删除一些自己信息数据保证安全</li>
+<li>C++中的面向对象来源于生活，每个对象也都会有初始设置以及 对象销毁前的清理数据的设置。</li>
+</ul>
+<h4 id="421-构造函数和析构函数">4.2.1 构造函数和析构函数</h4>
+<p>对象的<strong>初始化和清理</strong>也是两个非常重要的安全问题</p>
+<p>​	一个对象或者变量没有初始状态，对其使用后果是未知</p>
+<p>​	同样的使用完一个对象或变量，没有及时清理，也会造成一定的安全问题</p>
+<p>c++利用了<strong>构造函数</strong>和<strong>析构函数</strong>解决上述问题，这两个函数将会被编译器自动调用，完成对象初始化和清理工作。</p>
+<p>对象的初始化和清理工作是编译器强制要我们做的事情，因此如果<strong>我们不提供构造和析构，编译器会提供</strong></p>
+<p><strong>编译器提供的构造函数和析构函数是空实现。</strong></p>
+<ul>
+<li>构造函数：主要作用在于创建对象时为对象的成员属性赋值，构造函数由编译器自动调用，无须手动调用。</li>
+<li>析构函数：主要作用在于对象<strong>销毁前</strong>系统自动调用，执行一些清理工作。</li>
+</ul>
+<p><strong>构造函数语法：</strong><code>类名(){}</code></p>
+<ol>
+<li>构造函数，没有返回值也不写void</li>
+<li>函数名称与类名相同</li>
+<li>构造函数可以有参数，因此可以发生重载</li>
+<li>程序在调用对象时候会自动调用构造，无须手动调用,而且只会调用一次</li>
+</ol>
+<p><strong>析构函数语法：</strong> <code>~类名(){}</code></p>
+<ol>
+<li>析构函数，没有返回值也不写void</li>
+<li>函数名称与类名相同,在名称前加上符号  ~</li>
+<li>析构函数不可以有参数，因此不可以发生重载</li>
+<li>程序在对象销毁前会自动调用析构，无须手动调用,而且只会调用一次</li>
+</ol>
+<pre><code class="language-C++">class Person
+{
+public:
+	//构造函数
+	Person()
+	{
+		cout &lt;&lt; &quot;Person的构造函数调用&quot; &lt;&lt; endl;
+	}
+	//析构函数
+	~Person()
+	{
+		cout &lt;&lt; &quot;Person的析构函数调用&quot; &lt;&lt; endl;
+	}
+
+};
+
+void test01()
+{
+	Person p;
+}
+
+int main() {
+	
+	test01();
+
+	system(&quot;pause&quot;);
+
+	return 0;
+}
+</code></pre>
+<h4 id="422-构造函数的分类及调用">4.2.2 构造函数的分类及调用</h4>
+<p>两种分类方式：</p>
+<p>​	按参数分为： 有参构造和无参构造</p>
+<p>​	按类型分为： 普通构造和拷贝构造</p>
+<p>三种调用方式：</p>
+<p>​	括号法</p>
+<p>​	显示法</p>
+<p>​	隐式转换法</p>
+<p><strong>示例：</strong></p>
+<pre><code class="language-C++">//1、构造函数分类
+// 按照参数分类分为 有参和无参构造   无参又称为默认构造函数
+// 按照类型分类分为 普通构造和拷贝构造
+
+class Person {
+public:
+	//无参（默认）构造函数
+	Person() {
+		cout &lt;&lt; &quot;无参构造函数!&quot; &lt;&lt; endl;
+	}
+	//有参构造函数
+	Person(int a) {
+		age = a;
+		cout &lt;&lt; &quot;有参构造函数!&quot; &lt;&lt; endl;
+	}
+	//拷贝构造函数
+	Person(const Person&amp; p) {
+		age = p.age;
+		cout &lt;&lt; &quot;拷贝构造函数!&quot; &lt;&lt; endl;
+	}
+	//析构函数
+	~Person() {
+		cout &lt;&lt; &quot;析构函数!&quot; &lt;&lt; endl;
+	}
+public:
+	int age;
+};
+
+//2、构造函数的调用
+//调用无参构造函数
+void test01() {
+	Person p; //调用无参构造函数
+}
+
+//调用有参的构造函数
+void test02() {
+
+	//2.1  括号法，常用
+	Person p1(10);
+	//注意1：调用无参构造函数不能加括号，如果加了编译器认为这是一个函数声明
+	//Person p2();
+
+	//2.2 显式法
+	Person p2 = Person(10); 
+	Person p3 = Person(p2);
+	//Person(10)单独写就是匿名对象  当前行结束之后，马上析构
+
+	//2.3 隐式转换法
+	Person p4 = 10; // Person p4 = Person(10); 
+	Person p5 = p4; // Person p5 = Person(p4); 
+
+	//注意2：不能利用 拷贝构造函数 初始化匿名对象 编译器认为是对象声明
+	//Person p5(p4);
+}
+
+int main() {
+
+	test01();
+	//test02();
+
+	system(&quot;pause&quot;);
+
+	return 0;
+}
+</code></pre>
+<h4 id="423-拷贝构造函数调用时机">4.2.3 拷贝构造函数调用时机</h4>
+<p>C++中拷贝构造函数调用时机通常有三种情况</p>
+<ul>
+<li>使用一个已经创建完毕的对象来初始化一个新对象</li>
+<li>值传递的方式给函数参数传值</li>
+<li>以值方式返回局部对象</li>
+</ul>
+<p><strong>示例：</strong></p>
+<pre><code class="language-C++">class Person {
+public:
+	Person() {
+		cout &lt;&lt; &quot;无参构造函数!&quot; &lt;&lt; endl;
+		mAge = 0;
+	}
+	Person(int age) {
+		cout &lt;&lt; &quot;有参构造函数!&quot; &lt;&lt; endl;
+		mAge = age;
+	}
+	Person(const Person&amp; p) {
+		cout &lt;&lt; &quot;拷贝构造函数!&quot; &lt;&lt; endl;
+		mAge = p.mAge;
+	}
+	//析构函数在释放内存之前调用
+	~Person() {
+		cout &lt;&lt; &quot;析构函数!&quot; &lt;&lt; endl;
+	}
+public:
+	int mAge;
+};
+
+//1. 使用一个已经创建完毕的对象来初始化一个新对象
+void test01() {
+
+	Person man(100); //p对象已经创建完毕
+	Person newman(man); //调用拷贝构造函数
+	Person newman2 = man; //拷贝构造
+
+	//Person newman3;
+	//newman3 = man; //不是调用拷贝构造函数，赋值操作
+}
+
+//2. 值传递的方式给函数参数传值
+//相当于Person p1 = p;
+void doWork(Person p1) {}
+void test02() {
+	Person p; //无参构造函数
+	doWork(p);
+}
+
+//3. 以值方式返回局部对象
+Person doWork2()
+{
+	Person p1;
+	cout &lt;&lt; (int *)&amp;p1 &lt;&lt; endl;
+	return p1;
+}
+
+void test03()
+{
+	Person p = doWork2();
+	cout &lt;&lt; (int *)&amp;p &lt;&lt; endl;
+}
+
+
+int main() {
+
+	//test01();
+	//test02();
+	test03();
+
+	system(&quot;pause&quot;);
+
+	return 0;
+}
+</code></pre>
+<h4 id="424-构造函数调用规则">4.2.4 构造函数调用规则</h4>
+<p>默认情况下，c++编译器至少给一个类添加3个函数</p>
+<p>1．默认构造函数(无参，函数体为空)</p>
+<p>2．默认析构函数(无参，函数体为空)</p>
+<p>3．默认拷贝构造函数，对属性进行值拷贝</p>
+<p>构造函数调用规则如下：</p>
+<ul>
+<li>
+<p>如果用户定义有参构造函数，c++不在提供默认无参构造，但是会提供默认拷贝构造</p>
+</li>
+<li>
+<p>如果用户定义拷贝构造函数，c++不会再提供其他构造函数</p>
+</li>
+</ul>
+<p>示例：</p>
+<pre><code class="language-C++">class Person {
+public:
+	//无参（默认）构造函数
+	Person() {
+		cout &lt;&lt; &quot;无参构造函数!&quot; &lt;&lt; endl;
+	}
+	//有参构造函数
+	Person(int a) {
+		age = a;
+		cout &lt;&lt; &quot;有参构造函数!&quot; &lt;&lt; endl;
+	}
+	//拷贝构造函数
+	Person(const Person&amp; p) {
+		age = p.age;
+		cout &lt;&lt; &quot;拷贝构造函数!&quot; &lt;&lt; endl;
+	}
+	//析构函数
+	~Person() {
+		cout &lt;&lt; &quot;析构函数!&quot; &lt;&lt; endl;
+	}
+public:
+	int age;
+};
+
+void test01()
+{
+	Person p1(18);
+	//如果不写拷贝构造，编译器会自动添加拷贝构造，并且做浅拷贝操作
+	Person p2(p1);
+
+	cout &lt;&lt; &quot;p2的年龄为： &quot; &lt;&lt; p2.age &lt;&lt; endl;
+}
+
+void test02()
+{
+	//如果用户提供有参构造，编译器不会提供默认构造，会提供拷贝构造
+	Person p1; //此时如果用户自己没有提供默认构造，会出错
+	Person p2(10); //用户提供的有参
+	Person p3(p2); //此时如果用户没有提供拷贝构造，编译器会提供
+
+	//如果用户提供拷贝构造，编译器不会提供其他构造函数
+	Person p4; //此时如果用户自己没有提供默认构造，会出错
+	Person p5(10); //此时如果用户自己没有提供有参，会出错
+	Person p6(p5); //用户自己提供拷贝构造
+}
+
+int main() {
+
+	test01();
+
+	system(&quot;pause&quot;);
+
+	return 0;
+}
+</code></pre>
+<h4 id="425-深拷贝与浅拷贝">4.2.5 深拷贝与浅拷贝</h4>
+<p>深浅拷贝是面试经典问题，也是常见的一个坑</p>
+<p>浅拷贝：简单的赋值拷贝操作</p>
+<p>深拷贝：在堆区重新申请空间，进行拷贝操作</p>
+<p><strong>示例：</strong></p>
+<pre><code class="language-C++">class Person {
+public:
+	//无参（默认）构造函数
+	Person() {
+		cout &lt;&lt; &quot;无参构造函数!&quot; &lt;&lt; endl;
+	}
+	//有参构造函数
+	Person(int age ,int height) {
+		
+		cout &lt;&lt; &quot;有参构造函数!&quot; &lt;&lt; endl;
+
+		m_age = age;
+		m_height = new int(height);
+		
+	}
+	//拷贝构造函数  
+	Person(const Person&amp; p) {
+		cout &lt;&lt; &quot;拷贝构造函数!&quot; &lt;&lt; endl;
+		//如果不利用深拷贝在堆区创建新内存，会导致浅拷贝带来的重复释放堆区问题
+		m_age = p.m_age;
+		m_height = new int(*p.m_height);
+		
+	}
+
+	//析构函数
+	~Person() {
+		cout &lt;&lt; &quot;析构函数!&quot; &lt;&lt; endl;
+		if (m_height != NULL)
+		{
+			delete m_height;
+		}
+	}
+public:
+	int m_age;
+	int* m_height;
+};
+
+void test01()
+{
+	Person p1(18, 180);
+
+	Person p2(p1);
+
+	cout &lt;&lt; &quot;p1的年龄： &quot; &lt;&lt; p1.m_age &lt;&lt; &quot; 身高： &quot; &lt;&lt; *p1.m_height &lt;&lt; endl;
+
+	cout &lt;&lt; &quot;p2的年龄： &quot; &lt;&lt; p2.m_age &lt;&lt; &quot; 身高： &quot; &lt;&lt; *p2.m_height &lt;&lt; endl;
+}
+
+int main() {
+
+	test01();
+
+	system(&quot;pause&quot;);
+
+	return 0;
+}
+</code></pre>
+<blockquote>
+<p>总结：如果属性有在堆区开辟的，一定要自己提供拷贝构造函数，防止浅拷贝带来的问题</p>
+</blockquote>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/graphic-raycasterjian-ce-suo-you-canvas-shang-de-ui/">
+                  <h3 class="post-title">
+                    Graphic Raycaster：检测所有Canvas上的UI
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

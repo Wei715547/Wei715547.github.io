@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" >
 
-<title>C++Class | WeiBlog</title>
+<title>C++类：静态，常量，内存申请，构造/析构，继承多态，友元 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606205119564">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606218306034">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -39,7 +39,7 @@ private:
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1606205119564" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1606218306034" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -114,7 +114,7 @@ private:
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">C++Class</h2>
+            <h2 class="post-title">C++类：静态，常量，内存申请，构造/析构，继承多态，友元</h2>
             <div class="post-date">2020-11-03</div>
             
             <div class="post-content" v-pre>
@@ -362,6 +362,179 @@ float Cube::SurfaceArea()<br>
 [<br>
 函数体<br>
 ]</p>
+<p><strong>友元/friend</strong> （使外部，全局/局部函数，类，作为本类的友元，使其可以访问本类中的私有成员）<br>
+1）全局函数做友元</p>
+<pre><code class="language-C++">class Building
+{
+	//告诉编译器 goodGay全局函数 是 Building类的好朋友，可以访问类中的私有内容
+	**friend void goodGay(Building * building);**
+
+public:
+
+	Building()
+	{
+		this-&gt;m_SittingRoom = &quot;客厅&quot;;
+		this-&gt;m_BedRoom = &quot;卧室&quot;;
+	}
+
+
+public:
+	string m_SittingRoom; //客厅
+
+private:
+	string m_BedRoom; //卧室
+};
+
+
+void goodGay(Building * building)
+{
+	cout &lt;&lt; &quot;好基友正在访问： &quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
+	cout &lt;&lt; &quot;好基友正在访问： &quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
+}
+
+
+void test01()
+{
+	Building b;
+	goodGay(&amp;b);
+}
+
+int main(){
+
+	test01();
+
+	system(&quot;pause&quot;);
+	return 0;
+}
+</code></pre>
+<p>2）类做友元</p>
+<pre><code class="language-C++">class Building;
+class goodGay
+{
+public:
+
+	goodGay();
+	void visit();
+
+private:
+	Building *building;
+};
+
+
+class Building
+{
+	//告诉编译器 goodGay类是Building类的好朋友，可以访问到Building类中私有内容
+	**friend class goodGay;**
+
+public:
+	Building();
+
+public:
+	string m_SittingRoom; //客厅
+private:
+	string m_BedRoom;//卧室
+};
+
+Building::Building()
+{
+	this-&gt;m_SittingRoom = &quot;客厅&quot;;
+	this-&gt;m_BedRoom = &quot;卧室&quot;;
+}
+
+goodGay::goodGay()
+{
+	building = new Building;
+}
+
+void goodGay::visit()
+{
+	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
+	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
+}
+
+void test01()
+{
+	goodGay gg;
+	gg.visit();
+
+}
+
+int main(){
+
+	test01();
+
+	system(&quot;pause&quot;);
+	return 0;
+}
+</code></pre>
+<p>3）成员函数做友元</p>
+<pre><code class="language-C++">
+class Building;
+class goodGay
+{
+public:
+
+	goodGay();
+	void visit(); //只让visit函数作为Building的好朋友，可以发访问Building中私有内容
+	void visit2(); 
+
+private:
+	Building *building;
+};
+
+
+class Building
+{
+	//告诉编译器  goodGay类中的visit成员函数 是Building好朋友，可以访问私有内容
+	**friend void GoodGay::visit();**
+
+public:
+	Building();
+
+public:
+	string m_SittingRoom; //客厅
+private:
+	string m_BedRoom;//卧室
+};
+
+Building::Building()
+{
+	this-&gt;m_SittingRoom = &quot;客厅&quot;;
+	this-&gt;m_BedRoom = &quot;卧室&quot;;
+}
+
+goodGay::goodGay()
+{
+	building = new Building;
+}
+
+void goodGay::visit()
+{
+	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
+	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
+}
+
+void goodGay::visit2()
+{
+	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
+	//cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
+}
+
+void test01()
+{
+	goodGay  gg;
+	gg.visit();
+
+}
+
+int main(){
+    
+	test01();
+
+	system(&quot;pause&quot;);
+	return 0;
+}
+</code></pre>
 
             </div>
             

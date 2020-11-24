@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-11-24T08:05:24.738Z</updated>
+    <updated>2020-11-24T11:45:10.249Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,358 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[C++构造/析构]]></title>
+        <id>https://Wei715547.github.io/post/cgou-zao-xi-gou/</id>
+        <link href="https://Wei715547.github.io/post/cgou-zao-xi-gou/">
+        </link>
+        <updated>2020-11-24T11:22:50.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="42-对象的初始化和清理">4.2 对象的初始化和清理</h3>
+<ul>
+<li>生活中我们买的电子产品都基本会有出厂设置，在某一天我们不用时候也会删除一些自己信息数据保证安全</li>
+<li>C++中的面向对象来源于生活，每个对象也都会有初始设置以及 对象销毁前的清理数据的设置。</li>
+</ul>
+<h4 id="421-构造函数和析构函数">4.2.1 构造函数和析构函数</h4>
+<p>对象的<strong>初始化和清理</strong>也是两个非常重要的安全问题</p>
+<p>​	一个对象或者变量没有初始状态，对其使用后果是未知</p>
+<p>​	同样的使用完一个对象或变量，没有及时清理，也会造成一定的安全问题</p>
+<p>c++利用了<strong>构造函数</strong>和<strong>析构函数</strong>解决上述问题，这两个函数将会被编译器自动调用，完成对象初始化和清理工作。</p>
+<p>对象的初始化和清理工作是编译器强制要我们做的事情，因此如果<strong>我们不提供构造和析构，编译器会提供</strong></p>
+<p><strong>编译器提供的构造函数和析构函数是空实现。</strong></p>
+<ul>
+<li>构造函数：主要作用在于创建对象时为对象的成员属性赋值，构造函数由编译器自动调用，无须手动调用。</li>
+<li>析构函数：主要作用在于对象<strong>销毁前</strong>系统自动调用，执行一些清理工作。</li>
+</ul>
+<p><strong>构造函数语法：</strong><code>类名(){}</code></p>
+<ol>
+<li>构造函数，没有返回值也不写void</li>
+<li>函数名称与类名相同</li>
+<li>构造函数可以有参数，因此可以发生重载</li>
+<li>程序在调用对象时候会自动调用构造，无须手动调用,而且只会调用一次</li>
+</ol>
+<p><strong>析构函数语法：</strong> <code>~类名(){}</code></p>
+<ol>
+<li>析构函数，没有返回值也不写void</li>
+<li>函数名称与类名相同,在名称前加上符号  ~</li>
+<li>析构函数不可以有参数，因此不可以发生重载</li>
+<li>程序在对象销毁前会自动调用析构，无须手动调用,而且只会调用一次</li>
+</ol>
+<pre><code class="language-C++">class Person
+{
+public:
+	//构造函数
+	Person()
+	{
+		cout &lt;&lt; &quot;Person的构造函数调用&quot; &lt;&lt; endl;
+	}
+	//析构函数
+	~Person()
+	{
+		cout &lt;&lt; &quot;Person的析构函数调用&quot; &lt;&lt; endl;
+	}
+
+};
+
+void test01()
+{
+	Person p;
+}
+
+int main() {
+	
+	test01();
+
+	system(&quot;pause&quot;);
+
+	return 0;
+}
+</code></pre>
+<h4 id="422-构造函数的分类及调用">4.2.2 构造函数的分类及调用</h4>
+<p>两种分类方式：</p>
+<p>​	按参数分为： 有参构造和无参构造</p>
+<p>​	按类型分为： 普通构造和拷贝构造</p>
+<p>三种调用方式：</p>
+<p>​	括号法</p>
+<p>​	显示法</p>
+<p>​	隐式转换法</p>
+<p><strong>示例：</strong></p>
+<pre><code class="language-C++">//1、构造函数分类
+// 按照参数分类分为 有参和无参构造   无参又称为默认构造函数
+// 按照类型分类分为 普通构造和拷贝构造
+
+class Person {
+public:
+	//无参（默认）构造函数
+	Person() {
+		cout &lt;&lt; &quot;无参构造函数!&quot; &lt;&lt; endl;
+	}
+	//有参构造函数
+	Person(int a) {
+		age = a;
+		cout &lt;&lt; &quot;有参构造函数!&quot; &lt;&lt; endl;
+	}
+	//拷贝构造函数
+	Person(const Person&amp; p) {
+		age = p.age;
+		cout &lt;&lt; &quot;拷贝构造函数!&quot; &lt;&lt; endl;
+	}
+	//析构函数
+	~Person() {
+		cout &lt;&lt; &quot;析构函数!&quot; &lt;&lt; endl;
+	}
+public:
+	int age;
+};
+
+//2、构造函数的调用
+//调用无参构造函数
+void test01() {
+	Person p; //调用无参构造函数
+}
+
+//调用有参的构造函数
+void test02() {
+
+	//2.1  括号法，常用
+	Person p1(10);
+	//注意1：调用无参构造函数不能加括号，如果加了编译器认为这是一个函数声明
+	//Person p2();
+
+	//2.2 显式法
+	Person p2 = Person(10); 
+	Person p3 = Person(p2);
+	//Person(10)单独写就是匿名对象  当前行结束之后，马上析构
+
+	//2.3 隐式转换法
+	Person p4 = 10; // Person p4 = Person(10); 
+	Person p5 = p4; // Person p5 = Person(p4); 
+
+	//注意2：不能利用 拷贝构造函数 初始化匿名对象 编译器认为是对象声明
+	//Person p5(p4);
+}
+
+int main() {
+
+	test01();
+	//test02();
+
+	system(&quot;pause&quot;);
+
+	return 0;
+}
+</code></pre>
+<h4 id="423-拷贝构造函数调用时机">4.2.3 拷贝构造函数调用时机</h4>
+<p>C++中拷贝构造函数调用时机通常有三种情况</p>
+<ul>
+<li>使用一个已经创建完毕的对象来初始化一个新对象</li>
+<li>值传递的方式给函数参数传值</li>
+<li>以值方式返回局部对象</li>
+</ul>
+<p><strong>示例：</strong></p>
+<pre><code class="language-C++">class Person {
+public:
+	Person() {
+		cout &lt;&lt; &quot;无参构造函数!&quot; &lt;&lt; endl;
+		mAge = 0;
+	}
+	Person(int age) {
+		cout &lt;&lt; &quot;有参构造函数!&quot; &lt;&lt; endl;
+		mAge = age;
+	}
+	Person(const Person&amp; p) {
+		cout &lt;&lt; &quot;拷贝构造函数!&quot; &lt;&lt; endl;
+		mAge = p.mAge;
+	}
+	//析构函数在释放内存之前调用
+	~Person() {
+		cout &lt;&lt; &quot;析构函数!&quot; &lt;&lt; endl;
+	}
+public:
+	int mAge;
+};
+
+//1. 使用一个已经创建完毕的对象来初始化一个新对象
+void test01() {
+
+	Person man(100); //p对象已经创建完毕
+	Person newman(man); //调用拷贝构造函数
+	Person newman2 = man; //拷贝构造
+
+	//Person newman3;
+	//newman3 = man; //不是调用拷贝构造函数，赋值操作
+}
+
+//2. 值传递的方式给函数参数传值
+//相当于Person p1 = p;
+void doWork(Person p1) {}
+void test02() {
+	Person p; //无参构造函数
+	doWork(p);
+}
+
+//3. 以值方式返回局部对象
+Person doWork2()
+{
+	Person p1;
+	cout &lt;&lt; (int *)&amp;p1 &lt;&lt; endl;
+	return p1;
+}
+
+void test03()
+{
+	Person p = doWork2();
+	cout &lt;&lt; (int *)&amp;p &lt;&lt; endl;
+}
+
+
+int main() {
+
+	//test01();
+	//test02();
+	test03();
+
+	system(&quot;pause&quot;);
+
+	return 0;
+}
+</code></pre>
+<h4 id="424-构造函数调用规则">4.2.4 构造函数调用规则</h4>
+<p>默认情况下，c++编译器至少给一个类添加3个函数</p>
+<p>1．默认构造函数(无参，函数体为空)</p>
+<p>2．默认析构函数(无参，函数体为空)</p>
+<p>3．默认拷贝构造函数，对属性进行值拷贝</p>
+<p>构造函数调用规则如下：</p>
+<ul>
+<li>
+<p>如果用户定义有参构造函数，c++不在提供默认无参构造，但是会提供默认拷贝构造</p>
+</li>
+<li>
+<p>如果用户定义拷贝构造函数，c++不会再提供其他构造函数</p>
+</li>
+</ul>
+<p>示例：</p>
+<pre><code class="language-C++">class Person {
+public:
+	//无参（默认）构造函数
+	Person() {
+		cout &lt;&lt; &quot;无参构造函数!&quot; &lt;&lt; endl;
+	}
+	//有参构造函数
+	Person(int a) {
+		age = a;
+		cout &lt;&lt; &quot;有参构造函数!&quot; &lt;&lt; endl;
+	}
+	//拷贝构造函数
+	Person(const Person&amp; p) {
+		age = p.age;
+		cout &lt;&lt; &quot;拷贝构造函数!&quot; &lt;&lt; endl;
+	}
+	//析构函数
+	~Person() {
+		cout &lt;&lt; &quot;析构函数!&quot; &lt;&lt; endl;
+	}
+public:
+	int age;
+};
+
+void test01()
+{
+	Person p1(18);
+	//如果不写拷贝构造，编译器会自动添加拷贝构造，并且做浅拷贝操作
+	Person p2(p1);
+
+	cout &lt;&lt; &quot;p2的年龄为： &quot; &lt;&lt; p2.age &lt;&lt; endl;
+}
+
+void test02()
+{
+	//如果用户提供有参构造，编译器不会提供默认构造，会提供拷贝构造
+	Person p1; //此时如果用户自己没有提供默认构造，会出错
+	Person p2(10); //用户提供的有参
+	Person p3(p2); //此时如果用户没有提供拷贝构造，编译器会提供
+
+	//如果用户提供拷贝构造，编译器不会提供其他构造函数
+	Person p4; //此时如果用户自己没有提供默认构造，会出错
+	Person p5(10); //此时如果用户自己没有提供有参，会出错
+	Person p6(p5); //用户自己提供拷贝构造
+}
+
+int main() {
+
+	test01();
+
+	system(&quot;pause&quot;);
+
+	return 0;
+}
+</code></pre>
+<h4 id="425-深拷贝与浅拷贝">4.2.5 深拷贝与浅拷贝</h4>
+<p>深浅拷贝是面试经典问题，也是常见的一个坑</p>
+<p>浅拷贝：简单的赋值拷贝操作</p>
+<p>深拷贝：在堆区重新申请空间，进行拷贝操作</p>
+<p><strong>示例：</strong></p>
+<pre><code class="language-C++">class Person {
+public:
+	//无参（默认）构造函数
+	Person() {
+		cout &lt;&lt; &quot;无参构造函数!&quot; &lt;&lt; endl;
+	}
+	//有参构造函数
+	Person(int age ,int height) {
+		
+		cout &lt;&lt; &quot;有参构造函数!&quot; &lt;&lt; endl;
+
+		m_age = age;
+		m_height = new int(height);
+		
+	}
+	//拷贝构造函数  
+	Person(const Person&amp; p) {
+		cout &lt;&lt; &quot;拷贝构造函数!&quot; &lt;&lt; endl;
+		//如果不利用深拷贝在堆区创建新内存，会导致浅拷贝带来的重复释放堆区问题
+		m_age = p.m_age;
+		m_height = new int(*p.m_height);
+		
+	}
+
+	//析构函数
+	~Person() {
+		cout &lt;&lt; &quot;析构函数!&quot; &lt;&lt; endl;
+		if (m_height != NULL)
+		{
+			delete m_height;
+		}
+	}
+public:
+	int m_age;
+	int* m_height;
+};
+
+void test01()
+{
+	Person p1(18, 180);
+
+	Person p2(p1);
+
+	cout &lt;&lt; &quot;p1的年龄： &quot; &lt;&lt; p1.m_age &lt;&lt; &quot; 身高： &quot; &lt;&lt; *p1.m_height &lt;&lt; endl;
+
+	cout &lt;&lt; &quot;p2的年龄： &quot; &lt;&lt; p2.m_age &lt;&lt; &quot; 身高： &quot; &lt;&lt; *p2.m_height &lt;&lt; endl;
+}
+
+int main() {
+
+	test01();
+
+	system(&quot;pause&quot;);
+
+	return 0;
+}
+</code></pre>
+<blockquote>
+<p>总结：如果属性有在堆区开辟的，一定要自己提供拷贝构造函数，防止浅拷贝带来的问题</p>
+</blockquote>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Graphic Raycaster：检测所有Canvas上的UI]]></title>
         <id>https://Wei715547.github.io/post/graphic-raycasterjian-ce-suo-you-canvas-shang-de-ui/</id>
@@ -142,7 +494,7 @@ private GameObject ClickScene()
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[C++Class]]></title>
+        <title type="html"><![CDATA[C++类：静态，常量，内存申请，构造/析构，继承多态，友元]]></title>
         <id>https://Wei715547.github.io/post/cclass/</id>
         <link href="https://Wei715547.github.io/post/cclass/">
         </link>
@@ -391,6 +743,179 @@ float Cube::SurfaceArea()<br>
 [<br>
 函数体<br>
 ]</p>
+<p><strong>友元/friend</strong> （使外部，全局/局部函数，类，作为本类的友元，使其可以访问本类中的私有成员）<br>
+1）全局函数做友元</p>
+<pre><code class="language-C++">class Building
+{
+	//告诉编译器 goodGay全局函数 是 Building类的好朋友，可以访问类中的私有内容
+	**friend void goodGay(Building * building);**
+
+public:
+
+	Building()
+	{
+		this-&gt;m_SittingRoom = &quot;客厅&quot;;
+		this-&gt;m_BedRoom = &quot;卧室&quot;;
+	}
+
+
+public:
+	string m_SittingRoom; //客厅
+
+private:
+	string m_BedRoom; //卧室
+};
+
+
+void goodGay(Building * building)
+{
+	cout &lt;&lt; &quot;好基友正在访问： &quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
+	cout &lt;&lt; &quot;好基友正在访问： &quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
+}
+
+
+void test01()
+{
+	Building b;
+	goodGay(&amp;b);
+}
+
+int main(){
+
+	test01();
+
+	system(&quot;pause&quot;);
+	return 0;
+}
+</code></pre>
+<p>2）类做友元</p>
+<pre><code class="language-C++">class Building;
+class goodGay
+{
+public:
+
+	goodGay();
+	void visit();
+
+private:
+	Building *building;
+};
+
+
+class Building
+{
+	//告诉编译器 goodGay类是Building类的好朋友，可以访问到Building类中私有内容
+	**friend class goodGay;**
+
+public:
+	Building();
+
+public:
+	string m_SittingRoom; //客厅
+private:
+	string m_BedRoom;//卧室
+};
+
+Building::Building()
+{
+	this-&gt;m_SittingRoom = &quot;客厅&quot;;
+	this-&gt;m_BedRoom = &quot;卧室&quot;;
+}
+
+goodGay::goodGay()
+{
+	building = new Building;
+}
+
+void goodGay::visit()
+{
+	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
+	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
+}
+
+void test01()
+{
+	goodGay gg;
+	gg.visit();
+
+}
+
+int main(){
+
+	test01();
+
+	system(&quot;pause&quot;);
+	return 0;
+}
+</code></pre>
+<p>3）成员函数做友元</p>
+<pre><code class="language-C++">
+class Building;
+class goodGay
+{
+public:
+
+	goodGay();
+	void visit(); //只让visit函数作为Building的好朋友，可以发访问Building中私有内容
+	void visit2(); 
+
+private:
+	Building *building;
+};
+
+
+class Building
+{
+	//告诉编译器  goodGay类中的visit成员函数 是Building好朋友，可以访问私有内容
+	**friend void GoodGay::visit();**
+
+public:
+	Building();
+
+public:
+	string m_SittingRoom; //客厅
+private:
+	string m_BedRoom;//卧室
+};
+
+Building::Building()
+{
+	this-&gt;m_SittingRoom = &quot;客厅&quot;;
+	this-&gt;m_BedRoom = &quot;卧室&quot;;
+}
+
+goodGay::goodGay()
+{
+	building = new Building;
+}
+
+void goodGay::visit()
+{
+	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
+	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
+}
+
+void goodGay::visit2()
+{
+	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
+	//cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
+}
+
+void test01()
+{
+	goodGay  gg;
+	gg.visit();
+
+}
+
+int main(){
+    
+	test01();
+
+	system(&quot;pause&quot;);
+	return 0;
+}
+</code></pre>
 ]]></content>
     </entry>
     <entry>
@@ -1112,73 +1637,6 @@ transform.DOShakePosition(1,new Vector3(1,1,0));//参数震动强度，方向约
 9.//颜色/阿尔法通道(UI)<br>
 text.DOColor(Color.cyan, 1f);<br>
 text.DOFade(1, 1f);</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Lua面向对象实现]]></title>
-        <id>https://Wei715547.github.io/post/lua-mian-xiang-dui-xiang-shi-xian/</id>
-        <link href="https://Wei715547.github.io/post/lua-mian-xiang-dui-xiang-shi-xian/">
-        </link>
-        <updated>2020-09-16T09:28:03.000Z</updated>
-        <content type="html"><![CDATA[<p><cood>print(&quot;<strong><strong><strong><strong><strong><strong>封装</strong></strong></strong></strong></strong></strong>__&quot;)<br>
-Object = {}<br>
-Object.ID = 1<br>
-function Object:Text()--&quot;:&quot;自动传入调用这个函数的对象，作为第一个参数传入方法<br>
-print(self.ID)--“self”代表默认传入的第一个参数<br>
-end</p>
-<p>function Object:new( )--类用于创建对象的方法--构造函数<br>
---function Object:new(o)--充当构造函数，返回空表，将本身设为空表的原表来继承类的属性与函数<br>
---local obj= o or {}--o填写时在填入子类的属性/函数基础上创建对象，不填时为空继承父类默认所有属性/函数创建对象（）p1 = Object:new(weight = 100) 或 p1 = Object:new()<br>
-local obj = {}<br>
---原表的__index指向自身<br>
-self.__index =self--__index:当在自己的表中找不到目标属性时，就会在元表的__index中寻找<br>
-setmetatable(obj ,self)<br>
---setmetatable (obj,{__index=self})--与上两句作用相同<br>
-return obj<br>
-end</p>
-<p>local myObj = Object:new()<br>
-print(myObj)<br>
-print(myObj.ID)<br>
-myObj:Text()--myObj调用则传入myObj</p>
-<p>print(&quot;_<strong><strong><strong><strong><strong><strong><strong><strong>继承</strong></strong></strong></strong></strong></strong></strong></strong>&quot;)</p>
-<p>--构造用于继承的方法<br>
-function Object:subClass(className)--声明类的方法<br>
---_G表存储所有的全局变量<br>
-_G[className] = {}<br>
-local obj = _G[className]<br>
-self.__index = self<br>
---为子类定义一个父类属性base<br>
-obj.base = self<br>
-setmetatable(obj,self)<br>
-end</p>
-<p>Object:subClass(&quot;Person&quot;)<br>
---print(Person)--此时是通过类名访问属性，类似静态变量<br>
---Person:Text()<br>
---通过对象访问属性<br>
-local p1 = Person:new ()--Person继承自Object的new方法。self使Person为第一变量传入<br>
-p1:Text()--原表中不存在，会继续查找原表的原表</p>
-<p>print(&quot;____________多态————————————————————————————&quot;)</p>
-<p>Object:subClass(&quot;GameObject&quot;)--声明游戏对象类<br>
-GameObject.posX = 0<br>
-GameObject.posY = 0<br>
-function GameObject:Move()<br>
-self .posX = self.posX+1<br>
-self.posY = self.posY+1<br>
-print(self.posX)<br>
-print(self.posX)</p>
-<p>end</p>
-<p>GameObject:subClass(&quot;Player&quot;)--声明角色类</p>
-<p>function Player:Move()--与父类方法“重名&quot;即相当于重写方法<br>
---此时base指GameObject类，使用“：”调用相当于把基类作为第一参数传入方法中，则此时创建pl2时会输出2，2<br>
---self.base:Move()<br>
---因此为了避免把基类表传入方法中，不使用“：”调用<br>
-self.base.Move(self)--使用.进行调用自行填入第一个传入的参数<br>
-print(&quot;子类重写&quot;)<br>
-end</p>
-<p>local pl1 = Player:new()--角色类对象<br>
-pl1:Move()</p>
-<p>local pl2 = Player:new()<br>
-pl2:Move()<cood></p>
 ]]></content>
     </entry>
 </feed>
