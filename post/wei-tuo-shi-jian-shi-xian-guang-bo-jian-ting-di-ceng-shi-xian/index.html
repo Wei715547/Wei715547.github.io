@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606298937359">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606307397171">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -35,7 +35,7 @@ pu..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1606298937359" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1606307397171" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -153,7 +153,8 @@ public delegate void MyDelegate ();</p>
     }
 }
 </code></pre>
-<h2 id="">}</h2>
+<p>}<br>
+--------------------------------<strong>广播/事件</strong>-------------------------------</p>
 <p>//广播者<br>
 using System;<br>
 using System.Collections.Generic;<br>
@@ -209,7 +210,7 @@ public string color;</p>
 <p>}</p>
 <p>//程序<br>
 using System;</p>
-<p>namespace 事件__观察者设计模式<br>
+<h2 id="namespace-事件__观察者设计模式class-programstatic-void-mainstring-argscat-c-new-catsuper-bulecatbluemoust-m1-new-moustmk-blakec将广播者传入监听者在监听者中注册委托ccatcome-m1msruning注册委托moust-m2-new-moustbt-bluecccatcome-m2msruning注册委托ccatcome事件不能在类的外部进行调用委托可以但可在类的外部注册-ccatcoming">namespace 事件__观察者设计模式<br>
 {<br>
 class Program<br>
 {<br>
@@ -224,9 +225,77 @@ Moust m2 = new Moust(&quot;Bt&quot;, &quot;Blue&quot;,c);<br>
 c.CatComing();<br>
 }<br>
 }<br>
-}</p>
-<hr>
+}</h2>
 <p>例二：<br>
+广播者<br>
+namespace 事件<br>
+{<br>
+//可由系统自带无返回值泛型委托代替<br>
+public delegate void ChangeEventHandler(object obj, EventArgs e);<br>
+class ListWithChangeEvent:ArrayList<br>
+{<br>
+//public event Action&lt;object, EventArgs&gt; Chaned;<br>
+public event ChangeEventHandler Changed;<br>
+//发布广播方法：事件链上不为空则执行事件<br>
+protected virtual void OnChanged(EventArgs e)<br>
+{<br>
+if (Changed != null)<br>
+Changed(this, e);<br>
+//Chaned?.Invoke(this, e);<br>
+}<br>
+public override int Add(object value)<br>
+{<br>
+int i = base.Add(value);<br>
+OnChanged(EventArgs.Empty);<br>
+return i;<br>
+}<br>
+public override void Clear()<br>
+{<br>
+base.Clear();<br>
+OnChanged(EventArgs.Empty);<br>
+}<br>
+}<br>
+}</p>
+<p>监听者<br>
+class EventListene<br>
+{<br>
+private ListWithChangeEvent list;//事件发布者<br>
+public EventListene(ListWithChangeEvent list)<br>
+{<br>
+this.list = list;<br>
+//list.Chaned += new ChangeEventHandler(ListChanged);<br>
+list.Changed += ListChanged;</p>
+<pre><code>    }
+    //发布事件时坚挺着调用的方法
+    public void ListChanged(object sender, EventArgs e)
+    {
+        Console.WriteLine(&quot;监听到事件&quot;);
+    }
+    public void Detach()
+    {
+        //list.Chaned -= new ChangeEventHandler(ListChanged);
+        list.Changed -= ListChanged;            
+        list = null;
+    }
+
+}
+测试程序
+class Program
+{
+    static void Main(string[] args)
+    {
+        //广播者
+        ListWithChangeEvent list = new ListWithChangeEvent();
+        //监听者
+        EventListene listene = new EventListene(list);
+        list.Add(&quot;Item 1&quot;);
+        list.Clear();
+        listene.Detach();
+    }
+}
+</code></pre>
+<hr>
+<p>例三：<br>
 广播者<br>
 public class PstPanel : MonoBehaviour ,IEndDragHandler,IBeginDragHandler<br>
 {</p>
