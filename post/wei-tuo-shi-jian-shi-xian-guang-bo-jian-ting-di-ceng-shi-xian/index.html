@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" >
 
-<title>委托事件实现广播/监听（底层实现） | WeiBlog</title>
+<title>委托，事件实现，回调函数，广播/监听（底层实现） | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606220854080">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606298937359">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -18,15 +18,14 @@
 
 
 
-    <meta name="description" content="//广播者
+    <meta name="description" content="---------------------------回调机制------------------------------
 using System;
-using System.Collections.Generic;
-using System.Text;
-namespace 事件__观察者设计模式
+namespace 委托
 {
-class Cat//被观察者（广播着）
+class Program
 {
-..." />
+//委托由于回调函数
+pu..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -36,7 +35,7 @@ class Cat//被观察者（广播着）
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1606220854080" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1606298937359" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -111,11 +110,51 @@ class Cat//被观察者（广播着）
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">委托事件实现广播/监听（底层实现）</h2>
+            <h2 class="post-title">委托，事件实现，回调函数，广播/监听（底层实现）</h2>
             <div class="post-date">2020-05-26</div>
             
             <div class="post-content" v-pre>
-              <p>//广播者<br>
+              <p>---------------------------<strong>回调机制</strong>------------------------------<br>
+using System;</p>
+<p>namespace 委托<br>
+{<br>
+class Program<br>
+{<br>
+//委托由于回调函数<br>
+public delegate void MyDelegate ();</p>
+<pre><code>    public static void CallBackS()
+    {
+        Console.WriteLine(&quot;Start回调函数&quot;);
+    }
+    public static void CallBackU()
+    {
+        Console.WriteLine(&quot;Update回调函数&quot;);
+    }
+
+    public static void StartLG(MyDelegate dlLink)
+    {
+        Console.WriteLine(&quot;Start逻辑执行完成&quot;);
+        dlLink?.Invoke();
+    }
+    public static void UpdateLG(MyDelegate dlLink)
+    {
+        Console.WriteLine( &quot;Update逻辑执行完成&quot;);
+        //dlLink?.Invoke();
+        dlLink();
+    }
+    //生命周期主函数
+    static void Main(string[] args)
+    {
+        MyDelegate stCallBack = CallBackS;
+        MyDelegate upCallBack = new MyDelegate(CallBackU);
+        StartLG(stCallBack);
+        UpdateLG(upCallBack);
+       
+    }
+}
+</code></pre>
+<h2 id="">}</h2>
+<p>//广播者<br>
 using System;<br>
 using System.Collections.Generic;<br>
 using System.Text;</p>
@@ -158,7 +197,7 @@ public string color;</p>
         this.name = name;
         this.color = color;
         c.catCome += this.MsRuning;//将自身应对广播“某”事件的方法，注册进广播者的该事件中(订阅消息)
-        //c.catCome();//事件不能在类的外部进行调用(委托可以)，但可在类的外部注册。
+        //c.catCome();//**事件不能在类的外部进行调用(委托可以)，但可在类的外部注册。因此事件更安全**
     }
 
     public void MsRuning()
