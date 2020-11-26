@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" >
 
-<title>洗牌算法，洪水填充算法，重置内置运算符 | WeiBlog</title>
+<title>洗牌算法，洪水填充算法，C#重置内置运算符 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606307397171">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1606395008116">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -37,7 +37,7 @@ f..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1606307397171" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1606395008116" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -112,7 +112,7 @@ f..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">洗牌算法，洪水填充算法，重置内置运算符</h2>
+            <h2 class="post-title">洗牌算法，洪水填充算法，C#重置内置运算符</h2>
             <div class="post-date">2020-10-12</div>
             
             <div class="post-content" v-pre>
@@ -190,27 +190,73 @@ int neighborY = currentTile.y + y;</p>
     return accessibleCount == walkableCount;//联通路径总的可行走数量与目标值相同时则可依据_mapObstacles中位置生成障碍物
 }
 ------------------------重置内置运算符“operator”--------------------------
-public struct Coord
+**C#支持的运算符重载**
+可重载的一元运算符 (overloadable unary operator) 有：
 </code></pre>
-<p>{<br>
+<ul>
+<li>
+<ul>
+<li>!   ~   ++   --   true   false<br>
+可重载的二元运算符 (overloadable binary operator) 有：</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>
+<ul>
+<li>/   %   &amp;   |   ^   &lt;&lt;   &gt;&gt;   ==   !=   &gt;   &lt;   &gt;=   &lt;=<br>
+struct Human<br>
+{<br>
+public int s1;<br>
+public int s2;<br>
+public Human(int a, int b)<br>
+{<br>
+s1 = a;<br>
+s2 = b;<br>
+}<br>
+public static Human operator + (Human a,Human b)<br>
+{<br>
+Human temp = new Human(a.s1 + b.s1, a.s2 + b.s2);<br>
+return temp;<br>
+}<br>
+public static Human operator - (Human a,Human b)<br>
+{<br>
+Human temp = new Human(a.s1 - b.s1, a.s2 - b.s2);<br>
+return temp;<br>
+}<br>
+public static bool operator == (Human a,Human b)<br>
+{<br>
+return a.s1 == b.s1 &amp;&amp; a.s2 == b.s2;<br>
+}<br>
+public static bool operator !=(Human a,Human b)<br>
+{<br>
+return !(a == b);<br>
+}<br>
+}<br>
+public struct Coord<br>
+{<br>
 public int x;<br>
-public int y;</p>
-<pre><code>public Coord(int _x, int _y)
-{
-    this.x = _x;
-    this.y = _y;
-}
-//operator：重置内置运算符，C#要求成对重载比较运算符
-public static bool operator !=(Coord _c1,Coord _c2)
-{
-    return !(_c1 == _c2);
-}
-public static bool operator ==(Coord _c1,Coord _c2)
-{
-    return (_c1.x == _c2.x &amp;&amp; _c1.y == _c2.y);
-}
-</code></pre>
-<p>}</p>
+public int y;</li>
+</ul>
+</li>
+</ul>
+<p>public Coord(int _x, int _y)<br>
+{<br>
+this.x = _x;<br>
+this.y = _y;<br>
+}<br>
+//operator：重置内置运算符，C#要求成对重载比较运算符<br>
+public static bool operator !=(Coord _c1,Coord _c2)<br>
+{<br>
+return !(_c1 == _c2);<br>
+}<br>
+public static bool operator ==(Coord _c1,Coord _c2)<br>
+{<br>
+return (_c1.x == _c2.x &amp;&amp; _c1.y == _c2.y);<br>
+}<br>
+}</p>
+</li>
+</ul>
 
             </div>
             
