@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-11-28T09:46:55.095Z</updated>
+    <updated>2020-11-29T11:50:29.660Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,46 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[C++泛型/STL]]></title>
+        <id>https://Wei715547.github.io/post/cfan-xing-stl/</id>
+        <link href="https://Wei715547.github.io/post/cfan-xing-stl/">
+        </link>
+        <updated>2020-11-28T12:20:41.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>函数模板</strong><br>
+格式：<br>
+template <class T>//或写成<typename T>与class无区别<br>
+//需要不同类型参数时&lt;typename T1,typename T2&gt;u77<br>
+返回值 函数名 （形参表）<br>
+{<br>
+函数体；<br>
+}<br>
+template <class T><br>
+T Max(T Inpute1, T Inpuet2)<br>
+{<br>
+return (Inpute1 &gt; Inpute2) ? Inpute1 : Inpute2;<br>
+}<br>
+使用：<br>
+1.自动类型推导<br>
+Max(a,b);<br>
+2.显示指定类型<br>
+Max<int>(a,b);<br>
+<strong>类模板</strong><br>
+template <typename T><br>
+class 类名<br>
+{<br>
+类定义；<br>
+}<br>
+在类外定义成员函数时：<br>
+template <typename T><br>
+返回值类型 类名<T>::函数名(T x,T y)<br>
+{<br>
+函数体；<br>
+}<br>
+类模板声明对象：<br>
+类名&lt;泛型数据类型&gt; 对象名；</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[C++运算符重载]]></title>
         <id>https://Wei715547.github.io/post/cyun-suan-fu-chong-zai/</id>
@@ -1908,110 +1948,6 @@ void Update()
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[24.]]></title>
-        <id>https://Wei715547.github.io/post/24/</id>
-        <link href="https://Wei715547.github.io/post/24/">
-        </link>
-        <updated>2020-09-25T15:20:11.000Z</updated>
-        <content type="html"><![CDATA[<p>class SL<br>
-{<br>
-public bool JudgePoint24(int[] nums)<br>
-{<br>
-List<double> list = new List<double>();<br>
-foreach (int i in nums) list.Add((double)i); //为dfs做准备<br>
-return dfs(list);<br>
-}<br>
-private bool dfs(List<double> list)<br>
-{<br>
-if (list.Count == 1)<br>
-{//一个数时判断相等<br>
-if (Math.Abs(list[0] - 24.0) &lt; 0.001) return true; //考虑除法造成的小数点<br>
-return false;<br>
-}<br>
-for (int i = 0; i &lt; list.Count; ++i)<br>
-{<br>
-for (int j = i + 1; j &lt; list.Count; ++j)<br>
-{<br>
-foreach (double c in generatePossibleResults(list[i], list[j]))<br>
-{<br>
-List<double> nextRound = new List<double>();<br>
-nextRound.Add(c); //遍历两个数的所有可能性<br>
-for (int k = 0; k &lt; list.Count; ++k)<br>
-{ //添加剩余项到next round<br>
-if (k == i || k == j) continue;<br>
-nextRound.Add(list[k]);<br>
-}<br>
-if (dfs(nextRound)) return true;<br>
-}<br>
-}<br>
-}<br>
-return false;<br>
-}<br>
-//生成两个数所有的组合<br>
-private List<double> generatePossibleResults(double a, double b)<br>
-{<br>
-List<double> res = new List<double>();<br>
-res.Add(a + b);<br>
-res.Add(a - b);<br>
-res.Add(b - a);<br>
-res.Add(a * b);<br>
-res.Add(a / b);<br>
-res.Add(b / a);<br>
-return res;<br>
-}<br>
-}</p>
-<pre><code>C#改JAVA
-</code></pre>
-<p>class Solution<br>
-{<br>
-public boolean judgePoint24(int[] nums)<br>
-{<br>
-ArrayList<Double> list = new ArrayList&lt;&gt;();<br>
-for (int n:nums)<br>
-{<br>
-list.add((double)n);<br>
-}<br>
-return Prm(list);<br>
-}<br>
-public boolean Prm(ArrayList<Double> list)<br>
-{<br>
-if (list.size() == 1)<br>
-{<br>
-return Math.abs(list.get(0) - 24) &lt; 1e-6;<br>
-}<br>
-for (int i = 0; i &lt; list.size(); i++)<br>
-{<br>
-for (int j = i + 1; j &lt; list.size(); j++)<br>
-{<br>
-for (double k:AllTowRes(list.get(i), list.get(j)))<br>
-{<br>
-ArrayList<Double> nextRound = new ArrayList&lt;&gt;();<br>
-nextRound.add(k);<br>
-for (int v = 0; v &lt; list.size(); v++)<br>
-{<br>
-if (v == i || v == j) continue;<br>
-nextRound.add(list.get(v));<br>
-}<br>
-if (Prm(nextRound)) return true;<br>
-}<br>
-}<br>
-}<br>
-return false;<br>
-}<br>
-public ArrayList<Double> AllTowRes(double a, double b)<br>
-{<br>
-ArrayList<Double> res = new ArrayList&lt;&gt;();<br>
-res.add(a + b);<br>
-res.add(a - b);<br>
-res.add(b - a);<br>
-if (b != 0) res.add(a / b);<br>
-if (a != 0) res.add(b / a);<br>
-return res;<br>
-}<br>
-}</p>
 ]]></content>
     </entry>
 </feed>
