@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-11-29T11:50:29.660Z</updated>
+    <updated>2020-11-29T12:59:02.636Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -18,7 +18,26 @@
         </link>
         <updated>2020-11-28T12:20:41.000Z</updated>
         <content type="html"><![CDATA[<p><strong>函数模板</strong><br>
-格式：<br>
+与普通函数区别：<br>
+1.普通函数调用存在隐式类型转换<br>
+2.自动类型推导调用时，不发生隐式类型转换<br>
+3.显示指定类型调用可以发生隐式类型转换<br>
+与普通函数重名时：<br>
+1,.默认调用普通函数<br>
+2.通过空模板参数类表(Max&lt;&gt;)强制调用函数模板<br>
+3.函数模板可发生重载(参数个数不同)<br>
+4.函数模板可产生更好的匹配时优先调用函数模板<br>
+例：普通函数：void Fun(int a,int b){}<br>
+函数模板：template<class T> viod Fun (T a,T b){};<br>
+调用Fun(a,b)//a,b为char类型时普通函数需隐式转换int为char，函数模板只需将T制定为char类型，即优先调用函数模板。<br>
+模板局限性：如自定义类型对比（解决方法1.在自定义类型中重置内置运算符，2.利用具体化模板实现代码）=&gt;template &lt;&gt; bool Compare(Person p1,Person p2)<br>
+{<br>
+if(p1.name ==p2.name&amp;&amp;p1.age == p2.age)<br>
+return true;<br>
+else<br>
+return false;<br>
+};<br>
+声明格式：<br>
 template <class T>//或写成<typename T>与class无区别<br>
 //需要不同类型参数时&lt;typename T1,typename T2&gt;u77<br>
 返回值 函数名 （形参表）<br>
@@ -35,8 +54,9 @@ return (Inpute1 &gt; Inpute2) ? Inpute1 : Inpute2;<br>
 Max(a,b);<br>
 2.显示指定类型<br>
 Max<int>(a,b);<br>
-<strong>类模板</strong><br>
-template <typename T><br>
+<strong>类模板</strong>//与函数模板区别：1.没有自动类型推导，<br>
+2.在模板参数列表中可以有默认参数template <typename T = int>//未指定类型是默认为int</p>
+<p>template <typename T><br>
 class 类名<br>
 {<br>
 类定义；<br>
