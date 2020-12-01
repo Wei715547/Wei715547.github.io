@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-11-29T12:59:02.636Z</updated>
+    <updated>2020-12-01T12:29:25.570Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -61,14 +61,70 @@ class 类名<br>
 {<br>
 类定义；<br>
 }<br>
+template &lt;class T1,class T2&gt;<br>
+class Person<br>
+{<br>
+public:<br>
+Person(T1 name,T2 age)<br>
+{<br>
+this-&gt;Name = name;<br>
+this-&gt;Age =age;<br>
+}<br>
+void ShowPerson(T1 name,T2 age);<br>
+private:<br>
+T1 Name;<br>
+T2 Age;<br>
+}<br>
 在类外定义成员函数时：<br>
 template <typename T><br>
 返回值类型 类名<T>::函数名(T x,T y)<br>
 {<br>
 函数体；<br>
 }<br>
+template &lt;typename T1, typenme T2&gt;<br>
+void Person&lt;T1,T2&gt;::ShowPerson(T1 name,T2 age)<br>
+{<br>
+cout&lt;&lt;name&lt;&lt;age&lt;&lt;endl;<br>
+}<br>
 类模板声明对象：<br>
-类名&lt;泛型数据类型&gt; 对象名；</p>
+类名&lt;泛型数据类型&gt; 对象名；<br>
+Person&lt;string,int&gt; p (&quot;Wei&quot;,17);</p>
+<p><strong>类模板对象作为函数参数</strong><br>
+1.指定传入类型<br>
+void PrintPerson(Person&lt;string ,int&gt; &amp;p)<br>
+{<br>
+p.ShowPerson(p.name,p.age);<br>
+}<br>
+2.参数模板化<br>
+template &lt;class T1,class T2&gt;<br>
+void PrintPerson(Person&lt;T1 ,T3&gt; &amp;p)<br>
+{<br>
+p.ShowPerson(p.name,p.age);<br>
+}<br>
+3.整个类模板化<br>
+template <class T><br>
+void PrintPerson(T &amp;p)<br>
+{<br>
+p.ShowPerson(p.name,p.age);<br>
+}</p>
+<p><strong>类模板与继承</strong><br>
+1.当子类继承的父类为一个类模板时，子类在声明时必须指定父类中T的类型。<br>
+template <class T><br>
+class Base<br>
+{<br>
+T m;<br>
+}<br>
+class Son :public Base<int>//指定父类T类型<br>
+{</p>
+<p>};<br>
+2.如果不指定 ，编译器无法为子类分配内存。<br>
+3.如想灵活指定父类T类型，则需将子类也定义为类模板。<br>
+template &lt;class T1, class T2&gt;//子类也定义为类模板<br>
+class Son :public Base<T2><br>
+{<br>
+T1 obj;<br>
+};<br>
+Son&lt;int,char&gt; s1;</p>
 ]]></content>
     </entry>
     <entry>
