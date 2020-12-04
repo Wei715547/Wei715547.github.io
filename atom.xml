@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-12-01T14:57:06.022Z</updated>
+    <updated>2020-12-04T11:08:11.859Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -124,7 +124,85 @@ class Son :public Base<T2><br>
 {<br>
 T1 obj;<br>
 };<br>
-Son&lt;int,char&gt; s1;</p>
+Son&lt;int,char&gt; s1;<br>
+——————————————————————————————————————<br>
+<strong>STL</strong></p>
+<p><strong>Vector</strong>:单端数组，动态拓展：开辟一块更大的空间拷贝数据，释放原来空间。<br>
+迭代器：v.begin()//指向容器首位置<br>
+v.end()//指向容器最后一位的下一个位置<br>
+v.rend()//首位的前一位置<br>
+v.rbegin()//指向最后一位元素<br>
+支持随机访问<br>
+构造函数：<br>
+vector<T> v;//              默认构造函数<br>
+vector(v.begin(),v.end())//         将v的首末拷贝到本身<br>
+vector(n,elem)//            将n个elem拷贝给本身<br>
+vector(const vector &amp;vec)//         拷贝构造函数<br>
+赋值操作：<br>
+operator=<br>
+v.assign(v1.begin(), v1.end())<br>
+v.assign(n,elem);<br>
+容量大小方法：<br>
+empty()//判断容易是否为空；<br>
+capacity()//容器容量<br>
+size()//容器中元素的个数<br>
+resize(int num)//重新制定容易的长度为num<br>
+resize(int num elem)//重新定义容器长度，并默认以elem填充<br>
+插入/删除方法：<br>
+push_back(ele);//在尾部插入数据<br>
+pop_back()//在尾部删除数据<br>
+insert(const_iterator  pos, ele)//在迭代器所指向位置插入ele<br>
+insert(const_iterator  pos, int count, ele)//在迭代器所指向位置插入count个ele<br>
+erase(const_iterator pos);//删除迭代器所指向的元素<br>
+erase(const_iterator start, const_iterator end)//清除迭代器s-e之间的元素<br>
+clear();//清空元素</p>
+<p>#include <iostream><br>
+#include &quot;pch.cpp&quot;<br>
+#include<vector><br>
+#include<algorithm><br>
+using namespace std;</p>
+<p>int main()<br>
+{<br>
+//cout &lt;&lt; &quot;WEI&quot; &lt;&lt; endl;<br>
+Fun1();<br>
+return 0;</p>
+<p>}<br>
+void Fun1()<br>
+{<br>
+//创建Vector容器<br>
+vector<int> v;</p>
+<pre><code>//向容器中插入数据
+v.push_back(10);
+v.push_back(20);
+v.push_back(30);
+v.push_back(40);
+v.push_back(50);
+
+////通过迭代器访问容器中的数据
+//vector&lt;int &gt;::iterator itBegin = v.begin();//起始迭代器，指向容器第一个元素
+//vector&lt;int &gt;::iterator itEnd = v.end();//结束迭代器，指向最后一个元素的下一个位置
+
+////遍历方式
+//while (itBegin != itEnd)
+//{
+//	cout &lt;&lt; *itBegin &lt;&lt; endl;
+//	itBegin++;
+//}
+
+//遍历方式二
+for (vector&lt;int&gt;::iterator it = v.begin(); it != v.end(); it++)
+{
+	cout &lt;&lt; *it &lt;&lt; endl;
+}
+
+//第三种 STL提供的遍历算法
+for_each (v.begin(), v.end(), MyPrint);
+</code></pre>
+<p>}<br>
+void MyPrint(int var)<br>
+{<br>
+cout &lt;&lt; var &lt;&lt; endl;<br>
+}</p>
 ]]></content>
     </entry>
     <entry>
