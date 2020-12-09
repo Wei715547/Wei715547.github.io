@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1607516149204">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1607517107021">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,11 @@ Her
 
 Sub PTS
 
-..." />
+DrawLine
+
+
+using System.Collections;
+using System.C..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -46,7 +50,7 @@ Sub PTS
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1607516149204" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1607517107021" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -142,7 +146,141 @@ Sub PTS
 <strong>Her</strong><br>
 <img src="https://Wei715547.github.io/post-images/1607515954518.PNG" alt="" loading="lazy"><br>
 <strong>Sub PTS</strong><br>
-<img src="https://Wei715547.github.io/post-images/1607516146807.PNG" alt="" loading="lazy"></p>
+<img src="https://Wei715547.github.io/post-images/1607516146807.PNG" alt="" loading="lazy"><br>
+<strong>DrawLine</strong><br>
+<img src="https://Wei715547.github.io/post-images/1607517065579.PNG" alt="" loading="lazy"><br>
+<cood><br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>[RequireComponent(typeof(ParticleSystem))]<br>
+[ExecuteInEditMode]<br>
+public class ParticleSystemLine : MonoBehaviour<br>
+{<br>
+/// <summary><br>
+/// 粒子系统<br>
+/// </summary><br>
+private ParticleSystem mParticleSystem;<br>
+/// <summary><br>
+/// 线的材质<br>
+/// </summary><br>
+public Material mMaterial;<br>
+/// <summary><br>
+/// 粒子数组<br>
+/// </summary><br>
+private ParticleSystem.Particle[] particles;<br>
+/// <summary><br>
+/// LineRenderer数组<br>
+/// </summary><br>
+private List<LineRenderer> linePool = new List<LineRenderer>();<br>
+/// <summary><br>
+/// 当前存活的粒子<br>
+/// </summary><br>
+private int numParticlesAlive;<br>
+/// <summary><br>
+/// 连线距离<br>
+/// </summary><br>
+public float MinDist = 5;<br>
+/// <summary><br>
+/// 线的宽度<br>
+/// </summary><br>
+public float LineWidth = 0.1f;</p>
+<pre><code>/// &lt;summary&gt;
+/// 已经使用的LineRender位置
+/// &lt;/summary&gt;
+private int index = 0;
+
+//public AnimationCurve LineWidthOverLifetime = AnimationCurve.Constant(0,1,1);
+void Start()
+{
+    mParticleSystem = GetComponent&lt;ParticleSystem&gt;();
+    //初始化粒子数组
+    particles = new ParticleSystem.Particle[mParticleSystem.main.maxParticles];
+}
+
+void LateUpdate()
+{
+    //获取粒子数据
+    numParticlesAlive = mParticleSystem.GetParticles(particles);
+
+    //两个粒子的距离小于MinDist就连线
+    for(int i = 0;i &lt; numParticlesAlive; i++)
+    {
+        for (int j = i + 1; j &lt; numParticlesAlive; j++)
+        {
+            //粒子直接距离的平方
+            float SqrDis = (particles[j].position - particles[i].position).sqrMagnitude;
+
+            if (SqrDis &lt; MinDist * MinDist)
+            {
+                ParticleSystem.Particle particle = particles[j];
+                ParticleSystem.Particle cur_particle = particles[i];
+                //获取粒子的颜色
+                Color sColor = cur_particle.GetCurrentColor(mParticleSystem);
+                Color eColor = particle.GetCurrentColor(mParticleSystem);
+                //计算宽度
+                //float width = LineWidth*LineWidthOverLifetime.Evaluate(cur_particle.remainingLifetime/cur_particle.startLifetime);
+                //绘制线
+                DrawLine(cur_particle.position, particle.position, sColor, eColor, LineWidth);
+
+            }
+        }
+    }
+
+    mParticleSystem.SetParticles(particles, numParticlesAlive);
+    for(int i=index;i&lt;linePool.Count;i++)
+    {
+        linePool[i].gameObject.SetActive(false);
+    }
+    index = 0;
+}
+
+/// &lt;summary&gt;
+/// 绘制线条
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;startPos&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;endPos&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;startColor&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;endColor&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;width&quot;&gt;&lt;/param&gt;
+void DrawLine(Vector3 startPos,Vector3 endPos,Color startColor,Color endColor,float width = 0.1f)
+{
+    LineRenderer line;
+
+    if(linePool.Count==index)
+    {
+        GameObject go = new GameObject(&quot;tempLine&quot;);
+        go.transform.parent = transform;
+        line = go.AddComponent&lt;LineRenderer&gt;();
+        line.useWorldSpace = true;
+        line.material = mMaterial;
+        linePool.Add(line);
+        index++;
+    }
+    else
+    {
+        line = linePool[index++];
+        line.gameObject.SetActive(true);
+    }
+
+    //点的数量
+    line.positionCount = 2;
+    
+    //设置线的位置
+    line.SetPosition(0,startPos);
+    line.SetPosition(1,endPos);
+
+    //线的颜色
+    line.startColor = startColor;
+    line.endColor = endColor;
+
+    //线的宽度
+    line.startWidth = width;
+    line.endWidth = width;
+}
+</code></pre>
+<p>}<br>
+</cood></p>
 
             </div>
             
