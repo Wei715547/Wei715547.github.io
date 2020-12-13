@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>MVC_UI | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1607863519670">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="
+M：数据模型//此例两界面共用一个数据模型
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+usin..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1607863519670" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">MVC_UI</h2>
+            <div class="post-date">2020-12-13</div>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://Wei715547.github.io/post-images/1607863048846.jpg" alt="" loading="lazy"><br>
+<strong>M：数据模型</strong>//此例两界面共用一个数据模型<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.Events;<br>
+/// <summary><br>
+/// 数据模型<br>
+/// </summary><br>
+public class PlayerMode<br>
+{<br>
+#region//数据层<br>
+private string playername;<br>
+public string Playername<br>
+{<br>
+get<br>
+{<br>
+return playername;<br>
+}<br>
+}<br>
+private int lev;<br>
+public int Lev<br>
+{<br>
+get<br>
+{<br>
+return lev;<br>
+}<br>
+}</p>
+<pre><code>private int money;
+public int Money
+{
+    get
+    {
+        return money;
+    }
+}
+
+private int power;
+public int Power
+{
+    get
+    {
+        return power;
+    }
+}
+
+
+private int hp;
+public int Hp
+{
+    get { return hp; }
+}
+private int atk;
+public int Atk
+{
+    get { return atk; }
+}
+private int def;
+public int Def
+{
+    get { return def; }
+}
+private int miss;
+public int Miss
+{
+    get { return miss; }
+}
+
+//通过事件与外部联系
+public event Action&lt;PlayerMode&gt; updateEvent;
+
+//数据模型类单例，达到数据唯一，与获取数据
+private static PlayerMode date;
+public static PlayerMode Date
+{
+    get
+    {
+        if(date==null)
+        {
+            date = new PlayerMode();
+            date.Init();
+        }
+        return date;
+    }
+}
+#endregion
+
+//初始化
+public void Init()
+{
+    playername = PlayerPrefs.GetString(&quot;Playername&quot;, &quot;Wei&quot;);//PlayerPrefs类场景中存储值
+    lev = PlayerPrefs.GetInt(&quot;Lev&quot;, 17);
+    money = PlayerPrefs.GetInt(&quot;Money&quot;, 100);
+    power = PlayerPrefs.GetInt(&quot;Power&quot;, 100);
+
+    hp = PlayerPrefs.GetInt(&quot;Hp&quot;, 100);
+    atk = PlayerPrefs.GetInt(&quot;Atk&quot;, 100);
+    def = PlayerPrefs.GetInt(&quot;Def&quot;, 100);
+    miss = PlayerPrefs.GetInt(&quot;Miss&quot;, 100);
+}
+//更新
+public void LeveUp()
+{
+    lev += 1;
+
+    hp += 10;
+    atk += 10;
+    def += 10;
+    miss += 10;
+
+    SaveDate();//更新后保存数据
+
+    
+}
+//保存
+public void SaveDate()
+{
+    PlayerPrefs.SetString(&quot;Playername&quot;, playername);
+    PlayerPrefs.SetInt(&quot;Lev&quot;, lev);
+    PlayerPrefs.SetInt(&quot;Money&quot;, money);
+    PlayerPrefs.SetInt(&quot;Power&quot;, power);
+
+    PlayerPrefs.SetInt(&quot;Hp&quot;, hp);
+    PlayerPrefs.SetInt(&quot;Atk&quot;, atk);
+    PlayerPrefs.SetInt(&quot;Def&quot;, def);
+    PlayerPrefs.SetInt(&quot;Miss&quot;, miss);
+
+    UpdateInfo();
+}
+//外部注册事件
+public void AddEventLissent(Action&lt;PlayerMode&gt; function)
+{
+    updateEvent += function;
+}
+//外部取消注册事件
+public void RemoveEventLissent(Action&lt;PlayerMode&gt; function)
+{
+    updateEvent -= function;
+}
+//通知更新数据的方法（调用数据更新时执行的事件）
+public void UpdateInfo()
+{
+    updateEvent?.Invoke(this);
+}
+</code></pre>
+<h2 id="">}</h2>
+<p><strong>V：界面脚本</strong>//获取控件，更新控件数据<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+//VM<br>
+public class PlayerMainView : MonoBehaviour<br>
+{<br>
+//获取控件<br>
+public Button btnRole;<br>
+public Button btnSkill;</p>
+<pre><code>public Text txtName;
+public Text txtLev;
+public Text txtMoney;
+public Text txtPower;
+
+//提供面板更新相关方法给外部
+public void UpdateInfo(PlayerMode date)
+{
+    txtName.text = date.Playername;
+    txtLev.text = &quot;Lv:&quot; + date.Lev.ToString();
+    txtMoney.text = date.Money.ToString();
+    txtPower.text = date.Power.ToString();
+}
+</code></pre>
+<p>}</p>
+<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+//VR<br>
+public class PlayerRoleView : MonoBehaviour<br>
+{<br>
+//获取控件<br>
+public Button btnBack;<br>
+public Button btnLeveUp;</p>
+<pre><code>public Text txtHp;
+public Text txtAtk;
+public Text txtDef;
+public Text txtMiss;
+
+//提供面板更新相关方法给外部
+public void UpdateInfo(PlayerMode date)
+{
+    txtHp.text = date.Hp.ToString();
+    txtAtk.text = date.Atk.ToString();
+    txtDef.text = date.Def.ToString();
+    txtMiss.text = date.Miss.ToString();
+}
+</code></pre>
+<h2 id="-2">}</h2>
+<p><strong>C：界面控制脚本</strong>//显隐，初始化，界面逻辑，数据更新时调用的事件<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 处理主界面业务逻辑<br>
+/// </summary><br>
+public class MainController : MonoBehaviour<br>
+{<br>
+//能够在Controller中获取View界面<br>
+private PlayerMainView mainView;</p>
+<pre><code>private static MainController contorller;
+
+public static MainController Controller
+{
+    get
+    {
+        return contorller;
+    }
+}
+//界面显示隐藏
+public static void ShowPanel()
+{
+    if(contorller==null)
+    {
+        GameObject res = Resources.Load&lt;GameObject&gt;(&quot;UI/MainPanel&quot;);
+        GameObject obj = Instantiate(res);
+        obj.transform.SetParent(GameObject.Find(&quot;Canvas&quot;).transform);
+        contorller = obj.GetComponent&lt;MainController&gt;();
+    }
+}
+public static void HeadPanel()
+{
+    contorller.gameObject.SetActive(false);
+}
+
+private void Start()
+{
+    //获取挂载同一物体上的View脚本
+    mainView = this.GetComponent&lt;PlayerMainView&gt;();
+    //第一次界面更新
+    mainView.UpdateInfo(PlayerMode.Date);
+
+    mainView.btnRole.onClick.AddListener(OnRoleBtnClick);
+
+    //数据更新时同时更新界面
+    PlayerMode.Date.AddEventLissent(UpdateInfo);
+}
+
+private void OnRoleBtnClick()
+{
+    RoleController.ShowPanel();
+}
+
+//界面事件监听，逻辑处理
+//界面更新
+private void UpdateInfo(PlayerMode date)
+{
+    if(mainView!=null)
+        mainView.UpdateInfo(date);
+}
+</code></pre>
+<p>}</p>
+<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 处理属性界面业务逻辑<br>
+/// </summary><br>
+public class RoleController : MonoBehaviour<br>
+{<br>
+//能够在Controller中获取View界面<br>
+private PlayerRoleView roleView;</p>
+<pre><code>private static RoleController contorller;
+
+public static RoleController Controller
+{
+    get
+    {
+        return contorller;
+    }
+}
+//界面显示隐藏
+public static void ShowPanel()
+{
+    if (contorller == null)
+    {
+        GameObject res = Resources.Load&lt;GameObject&gt;(&quot;UI/RolePanel&quot;);
+        GameObject obj = Instantiate(res);
+        obj.transform.SetParent(GameObject.Find(&quot;Canvas&quot;).transform);
+        contorller = obj.GetComponent&lt;RoleController&gt;();
+    }
+}
+public static void HeadPanel()
+{
+    contorller.gameObject.SetActive(false);
+}
+
+private void Start()
+{
+    //获取挂载同一物体上的View脚本
+    roleView = this.GetComponent&lt;PlayerRoleView&gt;();
+    //第一次界面更新
+    roleView.UpdateInfo(PlayerMode.Date);
+
+    roleView.btnBack.onClick.AddListener(OnClickBack);
+    roleView.btnLeveUp.onClick.AddListener(OnClickLeveUp);
+
+    //数据更新时同时更新界面
+    PlayerMode.Date.AddEventLissent(UpdataInfo);
+    //PlayerMode.Date.AddEventLissent(roleView.UpdateInfo);
+    //PlayerMode.Date.updateEvent += roleView.UpdateInfo;
+}
+private void OnClickBack()
+{
+    HeadPanel();
+}
+private void OnClickLeveUp()
+{
+    //通过事件模块，改变数据。
+    PlayerMode.Date.LeveUp();
+}
+
+//界面事件监听，逻辑处理
+//界面更新
+private void UpdataInfo(PlayerMode date)
+{
+    if(roleView!=null)
+        roleView.UpdateInfo(date);
+}
+</code></pre>
+<p>}</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/particle-system/">
+                  <h3 class="post-title">
+                    Particle System
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

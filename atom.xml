@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-12-11T08:18:23.397Z</updated>
+    <updated>2020-12-13T12:45:27.437Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,682 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[BaseMVC_UI]]></title>
+        <id>https://Wei715547.github.io/post/basemvc_ui/</id>
+        <link href="https://Wei715547.github.io/post/basemvc_ui/">
+        </link>
+        <updated>2020-12-13T11:28:39.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1607863048846.jpg" alt="" loading="lazy"><br>
+<strong>M：数据模型</strong>//此例两界面共用一个数据模型<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.Events;<br>
+/// <summary><br>
+/// 数据模型<br>
+/// </summary><br>
+public class PlayerMode<br>
+{<br>
+#region//数据层<br>
+private string playername;<br>
+public string Playername<br>
+{<br>
+get<br>
+{<br>
+return playername;<br>
+}<br>
+}<br>
+private int lev;<br>
+public int Lev<br>
+{<br>
+get<br>
+{<br>
+return lev;<br>
+}<br>
+}</p>
+<pre><code>private int money;
+public int Money
+{
+    get
+    {
+        return money;
+    }
+}
+
+private int power;
+public int Power
+{
+    get
+    {
+        return power;
+    }
+}
+
+
+private int hp;
+public int Hp
+{
+    get { return hp; }
+}
+private int atk;
+public int Atk
+{
+    get { return atk; }
+}
+private int def;
+public int Def
+{
+    get { return def; }
+}
+private int miss;
+public int Miss
+{
+    get { return miss; }
+}
+
+//通过事件与外部联系
+public event Action&lt;PlayerMode&gt; updateEvent;
+
+//数据模型类单例，达到数据唯一，与获取数据
+private static PlayerMode date;
+public static PlayerMode Date
+{
+    get
+    {
+        if(date==null)
+        {
+            date = new PlayerMode();
+            date.Init();
+        }
+        return date;
+    }
+}
+#endregion
+
+//初始化
+public void Init()
+{
+    playername = PlayerPrefs.GetString(&quot;Playername&quot;, &quot;Wei&quot;);//PlayerPrefs类场景中存储值
+    lev = PlayerPrefs.GetInt(&quot;Lev&quot;, 17);
+    money = PlayerPrefs.GetInt(&quot;Money&quot;, 100);
+    power = PlayerPrefs.GetInt(&quot;Power&quot;, 100);
+
+    hp = PlayerPrefs.GetInt(&quot;Hp&quot;, 100);
+    atk = PlayerPrefs.GetInt(&quot;Atk&quot;, 100);
+    def = PlayerPrefs.GetInt(&quot;Def&quot;, 100);
+    miss = PlayerPrefs.GetInt(&quot;Miss&quot;, 100);
+}
+//更新
+public void LeveUp()
+{
+    lev += 1;
+
+    hp += 10;
+    atk += 10;
+    def += 10;
+    miss += 10;
+
+    SaveDate();//更新后保存数据
+
+    
+}
+//保存
+public void SaveDate()
+{
+    PlayerPrefs.SetString(&quot;Playername&quot;, playername);
+    PlayerPrefs.SetInt(&quot;Lev&quot;, lev);
+    PlayerPrefs.SetInt(&quot;Money&quot;, money);
+    PlayerPrefs.SetInt(&quot;Power&quot;, power);
+
+    PlayerPrefs.SetInt(&quot;Hp&quot;, hp);
+    PlayerPrefs.SetInt(&quot;Atk&quot;, atk);
+    PlayerPrefs.SetInt(&quot;Def&quot;, def);
+    PlayerPrefs.SetInt(&quot;Miss&quot;, miss);
+
+    UpdateInfo();
+}
+//外部注册事件
+public void AddEventLissent(Action&lt;PlayerMode&gt; function)
+{
+    updateEvent += function;
+}
+//外部取消注册事件
+public void RemoveEventLissent(Action&lt;PlayerMode&gt; function)
+{
+    updateEvent -= function;
+}
+//通知更新数据的方法（调用数据更新时执行的事件）
+public void UpdateInfo()
+{
+    updateEvent?.Invoke(this);
+}
+</code></pre>
+<h2 id="">}</h2>
+<p><strong>V：界面脚本</strong>//获取控件，更新控件数据<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+//VM<br>
+public class PlayerMainView : MonoBehaviour<br>
+{<br>
+//获取控件<br>
+public Button btnRole;<br>
+public Button btnSkill;</p>
+<pre><code>public Text txtName;
+public Text txtLev;
+public Text txtMoney;
+public Text txtPower;
+
+//提供面板更新相关方法给外部
+public void UpdateInfo(PlayerMode date)
+{
+    txtName.text = date.Playername;
+    txtLev.text = &quot;Lv:&quot; + date.Lev.ToString();
+    txtMoney.text = date.Money.ToString();
+    txtPower.text = date.Power.ToString();
+}
+</code></pre>
+<p>}</p>
+<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+//VR<br>
+public class PlayerRoleView : MonoBehaviour<br>
+{<br>
+//获取控件<br>
+public Button btnBack;<br>
+public Button btnLeveUp;</p>
+<pre><code>public Text txtHp;
+public Text txtAtk;
+public Text txtDef;
+public Text txtMiss;
+
+//提供面板更新相关方法给外部
+public void UpdateInfo(PlayerMode date)
+{
+    txtHp.text = date.Hp.ToString();
+    txtAtk.text = date.Atk.ToString();
+    txtDef.text = date.Def.ToString();
+    txtMiss.text = date.Miss.ToString();
+}
+</code></pre>
+<h2 id="-2">}</h2>
+<p><strong>C：界面控制脚本</strong>//显隐，初始化，界面逻辑，数据更新时调用的事件<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 处理主界面业务逻辑<br>
+/// </summary><br>
+public class MainController : MonoBehaviour<br>
+{<br>
+//能够在Controller中获取View界面<br>
+private PlayerMainView mainView;</p>
+<pre><code>private static MainController contorller;
+
+public static MainController Controller
+{
+    get
+    {
+        return contorller;
+    }
+}
+//界面显示隐藏
+public static void ShowPanel()
+{
+    if(contorller==null)
+    {
+        GameObject res = Resources.Load&lt;GameObject&gt;(&quot;UI/MainPanel&quot;);
+        GameObject obj = Instantiate(res);
+        obj.transform.SetParent(GameObject.Find(&quot;Canvas&quot;).transform);
+        contorller = obj.GetComponent&lt;MainController&gt;();
+    }
+}
+public static void HeadPanel()
+{
+    contorller.gameObject.SetActive(false);
+}
+
+private void Start()
+{
+    //获取挂载同一物体上的View脚本
+    mainView = this.GetComponent&lt;PlayerMainView&gt;();
+    //第一次界面更新
+    mainView.UpdateInfo(PlayerMode.Date);
+
+    mainView.btnRole.onClick.AddListener(OnRoleBtnClick);
+
+    //数据更新时同时更新界面
+    PlayerMode.Date.AddEventLissent(UpdateInfo);
+}
+
+private void OnRoleBtnClick()
+{
+    RoleController.ShowPanel();
+}
+
+//界面事件监听，逻辑处理
+//界面更新
+private void UpdateInfo(PlayerMode date)
+{
+    if(mainView!=null)
+        mainView.UpdateInfo(date);
+}
+</code></pre>
+<p>}</p>
+<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 处理属性界面业务逻辑<br>
+/// </summary><br>
+public class RoleController : MonoBehaviour<br>
+{<br>
+//能够在Controller中获取View界面<br>
+private PlayerRoleView roleView;</p>
+<pre><code>private static RoleController contorller;
+
+public static RoleController Controller
+{
+    get
+    {
+        return contorller;
+    }
+}
+//界面显示隐藏
+public static void ShowPanel()
+{
+    if (contorller == null)
+    {
+        GameObject res = Resources.Load&lt;GameObject&gt;(&quot;UI/RolePanel&quot;);
+        GameObject obj = Instantiate(res);
+        obj.transform.SetParent(GameObject.Find(&quot;Canvas&quot;).transform);
+        contorller = obj.GetComponent&lt;RoleController&gt;();
+    }
+}
+public static void HeadPanel()
+{
+    contorller.gameObject.SetActive(false);
+}
+
+private void Start()
+{
+    //获取挂载同一物体上的View脚本
+    roleView = this.GetComponent&lt;PlayerRoleView&gt;();
+    //第一次界面更新
+    roleView.UpdateInfo(PlayerMode.Date);
+
+    roleView.btnBack.onClick.AddListener(OnClickBack);
+    roleView.btnLeveUp.onClick.AddListener(OnClickLeveUp);
+
+    //数据更新时同时更新界面
+    PlayerMode.Date.AddEventLissent(UpdataInfo);
+    //PlayerMode.Date.AddEventLissent(roleView.UpdateInfo);
+    //PlayerMode.Date.updateEvent += roleView.UpdateInfo;
+}
+private void OnClickBack()
+{
+    HeadPanel();
+}
+private void OnClickLeveUp()
+{
+    //通过事件模块，改变数据。
+    PlayerMode.Date.LeveUp();
+}
+
+//界面事件监听，逻辑处理
+//界面更新
+private void UpdataInfo(PlayerMode date)
+{
+    if(roleView!=null)
+        roleView.UpdateInfo(date);
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MVC_UI]]></title>
+        <id>https://Wei715547.github.io/post/mvc_ui/</id>
+        <link href="https://Wei715547.github.io/post/mvc_ui/">
+        </link>
+        <updated>2020-12-13T11:28:39.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1607863048846.jpg" alt="" loading="lazy"><br>
+<strong>M：数据模型</strong>//此例两界面共用一个数据模型<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.Events;<br>
+/// <summary><br>
+/// 数据模型<br>
+/// </summary><br>
+public class PlayerMode<br>
+{<br>
+#region//数据层<br>
+private string playername;<br>
+public string Playername<br>
+{<br>
+get<br>
+{<br>
+return playername;<br>
+}<br>
+}<br>
+private int lev;<br>
+public int Lev<br>
+{<br>
+get<br>
+{<br>
+return lev;<br>
+}<br>
+}</p>
+<pre><code>private int money;
+public int Money
+{
+    get
+    {
+        return money;
+    }
+}
+
+private int power;
+public int Power
+{
+    get
+    {
+        return power;
+    }
+}
+
+
+private int hp;
+public int Hp
+{
+    get { return hp; }
+}
+private int atk;
+public int Atk
+{
+    get { return atk; }
+}
+private int def;
+public int Def
+{
+    get { return def; }
+}
+private int miss;
+public int Miss
+{
+    get { return miss; }
+}
+
+//通过事件与外部联系
+public event Action&lt;PlayerMode&gt; updateEvent;
+
+//数据模型类单例，达到数据唯一，与获取数据
+private static PlayerMode date;
+public static PlayerMode Date
+{
+    get
+    {
+        if(date==null)
+        {
+            date = new PlayerMode();
+            date.Init();
+        }
+        return date;
+    }
+}
+#endregion
+
+//初始化
+public void Init()
+{
+    playername = PlayerPrefs.GetString(&quot;Playername&quot;, &quot;Wei&quot;);//PlayerPrefs类场景中存储值
+    lev = PlayerPrefs.GetInt(&quot;Lev&quot;, 17);
+    money = PlayerPrefs.GetInt(&quot;Money&quot;, 100);
+    power = PlayerPrefs.GetInt(&quot;Power&quot;, 100);
+
+    hp = PlayerPrefs.GetInt(&quot;Hp&quot;, 100);
+    atk = PlayerPrefs.GetInt(&quot;Atk&quot;, 100);
+    def = PlayerPrefs.GetInt(&quot;Def&quot;, 100);
+    miss = PlayerPrefs.GetInt(&quot;Miss&quot;, 100);
+}
+//更新
+public void LeveUp()
+{
+    lev += 1;
+
+    hp += 10;
+    atk += 10;
+    def += 10;
+    miss += 10;
+
+    SaveDate();//更新后保存数据
+
+    
+}
+//保存
+public void SaveDate()
+{
+    PlayerPrefs.SetString(&quot;Playername&quot;, playername);
+    PlayerPrefs.SetInt(&quot;Lev&quot;, lev);
+    PlayerPrefs.SetInt(&quot;Money&quot;, money);
+    PlayerPrefs.SetInt(&quot;Power&quot;, power);
+
+    PlayerPrefs.SetInt(&quot;Hp&quot;, hp);
+    PlayerPrefs.SetInt(&quot;Atk&quot;, atk);
+    PlayerPrefs.SetInt(&quot;Def&quot;, def);
+    PlayerPrefs.SetInt(&quot;Miss&quot;, miss);
+
+    UpdateInfo();
+}
+//外部注册事件
+public void AddEventLissent(Action&lt;PlayerMode&gt; function)
+{
+    updateEvent += function;
+}
+//外部取消注册事件
+public void RemoveEventLissent(Action&lt;PlayerMode&gt; function)
+{
+    updateEvent -= function;
+}
+//通知更新数据的方法（调用数据更新时执行的事件）
+public void UpdateInfo()
+{
+    updateEvent?.Invoke(this);
+}
+</code></pre>
+<h2 id="">}</h2>
+<p><strong>V：界面脚本</strong>//获取控件，更新控件数据<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+//VM<br>
+public class PlayerMainView : MonoBehaviour<br>
+{<br>
+//获取控件<br>
+public Button btnRole;<br>
+public Button btnSkill;</p>
+<pre><code>public Text txtName;
+public Text txtLev;
+public Text txtMoney;
+public Text txtPower;
+
+//提供面板更新相关方法给外部
+public void UpdateInfo(PlayerMode date)
+{
+    txtName.text = date.Playername;
+    txtLev.text = &quot;Lv:&quot; + date.Lev.ToString();
+    txtMoney.text = date.Money.ToString();
+    txtPower.text = date.Power.ToString();
+}
+</code></pre>
+<p>}</p>
+<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;<br>
+//VR<br>
+public class PlayerRoleView : MonoBehaviour<br>
+{<br>
+//获取控件<br>
+public Button btnBack;<br>
+public Button btnLeveUp;</p>
+<pre><code>public Text txtHp;
+public Text txtAtk;
+public Text txtDef;
+public Text txtMiss;
+
+//提供面板更新相关方法给外部
+public void UpdateInfo(PlayerMode date)
+{
+    txtHp.text = date.Hp.ToString();
+    txtAtk.text = date.Atk.ToString();
+    txtDef.text = date.Def.ToString();
+    txtMiss.text = date.Miss.ToString();
+}
+</code></pre>
+<h2 id="-2">}</h2>
+<p><strong>C：界面控制脚本</strong>//显隐，初始化，界面逻辑，数据更新时调用的事件<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 处理主界面业务逻辑<br>
+/// </summary><br>
+public class MainController : MonoBehaviour<br>
+{<br>
+//能够在Controller中获取View界面<br>
+private PlayerMainView mainView;</p>
+<pre><code>private static MainController contorller;
+
+public static MainController Controller
+{
+    get
+    {
+        return contorller;
+    }
+}
+//界面显示隐藏
+public static void ShowPanel()
+{
+    if(contorller==null)
+    {
+        GameObject res = Resources.Load&lt;GameObject&gt;(&quot;UI/MainPanel&quot;);
+        GameObject obj = Instantiate(res);
+        obj.transform.SetParent(GameObject.Find(&quot;Canvas&quot;).transform);
+        contorller = obj.GetComponent&lt;MainController&gt;();
+    }
+}
+public static void HeadPanel()
+{
+    contorller.gameObject.SetActive(false);
+}
+
+private void Start()
+{
+    //获取挂载同一物体上的View脚本
+    mainView = this.GetComponent&lt;PlayerMainView&gt;();
+    //第一次界面更新
+    mainView.UpdateInfo(PlayerMode.Date);
+
+    mainView.btnRole.onClick.AddListener(OnRoleBtnClick);
+
+    //数据更新时同时更新界面
+    PlayerMode.Date.AddEventLissent(UpdateInfo);
+}
+
+private void OnRoleBtnClick()
+{
+    RoleController.ShowPanel();
+}
+
+//界面事件监听，逻辑处理
+//界面更新
+private void UpdateInfo(PlayerMode date)
+{
+    if(mainView!=null)
+        mainView.UpdateInfo(date);
+}
+</code></pre>
+<p>}</p>
+<p>using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+/// <summary><br>
+/// 处理属性界面业务逻辑<br>
+/// </summary><br>
+public class RoleController : MonoBehaviour<br>
+{<br>
+//能够在Controller中获取View界面<br>
+private PlayerRoleView roleView;</p>
+<pre><code>private static RoleController contorller;
+
+public static RoleController Controller
+{
+    get
+    {
+        return contorller;
+    }
+}
+//界面显示隐藏
+public static void ShowPanel()
+{
+    if (contorller == null)
+    {
+        GameObject res = Resources.Load&lt;GameObject&gt;(&quot;UI/RolePanel&quot;);
+        GameObject obj = Instantiate(res);
+        obj.transform.SetParent(GameObject.Find(&quot;Canvas&quot;).transform);
+        contorller = obj.GetComponent&lt;RoleController&gt;();
+    }
+}
+public static void HeadPanel()
+{
+    contorller.gameObject.SetActive(false);
+}
+
+private void Start()
+{
+    //获取挂载同一物体上的View脚本
+    roleView = this.GetComponent&lt;PlayerRoleView&gt;();
+    //第一次界面更新
+    roleView.UpdateInfo(PlayerMode.Date);
+
+    roleView.btnBack.onClick.AddListener(OnClickBack);
+    roleView.btnLeveUp.onClick.AddListener(OnClickLeveUp);
+
+    //数据更新时同时更新界面
+    PlayerMode.Date.AddEventLissent(UpdataInfo);
+    //PlayerMode.Date.AddEventLissent(roleView.UpdateInfo);
+    //PlayerMode.Date.updateEvent += roleView.UpdateInfo;
+}
+private void OnClickBack()
+{
+    HeadPanel();
+}
+private void OnClickLeveUp()
+{
+    //通过事件模块，改变数据。
+    PlayerMode.Date.LeveUp();
+}
+
+//界面事件监听，逻辑处理
+//界面更新
+private void UpdataInfo(PlayerMode date)
+{
+    if(roleView!=null)
+        roleView.UpdateInfo(date);
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Particle System]]></title>
         <id>https://Wei715547.github.io/post/particle-system/</id>
@@ -1760,170 +2436,6 @@ p_arrayint - new int[10]//声明数组内存空间，不能分配时返回NULL<b
 delete[] p_arrayint;<br>
 分配到的内存系统不会自动回收，需要调用delete[] p_arrayint;来释放内存。<br>
 不释放则导致内存泄漏。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[洗牌算法，洪水填充算法，C#重置内置运算符]]></title>
-        <id>https://Wei715547.github.io/post/xi-pai-suan-fa/</id>
-        <link href="https://Wei715547.github.io/post/xi-pai-suan-fa/">
-        </link>
-        <updated>2020-10-12T02:57:36.000Z</updated>
-        <content type="html"><![CDATA[<p>public class Utilities<br>
-{<br>
-/// <summary><br>
-/// 洗牌算法，<br>
-/// </summary><br>
-/// <param name="dateArray">随机重排的数组</param><br>
-/// <returns></returns><br>
-public static Coord[] ShuffleCoords(Coord[] dateArray)<br>
-{<br>
-for (int i = 0; i &lt; dateArray.Length; i++)<br>
-{<br>
-//将每次随机到的元素放到首位，第二次随机从“队首+1~最后元素”开始随机，这样每次随机到的即不为同一元素<br>
-int random = Random.Range(i, dateArray.Length);<br>
-//SWAP<br>
-Coord temp = dateArray[random];<br>
-dateArray[random] = dateArray[i];<br>
-dateArray[i] = temp;<br>
-}<br>
-return dateArray;<br>
-}<br>
-}<br>
-//应用程序<br>
-<img src="https://Wei715547.github.io/post-images/1602493526529.PNG" alt="" loading="lazy"><br>
-shuffleCoords = new Queue<Coord>(Utilities.ShuffleCoords(allTilesCoord.ToArray()));<br>
-public Coord GetRandomCoord()<br>
-{<br>
-Coord randomCoord = shuffleCoords.Dequeue();<br>
-shuffleCoords.Enqueue(randomCoord);<br>
-return randomCoord;<br>
-}<br>
-——————————————————————————————————————————————————<br>
-/// <summary><br>
-/// 洪水填充算法<br>
-/// </summary><br>
-/// <param name="_mapObstacles">地图上的位置是否存在障碍物</param><br>
-/// <param name="_currentObsCount">应该时候能承担障碍物数量</param><br>
-/// <returns>是否可以在此处生成障碍物</returns><br>
-public bool MapIsFullyAccessible(bool[,] _mapObstacles, int _currentObsCount)<br>
-{<br>
-bool[,] mapFlag = new bool[_mapObstacles.GetLength(0), _mapObstacles.GetLength(1)];<br>
-Queue<Coord> queue = new Queue<Coord>();//存储所有筛选后的坐标<br>
-queue.Enqueue(mapCenter);<br>
-mapFlag[mapCenter.x, mapCenter.y] = true;//中心点标记为已检测<br>
-int accessibleCount = 1;//可以行走的格子数量<br>
-while(queue.Count&gt;0)<br>
-{<br>
-Coord currentTile = queue.Dequeue();<br>
-for (int x = -1; x &lt;=1; x++)<br>
-{<br>
-for (int y = -1; y &lt;=1; y++)<br>
-{<br>
-int neighborX = currentTile.x + x;<br>
-int neighborY = currentTile.y + y;</p>
-<pre><code>                if (x==0||y==0)//检测上下左右四个相邻的位置是否可行
-                {
-                    if(neighborX &gt;=0&amp;&amp;neighborX&lt;_mapObstacles.GetLength(0)
-                        &amp;&amp; neighborY&gt;=0&amp;&amp;neighborY&lt;_mapObstacles.GetLength(1))//范围限定在地图范围内
-                    {
-                        //该位置未检测，且不存在障碍物时
-                        if(!mapFlag[neighborX,neighborY]&amp;&amp;!_mapObstacles[neighborX,neighborY])
-                        {
-                            mapFlag[neighborX, neighborY] = true;
-                            accessibleCount++;
-                            queue.Enqueue(new Coord(neighborX, neighborY));
-                        }
-                    }
-                }
-            }
-        }
-    }
-    int walkableCount = (int)(mapSize.x * mapSize.y - _currentObsCount);//地图上应该可行走位置的数量
-    return accessibleCount == walkableCount;//联通路径总的可行走数量与目标值相同时则可依据_mapObstacles中位置生成障碍物
-}
-------------------------重置内置运算符“operator”--------------------------
-**C#支持的运算符重载**
-可重载的一元运算符 (overloadable unary operator) 有：
-</code></pre>
-<ul>
-<li>
-<ul>
-<li>!   ~   ++   --   true   false<br>
-可重载的二元运算符 (overloadable binary operator) 有：</li>
-</ul>
-</li>
-<li>
-<ul>
-<li>
-<ul>
-<li>/   %   &amp;   |   ^   &lt;&lt;   &gt;&gt;   ==   !=   &gt;   &lt;   &gt;=   &lt;=<br>
-struct Human<br>
-{<br>
-public int s1;<br>
-public int s2;<br>
-public Human(int a, int b)<br>
-{<br>
-s1 = a;<br>
-s2 = b;<br>
-}<br>
-public static Human operator + (Human a,Human b)<br>
-{<br>
-Human temp = new Human(a.s1 + b.s1, a.s2 + b.s2);<br>
-return temp;<br>
-}<br>
-public static Human operator - (Human a,Human b)<br>
-{<br>
-Human temp = new Human(a.s1 - b.s1, a.s2 - b.s2);<br>
-return temp;<br>
-}<br>
-public static bool operator == (Human a,Human b)<br>
-{<br>
-return a.s1 == b.s1 &amp;&amp; a.s2 == b.s2;<br>
-}<br>
-public static bool operator !=(Human a,Human b)<br>
-{<br>
-return !(a == b);<br>
-}<br>
-}<br>
-public struct Coord<br>
-{<br>
-public int x;<br>
-public int y;</li>
-</ul>
-</li>
-</ul>
-<p>public Coord(int _x, int _y)<br>
-{<br>
-this.x = _x;<br>
-this.y = _y;<br>
-}<br>
-//operator：重置内置运算符，C#要求成对重载比较运算符<br>
-public static bool operator !=(Coord _c1,Coord _c2)<br>
-{<br>
-return !(_c1 == _c2);<br>
-}<br>
-public static bool operator ==(Coord _c1,Coord _c2)<br>
-{<br>
-return (_c1.x == _c2.x &amp;&amp; _c1.y == _c2.y);<br>
-}<br>
-}</p>
-</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[DgR]]></title>
-        <id>https://Wei715547.github.io/post/dgr/</id>
-        <link href="https://Wei715547.github.io/post/dgr/">
-        </link>
-        <updated>2020-10-03T10:54:03.000Z</updated>
-        <content type="html"><![CDATA[<p>1.单一职责原则：类的职责要单一，不能将太多的职责放到一个类中。<br>
-2.开闭原则：软件实体对扩展时开放的，但对修改是关闭的，即在不修改一个软件实体的基础上去扩展器功能。<br>
-3.里转转换原则：在软件系统中一个可以接受基类对象的地方必然可以接受其子类对象（父类中装入子类）<br>
-4.依赖倒转原则：要针对抽象对象编程，而不是对具体类编程。<br>
-5.接口隔离原则：使用多个专门的接口 来取代一个统一的接口。<br>
-6.合成复用原则：在系统中应多使用组合聚合关系，尽量少使用或不使用继承关系。<br>
-7.迪米特法则：一个软件实体对其他实体的引用越少越好，或者说如果两个类不必彼此自黑通信，那么，两个类就不应当直接发生作用，而是通过引入中间体发生间接交互。</p>
 ]]></content>
     </entry>
 </feed>
