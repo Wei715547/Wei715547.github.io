@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-12-14T14:43:19.860Z</updated>
+    <updated>2020-12-17T10:19:43.990Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -648,7 +648,7 @@ v.assign(n,elem);<br>
 empty()//判断容易是否为空；<br>
 capacity()//容器容量<br>
 size()//容器中元素的个数<br>
-resize(int num)//重新制定容易的长度为num<br>
+resize(int num)//重新制定容器的长度为num<br>
 resize(int num elem)//重新定义容器长度，并默认以elem填充<br>
 插入/删除方法：<br>
 push_back(ele);//在尾部插入数据<br>
@@ -700,11 +700,228 @@ for (vector&lt;int&gt;::iterator it = v.begin(); it != v.end(); it++)
 //第三种 STL提供的遍历算法
 for_each (v.begin(), v.end(), MyPrint);
 </code></pre>
-<p>}<br>
+<h2 id="void-myprintint-varcout-var-endl">}<br>
 void MyPrint(int var)<br>
 {<br>
 cout &lt;&lt; var &lt;&lt; endl;<br>
-}</p>
+}</h2>
+<p><strong>C++链表List</strong><br>
+优点：可在任意位置插入大量元素，修改指针即可不需要移动大量元素；动态内存分配，不会造成内存浪费和溢出<br>
+缺点：空间(占用空间比较大)，时间(遍历速度慢)的额外消耗较大；插入和删除操作不会造成原来的迭代器失效，这在vector中是不成立的（数组装满后会开辟新的更大的空间拷贝源数据，但迭代器仍指向原地址）<br>
+//遍历方法<br>
+void MyList::printList(const list<int>&amp; L)<br>
+{<br>
+for (list<int>::const_iterator it = L.begin(); it!= L.end(); it++)<br>
+{<br>
+cout &lt;&lt; *it &lt;&lt; &quot; &quot;;<br>
+}<br>
+cout &lt;&lt; endl;<br>
+}<br>
+void MyList::List()<br>
+{<br>
+//创建Lis容器<br>
+list<int> Li; //默认构造</p>
+<pre><code>	//添加数据
+	Li.push_back(10);
+	Li.push_back(20);
+	Li.push_back(30);
+	Li.push_back(40);
+
+	//遍历容器
+	printList(Li);
+
+	//区间构造
+	list&lt;int&gt; L2(Li.begin(), Li.end());
+	printList(L2);
+
+	//拷贝构造
+	list&lt;int &gt; L3 (L2);
+	printList(L3);
+
+	//N个ELE构造
+	list&lt;int&gt; L4(10, 999);
+	printList(L4);
+
+    //**赋值 **=
+	list&lt;int&gt; L5;
+	L5 = L4;
+	//区间
+	list&lt;int&gt; L6;
+	L6.assign(L4.begin(), L4.end());
+	//n*Ele
+	list&lt;int&gt; L7;
+	L7.assign(5, 7);
+
+	//交换
+	printList(L6);
+	printList(L7);
+	L7.swap(L6);
+	printList(L6);
+	printList(L7);
+
+    //**list大小操作**
+	cout&lt;&lt;L7.size()&lt;&lt;endl;//返回容器元素个数
+	cout &lt;&lt; L7.empty()&lt;&lt;endl;//容器是否为空
+	L7.resize(7);//重新定义容器长度，多则0填充，少则从末尾删除
+	printList(L7);
+	L7.resize(10, 777);//重新定义容器长度，多则ele填充，少则从末尾删除
+	printList(L7);
+
+    //**插入/删除**
+	list&lt;int&gt; insDle(5,7);
+	//头插
+	insDle.push_front(3);
+	insDle.push_front(2);
+	insDle.push_front(1);
+	//尾插
+	insDle.push_back(7);
+	insDle.push_back(8);
+	insDle.push_back(9);
+	printList(insDle);
+	//尾删除
+	insDle.pop_back();
+	//头部删除
+	insDle.pop_front();
+	printList(insDle);
+
+	//insert插入
+	list&lt;int&gt;::iterator it = insDle.begin();
+	insDle.insert(++it, 23);
+	printList(insDle);
+	//删除
+	it = insDle.begin();
+	insDle.erase(it);
+	printList(insDle);
+	//移除所有同样的元素
+	insDle.remove(7);
+	printList(insDle);
+	//清空
+	insDle.clear();
+	printList(insDle);
+    //数据存取
+	L7.front();
+	L7.back();
+	list&lt;int&gt;::iterator Linklist_it = L7.begin();
+	Linklist_it++;//支持双向
+	Linklist_it--;//不支持--则为单相访问
+	//Linklist_it = Linklist_it + 1;//可以这样写着表示可以支持随机访问，链表不支持随机访问。
+
+	//链表反转/排序
+	printList(L7);
+	L7.reverse();
+	printList(L7);
+	//排序
+	list&lt;int&gt; ls;
+	ls.push_back(3);
+	ls.push_back(1);
+	ls.push_back(2);
+	//所有不支持随机访问到迭代器的容器，不支持标准算法
+	//容器内部会提供对应的一些算法
+	ls.sort();//默认升生序排序
+	//MyList l;
+	//ls.sort(l.MyCompare);
+	printList(ls);
+}
+}
+—————————————————————————————————————————
+ **哈希表/(键值对)**
+map/multimap：元素为pair键值对，底层容器由二叉树实现
+优点：根据key可以快速找到value
+map不允许有重复的key
+multimap允许有重复的key
+</code></pre>
+<p>class MyTable<br>
+{<br>
+public:<br>
+void MapText()<br>
+{<br>
+//默认构造<br>
+map&lt;int, string&gt; m1;//map会根据键的值进行默认的排序，与先后插入顺序无关<br>
+m1.insert(pair&lt;int, string&gt;(1, &quot;A&quot;));<br>
+m1.insert(pair&lt;int, string&gt;(3, &quot;C&quot;));<br>
+m1.insert(map&lt;int, string&gt;::value_type(2,&quot;B&quot;));<br>
+//m1.insert(pair&lt;int, string&gt;(3, &quot;C&quot;));<br>
+m1.insert(pair&lt;int, string&gt;(7, &quot;W&quot;));<br>
+printMap(m1);</p>
+<pre><code>		//拷贝构造
+		map&lt;int, string&gt;m2(m1);
+		printMap(m2);
+		//赋值
+		map&lt;int, string&gt; m3 = m2;
+		m3.erase(7);
+		m3.insert(pair&lt;int ,string&gt;(11, &quot;Z&quot;));
+		printMap(m3);
+
+		//大小和交换
+		cout &lt;&lt; m1.size()&lt;&lt;endl;
+		cout &lt;&lt; m1.empty()&lt;&lt;endl;
+
+		m2.swap(m3);
+		printMap(m2);
+		printMap(m3);
+
+		//插入/删除
+		map&lt;int, string&gt; m7;
+		m7.insert(pair&lt;int ,string&gt;(1, &quot;A&quot;));			
+		m7.insert(pair(2, &quot;B&quot;));
+		m7.insert(make_pair(3, &quot;C&quot;));
+		m7.insert(map&lt;int, string&gt;::value_type(7, &quot;W&quot;));
+		m7[5] = &quot;Z&quot;;//不存在Key时，会创建该键值为类型默认值，不建议使用，可以用来读取键中的值
+		printMap(m7);
+
+		//删除
+		m7.erase(m7.begin());
+		m7.erase(3);//按照key删除
+		//m7.erase(m7.begin(), m7.end());
+		//m7.clear();
+		m7.insert(pair(17, &quot;Z&quot;));
+		printMap(m7);
+
+		//查找,返回值为迭代器，未找到2时返回容器的end()
+		map&lt;int, string&gt;::iterator pos = m7.find(7);
+		if (pos != m7.end())
+			cout &lt;&lt; (*pos).first &lt;&lt;&quot; &quot;&lt;&lt;(*pos).second &lt;&lt; endl;
+		//统计,1/0，multimap允许键重复适用此方法
+		int n = m7.count(7);
+		cout &lt;&lt; n &lt;&lt; endl;
+	}
+	void printMap(map&lt;int, string&gt; m)
+	{
+		for (map&lt;int, string&gt;::iterator it = m.begin(); it != m.end(); it++)
+		{
+			cout &lt;&lt; &quot;KEY: &quot;&lt;&lt;(*it).first &lt;&lt;&quot; &quot;&lt;&lt; &quot;Value:&quot;&lt;&lt;(*it).second&lt;&lt;endl;
+		}
+		cout &lt;&lt; endl;
+	}
+};
+
+//改为降序排序的仿函数
+</code></pre>
+<p>class MyMapSort<br>
+{<br>
+public:<br>
+bool operator() (int a,int b)<br>
+{<br>
+//降序：第一个数大于第二个数<br>
+return a &gt; b;<br>
+}<br>
+};<br>
+void textmap()<br>
+{<br>
+map&lt;int, int,MyMapSort&gt; m;//默认按照键从小到大排序<br>
+m.insert(pair(1, 1));<br>
+m.insert(pair(3, 3));<br>
+m.insert(pair(2, 2));</p>
+<pre><code>//m.insert(pair(3, 3));
+m.insert(pair(4, 4));
+m.insert(pair(5, 5));
+
+for (map&lt;int,int, MyMapSort&gt;::iterator it = m.begin(); it!=m.end(); it++)
+{
+	cout &lt;&lt; &quot;key:&quot; &lt;&lt; (*it).first &lt;&lt; &quot; &quot; &lt;&lt; (*it).second &lt;&lt; endl;
+}
+</code></pre>
+<p>}</p>
 ]]></content>
     </entry>
     <entry>
