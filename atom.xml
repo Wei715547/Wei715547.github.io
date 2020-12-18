@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-12-17T10:19:43.990Z</updated>
+    <updated>2020-12-18T09:29:35.718Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -823,14 +823,43 @@ list<int> Li; //默认构造</p>
 	printList(ls);
 }
 }
-—————————————————————————————————————————
- **哈希表/(键值对)**
-map/multimap：元素为pair键值对，底层容器由二叉树实现
-优点：根据key可以快速找到value
-map不允许有重复的key
-multimap允许有重复的key
+例：两数之和LC
+list&lt;int&gt; TowAddList(list&lt;int&gt;* l1, list&lt;int&gt;* l2)
 </code></pre>
-<p>class MyTable<br>
+<p>{<br>
+list<int> res;<br>
+list<int>::iterator pos1 = l1-&gt;begin();<br>
+list<int>::iterator pos2 = l2-&gt;begin();<br>
+int digit = 0;<br>
+while (pos1!=l1-&gt;end()||pos2!=l2-&gt;end())<br>
+{<br>
+int total = digit;<br>
+if (pos1 != l1-&gt;end())<br>
+{<br>
+total += *pos1;<br>
+pos1++;<br>
+}<br>
+if (pos2 != l2-&gt;end())<br>
+{<br>
+total += *pos2;<br>
+pos2++;<br>
+}<br>
+digit = total / 10;<br>
+res.push_back(total % 10);<br>
+}<br>
+if (digit != 0)<br>
+{<br>
+res.push_back(digit);<br>
+}<br>
+return res;<br>
+}<br>
+—————————————————————————————————————————<br>
+<strong>哈希表/(键值对)</strong><br>
+map/multimap：元素为pair键值对，底层容器由二叉树实现<br>
+优点：根据key可以快速找到value<br>
+map不允许有重复的key<br>
+multimap允许有重复的key<br>
+class MyTable<br>
 {<br>
 public:<br>
 void MapText()<br>

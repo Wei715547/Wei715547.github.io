@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1608199628752">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1608277313566">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -35,7 +35,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1608199628752" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1608277313566" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -418,14 +418,43 @@ list<int> Li; //默认构造</p>
 	printList(ls);
 }
 }
-—————————————————————————————————————————
- **哈希表/(键值对)**
-map/multimap：元素为pair键值对，底层容器由二叉树实现
-优点：根据key可以快速找到value
-map不允许有重复的key
-multimap允许有重复的key
+例：两数之和LC
+list&lt;int&gt; TowAddList(list&lt;int&gt;* l1, list&lt;int&gt;* l2)
 </code></pre>
-<p>class MyTable<br>
+<p>{<br>
+list<int> res;<br>
+list<int>::iterator pos1 = l1-&gt;begin();<br>
+list<int>::iterator pos2 = l2-&gt;begin();<br>
+int digit = 0;<br>
+while (pos1!=l1-&gt;end()||pos2!=l2-&gt;end())<br>
+{<br>
+int total = digit;<br>
+if (pos1 != l1-&gt;end())<br>
+{<br>
+total += *pos1;<br>
+pos1++;<br>
+}<br>
+if (pos2 != l2-&gt;end())<br>
+{<br>
+total += *pos2;<br>
+pos2++;<br>
+}<br>
+digit = total / 10;<br>
+res.push_back(total % 10);<br>
+}<br>
+if (digit != 0)<br>
+{<br>
+res.push_back(digit);<br>
+}<br>
+return res;<br>
+}<br>
+—————————————————————————————————————————<br>
+<strong>哈希表/(键值对)</strong><br>
+map/multimap：元素为pair键值对，底层容器由二叉树实现<br>
+优点：根据key可以快速找到value<br>
+map不允许有重复的key<br>
+multimap允许有重复的key<br>
+class MyTable<br>
 {<br>
 public:<br>
 void MapText()<br>
