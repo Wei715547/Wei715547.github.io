@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1608277313566">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1608552995751">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -18,18 +18,10 @@
 
 
 
-    <meta name="description" content="声明：
-class 类名
-{
-public:
-外部调用方法
-属性get,set;
-private:
-属性
-}
-//在类外部定义“类中声明的方法”（必须加以“::”作为域限定符，用于声明函数属于哪个类）
-函数返回值  类名::函数名（参数）
-..." />
+    <meta name="description" content="int a[3] = { 0,1,2 };//数组
+char cl[3];//类C字符串逐个位赋值，cl = &quot;zla&quot;不合法--C++提供字符串类&quot;string&quot;
+cl[0] = 'z';
+cl[1..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -39,7 +31,7 @@ private:
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1608277313566" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1608552995751" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -118,7 +110,25 @@ private:
             <div class="post-date">2020-11-03</div>
             
             <div class="post-content" v-pre>
-              <p>声明：<br>
+              <p>int a[3] = { 0,1,2 };//数组<br>
+char cl[3];//类C字符串逐个位赋值，cl = &quot;zla&quot;不合法--C++提供字符串类&quot;string&quot;<br>
+cl[0] = 'z';<br>
+cl[1] = 'l';<br>
+cl[2] = 'a';<br>
+//cin &gt;&gt; cl;<br>
+for (int i = 0; i &lt; 3; i++)<br>
+{<br>
+cout &lt;&lt; cl[i]&lt;&lt; endl;<br>
+}<br>
+struct Person<br>
+{<br>
+string name;<br>
+int age;<br>
+char sex;<br>
+float height;<br>
+};<br>
+Person p1 = { &quot;Wei&quot;,27,'W',175};<br>
+声明：<br>
 class 类名<br>
 {<br>
 public:<br>

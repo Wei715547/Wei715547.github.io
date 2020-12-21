@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2020-12-18T09:29:35.718Z</updated>
+    <updated>2020-12-21T12:23:48.770Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -1857,7 +1857,25 @@ private GameObject ClickScene()
         <link href="https://Wei715547.github.io/post/cclass/">
         </link>
         <updated>2020-11-03T12:37:47.000Z</updated>
-        <content type="html"><![CDATA[<p>声明：<br>
+        <content type="html"><![CDATA[<p>int a[3] = { 0,1,2 };//数组<br>
+char cl[3];//类C字符串逐个位赋值，cl = &quot;zla&quot;不合法--C++提供字符串类&quot;string&quot;<br>
+cl[0] = 'z';<br>
+cl[1] = 'l';<br>
+cl[2] = 'a';<br>
+//cin &gt;&gt; cl;<br>
+for (int i = 0; i &lt; 3; i++)<br>
+{<br>
+cout &lt;&lt; cl[i]&lt;&lt; endl;<br>
+}<br>
+struct Person<br>
+{<br>
+string name;<br>
+int age;<br>
+char sex;<br>
+float height;<br>
+};<br>
+Person p1 = { &quot;Wei&quot;,27,'W',175};<br>
+声明：<br>
 class 类名<br>
 {<br>
 public:<br>
