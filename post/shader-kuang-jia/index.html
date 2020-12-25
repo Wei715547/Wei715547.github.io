@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1608881995710">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1608895014287">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -31,7 +31,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1608881995710" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1608895014287" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -151,8 +151,26 @@ Shader "Custom/FW"
 	}
 		SubShader//子着色器可以写多个
 	{
-<pre><code>	Pass//着色器具体绘制方式，同样可以有多个，（尽量写在一个中只提交一次）
+        Tage//Sub块标签：键值都为字符型的键值对，控制渲染引擎如何/何时渲染该对象
+        {
+                //标签类型
+                "Queue" = "AlphaTest"//渲染队列，可控制透明物体在所有不透明物体后面渲染
+                "RanderType" = "Opaque"//着色器分类，不透明/透明。
+                "DisableBatching" = "True"//如顶点动画，是否使用批量处理
+                "ForceNoShadowCasting" = "True"//控制该SubShader物体是否投射阴影
+                "IgnoreProjecttor" = "Flase"//控制该SubShader物体是否受到工程影响，True常用用于半透明物体
+                "CanUseSprite Atlas" = "False"//该SubShader用于精灵(Sprites)时,将该标签射为“Fales”
+                "PreviewType" = "Plane"//设置材质面板以何种形式预览该材质，默认为球体，可设置为“Plane”,"Skybox"等
+<pre><code>    }
+
+	Pass//着色器具体绘制方式，同样可以有多个，（尽量写在一个中只提交一次）
 	{
+        Tags
+        {
+                //设置为前项渲染
+                &quot;LightMode&quot; = &quot;ForwardBase&quot;//定义该Pass在Unity的渲染流水线中的角色，
+                &quot;RequireOptions&quot; = &quot;SoflVegetation&quot;//指定满足某些条件时渲染该Pass
+        }
 		CGPROGRAM//CG语言代码
 		//在CG语言中国对公开的属性进行声明
 		fixed4 _Color//颜色0~1可用fixed存储
