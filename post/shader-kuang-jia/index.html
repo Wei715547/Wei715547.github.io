@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1608552995751">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1608881995710">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -20,13 +20,8 @@
 
     <meta name="description" content="渲染管线流程图：
 
-
-Shader "Custom/FW"
-{
-	Properties//公开属性
-	{
-		//_MainTex ("Texture", 2D) = "white" {}
-		_Colorcosm("_Colorc",Co..." />
+1.应用程序阶段
+包括输入装配阶段/顶点信息阶段，以及上传对应纹理信息、编译着色器指令和设置相关变量（光源位置、光线种类、摄像机视椎体、模型信息，顶点位置，法线）等。广义的还包括视椎体裁剪、控制器输入、碰撞检测等。(将视..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -36,7 +31,7 @@ Shader "Custom/FW"
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1608552995751" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1608881995710" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -117,6 +112,28 @@ Shader "Custom/FW"
             <div class="post-content" v-pre>
               <p>渲染管线流程图：<br>
 <img src="https://Wei715547.github.io/post-images/1597916253014.jpg" alt="" loading="lazy"></p>
+<p><strong>1.应用程序阶段</strong><br>
+包括输入装配阶段/顶点信息阶段，以及上传对应纹理信息、编译着色器指令和设置相关变量（光源位置、光线种类、摄像机视椎体、模型信息，顶点位置，法线）等。广义的还包括视椎体裁剪、控制器输入、碰撞检测等。(将视椎体外的物体剔除，引擎自动完成，也有相关API提供，或与遮挡剔除共用)。<br>
+<strong>2.几何阶段</strong><br>
+具体包括：坐标变换-&gt;顶点着色-&gt;投影变换-&gt;裁剪-&gt;屏幕映射<br>
+将模型坐标映射到屏幕坐标(裁剪空间)生成新的图元，备后续完成图像渲染。<br>
+期间需要变换到一个合适的坐标系，进行相应的渲染操作，如世界空间下计算顶点法线与光线的相互作用更方便。<br>
+<strong>3.光栅化阶段</strong><br>
+将集合阶段传来的图元光栅化，将它们转化为片元。即转变为一个个像素点用于在屏幕上显示。<br>
+逐像素调用片原着色器，涉及一些剔除，隐藏面消除在这里执行。<br>
+<strong>渲染流水线执行阶段</strong><br>
+1.输入装配阶段：负责从CPU获取图元基本信息，组合成流水线需要的几何信息。<br>
+渲染批次：<br>
+<img src="https://Wei715547.github.io/post-images/1608879579819.PNG" alt="" loading="lazy"></p>
+<p>2.顶点着色器：负责处理输入装配阶段传入的数据，主要进行坐标变换，(返回值)将顶点从模型空间转变到裁剪空间，法线转到世界空间，对后续计算需要用到的结构体中的数据进行赋值。或者对顶点做出一些变化。</p>
+<p>3.细化阶段(可选)；移动平台很少支持</p>
+<p>4.几何着色器(可选)：可处理不同的图元点，线，三角面，并可处理它们的相邻点。适合以下算法：<br>
+点精灵扩展，动态粒子系统，毛皮/晶粒生成，阴影体生成，从单通道渲染到立方体贴图，以图元为单位的材质替换与设置。<br>
+即可以实现调整图元，创造图元和删除图元，控制图元之间的关系。</p>
+<p>5.流输出阶段：将顶点数据输出到内存或显存中，供输入装配阶段，可编程的着色器阶段使用加载功能读取。U3D中较少使用，通常直接交给光栅化阶段处理，一种应用场景为基于GPU的骨骼蒙皮计算。</p>
+<p>6.片元着色器：进行光照处理效果表现，每个像素都会执行应尽量减少其中的计算量避免三角函数，开放等计算。</p>
+<p>7.输出合并阶段：颜色缓存，深度缓存，多重采用缓存和模板缓存的信息进行加工处理，以决定最终输出像素是什么。(垂直同步可限制显卡刷新一帧的速度)</p>
+<p>延迟渲染/前向渲染/批次合并渲染</p>
 <code>
 Shader "Custom/FW"
 {
