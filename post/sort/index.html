@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609573945384">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609583177725">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@ int iValue = dateArray..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1609573945384" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1609583177725" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -144,9 +144,9 @@ dateArray[0] = iValue;<br>
 <pre><code>    冒泡排序
     static void BubbleSort(int[] dateArray)
     {
-        for (int i = 0; i &lt; dateArray .Length-1 ; i++)//总循环次数
+        for (int i = dateArray.Length-1; i &gt; 0 ; i--)//总循环次数(n-1)
         {
-            for (int j = 0; j &lt; dateArray.Length-1-i; j++)//循环n次后后n个数已经最大不需在进入比较
+            for (int j = 0; j &lt; i; j++)//循环n次后后n个数已经最大不需在进入比较
             {
                 if (dateArray [j]&gt;dateArray [j+1])
                 {
@@ -157,6 +157,25 @@ dateArray[0] = iValue;<br>
             }
         }
     }
+    static void BubbleSort2(int[] sortArray)
+    {
+        bool isChang = true;
+        do
+        {
+            isChang = false;
+            for (int i = 0; i &lt; sortArray.Length - 1; i++)
+            {
+                if (sortArray[i] &gt; sortArray[i + 1])
+                {
+                    int temp = sortArray[i];
+                    sortArray[i] = sortArray[i + 1];
+                    sortArray[i + 1] = temp;
+                    isChang = true;
+                }
+            }
+            //isChange仍为false,则说明相邻前面的数都比后面的数小不需要排序，退出循环
+        } while (isChang);
+    }
 </code></pre>
 <p><img src="https://Wei715547.github.io/post-images/1593315435960.jpg" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1593315539844.jpg" alt="" loading="lazy"><br>
@@ -165,7 +184,6 @@ static void SelectSort(int[] dateArray)<br>
 {<br>
 for (int i = 0; i &lt; dateArray .Length-1 ; i++)<br>
 {<br>
-int mindate = dateArray[i];<br>
 int minIndex = i;<br>
 for (int j = i+1; j &lt; dateArray.Length ; j++)<br>
 {<br>
@@ -266,6 +284,35 @@ while (h&gt;0)<br>
             QuickSort(dateArray, left, i - 1);
             QuickSort(dateArray, i + 1, right);
         }
+    }
+    //递归快排
+    static void Qsort(int[] array,int left,int right)
+    {
+        if(left&lt;right)
+        {
+            int i = left;
+            int j = right + 1;
+            int provt = array[i];
+            do
+            {
+                do i++; while (array[i] &lt; provt &amp;&amp; i &lt; array.Length-1);//从左往右找比基准值大的
+                do j--; while (array[j] &gt; provt &amp;&amp; j &gt;= 0);//从右往左找比基准值小的
+                if(i&lt;j)//左右未交错，即交换
+                {
+                    Swap(ref array[i], ref array[j]);
+                }
+            } while (i&lt;j);//左右未交错继续寻找，交错则退出循环
+            Swap(ref array[left], ref array[j]);//退出循环时j仍是比基准值小的数，i仍是比基准值大的数，可将基准值与j位置值交换。之后左右递归调用快排
+            Qsort(array, left, j - 1);
+            Qsort(array, j + 1, right);
+        }
+    }
+
+    static void Swap(ref int a,ref int b)
+    {
+        int temp = a;
+        a = b;
+        b = temp;
     }</code></pre>
 
             </div>
