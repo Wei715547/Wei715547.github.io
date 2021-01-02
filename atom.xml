@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-02T04:47:59.964Z</updated>
+    <updated>2021-01-02T04:59:35.533Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -21,6 +21,7 @@
 <strong>服务端</strong><br>
 <img src="https://Wei715547.github.io/post-images/1609562480036.png" alt="" loading="lazy"><br>
 <strong>Server代码</strong><br>
+<code><br>
 using System;<br>
 using System.Collections.Generic;<br>
 using System.Net.Sockets;<br>
@@ -173,7 +174,9 @@ StartAccept();//开支接收客户端连接<br>
 }
 </code></pre>
 <p>}<br>
+</code><br>
 <strong>ControllerManager代码</strong><br>
+<code><br>
 using System;<br>
 using System.Collections.Generic;<br>
 using System.Reflection;<br>
@@ -228,7 +231,9 @@ controlDict.Add(roomController.GetRequestCode, roomController);<br>
 }
 </code></pre>
 <p>}<br>
+</code><br>
 <strong>Client代码</strong><br>
+<code><br>
 using System;<br>
 using System.Collections.Generic;<br>
 using System.Net.Sockets;<br>
@@ -325,7 +330,9 @@ socket.BeginReceive(message.Buffer,message.StartIndex,message.Remsize,SocketFlag
 }
 </code></pre>
 <p>}<br>
+</code><br>
 <strong>Message处理类代码</strong><br>
+<code><br>
 using System;<br>
 using System.Collections.Generic;<br>
 using System.Linq;<br>
@@ -405,7 +412,9 @@ return buffer;<br>
 }
 </code></pre>
 <p>}<br>
+</code><br>
 <strong>MainPack，build之前代码(生成GameSocketServerProtocol.cs引入服务端/客户端使用)</strong><br>
+<code><br>
 syntax = &quot;proto3&quot;;<br>
 package GameSocketServerProtocol;<br>
 //客户端请求类型枚举<br>
@@ -489,7 +498,8 @@ message PlayerPack<br>
 {<br>
 //玩家名称<br>
 string playername = 1;<br>
-}</p>
+}<br>
+</code></p>
 ]]></content>
     </entry>
     <entry>

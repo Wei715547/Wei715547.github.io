@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609562864142">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609563360500">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -22,10 +22,11 @@
 服务端
 
 Server代码
+
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Tex..." />
+using System.Te..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -35,7 +36,7 @@ using System.Tex..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1609562864142" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1609563360500" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -118,6 +119,7 @@ using System.Tex..." />
 <strong>服务端</strong><br>
 <img src="https://Wei715547.github.io/post-images/1609562480036.png" alt="" loading="lazy"><br>
 <strong>Server代码</strong><br>
+<code><br>
 using System;<br>
 using System.Collections.Generic;<br>
 using System.Net.Sockets;<br>
@@ -270,7 +272,9 @@ StartAccept();//开支接收客户端连接<br>
 }
 </code></pre>
 <p>}<br>
+</code><br>
 <strong>ControllerManager代码</strong><br>
+<code><br>
 using System;<br>
 using System.Collections.Generic;<br>
 using System.Reflection;<br>
@@ -325,7 +329,9 @@ controlDict.Add(roomController.GetRequestCode, roomController);<br>
 }
 </code></pre>
 <p>}<br>
+</code><br>
 <strong>Client代码</strong><br>
+<code><br>
 using System;<br>
 using System.Collections.Generic;<br>
 using System.Net.Sockets;<br>
@@ -422,7 +428,9 @@ socket.BeginReceive(message.Buffer,message.StartIndex,message.Remsize,SocketFlag
 }
 </code></pre>
 <p>}<br>
+</code><br>
 <strong>Message处理类代码</strong><br>
+<code><br>
 using System;<br>
 using System.Collections.Generic;<br>
 using System.Linq;<br>
@@ -502,7 +510,9 @@ return buffer;<br>
 }
 </code></pre>
 <p>}<br>
+</code><br>
 <strong>MainPack，build之前代码(生成GameSocketServerProtocol.cs引入服务端/客户端使用)</strong><br>
+<code><br>
 syntax = &quot;proto3&quot;;<br>
 package GameSocketServerProtocol;<br>
 //客户端请求类型枚举<br>
@@ -586,7 +596,8 @@ message PlayerPack<br>
 {<br>
 //玩家名称<br>
 string playername = 1;<br>
-}</p>
+}<br>
+</code></p>
 
             </div>
             
