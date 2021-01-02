@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-02T04:59:35.533Z</updated>
+    <updated>2021-01-02T07:53:07.790Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -499,7 +499,234 @@ message PlayerPack<br>
 //玩家名称<br>
 string playername = 1;<br>
 }<br>
-</code></p>
+</code><br>
+<strong>————————————————————————————————————————</strong><br>
+<img src="https://Wei715547.github.io/post-images/1609573638953.png" alt="" loading="lazy"><br>
+<strong>客户端代码</strong><br>
+<strong>GameFace</strong><br>
+using GameSocketServerProtocol;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class GameFace : MonoBehaviour<br>
+{<br>
+private ClientManeger clientManeger;<br>
+private RequestManager requestManager;<br>
+private UIManager uiManager;</p>
+<pre><code>private static GameFace face;
+
+public static GameFace Face
+{
+    get
+    {
+        if (face == null)
+            face = GameObject.Find(&quot;GameFace&quot;).GetComponent&lt;GameFace&gt;();
+        return face;
+    }
+}
+// Start is called before the first frame update
+void Start()
+{
+    //face = this;
+    uiManager = new UIManager(this);
+    clientManeger = new ClientManeger(this);
+    requestManager = new RequestManager(this);
+    uiManager.OnInit();
+    clientManeger.OnInit();
+    requestManager.OnInit();
+}
+private void OnDestroy()
+{
+    clientManeger.OnDestory();
+    requestManager.OnDestory();
+    uiManager.OnDestory();
+}
+public void Send(MainPack pack)
+{
+    clientManeger.Send(pack);
+}
+public void HandleResoonse(MainPack pack)
+{
+    //处理
+    Debug.Log(&quot;服务器返回&quot;+pack.Returncode.ToString());
+    requestManager.HandleResponse(pack);
+}
+public void AddRequest(BaseRequest request)
+{
+    requestManager.AddRequest(request);
+}
+public void RemoveReqest(ActionCode action)
+{
+    requestManager.RemoveRequest(action);
+}
+
+public void ShowMessage(string message,bool sync=false)
+{
+    uiManager.ShowMessage(message,sync);
+}
+</code></pre>
+<p>}<br>
+<strong>BaseRequest基类</strong><br>
+using GameSocketServerProtocol;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class BaseRequest : MonoBehaviour<br>
+{<br>
+protected RequestCode requestCode;<br>
+protected ActionCode actionCode;<br>
+protected GameFace face;<br>
+public ActionCode GetActionCode<br>
+{<br>
+get { return actionCode; }<br>
+}<br>
+public virtual void Awake()<br>
+{<br>
+face = GameFace.Face;<br>
+}<br>
+public virtual void Start()<br>
+{<br>
+face.AddRequest(this);<br>
+Debug.Log(actionCode.ToString());<br>
+}<br>
+public virtual void OnDesttroy()<br>
+{<br>
+face.RemoveReqest(actionCode);<br>
+}</p>
+<pre><code>public virtual void OnResponse(MainPack pack)
+{
+
+}
+public virtual void SendRequest(MainPack pack)
+{
+    face.Send(pack);
+}
+</code></pre>
+<p>}<br>
+<strong>ClientManager</strong><br>
+using GameSocketServerProtocol;<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using System.Net.Sockets;<br>
+using UnityEngine;</p>
+<p>public class ClientManeger : BaseManager<br>
+{<br>
+private Socket socket;<br>
+private Message message;<br>
+public ClientManeger(GameFace face) : base(face)<br>
+{</p>
+<pre><code>}
+
+public override void OnInit()
+{
+    base.OnInit();
+    message = new Message();
+    InitSocket();
+}
+public override void OnDestory()
+{
+    base.OnDestory();
+    message = null;
+    CloseSocket();
+}/// &lt;summary&gt;
+/// 初始化Socket
+/// &lt;/summary&gt;
+private void InitSocket()
+{
+    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    try
+    {
+        socket.Connect(&quot;127.0.0.1&quot;, 6666);
+        //连接成功
+        face.ShowMessage(&quot;连接成功&quot;);
+        StartReceive();
+    }
+    catch(Exception e)
+    {
+        Debug.LogWarning(e);
+        //连接错误
+        face.ShowMessage(&quot;连接失败&quot;);
+    }
+}
+/// &lt;summary&gt;
+/// 关闭Socket
+/// &lt;/summary&gt;
+private void CloseSocket()
+{
+    if(socket.Connected&amp;&amp;socket!=null)
+    {
+        socket.Close();
+    }
+}
+private void StartReceive()
+{
+    socket.BeginReceive(message.Buffer, message.StartIndex, message.Remsize, SocketFlags.None, RecelveClientBack,null);
+
+}
+
+private void RecelveClientBack(IAsyncResult iar)
+{
+    try
+    {
+        if (socket == null || socket.Connected == false) return;
+        int len = socket.EndReceive(iar);
+        if(len==0)
+        {
+            CloseSocket();
+            return;
+        }
+        message.ReadBuffer(len,HandleResoonse);
+        StartReceive();
+    }catch(Exception e)
+    {
+        Debug.Log(e.Message);
+    }
+}
+private void HandleResoonse(MainPack pack)
+{
+    face.HandleResoonse(pack);
+}
+
+public void Send(MainPack pack)
+{
+    socket.Send(Message.PackDate(pack));
+}
+</code></pre>
+<p>}<br>
+<strong>RequestManager</strong><br>
+using GameSocketServerProtocol;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>public class RequestManager : BaseManager<br>
+{<br>
+public RequestManager(GameFace face):base(face) { }</p>
+<pre><code>private Dictionary&lt;ActionCode, BaseRequest&gt; requestDict = new Dictionary&lt;ActionCode, BaseRequest&gt;();
+
+public void AddRequest(BaseRequest request)
+{
+    requestDict.Add(request.GetActionCode, request);
+    Debug.Log(&quot;新请求：&quot; + request.GetActionCode.ToString());
+}
+public void RemoveRequest(ActionCode action)
+{
+    requestDict.Remove(action);
+}
+public void HandleResponse(MainPack pack)
+{
+    if (requestDict.TryGetValue(pack.Actioncode, out BaseRequest request))
+    {
+        //基类回应请求方法，已在子类中重写
+        request.OnResponse(pack);
+    }else
+    {
+        Debug.Log(&quot;未找到对应处理&quot;);
+    }
+    
+}
+</code></pre>
+<p>}</p>
 ]]></content>
     </entry>
     <entry>
