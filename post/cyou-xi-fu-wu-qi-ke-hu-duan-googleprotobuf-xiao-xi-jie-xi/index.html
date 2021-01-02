@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>C#游戏服务器/客户端/Google.Protobuf消息解析 | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609562864142">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="基本客户端请求，服务端反馈实现
+服务端
+
+Server代码
+using System;
+using System.Collections.Generic;
+using System.Net.Sockets;
+using System.Tex..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1609562864142" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">C#游戏服务器/客户端/Google.Protobuf消息解析</h2>
+            <div class="post-date">2021-01-02</div>
+            
+            <div class="post-content" v-pre>
+              <p>基本客户端请求，服务端反馈实现<br>
+<strong>服务端</strong><br>
+<img src="https://Wei715547.github.io/post-images/1609562480036.png" alt="" loading="lazy"><br>
+<strong>Server代码</strong><br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Net.Sockets;<br>
+using System.Text;<br>
+using System.Net;<br>
+using Game_Socket_Server.Controller;<br>
+using GameSocketServerProtocol;<br>
+namespace Game_Socket_Server<br>
+{/// <summary><br>
+/// 服务器类<br>
+/// </summary><br>
+class Server<br>
+{<br>
+private Socket socket;<br>
+//客户端列表<br>
+private List<Client> clientList = new List<Client>();<br>
+//所有房间<br>
+private List<Room> roomList = new List<Room>();<br>
+//控制类管理器<br>
+private ControllerManager controllerManager;<br>
+/// <summary><br>
+/// 服务端构造<br>
+/// </summary><br>
+/// <param name="prot">传入端口号</param><br>
+public Server(int prot)<br>
+{<br>
+controllerManager = new ControllerManager(this);<br>
+socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);<br>
+socket.Bind(new IPEndPoint(IPAddress.Any, prot));//绑定端口<br>
+socket.Listen(10);//监听队列长度<br>
+StartAccept();//开支接收客户端连接<br>
+}</p>
+<pre><code>    void StartAccept()
+    {
+        //开始异步接收客户端Socket
+        socket.BeginAccept(AcceptCallBack,null);
+    }
+    void AcceptCallBack(IAsyncResult iar)
+    {
+        Socket client = socket.EndAccept(iar);//返回异步操作结果中接收到连入的客户端Socket
+        clientList.Add(new Client(client,this));//加入客户端List
+        StartAccept();//继续异步监听
+    }
+    /// &lt;summary&gt;
+    /// 处理客户端发来的请求
+    /// &lt;/summary&gt;  
+    /// &lt;param name=&quot;pack&quot;&gt;包&lt;/param&gt;
+    /// &lt;param name=&quot;client&quot;&gt;客户端&lt;/param&gt;
+    public void HandleRequest(MainPack pack,Client client)
+    {
+        //通过controllerManager找到对应的，请求控制类
+        controllerManager.HandleRequest(pack, client);
+    }
+
+    public MainPack CreateRoom(Client client,MainPack pack)
+    {
+        try
+        {
+            Room room = new Room(client, pack.Roompack[0]);
+            roomList.Add(room);
+            foreach (PlayerPack p in room.GetPlayerInfo())
+            {
+                pack.Playerpack.Add(p);
+            }
+            pack.Returncode = ReturnCode.Succeed;
+            return pack;
+        }catch
+        {
+            pack.Returncode = ReturnCode.Fall;
+            return pack;
+        }            
+    }
+    public MainPack FindRoom()
+    {
+        MainPack pack = new MainPack();
+        pack.Actioncode = ActionCode.FindRoom;
+        try
+        {
+            if(roomList.Count==0)
+            {
+                pack.Returncode = ReturnCode.NotRoom;
+                return pack;
+            }
+            foreach (Room room in roomList)
+            {
+                pack.Roompack.Add(room.GetRoomInfo);
+            }
+            pack.Returncode = ReturnCode.Succeed;
+        }catch
+        {
+            pack.Returncode = ReturnCode.Fall;
+        }
+        return pack;
+    }
+
+    public MainPack JoinRoom(Client client,MainPack pack)
+    {
+        foreach (Room r in roomList)
+        {
+            //客户端加入str房间
+            if(r.GetRoomInfo.Roomname.Equals(pack.Str))
+            {
+                if(r.GetRoomInfo.State==0)
+                {
+                    //房间可加入
+                    r.Join(client);
+                    pack.Roompack.Add(r.GetRoomInfo);
+                    foreach (PlayerPack p in r.GetPlayerInfo())
+                    {
+                        pack.Playerpack.Add(p);
+                    }
+                    pack.Returncode = ReturnCode.Succeed;
+                    return pack;
+                }else
+                {
+                    //房间不可加入
+                    pack.Returncode = ReturnCode.Fall;
+                    return pack;
+                }
+            }
+        }
+        //当前无房间可加入
+        pack.Returncode = ReturnCode.NotRoom;
+        return pack;
+    }
+    public MainPack Exit(Client client,MainPack pack)
+    {
+        if(client.GetRoom==null)
+        {
+            pack.Returncode = ReturnCode.Fall;
+            return pack;
+        }
+        client.GetRoom.Exit(this, client);
+        pack.Returncode = ReturnCode.Succeed;
+        return pack;
+    }
+    public void Chat(Client client,MainPack pack)
+    {
+        pack.Str = client.UserName+&quot;：&quot;+ pack.Str;
+        client.GetRoom.Broadcast(client, pack);
+    }
+    public void RemoveClient(Client client)
+    {
+        clientList.Remove(client);
+    }
+    public void RemoveRoom(Room room)
+    {
+        roomList.Remove(room);
+    }
+}
+</code></pre>
+<p>}<br>
+<strong>ControllerManager代码</strong><br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Reflection;<br>
+using System.Text;<br>
+using GameSocketServerProtocol;</p>
+<p>namespace Game_Socket_Server.Controller<br>
+{<br>
+class ControllerManager<br>
+{<br>
+private Dictionary&lt;RequestCode, BaseController&gt; controlDict = new Dictionary&lt;RequestCode, BaseController&gt;();<br>
+private Server server;<br>
+public ControllerManager(Server server)<br>
+{<br>
+this.server = server;<br>
+UserController userController = new UserController();<br>
+controlDict.Add(userController.GetRequestCode, userController);<br>
+RoomController roomController = new RoomController();<br>
+controlDict.Add(roomController.GetRequestCode, roomController);<br>
+}</p>
+<pre><code>    public void HandleRequest(MainPack pack,Client client)
+    {
+        //根据Requestcode请求类型获取对应的请求类型控制器，如User-UserController
+        if (controlDict.TryGetValue(pack.Requestcode,out BaseController controller))
+        {
+            string mothooname = pack.Actioncode.ToString();//解析具体请求类型中的方法如：User中的Logon
+            //通过反射特性获取，处理该请求类型控制器中的方法，如UserController中的Logon
+            MethodInfo method = controller.GetType().GetMethod(mothooname);
+            if(method == null)
+            {
+                Console.WriteLine(&quot;没有找到对应的事件处理方法&quot;);
+                return;
+            }
+            //方法不为空，存在处理方法
+            Console.WriteLine(&quot;客户端&quot;+mothooname+&quot;请求&quot;);
+
+            //方法的统一参数，(服务器Socket，客户端Socket，数据包MainPack)
+            object[] obj = new object[] {server,client,pack};
+            //方法处理后返回的数据包
+            object ret = method.Invoke(controller, obj);//通过反射调用请求控制器中处理该请求的方法，返回处理后的的包
+            
+            if(ret != null)//请求处理返回的数据包不为空（需要给客户端反馈时）
+            {
+                client.Send(ret as MainPack);//将处理结果发给客户端
+            }
+            //ret为空时即服务器对此请求不需要回复
+
+        }else
+        {
+            Console.WriteLine(&quot;没有找到对应的Ccontroller处理&quot;);
+        }
+    }
+}
+</code></pre>
+<p>}<br>
+<strong>Client代码</strong><br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Net.Sockets;<br>
+using System.Net;<br>
+using System.Text;<br>
+using Game_Socket_Server.Tool;<br>
+using Game_Socket_Server.DAO;<br>
+using GameSocketServerProtocol;</p>
+<p>namespace Game_Socket_Server<br>
+{<br>
+class Client<br>
+{<br>
+private Socket socket;//与远程客户端通信的Socket<br>
+private Message message;//消息类<br>
+private UserDate userDate;//用户数据类，连接数据库读取写入<br>
+private Server server;//服务器<br>
+public Room GetRoom//自动属性，客户端所在房间<br>
+{<br>
+get;set;<br>
+}<br>
+public string UserName//自动属性，用户名<br>
+{<br>
+get;set;<br>
+}<br>
+public UserDate GetUserDate//外部获取用户数据公开属性<br>
+{<br>
+get<br>
+{<br>
+return userDate;<br>
+}<br>
+}<br>
+public Client(Socket socket,Server server)<br>
+{<br>
+this.server = server;<br>
+this.socket = socket;<br>
+message = new Message();<br>
+userDate = new UserDate();<br>
+StartReceiveMsg();<br>
+}<br>
+/// <summary><br>
+/// 客户端异步接收字节流数据<br>
+/// </summary><br>
+void StartReceiveMsg()<br>
+{<br>
+//异步接收方法(用于接收的字节数组，开始接收位，可用于接收的长度，Sock标记，回调函数，null)<br>
+socket.BeginReceive(message.Buffer,message.StartIndex,message.Remsize,SocketFlags.None,ReceiveCallBak,null);</p>
+<pre><code>    }
+    void ReceiveCallBak(IAsyncResult iar)
+    {
+        try
+        {
+            //如socket为空，或未连接，则返回
+            if (socket == null || socket.Connected == false) return;
+            //接收到的字节流长度
+            int len = socket.EndReceive(iar);
+            if (len == 0)//为空则返回
+            {
+                Close();
+                return;
+            }
+            //不为空时开始解析消息
+            message.ReadBuffer(len,HandleRequest);
+            StartReceiveMsg();
+        }
+        catch {
+            Close();
+        }
+    }
+    /// &lt;summary&gt;
+    /// 客户端发送数据方法
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;pack&quot;&gt;包转字节流&lt;/param&gt;
+    public void Send(MainPack pack)
+    {
+        socket.Send(Message.PackDate(pack));
+    }
+
+    //处理客户端发来的请求
+    private void HandleRequest(MainPack pack)
+    {
+        server.HandleRequest(pack, this);
+    }
+
+    private void Close()
+    {
+        if(GetRoom!=null)
+        {
+            GetRoom.Exit(server, this);
+        }
+        server.RemoveClient(this);
+        socket.Close();
+        
+    }
+}
+</code></pre>
+<p>}<br>
+<strong>Message处理类代码</strong><br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Linq;<br>
+using System.Text;<br>
+using GameSocketServerProtocol;<br>
+using Google.Protobuf;</p>
+<p>namespace Game_Socket_Server.Tool<br>
+{<br>
+/// <summary><br>
+/// 消息处理类，主要方法，将字节数组解析为MainPack包，将包转为字节数组。<br>
+/// </summary><br>
+class Message<br>
+{<br>
+/// <summary><br>
+/// 字节数组容器<br>
+/// </summary><br>
+private byte[] buffer = new byte[1024];<br>
+/// <summary><br>
+///<br>
+/// </summary><br>
+private int startIndex;<br>
+public byte[] Buffer<br>
+{<br>
+get<br>
+{<br>
+return buffer;<br>
+}<br>
+}</p>
+<pre><code>    public int StartIndex
+    {
+        get
+        {
+            return startIndex;
+        }
+    }
+
+    public int Remsize
+    {
+        get
+        {
+            return buffer.Length - startIndex;
+        }
+    }
+
+    /// &lt;summary&gt;
+    /// 数据解析，字节流转为MainPack包
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;len&quot;&gt;读取的长度&lt;/param&gt;
+    public void ReadBuffer(int len,Action&lt;MainPack&gt; HandleRequest)
+    {
+        startIndex += len;
+        if(startIndex&lt;=4) return;//包头一个int类型长度&lt;=4 包体无数据不需解析
+        int count = BitConverter.ToInt32(buffer,0);//读取4位返回一个int值
+        while (true)//循环解析消息
+        {
+            if (startIndex &gt;= (count + 4))
+            {
+                //接收数据包
+                MainPack pack = (MainPack)MainPack.Descriptor.Parser.ParseFrom(buffer, 4, count);//byte[]容器，偏移(从第几位开始读)，读多少位。
+                HandleRequest(pack);
+                //读取之后清理解析过的位
+                Array.Copy(buffer, count + 4, buffer, 0, startIndex - count - 4);
+                startIndex -= (count + 4);
+            }
+            else
+            {
+                break;
+            }
+        }            
+    }
+    public static byte[] PackDate(MainPack pack)
+    {
+        byte[] date = pack.ToByteArray();//包体
+        byte[] head = BitConverter.GetBytes(date.Length);//包头
+        return head.Concat(date).ToArray();
+    }
+}
+</code></pre>
+<p>}<br>
+<strong>MainPack，build之前代码(生成GameSocketServerProtocol.cs引入服务端/客户端使用)</strong><br>
+syntax = &quot;proto3&quot;;<br>
+package GameSocketServerProtocol;<br>
+//客户端请求类型枚举<br>
+enum RequestCode<br>
+{<br>
+RequestNone=0;<br>
+//用户请求<br>
+User = 1;<br>
+//房间请求<br>
+Room = 2;<br>
+}<br>
+//客户端请求事件类型<br>
+enum ActionCode<br>
+{<br>
+ActionNone=0;<br>
+//注册<br>
+Logon = 1;<br>
+//登录<br>
+Login = 2;<br>
+//创建房间<br>
+CreateRoom = 3;<br>
+//查询房间<br>
+FindRoom = 4;<br>
+//玩家列表：服务器发给客户端解析<br>
+PlayerList = 5;<br>
+//加入房间<br>
+JoinRoom = 6;<br>
+//离开<br>
+Exit = 7;<br>
+//聊天<br>
+Chat = 8;<br>
+//开始游戏<br>
+StartGame = 9;<br>
+//服务端发送来的开始游戏<br>
+Staring = 10;<br>
+}<br>
+//服务器返回类型<br>
+enum ReturnCode<br>
+{<br>
+ReturnNone=0;<br>
+//成功<br>
+Succeed = 1;<br>
+//失败<br>
+Fall = 2;<br>
+//未找到房间<br>
+NotRoom = 3;<br>
+}</p>
+<p>message MainPack<br>
+{<br>
+RequestCode requestcode=1;<br>
+ActionCode actioncode=2;<br>
+ReturnCode returncode=3;<br>
+//注册/登录信息包<br>
+LoginPack loginpack=4;<br>
+//防止发送空包占用空间的字符串，也可传输客户端聊天消息等<br>
+string str = 5;<br>
+//房间列表<br>
+repeated RoomPack roompack = 6;<br>
+//玩家列表<br>
+repeated PlayerPack playerpack = 7;<br>
+}</p>
+<p>message LoginPack<br>
+{<br>
+//用户名<br>
+string username=1;<br>
+//密码<br>
+string password=2;<br>
+}<br>
+message RoomPack<br>
+{<br>
+//房间名<br>
+string roomname = 1;<br>
+//房间最大人数<br>
+int32 maxnum = 2;<br>
+//房间当前人数<br>
+int32 curnum = 3;<br>
+//房间状态<br>
+int32 state = 4;<br>
+}<br>
+message PlayerPack<br>
+{<br>
+//玩家名称<br>
+string playername = 1;<br>
+}</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/basemvc_ui/">
+                  <h3 class="post-title">
+                    BaseMVC_UI
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
