@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Leet Code1~500持续更新 | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609737068669">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="LeetCode题库
+/// 
+/// 移除元素：给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。
+/// 
+class LC27
+{
+//将与val相等的值都移动到数组最..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1609737068669" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Leet Code1~500持续更新</h2>
+            <div class="post-date">2021-01-02</div>
+            
+            <div class="post-content" v-pre>
+              <p><a href ="https://leetcode-cn.com/problemset/all/"><strong>LeetCode题库</strong></a><br>
+/// <summary><br>
+/// 移除元素：给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。<br>
+/// </summary><br>
+class LC27<br>
+{<br>
+//将与val相等的值都移动到数组最右边，<br>
+public static int RemoveEle(int [] nums,int value)<br>
+{<br>
+if (nums == null || nums.Length == 0)<br>
+return 0;<br>
+int l = 0;<br>
+int r = nums.Length - 1;<br>
+while(l&lt;r)<br>
+{<br>
+while(l&lt;r&amp;&amp;nums[l]!=value)//左指针找与val相等的值<br>
+{<br>
+l++;<br>
+}<br>
+while(l&lt;r&amp;&amp;nums[r]==value)//右指针找与val不相等的值<br>
+{<br>
+r--;<br>
+}<br>
+int temp = nums[l];<br>
+nums[l] = nums[r];<br>
+nums[r] = temp;<br>
+}<br>
+return nums[l] == value ? l : l + 1;//最后一个与val相等的值先被左指针找到，左指针位置的索引即移除val后的，前面元素的长度(数组从0开始)。<br>
+最后与val相等的值先被有指针找到，则l指向的即是不重复元素的中一个元素，数组索引值比实际长度小1，即返回l+1<br>
+}<br>
+}<br>
+<strong>————————————————————————————————————</strong><br>
+<strong>48.旋转图像</strong><br>
+class LC48<br>
+{<br>
+public static void rotate(int[][] matrix)<br>
+{<br>
+int n = matrix[0].Length;<br>
+if (n == 0 || n == 1) return;</p>
+<pre><code>        for (int start = 0, end = n - 1; start &lt; end; start++, end--)
+        { //控制旋转层数（不断缩小圈的范围）
+            int s = start; int e = end;
+            while (s &lt; end)
+            { //完成一圈的旋转
+                int temp = matrix[start][s]; //temp&lt;-左上角值
+                matrix[start][s] = matrix[e][start]; //左上角&lt;-左下角
+                matrix[e][start] = matrix[end][e];  //左下角&lt;-右下角
+                matrix[end][e] = matrix[s][end];  //右下角&lt;-右上角
+                matrix[s][end] = temp; //右上角&lt;-temp
+                s++; e--; //向右平移该层的圈
+            }
+        }
+    }
+}
+</code></pre>
+<p><strong>————————————————————————————————————</strong><br>
+<strong>49.字母异为词分组</strong><br>
+class LC49<br>
+{<br>
+public static List&lt;List<string>&gt; GroupAnagrams(string[] strs)<br>
+{<br>
+//可变字符串：存储排序后的字符数组转为字符串<br>
+StringBuilder key = new StringBuilder();<br>
+//字典：键：排序后相同的字符(串有相同字符组成)，值：由相同字符组成的字符串数组<br>
+Dictionary&lt;string, List<string>&gt; strsGroupDict = new Dictionary&lt;string, List<string>&gt;();<br>
+//遍历字符串数组中每个字符串<br>
+foreach (string s in strs)<br>
+{<br>
+char[] temp = s.ToCharArray();//字符串转为字符数组，用于排序<br>
+Array.Sort(temp);//调用数组类静态排序方法<br>
+key.Clear();//添加前先请空可变字符串<br>
+foreach (char c in temp)//将字符数组的每个字符添加到可变字符串<br>
+{<br>
+key.Append(c);<br>
+}<br>
+if (!strsGroupDict.ContainsKey(key.ToString()))//判断字典的键中是否包含此排序后的字符串<br>
+{<br>
+//不包含则新建键值对，键：此排序后的字符串，值：新建字符串可变数组(存储由相同字符组成的字符串)<br>
+strsGroupDict.Add(key.ToString(), new List<string>());<br>
+}<br>
+//创建后/或已经存在键的情况下，将当前字符添加到可变数组中<br>
+strsGroupDict[key.ToString()].Add(s);<br>
+}<br>
+return new List&lt;List<string>&gt;(strsGroupDict.Values);//返回数组类表，即字典的所有值<br>
+}<br>
+}<br>
+<strong>————————————————————————————————————</strong><br>
+<strong>56.合并区间</strong><br>
+class LC56<br>
+{<br>
+public static int[][] Merge(int [][]intervals)<br>
+{<br>
+List&lt;int[]&gt; result = new List&lt;int[]&gt;() ;<br>
+if (intervals == null || intervals.Length &lt; 2)<br>
+return intervals;<br>
+//先对二维数组坐标第一个值进行从小到大排序<br>
+Array.Sort(intervals, (a, b) =&gt; a[0] - b[0]);<br>
+foreach (int[] interval in intervals)<br>
+{<br>
+//返回类表为空或者类表最后一个坐标右边的值比排序后的二维数组中第一的坐标的左边的值小时，则范围不重合即将范围添加到返回列表中<br>
+if(result.Count==0||interval[0]&gt;result[result.Count-1][1])<br>
+{<br>
+result.Add(interval);<br>
+}else//重合则合并区间，取右边最大的值(左边的值排序后，二维数组中第一个值不可能比返回列表中的值小<br>
+{<br>
+//右范围取最大值<br>
+result[result.Count - 1][1] = Math.Max(result[result.Count-1][1], interval[1]);<br>
+}<br>
+}<br>
+return result.ToArray();//列表转数组返回<br>
+}<br>
+}<br>
+<strong>————————————————————————————————————</strong><br>
+<strong>78/90.子集</strong><br>
+/// <summary><br>
+/// 子集<br>
+/// </summary><br>
+class LC78<br>
+{<br>
+/// <summary><br>
+/// SubsetI<br>
+/// </summary><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public static List&lt;List<int>&gt; Subset(int[] nums)<br>
+{<br>
+List&lt;List<int>&gt; res = new List&lt;List<int>&gt;();<br>
+res.Add(new List<int> { });<br>
+foreach (int  n in nums)<br>
+{<br>
+int resLength = res.Count;<br>
+for (int i = 0; i &lt; resLength; i++)<br>
+{<br>
+List<int> cur = new List<int>(res[i]);<br>
+cur.Add(n);<br>
+res.Add(cur);<br>
+}<br>
+}<br>
+return res;<br>
+}<br>
+/// <summary><br>
+/// SubsetII<br>
+/// </summary><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public static List&lt;List<int >&gt; SubsetsWithDup(int [] nums)<br>
+{<br>
+List&lt;List<int>&gt; res = new List&lt;List<int>&gt;();<br>
+res.Add(new List<int> {});<br>
+Array.Sort<int>(nums);<br>
+foreach (int n in nums)<br>
+{<br>
+int resLength = res.Count;<br>
+for (int i = 0; i &lt; resLength; i++)<br>
+{<br>
+List<int> cur = new List<int>(res[i]);<br>
+cur.Add(n);<br>
+res.Add(cur);<br>
+}<br>
+}<br>
+List&lt;List<int>&gt; resLast = new List&lt;List<int>&gt;();</p>
+<pre><code>        foreach (List&lt;int&gt; list in res)
+        {
+            if (!Contants(resLast, list))
+            {
+                resLast.Add(list);
+            }
+        }
+        return resLast;
+
+    }
+    public static bool Contants(List&lt;List&lt;int&gt;&gt; res,List&lt;int&gt; slist)
+    {
+        if (res.Count == 0) return false;
+        bool conts = false;
+        foreach (var item in res)
+        {
+            if (CpList(item, slist))
+                conts = true;
+        }
+        return conts;
+    }
+
+    public static bool CpList(List&lt;int&gt; l1,List&lt;int&gt; l2)
+    {
+        bool res = true;
+        if (l1.Count != l2.Count)
+            return false;
+        else
+        {                
+            for (int i = 0; i &lt; l1.Count; i++)
+            {
+                if (l1[i] != l2[i])
+                    res = false;
+            }
+        }
+
+        return res;
+    }
+}
+</code></pre>
+<p><strong>————————————————————————————————————</strong><br>
+<strong>179.最大数</strong><br>
+/// <summary><br>
+///179： 给定一组非负整数 nums，重新排列它们每个数字的顺序（每个数字不可拆分）使之组成一个最大的整数。<br>
+/// </summary><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public static string LargestNum(int[] nums)<br>
+{<br>
+if (nums == null) return &quot;&quot;;<br>
+if (nums.Length == 1) return nums[0].ToString();<br>
+string[] st = new string[nums.Length];<br>
+//StringBuilder s = new StringBuilder();<br>
+for (int i = 0; i &lt; nums.Length; i++)<br>
+{<br>
+st[i] = nums[i].ToString();<br>
+}<br>
+for (int i = 0; i &lt; st.Length; i++)<br>
+{<br>
+for (int j = i+1; j &lt; st.Length; j++)<br>
+{<br>
+if((st[i]+st[j]).CompareTo(st[j]+st[i])&lt;0)<br>
+//s1.CompareTo(s2):<br>
+//s1&gt;s2: 1<br>
+//s1=s2: 0<br>
+//s1&lt;s2: -1<br>
+{<br>
+Swap(ref st[i], ref st[j]);<br>
+}<br>
+}<br>
+}<br>
+/<em>foreach (string item in st)<br>
+{<br>
+s.Append(item);<br>
+}<br>
+return s.ToString();</em>/<br>
+if (nums[0].Equals(&quot;0&quot;)) return &quot;0&quot;;<br>
+else return string.Join(&quot;-&quot;, st);//使用字符连接字符串数组，返回连接后的字符<br>
+}<br>
+<strong>————————————————————————————————————</strong><br>
+/// <summary><br>
+///<strong>206. 反转链表</strong><br>
+/// </summary><br>
+class LC206<br>
+{<br>
+public static ListNode ReversList(ListNode head)<br>
+{<br>
+ListNode dummy = new ListNode();<br>
+dummy.next = head;<br>
+while(head!=null||head.next!=null)<br>
+{<br>
+ListNode next = head.next;<br>
+ListNode temp = dummy.next;<br>
+head.next = head.next.next;<br>
+dummy.next = next;<br>
+next.next = temp;<br>
+}<br>
+return dummy.next;</p>
+<pre><code>    }
+    public static ListNode ReversList2(ListNode head)
+    {
+        if (head == null || head.next == null)
+            return head;
+        //返回末尾节点
+        ListNode res = ReversList2(head.next);
+        //节点指向反转：递归栈先入后出，先返回最后递归层的末尾节点
+        head.next.next = head;
+        head.next = null;
+
+        return res;
+    }
+}
+</code></pre>
+<p><strong>————————————————————————————————————</strong><br>
+/// <summary><br>
+<strong>209.长度最小的子数组</strong><br>
+/// 给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的 连续 子数组，<br>
+/// 并返回其长度。如果不存在符合条件的子数组，返回 0。<br>
+/// </summary><br>
+class LC209<br>
+{<br>
+/// <summary><br>
+/// 暴力法，可能输出的值即为1~数组最大长度，长度为n时如存在连续n个数的和&gt;=s，则返回长度n<br>
+/// </summary><br>
+/// <param name="s"></param><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public static int MinSubArrayLen1(int s, int[] nums)<br>
+{<br>
+if (nums == null || nums.Length == 0)<br>
+return 0;<br>
+int size = 1;<br>
+while(size&lt;=nums.Length)<br>
+{<br>
+for (int i = 0; i &lt; nums.Length-size+1;i++)<br>
+{<br>
+int total = 0;<br>
+for (int j = i; j &lt; i+size; j++)<br>
+{<br>
+total += nums[j];<br>
+}<br>
+if (total &gt;= s)<br>
+return size;<br>
+}<br>
+size++;<br>
+}<br>
+return 0;<br>
+}<br>
+/// <summary><br>
+/// 滑动窗口法/双指针法<br>
+/// </summary><br>
+/// <param name="s"></param><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public static int MinSubArrayLen2(int s, int[] nums)<br>
+{<br>
+if (nums == null || nums.Length == 0)<br>
+return 0;<br>
+int i = 0;//左指针<br>
+int j = 0;//右指针<br>
+int result = nums.Length + 1;//返回结果默不可能比数组长度长，不变则不存在返回0<br>
+int total = 0;//窗口内数字的和<br>
+while (j&lt;nums.Length)<br>
+{<br>
+total += nums[j];//计算窗口内数字和<br>
+j++;//右指针滑动<br>
+while(total&gt;=s)//当窗口内数字和&gt;=给定值时，更新返回值取最小长度<br>
+{<br>
+result = Math.Min(result, j - i);</p>
+<pre><code>                total -= nums[i];//左指针开始移动，
+                i++;
+                //和仍大于等于给定时时继续移动，小于则退出循环，移动有指针
+            }
+        }//j移动到末尾时循环结束
+        return result == nums.Length + 1 ? 0 : result;//长度未更新则不存在返回0，更新则为最小值
+    }
+}
+</code></pre>
+<p><strong>————————————————————————————————————</strong><br>
+/// <summary><br>
+/// 给定一个整数数组，判断是否存在重复元素。<br>
+/// 如果任意一值在数组中出现至少两次，函数返回 true 。<br>
+/// 如果数组中每个元素都不相同，则返回 false<br>
+/// </summary><br>
+class LC217重复元素<br>
+{<br>
+/// <summary><br>
+/// 排序法，排序后存在两个相邻的数相同即存在重复的数<br>
+/// </summary><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public static bool ContainsDuplicate(int[] nums)<br>
+{<br>
+if (nums == null || nums.Length == 0)<br>
+return false;<br>
+Array.Sort(nums);<br>
+//方式1<br>
+/<em>int i = 0;<br>
+int j = i + 1;<br>
+while(j&lt;nums.Length)<br>
+{<br>
+if (nums[i] == nums[j])<br>
+return true;<br>
+i++;<br>
+j++;<br>
+}</em>/<br>
+//方式2<br>
+int prev = nums[0];<br>
+for (int i = 1; i &lt; nums.Length; i++)<br>
+{<br>
+if (nums[i] == prev)<br>
+return true;<br>
+else<br>
+prev = nums[i];<br>
+}<br>
+return false;<br>
+}</p>
+<pre><code>    /// &lt;summary&gt;
+    /// Set法，集合无法添加重复的元素，
+    /// 添加完成后集合长度与原数组长度不相等即存在重复的元素
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;nums&quot;&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public static bool ContainsDuplicate2(int [] nums)
+    {
+        HashSet&lt;int&gt; set = new HashSet&lt;int&gt;(nums);
+        return nums.Length == set.Count ? false : true;
+    }
+    /// &lt;summary&gt;
+    /// 字典法，通过字典统计各元素出现的次数，存在次数大于1,
+    /// 即有值重复出现
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;nums&quot;&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public static bool ContainsDuplicate3(int[] nums)
+    {
+        Dictionary&lt;int, int&gt; dic = new Dictionary&lt;int, int&gt;();
+        foreach (int  n in nums)
+        {
+            if(!dic.ContainsKey(n))
+            {
+                dic.Add(n, 1);
+            }else
+            {
+                dic[n] += 1;
+            }
+        }
+        foreach (var item in dic.Values)
+        {
+            if (item &gt; 1)
+                return true;
+        }
+        return false;
+    }
+}
+</code></pre>
+<p><strong>————————————————————————————————————</strong><br>
+/// <summary><br>
+/// 请判断一个链表是否为回文链表。回文正反相同的，1；121；1221.<br>
+/// </summary><br>
+class LC234回文链表<br>
+{<br>
+/// <summary><br>
+/// 双指针法，由于链表中不能向前移动，所以先将链表中的数，加到数组中<br>
+/// 然后左右指针向中间一定进行对比<br>
+/// </summary><br>
+/// <param name="head"></param><br>
+/// <returns></returns><br>
+public static bool IsPalindrome(ListNode head)<br>
+{<br>
+if (head == null || head.next == null)<br>
+return true;<br>
+List<int> list = new List<int>();<br>
+while (head != null)<br>
+{<br>
+list.Add(head.val);<br>
+head = head.next;<br>
+}<br>
+int l = 0;<br>
+int r = list.Count - 1;<br>
+while(l&lt;r)<br>
+{<br>
+if (!list[l].Equals(list[r]))//Equals比较的是值==比较的是索引可能不同<br>
+return false;<br>
+l++;<br>
+r--;<br>
+}<br>
+return true;<br>
+}</p>
+<pre><code>    /// &lt;summary&gt;
+    /// 递归双指针法，全局变量指向头结点，递归到最后一个节点，
+    /// 比较最后一个节点与当前p指向的头结点，不想同则返回false，相同p向后移动，返回true
+    /// 回到上一层递归对比最后一个节点之前的节点，与当前p值不同则返回false，相同p继续向后移返回true
+    /// 继续回到上一层递归及其没有出现不等则返回true
+    /// &lt;/summary&gt;
+    static ListNode p = new ListNode();
+    public static bool IsPalindrome2(ListNode head)
+    {
+        p = head;
+        return Recursion(head);
+    }
+    public static bool Recursion(ListNode head)
+    {
+        if (head == null)
+            return true;
+        if (!Recursion(head.next))
+            return false;
+
+        if (p.val != head.val)
+            return false;
+        p = p.next;
+        return true;
+    }
+    /// &lt;summary&gt;
+    /// 栈，将链表节点压入栈，弹出反序链表对比正序链表值是否一致。
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;head&quot;&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public static bool IsPalindrome3(ListNode head)
+    {
+        if (head == null || head.next == null)
+            return true;
+        ListNode temp = head;
+        Stack&lt;int&gt; stack = new Stack&lt;int&gt;();
+        while(temp!=null)//链表节点压入栈
+        {
+            stack.Push(temp.val);
+            temp = temp.next;
+        }
+        while (head != null &amp;&amp; stack.Count != 0)//正反序对比
+        {
+            if (head.val != stack.Pop())
+                return false;
+            head = head.next;
+        }
+        return true;
+    }
+}</code></pre>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/cyou-xi-fu-wu-qi-ke-hu-duan-googleprotobuf-xiao-xi-jie-xi/">
+                  <h3 class="post-title">
+                    C#游戏服务器/客户端/Google.Protobuf消息解析
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
