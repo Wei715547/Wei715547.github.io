@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609777806399">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609777858835">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ using System.Te..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1609777806399" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1609777858835" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -481,11 +481,11 @@ return buffer;<br>
     /// &lt;param name=&quot;len&quot;&gt;读取的长度&lt;/param&gt;
     public void ReadBuffer(int len,Action&lt;MainPack&gt; HandleRequest)
     {
-        startIndex += len;
-        if(startIndex&lt;=4) return;//包头一个int类型长度&lt;=4 包体无数据不需解析
-        int count = BitConverter.ToInt32(buffer,0);//读取4位返回一个int值
+        startIndex += len;            
         while (true)//循环解析消息
         {
+            if(startIndex&lt;=4) return;//包头一个int类型长度&lt;=4 包体无数据不需解析
+            int count = BitConverter.ToInt32(buffer,0);//读取4位返回一个int值
             if (startIndex &gt;= (count + 4))
             {
                 //接收数据包

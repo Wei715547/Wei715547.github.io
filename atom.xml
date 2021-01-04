@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-04T16:30:14.825Z</updated>
+    <updated>2021-01-04T16:33:00.242Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -945,11 +945,11 @@ return buffer;<br>
     /// &lt;param name=&quot;len&quot;&gt;读取的长度&lt;/param&gt;
     public void ReadBuffer(int len,Action&lt;MainPack&gt; HandleRequest)
     {
-        startIndex += len;
-        if(startIndex&lt;=4) return;//包头一个int类型长度&lt;=4 包体无数据不需解析
-        int count = BitConverter.ToInt32(buffer,0);//读取4位返回一个int值
+        startIndex += len;            
         while (true)//循环解析消息
         {
+            if(startIndex&lt;=4) return;//包头一个int类型长度&lt;=4 包体无数据不需解析
+            int count = BitConverter.ToInt32(buffer,0);//读取4位返回一个int值
             if (startIndex &gt;= (count + 4))
             {
                 //接收数据包
