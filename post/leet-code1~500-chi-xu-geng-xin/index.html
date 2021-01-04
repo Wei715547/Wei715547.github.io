@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609737717169">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609777806399">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@ class LC27
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1609737717169" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1609777806399" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -610,7 +610,63 @@ return true;<br>
         }
         return true;
     }
-}</code></pre>
+}
+</code></pre>
+<p><strong>———————————————————————————————————————</strong><br>
+<strong>268丢失的数字</strong><br>
+/// <summary><br>
+/// 给定一个包含 [0, n] 中 n 个数的数组 nums ，<br>
+/// 找出 [0, n] 这个范围内没有出现在数组中的那个数。<br>
+/// </summary><br>
+class LC268丢失的数字<br>
+{<br>
+/// <summary><br>
+/// 排序法 [0,n]，排序后数组与索引值不相等即，缺失索引位置的值<br>
+/// </summary><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public int MissingNumber(int[] nums)<br>
+{<br>
+Array.Sort(nums);<br>
+for (int i = 0; i &lt; nums.Length; i++)<br>
+{<br>
+if (i != nums[i])<br>
+return i;<br>
+}<br>
+return nums.Length;<br>
+}<br>
+/// <summary><br>
+/// 集合法，加入集合后，直接遍历判断集合不包含[0,n]中的那个值，<br>
+/// </summary><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public static int MissingNumber2(int[] nums)<br>
+{<br>
+HashSet<int> set = new HashSet<int>();<br>
+foreach (int  n in nums)<br>
+set.Add(n);<br>
+for (int i = 0; i &lt; nums.Length; i++)<br>
+{<br>
+if (!set.Contains(i))<br>
+return i;<br>
+}<br>
+return nums.Length;<br>
+}<br>
+/// <summary><br>
+/// 数学法，[0,n]之和为“n*(n+1)/2“减去数组之和即为等于缺失的数值<br>
+/// </summary><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public int MissingNumber3(int[] nums)<br>
+{<br>
+int sum = 0;<br>
+for (int i = 0; i &lt; nums.Length; i++)<br>
+{<br>
+sum += nums[i];<br>
+}<br>
+return (nums.Length * (nums.Length + 1)) / 2 - sum;<br>
+}<br>
+}</p>
 
             </div>
             

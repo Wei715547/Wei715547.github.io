@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-04T05:22:05.055Z</updated>
+    <updated>2021-01-04T16:30:14.825Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -514,7 +514,63 @@ return true;<br>
         }
         return true;
     }
-}</code></pre>
+}
+</code></pre>
+<p><strong>———————————————————————————————————————</strong><br>
+<strong>268丢失的数字</strong><br>
+/// <summary><br>
+/// 给定一个包含 [0, n] 中 n 个数的数组 nums ，<br>
+/// 找出 [0, n] 这个范围内没有出现在数组中的那个数。<br>
+/// </summary><br>
+class LC268丢失的数字<br>
+{<br>
+/// <summary><br>
+/// 排序法 [0,n]，排序后数组与索引值不相等即，缺失索引位置的值<br>
+/// </summary><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public int MissingNumber(int[] nums)<br>
+{<br>
+Array.Sort(nums);<br>
+for (int i = 0; i &lt; nums.Length; i++)<br>
+{<br>
+if (i != nums[i])<br>
+return i;<br>
+}<br>
+return nums.Length;<br>
+}<br>
+/// <summary><br>
+/// 集合法，加入集合后，直接遍历判断集合不包含[0,n]中的那个值，<br>
+/// </summary><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public static int MissingNumber2(int[] nums)<br>
+{<br>
+HashSet<int> set = new HashSet<int>();<br>
+foreach (int  n in nums)<br>
+set.Add(n);<br>
+for (int i = 0; i &lt; nums.Length; i++)<br>
+{<br>
+if (!set.Contains(i))<br>
+return i;<br>
+}<br>
+return nums.Length;<br>
+}<br>
+/// <summary><br>
+/// 数学法，[0,n]之和为“n*(n+1)/2“减去数组之和即为等于缺失的数值<br>
+/// </summary><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public int MissingNumber3(int[] nums)<br>
+{<br>
+int sum = 0;<br>
+for (int i = 0; i &lt; nums.Length; i++)<br>
+{<br>
+sum += nums[i];<br>
+}<br>
+return (nums.Length * (nums.Length + 1)) / 2 - sum;<br>
+}<br>
+}</p>
 ]]></content>
     </entry>
     <entry>
