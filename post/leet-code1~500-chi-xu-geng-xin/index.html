@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609777858835">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609817023797">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@ class LC27
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1609777858835" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1609817023797" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -141,7 +141,7 @@ nums[l] = nums[r];<br>
 nums[r] = temp;<br>
 }<br>
 return nums[l] == value ? l : l + 1;//最后一个与val相等的值先被左指针找到，左指针位置的索引即移除val后的，前面元素的长度(数组从0开始)。<br>
-最后与val相等的值先被有指针找到，则l指向的即是不重复元素的中一个元素，数组索引值比实际长度小1，即返回l+1<br>
+最后与val相等的值先被右指针找到，则l指向的即是不重复元素的中一个元素，数组索引值比实际长度小1，即返回l+1<br>
 }<br>
 }<br>
 <strong>————————————————————————————————————</strong><br>
@@ -665,6 +665,44 @@ for (int i = 0; i &lt; nums.Length; i++)<br>
 sum += nums[i];<br>
 }<br>
 return (nums.Length * (nums.Length + 1)) / 2 - sum;<br>
+}<br>
+}<br>
+<strong>class LC283移动0</strong><br>
+{<br>
+public static void MoveZeroes(int [] nums)<br>
+{<br>
+int index = 0;<br>
+for (int i = 0; i &lt; nums.Length; i++)<br>
+{<br>
+if(nums[i]!=0)<br>
+{<br>
+nums[index] = nums[i];<br>
+index++;<br>
+}<br>
+}<br>
+for (int i = index; i &lt; nums.Length; i++)<br>
+{<br>
+nums[i] = 0;<br>
+}<br>
+}<br>
+}<br>
+<strong>class LC485.最大连续1的个数</strong><br>
+{<br>
+public static int FindMaxConsecutiveOnes(int [] nums)<br>
+{<br>
+int res = 0;<br>
+int count = 0;<br>
+for (int i = 0; i &lt; nums.Length; i++)<br>
+{<br>
+if (nums[i] == 1)<br>
+count++;<br>
+else<br>
+{<br>
+res = Math.Max(res, count);<br>
+count = 0;<br>
+}<br>
+}<br>
+return Math.Max(res,count);<br>
 }<br>
 }</p>
 
