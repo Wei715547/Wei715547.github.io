@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" >
 
-<title>泛型集合List,Dictionary | WeiBlog</title>
+<title>泛型集合List(排序),Dictionary | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609817023797">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609827853065">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@ list.Remo..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1609817023797" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1609827853065" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -109,7 +109,7 @@ list.Remo..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">泛型集合List,Dictionary</h2>
+            <h2 class="post-title">泛型集合List(排序),Dictionary</h2>
             <div class="post-date">2020-05-15</div>
             
             <div class="post-content" v-pre>
@@ -202,9 +202,21 @@ userList.Remove(userList[i]);<br>
         else Console.WriteLine(&quot;当前为空&quot;); 
     }
 }
-
-
-static void Main(string[] args)
+</code></pre>
+<p><strong>List排序</strong><br>
+1：List.Sort()//默认可对继承了IComparer<T>,并实现了接口的Compare方法的对象类型进行排序(默认从小到大，自定义类型可继承接口更改Compare返回值(int)改变排序顺序，a&gt;b? -1/a放在左，1/a放在右) -1:0:1<br>
+2：List.Sort(Comparison<T> comparison)//通过委托函数进行比较<br>
+public delegate int Comparison<T>(T a,T b)//要求传入函数与此基类委托类型相同<br>
+如：public static int CP(int a,int b)<br>
+{<br>
+//从大到小<br>
+return a &gt; b ? -1 : 1;//a大于b时返回-1，则把大的数放到左边。a小于b时，返回-1，则把小的数放在右边。<br>
+//从大到小，也可以如下表示<br>
+//return a &lt; b ? 1 : -1;//a小于b时，返回1，即小的放在右边。a大于b时发挥-1，即大的放在右边<br>
+}<br>
+nums.Sort(delegate (int a, int b) { return a &gt; b ? -1 : 1; });CP函数用匿名函数代替<br>
+nums.Sort((a, b) =&gt; { return a &gt; b ? -1 : 1; });//CP函数也可以用表达式代替(此处a,b也是泛型)</p>
+<pre><code>static void Main(string[] args)
     {
         //创建字典泛型集合
         Dictionary&lt;string, string&gt; dic = new Dictionary&lt;string, string&gt;();
