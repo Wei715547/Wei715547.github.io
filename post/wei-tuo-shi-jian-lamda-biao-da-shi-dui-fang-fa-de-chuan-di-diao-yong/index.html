@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609827853065">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609864158330">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -35,7 +35,7 @@ class Program
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1609827853065" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1609864158330" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -169,6 +169,12 @@ class Program<br>
 
         //事件
         **事件不能在类的外部进行调用(委托可以)，但可在类的外部注册。因此事件更安全**
+        **事件委托区别**
+        **事件使用与委托基本一致，事件是对委托的封装，使用更安全**
+        **主要区别**
+        **1.事件不能在外部使用赋值负号&quot;=&quot;，只能进行+，-，进行事添加与注销，委托那里都能使用**
+        **2.事件不能在外部执行，委托在那里都能执行**
+        **3.事件 不能作为函数中的临时变量，只能在类/结构体中的成员变量，委托可以作为临时变量**
         //注册事件
        // SayHelloEvent += new SayHelloDlg(Program_SayHelloEvent);//实际事件上挂的是委托链对象
         SayHelloEvent += Program_SayHelloEvent;//上行代码简写
