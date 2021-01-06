@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" >
 
-<title>C#游戏服务器/客户端/Google.Protobuf消息解析 | WeiBlog</title>
+<title>C#游戏服务器/客户端(TCP/UDP无连接转发位置同步)/Google.Protobuf消息解析 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609908513154">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609918805934">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ using System.Te..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1609908513154" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1609918805934" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -111,7 +111,7 @@ using System.Te..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">C#游戏服务器/客户端/Google.Protobuf消息解析</h2>
+            <h2 class="post-title">C#游戏服务器/客户端(TCP/UDP无连接转发位置同步)/Google.Protobuf消息解析</h2>
             <div class="post-date">2021-01-02</div>
             
             <div class="post-content" v-pre>
@@ -126,14 +126,15 @@ using System.Net.Sockets;<br>
 using System.Text;<br>
 using System.Net;<br>
 using Game_Socket_Server.Controller;<br>
-using GameSocketServerProtocol;<br>
-namespace Game_Socket_Server<br>
+using GameSocketServerProtocol;</p>
+<p>namespace Game_Socket_Server<br>
 {/// <summary><br>
 /// 服务器类<br>
 /// </summary><br>
 class Server<br>
 {<br>
 private Socket socket;<br>
+private UDPServer us;<br>
 //客户端列表<br>
 private List<Client> clientList = new List<Client>();<br>
 //所有房间<br>
@@ -151,6 +152,7 @@ socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.
 socket.Bind(new IPEndPoint(IPAddress.Any, prot));//绑定端口<br>
 socket.Listen(10);//监听队列长度<br>
 StartAccept();//开支接收客户端连接<br>
+us = new UDPServer(6667, this, controllerManager);<br>
 }</p>
 <pre><code>    void StartAccept()
     {
@@ -160,9 +162,20 @@ StartAccept();//开支接收客户端连接<br>
     void AcceptCallBack(IAsyncResult iar)
     {
         Socket client = socket.EndAccept(iar);//返回异步操作结果中接收到连入的客户端Socket
-        clientList.Add(new Client(client,this));//加入客户端List
+        clientList.Add(new Client(client,this,us));//加入客户端List
         StartAccept();//继续异步监听
     }
+
+    public Client CientFromUserName(string user)
+    {
+        foreach (Client  c in clientList)
+        {
+            if (c.GetUserInfo.Username == user)
+                return c;
+        }
+        return null;
+    }
+
     /// &lt;summary&gt;
     /// 处理客户端发来的请求
     /// &lt;/summary&gt;  
@@ -178,7 +191,7 @@ StartAccept();//开支接收客户端连接<br>
     {
         try
         {
-            Room room = new Room(client, pack.Roompack[0]);
+            Room room = new Room(this, client, pack.Roompack[0]);
             roomList.Add(room);
             foreach (PlayerPack p in room.GetPlayerInfo())
             {
@@ -273,6 +286,93 @@ StartAccept();//开支接收客户端连接<br>
 </code></pre>
 <p>}<br>
 </code><br>
+<strong>服务端UDP转发类</strong><br>
+<code><br>
+using Game_Socket_Server.Controller;<br>
+using Game_Socket_Server.Tool;<br>
+using GameSocketServerProtocol;<br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Net;<br>
+using System.Net.Sockets;<br>
+using System.Text;<br>
+using System.Threading;</p>
+<p>namespace Game_Socket_Server<br>
+{<br>
+class UDPServer<br>
+{<br>
+Socket udpServer;//UDPSocket<br>
+IPEndPoint bindEP;//本地监听IP<br>
+EndPoint remotEP;//远程IP</p>
+<pre><code>    Server server;//TCPServer
+
+    ControllerManager controllerManager;//控制管理器调用对应事件防范
+
+    Byte[] buffer = new Byte[1024];//消息接收容器
+    Thread receiveThread;//接收线程
+    /// &lt;summary&gt;
+    /// UDP转发服务器构造
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;port&quot;&gt;监听端口号&lt;/param&gt;
+    /// &lt;param name=&quot;server&quot;&gt;TCP服务器&lt;/param&gt;
+    /// &lt;param name=&quot;controllerManager&quot;&gt;控制管理器&lt;/param&gt;
+    public UDPServer(int port, Server server, ControllerManager controllerManager)
+    {
+        this.server = server;
+        this.controllerManager = controllerManager;
+        udpServer = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        bindEP = new IPEndPoint(IPAddress.Any, port);//监听本地IP端口
+        remotEP = (EndPoint)bindEP;//初始远程IP为默认本地,
+        udpServer.Bind(bindEP);
+        receiveThread = new Thread(ReceiveMag);
+        receiveThread.Start();
+        Console.WriteLine(&quot;UDP服务器以创建&quot;);
+
+    }
+    ~UDPServer()
+    {
+        if (receiveThread != null)
+        {
+            receiveThread.Abort();
+            receiveThread = null;
+        }
+    }
+    /// &lt;summary&gt;
+    /// 服务器UDP接收端建立后即开始接收
+    /// &lt;/summary&gt;
+    private void ReceiveMag()
+    {
+        while (true)
+        {
+            int len = udpServer.ReceiveFrom(buffer, ref remotEP);//UDP接收方法，数据写入buffer，返回另一端通信地址
+            MainPack pack = (MainPack)MainPack.Descriptor.Parser.ParseFrom(buffer, 0, len);
+            Handlerequest(pack, remotEP);
+        }
+    }
+    /// &lt;summary&gt;
+    /// UDP无连接，通过返回客户端地址进行通信
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;buffer&quot;&gt;接收客户端发来的数据&lt;/param&gt;
+    /// &lt;param name=&quot;remotEP&quot;&gt;返回到到客户端地址&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public void Handlerequest(MainPack pack, EndPoint ipEndPoint)
+    {
+        Client client = server.CientFromUserName(pack.User);//通过包中的用户名找到对应的客户端类，对其通信地址赋值
+        if(client.IEP==null)
+        {
+            client.IEP = ipEndPoint;
+        }
+        controllerManager.HandleRequest(pack, client,true);
+    }
+    public void SendTo(MainPack pack,EndPoint point)
+    {
+        byte[] buff = Message.PackDateUDP(pack);
+        udpServer.SendTo(buff, buff.Length, SocketFlags.None, point);
+    }
+}
+</code></pre>
+<p>}<br>
+</code><br>
 <strong>ControllerManager代码</strong><br>
 <code><br>
 using System;<br>
@@ -294,7 +394,13 @@ controlDict.Add(userController.GetRequestCode, userController);<br>
 RoomController roomController = new RoomController();<br>
 controlDict.Add(roomController.GetRequestCode, roomController);<br>
 }</p>
-<pre><code>    public void HandleRequest(MainPack pack,Client client)
+<pre><code>    /// &lt;summary&gt;
+    /// 服务端消息处理方法，默认处理TCP消息
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;pack&quot;&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;client&quot;&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;isUDP&quot;&gt;是否为UDP数据报&lt;/param&gt;
+    public void HandleRequest(MainPack pack,Client client,bool isUDP = false)
     {
         //根据Requestcode请求类型获取对应的请求类型控制器，如User-UserController
         if (controlDict.TryGetValue(pack.Requestcode,out BaseController controller))
@@ -306,26 +412,35 @@ controlDict.Add(roomController.GetRequestCode, roomController);<br>
             {
                 Console.WriteLine(&quot;没有找到对应的事件处理方法&quot;);
                 return;
-            }
+            }                
             //方法不为空，存在处理方法
             Console.WriteLine(&quot;客户端&quot;+mothooname+&quot;请求&quot;);
-
-            //方法的统一参数，(服务器Socket，客户端Socket，数据包MainPack)
-            object[] obj = new object[] {server,client,pack};
-            //方法处理后返回的数据包
-            object ret = method.Invoke(controller, obj);//通过反射调用请求控制器中处理该请求的方法，返回处理后的的包
-            
-            if(ret != null)//请求处理返回的数据包不为空（需要给客户端反馈时）
+            object[] obj;
+            if (isUDP)
             {
-                client.Send(ret as MainPack);//将处理结果发给客户端
+                obj = new object[] { client, pack };
+                method.Invoke(controller, obj);//UDP只负责转发，不需要对客户端进行反馈
             }
-            //ret为空时即服务器对此请求不需要回复
+            else
+            {
+                //方法的统一参数，(服务器Socket，客户端Socket，数据包MainPack)
+                obj = new object[] { server, client, pack };
+                //方法处理后返回的数据包
+                object ret = method.Invoke(controller, obj);//通过反射调用请求控制器中处理该请求的方法，返回处理后的的包
+
+                if (ret != null)//请求处理返回的数据包不为空（需要给客户端反馈时）
+                {
+                    client.Send(ret as MainPack);//将处理结果发给客户端
+                }
+                //ret为空时即服务器对此请求不需要回复
+            }
 
         }else
         {
             Console.WriteLine(&quot;没有找到对应的Ccontroller处理&quot;);
         }
     }
+}
 }
 </code></pre>
 <p>}<br>
@@ -348,6 +463,9 @@ private Socket socket;//与远程客户端通信的Socket<br>
 private Message message;//消息类<br>
 private UserDate userDate;//用户数据类，连接数据库读取写入<br>
 private Server server;//服务器<br>
+private UDPServer us;//UDPServer<br>
+private EndPoint remoetEP;<br>
+//private int hp = 100;<br>
 public Room GetRoom//自动属性，客户端所在房间<br>
 {<br>
 get;set;<br>
@@ -356,29 +474,63 @@ public string UserName//自动属性，用户名<br>
 {<br>
 get;set;<br>
 }<br>
-public UserDate GetUserDate//外部获取用户数据公开属性<br>
+/<em>public int HP<br>
 {<br>
-get<br>
+get { return hp; }<br>
+set { hp = value; }<br>
+}</em>/<br>
+public UserInfo GetUserInfo<br>
 {<br>
-return userDate;<br>
+get;set;<br>
 }<br>
-}<br>
-public Client(Socket socket,Server server)<br>
+public class UserInfo<br>
 {<br>
-this.server = server;<br>
-this.socket = socket;<br>
-message = new Message();<br>
-userDate = new UserDate();<br>
-StartReceiveMsg();<br>
-}<br>
-/// <summary><br>
-/// 客户端异步接收字节流数据<br>
-/// </summary><br>
-void StartReceiveMsg()<br>
+public string Username<br>
 {<br>
-//异步接收方法(用于接收的字节数组，开始接收位，可用于接收的长度，Sock标记，回调函数，null)<br>
-socket.BeginReceive(message.Buffer,message.StartIndex,message.Remsize,SocketFlags.None,ReceiveCallBak,null);</p>
-<pre><code>    }
+get;set;<br>
+}<br>
+public int Hp<br>
+{<br>
+get;<br>
+set;<br>
+}<br>
+public PosPack Pos<br>
+{<br>
+get;set;<br>
+}<br>
+}</p>
+<pre><code>    public EndPoint IEP
+    {
+        get { return remoetEP; }
+        set { remoetEP = value; }
+    }
+
+    public UserDate GetUserDate//外部获取用户数据公开属性
+    {
+        get
+        {
+            return userDate;
+        }
+    }
+    public Client(Socket socket,Server server,UDPServer us)
+    {
+        this.server = server;
+        this.socket = socket;
+        this.us = us;
+        message = new Message();
+        userDate = new UserDate();
+        GetUserInfo = new UserInfo();
+        StartReceiveMsg();
+    }
+    /// &lt;summary&gt;
+    /// 客户端异步接收字节流数据
+    /// &lt;/summary&gt;
+    void StartReceiveMsg()
+    {
+        //异步接收方法(用于接收的字节数组，开始接收位，可用于接收的长度，Sock标记，回调函数，null)
+        socket.BeginReceive(message.Buffer,message.StartIndex,message.Remsize,SocketFlags.None,ReceiveCallBak,null);
+        
+    }
     void ReceiveCallBak(IAsyncResult iar)
     {
         try
@@ -406,9 +558,21 @@ socket.BeginReceive(message.Buffer,message.StartIndex,message.Remsize,SocketFlag
     /// &lt;param name=&quot;pack&quot;&gt;包转字节流&lt;/param&gt;
     public void Send(MainPack pack)
     {
-        socket.Send(Message.PackDate(pack));
+        if (socket == null || socket.Connected == false) return;
+        try
+        {
+            socket.Send(Message.PackDate(pack));
+        }
+        catch
+        { }
     }
+    //UDP转发方法，UDP无连接，通过收到的客户端地址发送数据。
+    public void SendTo(MainPack pack)
+    {
+        if (IEP == null) return;
+        us.SendTo(pack, IEP);
 
+    }
     //处理客户端发来的请求
     private void HandleRequest(MainPack pack)
     {
@@ -417,6 +581,7 @@ socket.BeginReceive(message.Buffer,message.StartIndex,message.Remsize,SocketFlag
 
     private void Close()
     {
+        Console.WriteLine(&quot;客户端断开&quot;);
         if(GetRoom!=null)
         {
             GetRoom.Exit(server, this);
@@ -507,6 +672,11 @@ return buffer;<br>
         byte[] head = BitConverter.GetBytes(date.Length);//包头
         return head.Concat(date).ToArray();
     }
+    //UDP MainPack打包不需要包头
+    public static byte[] PackDateUDP(MainPack pack)
+    {
+        return pack.ToByteArray();
+    }
 }
 </code></pre>
 <p>}<br>
@@ -523,6 +693,8 @@ RequestNone=0;<br>
 User = 1;<br>
 //房间请求<br>
 Room = 2;<br>
+//游戏请求<br>
+Game = 3;<br>
 }<br>
 //客户端请求事件类型<br>
 enum ActionCode<br>
@@ -548,6 +720,14 @@ Chat = 8;<br>
 StartGame = 9;<br>
 //服务端发送来的开始游戏<br>
 Staring = 10;<br>
+//更新位置<br>
+UpState = 11;<br>
+//离开游戏<br>
+ExitGame = 12;<br>
+//更新角色和玩家列表<br>
+UpDatePlayerList = 13;<br>
+//开火<br>
+Fire = 14;<br>
 }<br>
 //服务器返回类型<br>
 enum ReturnCode<br>
@@ -573,6 +753,10 @@ string str = 5;<br>
 repeated RoomPack roompack = 6;<br>
 //玩家列表<br>
 repeated PlayerPack playerpack = 7;<br>
+//子弹位置<br>
+BulletPack bulletpack = 8;<br>
+//用户名<br>
+string user = 9;<br>
 }</p>
 <p>message LoginPack<br>
 {<br>
@@ -596,22 +780,51 @@ message PlayerPack<br>
 {<br>
 //玩家名称<br>
 string playername = 1;<br>
+//玩家ID<br>
+string playerID = 2;<br>
+//玩家血量<br>
+int32 hp = 3;<br>
+//位置信息<br>
+PosPack pospack = 4;<br>
 }<br>
-</code><br>
-<strong>————————————————————————————————————————</strong><br>
-<img src="https://Wei715547.github.io/post-images/1609573638953.png" alt="" loading="lazy"><br>
-<strong>客户端代码</strong><br>
-<strong>GameFace</strong><br>
-using GameSocketServerProtocol;<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
+message PosPack<br>
+{<br>
+//玩家2D坐标<br>
+float PosX = 1;<br>
+float PosY = 2;<br>
+float RotZ = 3;	<br>
+float GunRotZ = 4;	<br>
+}<br>
+message BulletPack<br>
+{<br>
+float PosX = 1;<br>
+float PosY = 2;<br>
+float RotZ = 3;	<br>
+//鼠标位置<br>
+float MousePosX = 4;<br>
+float MousePosY = 5;<br>
+}</p>
+</code>
+**————————————————————————————————————————**
+![](https://Wei715547.github.io/post-images/1609573638953.png)
+**客户端代码**
+**GameFace**
+using GameSocketServerProtocol;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 <p>public class GameFace : MonoBehaviour<br>
 {<br>
 private ClientManeger clientManeger;<br>
 private RequestManager requestManager;<br>
-private UIManager uiManager;</p>
-<pre><code>private static GameFace face;
+private UIManager uiManager;<br>
+PlayerManager playerManager;</p>
+<pre><code>public string UserName//客户端登录时赋值
+{
+    get;set;    
+}
+
+private static GameFace face;
 
 public static GameFace Face
 {
@@ -629,9 +842,11 @@ void Start()
     uiManager = new UIManager(this);
     clientManeger = new ClientManeger(this);
     requestManager = new RequestManager(this);
+    playerManager = new PlayerManager(this);
     uiManager.OnInit();
     clientManeger.OnInit();
     requestManager.OnInit();
+    playerManager.OnInit();
 }
 private void OnDestroy()
 {
@@ -642,6 +857,11 @@ private void OnDestroy()
 public void Send(MainPack pack)
 {
     clientManeger.Send(pack);
+}
+public void SendTo(MainPack pack)
+{
+    pack.User = UserName;//向包中加入用户名，用于服务端UDP对本客户端通信地址赋值
+    clientManeger.SendTo(pack);
 }
 public void HandleResoonse(MainPack pack)
 {
@@ -662,9 +882,37 @@ public void ShowMessage(string message,bool sync=false)
 {
     uiManager.ShowMessage(message,sync);
 }
+/*public void SetSelfID(string id)
+{
+    playerManager.CurPlayerID = id;
+}*/
+public void AddPlayer(MainPack packs)
+{
+    playerManager.AddPlayer(packs);
+}
+public void RemovePlayer(string id)
+{
+    playerManager.RemovePlayer(id);
+}
+public void GameExit()
+{
+    playerManager.GameExit();
+    uiManager.PopPaneal();
+    uiManager.PopPaneal();
+    requestManager.RemoveRequest(ActionCode.UpState);
+    requestManager.RemoveRequest(ActionCode.Fire);
+}
+public void UpPos(MainPack pack)
+{
+    playerManager.UpPos(pack);
+}
+public void SpawnBullet(MainPack pack)
+{
+    playerManager.SpawnBullet(pack);
+}
 </code></pre>
-<p>}<br>
-<strong>BaseRequest基类</strong><br>
+<p>}</p>
+<p><strong>BaseRequest基类</strong><br>
 using GameSocketServerProtocol;<br>
 using System.Collections;<br>
 using System.Collections.Generic;<br>
@@ -695,9 +943,15 @@ face.RemoveReqest(actionCode);<br>
 {
 
 }
+//基类TCP发送
 public virtual void SendRequest(MainPack pack)
 {
     face.Send(pack);
+}
+//基类UDP发送
+public virtual void SendRequestUDP(MainPack pack)
+{
+    face.SendTo(pack);
 }
 </code></pre>
 <p>}<br>
@@ -712,15 +966,13 @@ using UnityEngine;</p>
 {<br>
 private Socket socket;<br>
 private Message message;<br>
-public ClientManeger(GameFace face) : base(face)<br>
-{</p>
-<pre><code>}
-
-public override void OnInit()
+public ClientManeger(GameFace face) : base(face)  { }</p>
+<pre><code>public override void OnInit()
 {
     base.OnInit();
     message = new Message();
-    InitSocket();
+    InitSocket();//初始化TCP通信
+    InitUDP();//初始化UDP通信
 }
 public override void OnDestory()
 {
@@ -789,6 +1041,51 @@ private void HandleResoonse(MainPack pack)
 public void Send(MainPack pack)
 {
     socket.Send(Message.PackDate(pack));
+}
+
+//UDP通信**————————————————————————————**
+private Socket udpClient;//Socket
+private IPEndPoint iPEndPoint;//服务器地址
+private EndPoint EPoint;//
+private Byte[] buffer = new Byte[1024];
+
+private void InitUDP()
+{
+    udpClient = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+    iPEndPoint = new IPEndPoint(IPAddress.Parse(ip), 6667);
+    EPoint = iPEndPoint;
+    try
+    {
+        udpClient.Connect(EPoint);
+    }
+    catch 
+    {
+        Debug.Log(&quot;UPD连接失败&quot;);
+        return;
+    }
+    aucThread = new Thread(ReceiveMsg);
+    aucThread.Start();
+}
+private void ReceiveMsg()
+{
+    //同步循环接收
+    Debug.Log(&quot;UDP开始接收&quot;);
+    while(true)
+    {
+        int len = udpClient.ReceiveFrom(buffer, ref EPoint);
+        MainPack pack = (MainPack)MainPack.Descriptor.Parser.ParseFrom(buffer, 0, len);
+        Debug.Log(&quot;接收数据&quot; + pack.Actioncode + pack.User);
+        HandleResoonse(pack);//收到MainPack包的处理方法与TCP一致，
+        //通过RequestManager找到对应的Reeuest,调用对应UDP通信类型的处理方法(根据包中的数据同步位置/其他操作)
+    }
+}
+//UDP发送数据方法
+public void SendTo(MainPack pack)
+{
+    byte[] sendbuffer = Message.PackDateUDP(pack);
+    //服务端地址固定，首次连接后即可发送
+    udpClient.Send(sendbuffer, sendbuffer.Length, SocketFlags.None);//使用Send必须先连接“110”行代码
+    //SendTo需要目的地址EndPoint
 }
 </code></pre>
 <p>}<br>
