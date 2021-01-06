@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609918805934">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1609923640460">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ using System.Te..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1609918805934" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1609923640460" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -284,11 +284,9 @@ us = new UDPServer(6667, this, controllerManager);<br>
     }
 }
 </code></pre>
-<p>}<br>
-</code><br>
-<strong>服务端UDP转发类</strong><br>
-<code><br>
-using Game_Socket_Server.Controller;<br>
+<p>}</p>
+<p><strong>服务端UDP转发类</strong></p>
+<p>using Game_Socket_Server.Controller;<br>
 using Game_Socket_Server.Tool;<br>
 using GameSocketServerProtocol;<br>
 using System;<br>
@@ -371,11 +369,9 @@ EndPoint remotEP;//远程IP</p>
     }
 }
 </code></pre>
-<p>}<br>
-</code><br>
-<strong>ControllerManager代码</strong><br>
-<code><br>
-using System;<br>
+<p>}</p>
+<p><strong>ControllerManager代码</strong></p>
+<p>using System;<br>
 using System.Collections.Generic;<br>
 using System.Reflection;<br>
 using System.Text;<br>
@@ -443,11 +439,9 @@ controlDict.Add(roomController.GetRequestCode, roomController);<br>
 }
 }
 </code></pre>
-<p>}<br>
-</code><br>
-<strong>Client代码</strong><br>
-<code><br>
-using System;<br>
+<p>}</p>
+<p><strong>Client代码</strong></p>
+<p>using System;<br>
 using System.Collections.Generic;<br>
 using System.Net.Sockets;<br>
 using System.Net;<br>
@@ -592,11 +586,9 @@ get;set;<br>
     }
 }
 </code></pre>
-<p>}<br>
-</code><br>
-<strong>Message处理类代码</strong><br>
-<code><br>
-using System;<br>
+<p>}</p>
+<p><strong>Message处理类代码</strong></p>
+<p>using System;<br>
 using System.Collections.Generic;<br>
 using System.Linq;<br>
 using System.Text;<br>
@@ -679,11 +671,9 @@ return buffer;<br>
     }
 }
 </code></pre>
-<p>}<br>
-</code><br>
-<strong>MainPack，build之前代码(生成GameSocketServerProtocol.cs引入服务端/客户端使用)</strong><br>
-<code><br>
-syntax = &quot;proto3&quot;;<br>
+<p>}</p>
+<p><strong>MainPack，build之前代码(生成GameSocketServerProtocol.cs引入服务端/客户端使用)</strong></p>
+<p>syntax = &quot;proto3&quot;;<br>
 package GameSocketServerProtocol;<br>
 //客户端请求类型枚举<br>
 enum RequestCode<br>
@@ -805,14 +795,14 @@ float MousePosX = 4;<br>
 float MousePosY = 5;<br>
 }</p>
 </code>
-**————————————————————————————————————————**
-![](https://Wei715547.github.io/post-images/1609573638953.png)
-**客户端代码**
-**GameFace**
-using GameSocketServerProtocol;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+<p><img src="https://Wei715547.github.io/post-images/1609573638953.png" alt="" loading="lazy"><br>
+<strong>客户端代码</strong><br>
+<strong>GameFace</strong><br>
+<code><br>
+using GameSocketServerProtocol;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
 <p>public class GameFace : MonoBehaviour<br>
 {<br>
 private ClientManeger clientManeger;<br>
@@ -1117,11 +1107,11 @@ public void HandleResponse(MainPack pack)
     }else
     {
         Debug.Log(&quot;未找到对应处理&quot;);
-    }
-    
+    }        
 }
 </code></pre>
-<p>}</p>
+<p>}<br>
+</code></p>
 
             </div>
             
