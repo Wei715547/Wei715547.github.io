@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-07T13:15:23.547Z</updated>
+    <updated>2021-01-08T16:32:57.057Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -257,6 +257,29 @@ List&lt;List<int>&gt; resLast = new List&lt;List<int>&gt;();</p>
         }
 
         return res;
+    }
+}
+</code></pre>
+<p><strong>class _141环形链表</strong><br>
+{<br>
+public bool HasCycle(ListNode head)<br>
+{<br>
+if (head == null || head.next == null)<br>
+{<br>
+return false;<br>
+}</p>
+<pre><code>        ListNode slow = head;
+        ListNode fast = head.next;
+        while (slow != fast)
+        {
+            if (fast == null || fast.next == null)
+            {
+                return false;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return true;
     }
 }
 </code></pre>
@@ -712,6 +735,32 @@ stack.Push(nums2[i]);<br>
         return res.ToArray();//遍历完nums1后返回结果类表转数组
     }
     
+}
+</code></pre>
+<p><strong>881.救生艇</strong><br>
+/// <summary><br>
+/// 第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。<br>
+/// 每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。<br>
+/// 返回载到每一个人所需的最小船数。(保证每个人都能被船载)。<br>
+/// </summary><br>
+class LC881救生艇<br>
+{<br>
+public int NumRescueBoats(int[] people, int limit)<br>
+{<br>
+if (people == null || people.Length == 0) return 0;</p>
+<pre><code>        Array.Sort&lt;int&gt;(people);
+        int res = 0;
+        int l = 0;
+        int r = people.Length - 1;
+        while(l&lt;=r)
+        {
+            if (people[l] + people[r] &lt;= limit)
+                l += 1;
+            r -= 1;
+            res += 1;
+        }
+        return res;
+    }
 }</code></pre>
 ]]></content>
     </entry>

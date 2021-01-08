@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610025317750">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610123565163">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -37,7 +37,7 @@ Stack st = new St..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1610025317750" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1610123565163" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -356,6 +356,29 @@ List&lt;List<int>&gt; resLast = new List&lt;List<int>&gt;();</p>
         }
 
         return res;
+    }
+}
+</code></pre>
+<p><strong>class _141环形链表</strong><br>
+{<br>
+public bool HasCycle(ListNode head)<br>
+{<br>
+if (head == null || head.next == null)<br>
+{<br>
+return false;<br>
+}</p>
+<pre><code>        ListNode slow = head;
+        ListNode fast = head.next;
+        while (slow != fast)
+        {
+            if (fast == null || fast.next == null)
+            {
+                return false;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return true;
     }
 }
 </code></pre>
@@ -811,6 +834,32 @@ stack.Push(nums2[i]);<br>
         return res.ToArray();//遍历完nums1后返回结果类表转数组
     }
     
+}
+</code></pre>
+<p><strong>881.救生艇</strong><br>
+/// <summary><br>
+/// 第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。<br>
+/// 每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。<br>
+/// 返回载到每一个人所需的最小船数。(保证每个人都能被船载)。<br>
+/// </summary><br>
+class LC881救生艇<br>
+{<br>
+public int NumRescueBoats(int[] people, int limit)<br>
+{<br>
+if (people == null || people.Length == 0) return 0;</p>
+<pre><code>        Array.Sort&lt;int&gt;(people);
+        int res = 0;
+        int l = 0;
+        int r = people.Length - 1;
+        while(l&lt;=r)
+        {
+            if (people[l] + people[r] &lt;= limit)
+                l += 1;
+            r -= 1;
+            res += 1;
+        }
+        return res;
+    }
 }</code></pre>
 
             </div>
