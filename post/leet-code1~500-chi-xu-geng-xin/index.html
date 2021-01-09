@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610123565163">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610189917308">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -37,7 +37,7 @@ Stack st = new St..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1610123565163" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1610189917308" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -244,7 +244,32 @@ strsGroupDict[key.ToString()].Add(s);<br>
 return new List&lt;List<string>&gt;(strsGroupDict.Values);//返回数组类表，即字典的所有值<br>
 }<br>
 }<br>
-<strong>————————————————————————————————————</strong><br>
+<strong>LC53.最大子数组和</strong><br>
+/// <summary><br>
+/// 给定一个整数数组 nums ，<br>
+/// 找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。<br>
+/// </summary><br>
+class LC53最大子数组和<br>
+{<br>
+public int MaxSubArray(int[] nums)<br>
+{<br>
+if (nums == null || nums.Length == 0)<br>
+return 0;</p>
+<pre><code>        int res = nums[0];
+        int sum = 0;
+        foreach (int n in nums)
+        {
+            if (sum &gt; 0)//都为正数时所有元素和即为最大
+                sum += n;//连续数相加的最大值，小于0时说明有负数加入，
+            else//都为负数时即得到最大的负数
+                sum = n;//出现和小于0有负数加入，找到下一个从正数开始的元素
+            res = Math.Max(res, sum);//每次填入一个数时会取res，sum最大的值
+        }
+        return res;
+    }
+}
+</code></pre>
+<p><strong>————————————————————————————————————</strong><br>
 <strong>56.合并区间</strong><br>
 class LC56<br>
 {<br>
