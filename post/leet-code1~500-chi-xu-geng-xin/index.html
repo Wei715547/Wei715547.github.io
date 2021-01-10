@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610189917308">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610248930610">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -37,7 +37,7 @@ Stack st = new St..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1610189917308" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1610248930610" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -295,7 +295,37 @@ result[result.Count - 1][1] = Math.Max(result[result.Count-1][1], interval[1]);<
 return result.ToArray();//列表转数组返回<br>
 }<br>
 }<br>
-<strong>————————————————————————————————————</strong><br>
+<strong>class LC74搜索矩阵</strong><br>
+{<br>
+/// <summary><br>
+/// 二分法，一维，二维数组索引转换<br>
+/// </summary><br>
+/// <param name="matrix"></param><br>
+/// <param name="target"></param><br>
+/// <returns></returns><br>
+public bool SearchMatrix(int[][] matrix, int target)<br>
+{<br>
+if (matrix == null || matrix.Length == 0) return false;</p>
+<pre><code>        int row = matrix.Length;
+        int col = matrix[0].Length;
+        int l = 0;
+        int r = row * col - 1;
+        while(l&lt;=r)
+        {
+            int mid = l + (r - l) / 2;
+            int ele = matrix[mid / col][mid % col];//一维索引二维
+            if (ele == target)
+                return true;
+            else if (ele &gt; target)
+                r = mid;
+            else
+                l = mid + 1;
+        }
+        return false;
+    }
+}
+</code></pre>
+<p><strong>————————————————————————————————————</strong><br>
 <strong>78/90.子集</strong><br>
 /// <summary><br>
 /// 子集<br>
@@ -404,6 +434,31 @@ return false;<br>
             fast = fast.next.next;
         }
         return true;
+    }
+}
+</code></pre>
+<p><strong>class LC162寻找峰值</strong><br>
+{<br>
+/// <summary><br>
+/// 峰值元素是指其值大于左右相邻值的元素。二分法<br>
+/// </summary><br>
+/// <param name="nums"></param><br>
+/// <returns></returns><br>
+public static int FindPeakElement(int[] nums)<br>
+{<br>
+if (nums == null || nums.Length == 0) return -1;</p>
+<pre><code>        int l = 0;
+        int r = nums.Length - 1;
+        while (l&lt;r)
+        {
+            int mid = (r + l) / 2;
+            //中间值右边的数小于mid则极值在左边，反之极值在右边
+            if (nums[mid] &gt; nums[mid + 1])
+                r = mid;
+            else 
+                l = mid + 1;
+        }
+        return l;
     }
 }
 </code></pre>
