@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-10T03:22:17.851Z</updated>
+    <updated>2021-01-10T04:06:41.344Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -841,7 +841,40 @@ if (people == null || people.Length == 0) return 0;</p>
         }
         return res;
     }
-}</code></pre>
+}
+</code></pre>
+<p><strong>——————————————————————————————————</strong><br>
+<strong>class LC1456定长子串中元音最大的数目</strong><br>
+{<br>
+/// <summary><br>
+/// 滑动窗口法<br>
+/// </summary><br>
+/// <param name="s"></param><br>
+/// <param name="k"></param><br>
+/// <returns></returns><br>
+public int MaxVowels(string s, int k)<br>
+{<br>
+if (s == null || s.Length == 0||s.Length&lt;k) return -1;<br>
+HashSet<char> set = new HashSet<char>(new char[] { 'a', 'e', 'i', 'o', 'u' });<br>
+int res = 0;<br>
+int count = 0;<br>
+for (int i = 0; i &lt; k; i++)<br>
+{<br>
+if (set.Contains(s[i]))<br>
+count += 1;<br>
+}<br>
+res = Math.Max(res, count);<br>
+for (int i = k; i &lt; s.Length; i++)<br>
+{<br>
+if (set.Contains(s[i - k]))<br>
+count -= 1;<br>
+if (set.Contains(s[i]))<br>
+count += 1;<br>
+res = Math.Max(res, count);<br>
+}<br>
+return res;<br>
+}<br>
+}</p>
 ]]></content>
     </entry>
     <entry>
