@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-10T07:26:58.872Z</updated>
+    <updated>2021-01-11T09:50:11.886Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -758,7 +758,56 @@ nums[i] = 0;<br>
 }<br>
 }<br>
 }<br>
-<strong>class LC485.最大连续1的个数</strong><br>
+<strong>344.反转字符串</strong><br>
+/// <summary><br>
+///系统函数<br>
+/// </summary><br>
+/// <param name="s"></param><br>
+public void ReverseString(char[] s)<br>
+{<br>
+Array.Reverse<char>(s);<br>
+}<br>
+/// <summary><br>
+/// 双指针<br>
+/// </summary><br>
+/// <param name="s"></param><br>
+public void ReverseString2(char[] s)<br>
+{<br>
+if (s == null || s.Length == 0) return;</p>
+<pre><code>        int l = 0;
+        int r = s.Length - 1;
+        while(l&lt;r)
+        {
+            char temp = s[l];
+            s[l] = s[r];
+            s[r] = temp;
+            l += 1;
+            r -= 1;
+        }
+    }
+    /// &lt;summary&gt;
+    /// 递归法
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;s&quot;&gt;&lt;/param&gt;
+    public void ReverseString3(char[] s)
+    {
+        if (s == null || s.Length == 0) return;//为空或长度为0返回
+
+        Recursion(s, 0, s.Length - 1);//递归函数
+
+    }
+    private void Recursion(char[] s,int l,int r)
+    {
+        if (l &gt;= r) return;//左右指针相等或相交时返回
+
+        Recursion(s, l + 1, r - 1);//左右两端对称的字符在同一递归层中，
+        //递归返回时，交换同递归层中的左右字符完成反转
+        char temp = s[l];
+        s[l] = s[r];
+        s[r] = temp;            
+    }
+</code></pre>
+<p><strong>class LC485.最大连续1的个数</strong><br>
 {<br>
 public static int FindMaxConsecutiveOnes(int [] nums)<br>
 {<br>
@@ -815,6 +864,22 @@ stack.Push(nums2[i]);<br>
         return res.ToArray();//遍历完nums1后返回结果类表转数组
     }
     
+}
+</code></pre>
+<p><strong>class LC509斐波那契数</strong><br>
+{<br>
+/// <summary><br>
+/// 斐波那契数，通常用 F(n) 表示，形成的序列称为 斐波那契数列 。<br>
+/// 该数列由 0 和 1 开始，后面的每一项数字都是前面两项数字的和。也就是：<br>
+/// </summary><br>
+/// <param name="n"></param><br>
+/// <returns></returns><br>
+public int Fib(int n)<br>
+{<br>
+if (n &lt; 2) return n == 1 ? 1 : 0;</p>
+<pre><code>        int sum = Fib(n - 1) + Fib(n - 2);
+        return sum;
+    }
 }
 </code></pre>
 <p><strong>881.救生艇</strong><br>
