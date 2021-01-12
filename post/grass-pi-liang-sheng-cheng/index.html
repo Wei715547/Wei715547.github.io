@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610357675942">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610423763170">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -33,7 +33,7 @@ public class Procedu..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1610357675942" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1610423763170" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -396,6 +396,355 @@ void GenerateGrass(Vector3 vertPos, Vector3 patchSize, int grassCountPerPatch)
         grassNormalList.Add(terrainNormals2D[indexX, indexZ]);//草地Mesh网格顶点法线，与同坐标的地面网格法线相同
     }
 }
+</code></pre>
+<p>}<br>
+<strong>———————————草地Shader——————————————</strong><br>
+Shader &quot;Unlit/Grass+Wind&quot;<br>
+{<br>
+Properties<br>
+{<br>
+[HDR]_GrassColor(&quot;GrassColor&quot;, Color) = (1,1,1,1)          //控制草的颜色<br>
+_SpecualarColor(&quot;SpecularColor&quot;, Color) = (1,1,1,1)          //控制草的高光颜色<br>
+_Specular(&quot;_Specular&quot;, Range(0, 1)) = 1          //控制草的高光程度<br>
+_Gloss(&quot;Gloss&quot;, Range(0,20)) = 1          //控制草的高光<br>
+[HDR]_FresnelColor(&quot;FresnelColor&quot;, Color) = (1,1,1,1)          //控制草的边缘高光颜色<br>
+_FresnelPower(&quot;FresnelPower&quot;, Range(0, 5)) = 1          //控制草的边缘高光程度<br>
+_MainTex (&quot;Texture&quot;, 2D) = &quot;white&quot; {}          //草的颜色贴图<br>
+_AlphaTex(&quot;AlphaTexture&quot;, 2D) = &quot;white&quot; {}          //草的透明贴图<br>
+_GrassHeight(&quot;GrassHeight&quot;, Range(0.5, 5)) = 2.5          //控制草的高度<br>
+_GrassWidth(&quot;GrassWidth&quot;, Range(0.001, 0.5)) = 0.05          //控制草的宽度<br>
+_BladeForward(&quot;BladeForward&quot;, Range(0, 2)) = 1          //控制草的弯曲程度</p>
+<pre><code>	_WindTex(&quot;WindTex&quot;, 2D) = &quot;white&quot; {}          //风的采样贴图
+    _WindVector(&quot;WindVector&quot;, Vector) = (1,1,1,0)          //控制风的方向
+    _WindTimeScale(&quot;WindTimeScale&quot;, float) = 1          //控制风的速度
+    _WindTexMapSize(&quot;WindTexMapSize&quot;, float) = 80          //控制风的采样贴图大小
+    _WindXZStrength(&quot;WindXZStrength&quot;, float) = 10          //控制风在草的XZ轴上的偏移
+    _WindYStrength(&quot;WindYStrength&quot;, float) = 10          //控制风在草的Y轴上的偏移          */
+}
+
+SubShader
+{
+    //存在顶点动画，所以要关闭批处理，DisableBatching 设置为 True
+    Tags {
+        &quot;RenderType&quot; = &quot;TransparentCutout&quot;
+        &quot;IgnoreProjector&quot; = &quot;True&quot;
+        &quot;Queue&quot; = &quot;AlphaTest&quot;
+        &quot;DisableBatching&quot; = &quot;True&quot;
+    }
+
+    //设置为双面渲染，关闭背面剔除
+    Cull Off
+    LOD 100
+
+    Pass
+    {
+        //设置为前向渲染模式
+        Tags { &quot;LightMode&quot; = &quot;ForwardBase&quot; }
+        Cull Off
+        AlphaToMask On
+
+        CGPROGRAM
+        //引入头文件
+        #include &quot;UnityCG.cginc&quot;
+        #include &quot;Lighting.cginc&quot;
+        #include &quot;AutoLight.cginc&quot;
+
+        //要应用几何着色器必须要将编译目标设置为 4.0 
+        #pragma target 4.0
+        #pragma multi_compile_fwdbase
+        #pragma vertex vert
+        #pragma fragment frag
+        //定义几何着色器
+        #pragma geometry geom
+
+        fixed4 _GrassColor;
+        fixed4 _SpecualarColor;
+        fixed _Specular;
+        float _Gloss;
+        fixed4 _FresnelColor;
+        half _FresnelPower;
+        sampler2D _MainTex;
+        float4 _MainTex_ST;
+        sampler2D _AlphaTex;
+        fixed _GrassHeight;
+        fixed _GrassWidth;
+		fixed _BladeForward;
+
+		sampler2D _WindTex;
+        float4 _WindTex_ST;
+        half4 _WindVector;
+        half _WindTimeScale;
+        float _WindTexMapSize;
+        half _WindXZStrength;
+        half _WindYStrength;
+
+        struct a2v {
+            float4 pos : POSITION;
+            float3 normal : NORMAL;
+            float2 uv : TEXCOORD0;
+        };
+
+        //顶点着色器传给几何着色器的数据结构
+        struct v2g {
+            float4 pos : POSITION;
+            float3 normal : NORMAL;
+            float2 uv : TEXCOORD0;
+        };
+
+        //几何着色器传给片元着色器的数据结构
+        struct g2f {
+            float4 pos : SV_POSITION;
+            float3 normal : NORMAL;
+            float2 uv : TEXCOORD0;
+            float3 worldPos : TEXCOORD1;
+        };
+
+		static const float oscillateDelta = 0.05;
+
+        //顶点着色器
+        //直接将从网格得到的数据传给传入几何着色器的结构体 v2g
+        v2g vert(a2v v) {
+            v2g o;
+            o.pos = v.pos;
+            o.normal = v.normal;
+            o.uv = v.uv;
+            return o;
+        }
+
+        //创建 CreatG2fOut() 函数
+        //初始化从几何着色器传入片元着色器的结构体 g2f
+        g2f CreatG2fOut() {
+            g2f output;
+            output.pos = float4(0, 0, 0, 0);
+            output.normal = float3(0, 0, 0);
+            output.uv = float2(0, 0);
+            output.worldPos = float3(0, 0, 0);
+            return output;
+        }
+
+        g2f GetVertex(float4 pos, float3 normal, float2 uv) {
+            g2f output;
+
+            output.pos = UnityObjectToClipPos(pos);    
+            output.normal = UnityObjectToWorldNormal(normal);
+            output.uv = uv;
+            output.worldPos = UnityObjectToWorldDir(pos);
+
+            return output;
+        }
+
+        //几何着色器
+        [maxvertexcount(30)]//限制几何着色器输出的最大顶点数目。每当输入一个图元，几何着色器可以输出 0~N 个图元。不论是什么结构的图元都是由顶点构成的，而这个语句就是用来限制输出最大的顶点数量（只要小于等于这个数量就可以，多余的顶点会被剔除）
+        void geom(point v2g points[1], inout TriangleStream&lt;g2f&gt; triStream) {
+
+            //顶点着色器输入的顶点位置
+            float4 root = points[0].pos;
+
+            //生成一个伪随机数
+            float random = sin(UNITY_HALF_PI * frac(root.x) + UNITY_HALF_PI * frac(root.z));
+            //给每根草的长宽加上这个随机值，我们希望草的宽度不要太宽或者太窄
+            _GrassWidth = _GrassWidth + (random / 50);
+            _GrassHeight = _GrassHeight + (random / 5);
+
+            //设置草的网格顶点一共有12个
+            const int vertexCount = 12;
+
+            //创建12个 g2f 输出数组
+            g2f v[vertexCount] = {
+                CreatG2fOut(), CreatG2fOut(), CreatG2fOut(), CreatG2fOut(),
+                CreatG2fOut(), CreatG2fOut(), CreatG2fOut(), CreatG2fOut(),
+                CreatG2fOut(), CreatG2fOut(), CreatG2fOut(), CreatG2fOut()
+            };
+
+            //初始化每个顶点的位置 pos 和 uv
+            float4 pos = float4(0, 0, 0, 0);
+            float2 uv = float2(0, 0);
+
+            //顶点的 UV 在竖直方向上的当前值和偏移值
+            float currentV = 0;
+            float offsetV = 1.0 / (vertexCount / 2 - 1);
+
+            //顶点的 y 坐标在竖直方向上的当前值的偏移值
+            float currentVertexHeight = 0;
+            float currentHeightOffset = 0;
+            float verticalEff = 0;
+			
+			//BlendCood
+			//让草绕着自身的 y 轴进行旋转
+            //生成一个随机角度
+            fixed randomAngle = frac(sin(root.x)*10000.0) * UNITY_HALF_PI;
+
+            //根据矩阵旋转的定理，分别创建旋转矩阵
+            //平移矩阵，先将所有点平移到原点
+            float4x4 firstTransformMatrix = float4x4(
+                1.0, 0.0, 0.0, -root.x,
+                0.0, 1.0, 0.0, -root.y,
+                0.0, 0.0, 1.0, -root.z,
+                0.0, 0.0, 0.0, 1.0
+                );
+
+            //旋转矩阵
+            float4x4 rotateMatrix = float4x4(
+                cos(randomAngle), 0, sin(randomAngle), 0,
+                0, 1, 0, 0,
+                -sin(randomAngle), 0, cos(randomAngle), 0,
+                0, 0, 0, 1
+                );
+
+            //再平移回去
+            float4x4 lastTransformMatrix = float4x4(
+                1.0, 0.0, 0.0, root.x,
+                0.0, 1.0, 0.0, root.y,
+                0.0, 0.0, 1.0, root.z,
+                0.0, 0.0, 0.0, 1.0
+                );
+				//BlendCood
+
+            //进行生成全部草顶点的循环
+            for (int i = 0; i &lt; vertexCount; i++)
+            {
+                //fmod(a,b) 返回 a 除 b 的余数
+                //如果返回值为偶数，顶点 UV 坐标均为(0,V)
+                if (fmod(i, 2) == 0) {
+                    pos = float4(root.x - _GrassWidth, root.y + currentVertexHeight, root.z, 1);
+                    uv = fixed2(0, currentV) * _MainTex_ST.xy + _MainTex_ST.zw;
+                }
+                else {
+                    pos = float4(root.x + _GrassWidth, root.y + currentVertexHeight, root.z, 1);
+                    uv = fixed2(1, currentV) * _MainTex_ST.xy + _MainTex_ST.zw;
+
+                    currentV += offsetV;
+                    currentVertexHeight += currentV * _GrassHeight;
+                }
+				 //对顶点 XZ 轴进行偏移
+                float2 randomDir = float2(sin((random * 15)), sin((random * 10)));
+                float2 forward = (sin((root.x * 10 + root.z / 5) * random)* verticalEff + randomDir * sin((random * 15)))* verticalEff;
+                pos.xz += forward * _BladeForward;
+                if (fmod(i, 2) == 1) {
+                    verticalEff += offsetV;
+                }
+
+                //对顶点 Y 轴进行旋转
+                //pos = mul(lastTransformMatrix, mul(rotateMatrix, mul(firstTransformMatrix, pos)));
+
+                 //对顶点 Y 轴进行旋转
+                pos = mul(lastTransformMatrix, mul(rotateMatrix, mul(firstTransformMatrix, pos)));
+				
+				/*/风随机偏移
+				float2 wind = float2(sin(_Time.x * UNITY_PI * 5), sin(_Time.x * UNITY_PI * 5));
+				wind.x += (sin(_Time.x + root.x / 25) + sin((_Time.x + root.x / 15) + 50)) * 0.5;
+				wind.y += cos(_Time.x + root.z / 80);
+				wind *= lerp(0.7, 1.0, 1.0 - random);
+
+				float oscillationStrength = 2.5f;
+				float sinSkewCoeff = random;
+				float lerpCoeff = (sin(oscillationStrength * _Time.x + sinSkewCoeff) + 1.0) / 2;
+				float2 leftWindBound = wind * (1.0 - oscillateDelta);
+				float2 rightWindBound = wind * (1.0 + oscillateDelta);
+
+				wind = lerp(leftWindBound, rightWindBound, lerpCoeff);
+
+				float randomAngle = lerp(-UNITY_PI, UNITY_PI, random);
+				float randomMagnitude = lerp(0, 1., random);
+				float2 randomWindDir = float2(sin(randomAngle), cos(randomAngle));
+				wind += randomWindDir * randomMagnitude;
+
+				float windForce = length(wind);
+
+				pos.xz += wind.xy * verticalEff;
+				pos.y -= windForce * verticalEff * 0.8;
+
+				pos = UnityObjectToClipPos(pos);
+
+				if (fmod(i, 2) == 1) {
+
+					verticalEff += offsetV;
+				}*/
+                //--风
+                //将世界坐标下的风的方向转化为局部坐标
+                float4 localWindDir = normalize(mul(unity_WorldToObject, _WindVector));
+                //控制风速（实际上为采样 uv 的移动速度）
+                float time = (_Time.y)*(_WindTimeScale);
+                //对风贴图进行采样
+                half4 rootWorldPos = mul(unity_ObjectToWorld, root);
+                //windmutation 一直在 0~1 之间变化 
+                float windmutation = 1 - tex2Dlod(_WindTex, float4(rootWorldPos.x / _WindTexMapSize + time, rootWorldPos.z / _WindTexMapSize, 0, 0)).g;
+                //sin(time + windmutation * 10) * cos(time * 2 / 3 + 1 + windmutation * 10) -1~1
+                //localWindDir.xz 控制风的方向
+                //clamp(uv.y - 0.1, 0, 1) UV.y 范围在 0.1 以下的顶点不发生移动 
+                //xz 轴上的偏移
+                half2 xzOffset = sin(time + windmutation * 10) * cos(time * 2 / 3 + 1 + windmutation * 10) * localWindDir.xz * clamp(uv.y - 0.1, 0, 1);
+                pos.xz += xzOffset * _WindXZStrength;
+                //根据 XZ 轴上的偏移算出在 Y 轴上
+                //直角三角形定理
+                //Y轴的偏移
+                half yOffset = pos.y - sqrt(pos.y * pos.y - (xzOffset.x * xzOffset.x + xzOffset.y * xzOffset.y));
+                pos.y -= yOffset * _WindYStrength * clamp(uv.y - 0.35, 0, 1);
+				
+                //pos.xz += sin(_Time.y * _WindTimeScale) * uv.y;
+
+                v[i] = GetVertex(pos, points[0].normal, uv);
+
+
+            }
+
+            //inout TriangleStream&lt;g2f&gt; triStream 输出三角形，即三个顶点数据
+            //将每三个顶点转化为三角形输出到片元着色器
+            for (int p = 0; p &lt; (vertexCount - 2); p++)
+            {
+                //triStream.Append(vertex); 该方法将输入的三个顶点自动构建成三角形
+                triStream.Append(v[p]);
+                triStream.Append(v[p + 2]);
+                triStream.Append(v[p + 1]);
+            }
+        }
+
+        //片元着色器
+        //简单的 Blin-Phong 光照模型
+        float4 frag(g2f i) : SV_Target{
+
+            //对_MainTex纹理和_AlphaTex纹理进行采样
+            fixed4 texColor = tex2D(_MainTex, i.uv);
+            fixed alpha = tex2D(_AlphaTex, i.uv).a;
+
+            //将法线归一化
+            float3 worldNormal = normalize(i.normal);
+            float3 worldSpecNormal = worldNormal;
+            worldNormal = worldNormal * 0.5 + 0.5;
+
+            //得到环境光
+            fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
+            //得到世界空间下光照方向
+            fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
+
+            //Diffuse 漫反射颜色
+            fixed NdotL = saturate(dot(worldNormal, worldLightDir));
+            fixed3 diffuse = _LightColor0.rgb * NdotL;
+
+            //Specular 高光颜色
+            //得到世界空间下的视线方向
+            fixed3 worldViewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
+            //得到半角向量
+            fixed3 halfDir = normalize(worldLightDir + worldViewDir);
+            fixed3 NdotH = saturate(dot(worldSpecNormal, halfDir));
+            float spec = pow(NdotH, _Specular * 128.0) * _Gloss;
+            fixed3 specular = _SpecualarColor * _LightColor0.rgb * spec;
+
+            //Fresnel
+            fixed fresnel = saturate(1 - dot(worldSpecNormal, worldViewDir));
+            //fresnel = clamp(fresnel - 0.2, 0, 1);
+            fresnel = pow(fresnel, _FresnelPower) * clamp(i.uv.y - 0.5, 0, i.uv.y);
+            fixed3 fresnelColor = fresnel * _FresnelColor;
+
+            //得到并输出最终颜色
+            fixed3 finalColor = ambient + diffuse + specular;
+            return fixed4(texColor * _GrassColor.rgb * finalColor, alpha);
+            //return fixed4(worldNormal, alpha);
+        }
+        ENDCG
+    }
+}
+FallBack &quot;Diffuse&quot;
 </code></pre>
 <p>}</p>
 

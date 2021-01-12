@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-11T09:50:11.886Z</updated>
+    <updated>2021-01-12T04:01:27.297Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -362,6 +362,75 @@ if (nums == null || nums.Length == 0) return -1;</p>
         return l;
     }
 }
+</code></pre>
+<p>#region 查找最大重复值<br>
+//static Dictionary&lt;int, int&gt; dic = new Dictionary&lt;int, int&gt;();</p>
+<pre><code>    //方法1：利用字典统计数组元素出现的次数。元素作为键，值存储数显次数。
+    static int SearchMaxRepet1(int[] array)
+    {
+        Dictionary&lt;int, int&gt; dic = new Dictionary&lt;int, int&gt;();
+        int hrefLength = array.Length / 2;
+
+        for (int i = 0; i &lt; array.Length; i++)
+        {
+            if (!dic.ContainsKey(array[i]))
+                dic.Add(array[i], 0);
+        }
+
+        for (int i = 0; i &lt; array.Length; i++)
+        {
+            dic[array[i]] += 1;
+        }
+        foreach (int k in dic.Keys)
+        {
+            if (dic[k] &gt; hrefLength)
+                return k;
+        }
+        return -1;
+    }
+    //方法2：排序发，排序后重复最多的值补丁集中在数组中间。
+    static int SearchMaxRepet2(int[] array)
+    {
+        QSort(new List&lt;int&gt;(array),0,array.Length-1);
+        return array[array.Length / 2];
+    }
+    //分治法
+    static int SearchMaxRepet3(int[] nums)
+    {
+        return GetMajority(nums, 0, nums.Length - 1);
+    }
+    /// &lt;summary&gt;
+    /// 分治法，获取众数
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;nums&quot;&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;left&quot;&gt;&lt;/param&gt;
+    /// &lt;param name=&quot;right&quot;&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    static int GetMajority(int [] nums,int left,int right)
+    {
+        if (left == right)//分为只有衣蛾元素时返回
+            return nums[left];
+
+        int mid = left + (right - left) / 2;//师爷咱们还是对半分
+        int leftMajority = GetMajority(nums, 0, mid);//左半边的中数
+        int rightMajority = GetMajority(nums, mid+1, right);//右半边的中数
+
+        if (leftMajority == rightMajority)//左右众数相同 则返回其中任意一个
+            return leftMajority;
+        //不相同则，则遍历数组统计该递归层左右那边众数出现的次数多
+        int leftCount = 0;
+        int rightCount = 0;
+        for (int i = left; i &lt;=right; i++)
+        {
+            if (nums[i] == leftMajority)
+                leftCount++;
+            else if (nums[i] == rightMajority)
+                rightCount++;
+        }
+
+        return leftCount &gt; rightCount ? leftMajority : rightMajority;
+    }
+    #endregion
 </code></pre>
 <p><strong>————————————————————————————————————</strong><br>
 <strong>179.最大数(网易面试题)</strong><br>
