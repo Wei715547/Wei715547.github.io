@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610423763170">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610682595388">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -37,7 +37,7 @@ Stack st = new St..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1610423763170" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1610682595388" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -294,8 +294,34 @@ result[result.Count - 1][1] = Math.Max(result[result.Count-1][1], interval[1]);<
 }<br>
 return result.ToArray();//列表转数组返回<br>
 }<br>
+}</p>
+<p>class LC62不同路径<br>
+{<br>
+/// <summary><br>
+/// 动态规划，dp[m,n] = dp[m-1,n]+dp[m,n-1];<br>
+/// </summary><br>
+/// <param name="m"></param><br>
+/// <param name="n"></param><br>
+/// <returns></returns><br>
+public int UniquePaths(int m, int n)<br>
+{<br>
+int[,] dp = new int[m,n];<br>
+dp[0,0] = 1;<br>
+for (int i = 0; i &lt; m; i++)<br>
+{<br>
+for (int j = 0; j &lt; n; j++)<br>
+{<br>
+if (i - 1 &gt;= 0 &amp;&amp; i - 1 &lt; m)<br>
+dp[i, j] += dp[i - 1,j];<br>
+if (j - 1 &gt;= 0 &amp;&amp; j - 1 &lt; n)<br>
+dp[i, j] += dp[i, j - 1];<br>
 }<br>
-<strong>class LC74搜索矩阵</strong><br>
+}<br>
+return dp[m - 1, n - 1];</p>
+<pre><code>    }
+}
+</code></pre>
+<p><strong>class LC74搜索矩阵</strong><br>
 {<br>
 /// <summary><br>
 /// 二分法，一维，二维数组索引转换<br>
@@ -1047,6 +1073,61 @@ public int Fib(int n)<br>
 if (n &lt; 2) return n == 1 ? 1 : 0;</p>
 <pre><code>        int sum = Fib(n - 1) + Fib(n - 2);
         return sum;
+    }
+    /// &lt;summary&gt;
+    /// 动态规划：
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;n&quot;&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public int Fib2(int n)
+    {
+        if (n &lt; 2) return n == 1 ? 1 : 0;
+
+        int[] res = new int[n + 1];
+        res[0] = 0;
+        res[1] = 1;
+        for (int i = 2; i &lt; res.Length; i++)
+        {
+            res[i] = res[i - 1] + res[i - 2];
+        }
+        return res[n];
+    }
+}
+</code></pre>
+<p><strong>class LC720词典中最长的单词</strong><br>
+{<br>
+/// <summary><br>
+/// 暴力法，<br>
+/// </summary><br>
+/// <param name="words"></param><br>
+/// <returns></returns><br>
+public static string LongestWord(string[] words)<br>
+{<br>
+//边界条件<br>
+if (words == null || words.Length == 0) return &quot;&quot;;</p>
+<pre><code>        string res = &quot;&quot;;//返回值
+        //将字符串数组存入集合方便快速查找
+        HashSet&lt;string&gt; wordset = new HashSet&lt;string&gt;(words);
+        //遍历集合
+        foreach (string  word in wordset)
+        {
+            //如果当前单词的长度大于，预存的结果。或长度相同时排序较小，这可能成为新的res
+            if (word.Length &gt; res.Length||(word.Length==res.Length&amp;&amp;word.CompareTo(res)&lt;0))
+            {
+                bool isword = true;//默认可以是新的res
+                for (int i = 0; i &lt; word.Length; i++)//遍历新word的每个word[0~i+1]顺序组合都在字典中存在
+                {
+                    if(!wordset.Contains(word.Substring(0,i+1)))//有不存在的则不能成为新res，退出循环
+                    {
+                        isword = false;
+                        break;
+                    }
+                }
+                if (isword==true)//遍历后认为true则瞒住条件
+                    res = word;//替换当前res
+            }                    
+        }
+        return res;//返回res
     }
 }
 </code></pre>
