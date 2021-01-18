@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-15T03:50:00.576Z</updated>
+    <updated>2021-01-18T05:47:09.407Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -18,6 +18,31 @@
         </link>
         <updated>2021-01-02T12:12:34.000Z</updated>
         <content type="html"><![CDATA[<p><a href ="https://leetcode-cn.com/problemset/all/"><strong>LeetCode题库</strong></a><br>
+/// <summary><br>
+** /// 19:删除链表d第n个节点**<br>
+/// </summary><br>
+/// <param name="head"></param><br>
+/// <param name="n"></param><br>
+/// <returns></returns><br>
+public ListNode RemoveNthFromEnd(ListNode head, int n)<br>
+{<br>
+if (head == null || head.next == null) return null;<br>
+ListNode dummy = new ListNode();<br>
+dummy.next = head;<br>
+ListNode l = dummy;<br>
+ListNode r = dummy;<br>
+for (int i = 0; i &lt; n; i++)<br>
+{<br>
+r = r.next;<br>
+}<br>
+while(r.next!=null)<br>
+{<br>
+l = l.next;<br>
+r = r.next;<br>
+}<br>
+l.next = l.next.next;<br>
+return dummy.next;<br>
+}<br>
 <strong>20.有效括号(B站面试题)</strong><br>
 /// <summary><br>
 /// 有效括号<br>

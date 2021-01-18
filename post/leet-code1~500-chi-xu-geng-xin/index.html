@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610682595388">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610948823939">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -19,15 +19,15 @@
 
 
     <meta name="description" content="LeetCode题库
-20.有效括号(B站面试题)
 /// 
-/// 有效括号
+** /// 19:删除链表d第n个节点**
 /// 
-class LeetCode20
+/// 
+/// 
+/// 
+public ListNode RemoveNthFromEnd(ListNode head, int n)
 {
-public static bool IsValid(string s)
-{
-Stack st = new St..." />
+if (..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -37,7 +37,7 @@ Stack st = new St..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1610682595388" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1610948823939" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -117,6 +117,31 @@ Stack st = new St..." />
             
             <div class="post-content" v-pre>
               <p><a href ="https://leetcode-cn.com/problemset/all/"><strong>LeetCode题库</strong></a><br>
+/// <summary><br>
+** /// 19:删除链表d第n个节点**<br>
+/// </summary><br>
+/// <param name="head"></param><br>
+/// <param name="n"></param><br>
+/// <returns></returns><br>
+public ListNode RemoveNthFromEnd(ListNode head, int n)<br>
+{<br>
+if (head == null || head.next == null) return null;<br>
+ListNode dummy = new ListNode();<br>
+dummy.next = head;<br>
+ListNode l = dummy;<br>
+ListNode r = dummy;<br>
+for (int i = 0; i &lt; n; i++)<br>
+{<br>
+r = r.next;<br>
+}<br>
+while(r.next!=null)<br>
+{<br>
+l = l.next;<br>
+r = r.next;<br>
+}<br>
+l.next = l.next.next;<br>
+return dummy.next;<br>
+}<br>
 <strong>20.有效括号(B站面试题)</strong><br>
 /// <summary><br>
 /// 有效括号<br>

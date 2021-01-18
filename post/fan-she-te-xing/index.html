@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610123565163">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610948823939">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -18,13 +18,10 @@
 
 
 
-    <meta name="description" content="using System;
-using System.Reflection;
-namespace 反射与特性
-{
-class Program
-{
-[Obsolete(&quot;过时的方法，请使用新的方法&quot;)]//弃用标记特性 O..." />
+    <meta name="description" content="**1.程序集：**是由编译器编译得到的，共供进一步执行的中间产物，
+在windo中一般表现为.dll(库文件)或可执行文件的格式
+**2.元数据：**程序中的类，类中的方法，变量等等信息就是程序的元数据，
+有关程序以及类型的数据被称为元数..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -34,7 +31,7 @@ class Program
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1610123565163" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1610948823939" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -113,7 +110,118 @@ class Program
             <div class="post-date">2020-05-30</div>
             
             <div class="post-content" v-pre>
-              <p>using System;<br>
+              <p>**1.程序集：**是由编译器编译得到的，共供进一步执行的中间产物，<br>
+在windo中一般表现为.dll(库文件)或可执行文件的格式<br>
+**2.元数据：**程序中的类，类中的方法，变量等等信息就是程序的元数据，<br>
+有关程序以及类型的数据被称为元数据，它们保存在程序集中<br>
+**3.反射的概念：**程序运行时可以查看本身或其他程序集的元数据。<br>
+一个运行的程序查看本身或者其他程序的元数据的行为叫做反射。<br>
+程序运行时，可通过反射得到其他程序集或者自己的程序集的各种代码的各种信息<br>
+类，函数，变量，对象等。对其进行实例化，执行等操作。<br>
+**4.反射的作用：**因为反射可以在程序编译后获取信息，所以它提高了程序的扩展性和灵活性。<br>
+1.程序运行时获得获得所有元数据，包括元数据的特性。<br>
+2.程序运行时，实例化对象，操作对象。<br>
+3.程序运行时创建新的对象，用着些对象执行任务。</p>
+<p><strong>一.Type（类的信息类）</strong><br>
+它是反射功能的基础，是访问元数据的主要方式。<br>
+使用Type的成员获取有关类型声明的信息<br>
+有关类型的成员（如构造方法，方法，字段，属性和类的事件）。</p>
+<pre><code>//获取Type
+        //1.object中的GetType方法可获取对象的Type
+        int a = 27;
+        Type type = a.GetType();
+        Console.WriteLine(type);
+        //2.通过typeof关键字传入类型，也可的到对象的Type
+        Type type1 = typeof(int);
+        Console.WriteLine(type1);
+        //3.通过类的名可获取类型，“必须包含命名空间”
+        Type type2 = Type.GetType(&quot;System.Int32&quot;);
+        Console.WriteLine(type2);
+        //三种方法获取的type相同(指向同一存储空间引用地址相同)
+
+        //的都类的程序集信息
+        Console.WriteLine(type.Assembly);
+
+        //获取类中所有公共成员
+        //首先得到Type
+        Type t = typeof(Text);
+        //然后得到所有公共成员
+        //需要引用命名空间 using System.Reflection;
+        MemberInfo[] infos = t.GetMembers();//成员信息
+        foreach (var item in infos)
+        {
+            Console.WriteLine(item);
+        }
+
+        //获取类公共构造函数并进行调用
+        //首先获取所有构造函数
+        ConstructorInfo[] ctinfo = t.GetConstructors();//构造信息
+        foreach (var item in ctinfo)
+        {
+            Console.WriteLine(item);
+        }
+        //获取其中一个构造函数并执行
+        //得到构造函数传入，type数组，数组中内容按顺序是参数类型
+        ConstructorInfo info = t.GetConstructor(new Type[0]);//得到无参构造函数
+        //执行构造函数传入，boject数组，表示按顺序传入的参数,没有参数掺入null即可
+         Text tn = info.Invoke(null/*new object[0]*/) as Text;
+        Console.WriteLine(tn.j);
+        //得到有参构造函数
+        ConstructorInfo info2 = t.GetConstructor(new Type[] { typeof(int) });
+        Text tn2 = info2.Invoke(new object[] { 2 }) as Text;
+
+        //获取类中公共成员变量
+        FieldInfo[] fieldInfos = t.GetFields();//公共变量信息
+        //得到指定名称的公共成员变量。
+        FieldInfo infoj = t.GetField(&quot;j&quot;);
+        Console.WriteLine(infoj);
+        //通过反射获取和设置对象的值
+        Text tg = new Text(1, &quot;7&quot;);//反射获取
+        **//读取（获取枚举中的类型时，GetValue(null)不需要填入对象）**
+        Console.WriteLine(infoj.GetValue(tg));//读取
+        infoj.SetValue(tg, 7);//设置
+         //获取类中公共方法
+        Type strType = typeof(string);
+        MethodInfo[] methods = strType.GetMethods();//成员方法信息
+        //如方法存在重载，用Type数组表示参数类型
+        MethodInfo substr = strType.GetMethod(&quot;SubString&quot;, 
+            new Type[] { typeof(int), typeof(int) });//开始位置和截取长度的重载
+        //调用该方法
+        string h = &quot;weizz&quot;;
+        object res = substr.Invoke(h, new object[] { 0, 2 });//若是静态方法则不需要传入对象。
+        Console.WriteLine(res);
+
+        **//Activator：用于快熟实例化对象的类**
+        //将Type对象快捷实例化为对应类对象
+        //需先得到Type
+        Type te = typeof(Text);
+        //1.无参构造
+        Text textobj = Activator.CreateInstance(te) as Text;
+        //2.有参数构造
+        textobj = Activator.CreateInstance(te, 99) as Text;
+        textobj = Activator.CreateInstance(te, 7, &quot;7&quot;) as Text;
+
+        **//Assembly:程序集类**
+        //主要用来加载其他程序集，加载后使用Type使用其他程序集中的信息，
+        //三种加载程序集的函数
+        //Assembly assembly = Assembly.Load(&quot;程序集名称&quot;);//加载同一文件夹下的
+        //assembly = Assembly.LoadFrom(&quot;包含文件名的路径&quot;);
+        //assembly = Assembly.LoadFile(&quot;程序集完全路径&quot;);
+        Assembly assembly = Assembly.LoadFile(@&quot;D:\715\1Note\Qs\Leet Cood\bin\Debug\netcoreapp3.0\Leet Cood.dll&quot;);
+        Type[] types = assembly.GetTypes();//获取程序集中所有的类
+        for (int i = 0; i &lt; types.Length; i++)
+        {
+            Console.WriteLine(types[i]);
+        }
+        //加载其中一个类使用
+        Type LC = assembly.GetType(&quot;Leet_Cood.LeetCode179&quot;);//从程序集中获取类元数据
+        object le = Activator.CreateInstance(LC);//创建类对象
+        MethodInfo method = LC.GetMethod(&quot;Ln&quot;, new Type[] { typeof(int[]) });//获取类中的方法
+        string s = method.Invoke(null, new object[] { new int[] { 4, 6, 7, 8, 1, 3 } }).ToString();//调用类中的方法，接收返回值(调用静态方法不用传入对象)
+        Console.WriteLine(s);
+</code></pre>
+<p><strong>——————————————————————————————</strong><br>
+using System;<br>
 using System.Reflection;</p>
 <p>namespace 反射与特性<br>
 {<br>

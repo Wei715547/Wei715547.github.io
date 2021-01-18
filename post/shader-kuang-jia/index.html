@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610682595388">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1610948823939">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -31,7 +31,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1610682595388" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1610948823939" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -119,7 +119,7 @@
 将模型坐标映射到屏幕坐标(裁剪空间)生成新的图元，备后续完成图像渲染。<br>
 期间需要变换到一个合适的坐标系，进行相应的渲染操作，如世界空间下计算顶点法线与光线的相互作用更方便。<br>
 <strong>3.光栅化阶段</strong><br>
-将集合阶段传来的图元光栅化，将它们转化为片元。即转变为一个个像素点用于在屏幕上显示。<br>
+将几何阶段传来的图元光栅化，将它们转化为片元。即转变为一个个像素点用于在屏幕上显示。<br>
 逐像素调用片原着色器，涉及一些剔除，隐藏面消除在这里执行。<br>
 <strong>渲染流水线执行阶段</strong><br>
 1.输入装配阶段：负责从CPU获取图元基本信息，组合成流水线需要的几何信息。<br>
