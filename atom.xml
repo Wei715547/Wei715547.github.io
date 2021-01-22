@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-18T09:21:30.835Z</updated>
+    <updated>2021-01-22T15:56:36.213Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,133 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[卡通Shader]]></title>
+        <id>https://Wei715547.github.io/post/qia-tong-shader/</id>
+        <link href="https://Wei715547.github.io/post/qia-tong-shader/">
+        </link>
+        <updated>2021-01-22T15:02:01.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1611328235122.PNG" alt="" loading="lazy"><br>
+Shader &quot;Shader103.5/Rimlight&quot;<br>
+{<br>
+Properties<br>
+{<br>
+_MainTex(&quot;Base texture&quot;, 2D) = &quot;white&quot; {}<br>
+_RampTex(&quot;Ramp texture&quot;, 2D) = &quot;white&quot; {}</p>
+<pre><code>	_AmbientStrength(&quot;Ambient Strength&quot;,Range(0,1.0)) = 0.1
+	_DiffStrength(&quot;Diff Strength&quot;,Range(0,1.0)) = 0.1
+	_SpecStrength(&quot;Spec Strength&quot;,Range(0,5.0)) = 0.1
+	_RimStrength(&quot;Rim Strength&quot;,Range(0,1.0)) = 0.1
+	_RimAmount(&quot;Rim Amount&quot;,Range(0,1.0)) = 0.1
+
+	_SpecPow(&quot;Specular Pow&quot;,int) = 0.5
+	_Brightness(&quot;Brightness&quot;,Range(0,1.0)) = 0.5
+	_TintColor(&quot;Tint Color&quot;,Color) = (1.0,1.0,1.0,1.0)
+	_OutlineAmount(&quot;OutlineAmount&quot;,Range(0,1.0)) = 0.1
+	_OutlineColor(&quot;OutlineColor&quot;,Color) = (0,0,0,0)
+}
+
+SubShader
+{
+	Tags
+	{
+		&quot;LightMode&quot; = &quot;ForwardBase&quot;
+		&quot;PassFlags&quot; = &quot;OnlyDirectional&quot;
+	}
+	Pass
+	{
+		CGPROGRAM
+		#pragma vertex vert
+		#pragma fragment frag
+		#include &quot;UnityLightingCommon.cginc&quot; // for _LightColor0
+		#include &quot;UnityCG.cginc&quot;
+
+		struct appdata
+		{
+			float4 vertex : POSITION;
+			float3 normal : NORMAL;
+			float2 uv: TEXCOORD0;
+		};
+
+		struct v2f
+		{
+			float4 vertex : SV_POSITION;
+			float3 normal : NORMAL;
+			float2 uv: TEXCOORD0;
+			float3 viewDir : TEXCOORD1;
+		};
+
+		v2f vert(appdata v)
+		{
+			v2f o;
+			o.uv = v.uv;
+			o.vertex = UnityObjectToClipPos(v.vertex);
+			o.normal = UnityObjectToWorldNormal(v.normal);
+			o.viewDir = normalize(_WorldSpaceCameraPos.xyz - mul(unity_ObjectToWorld, v.vertex).xyz);
+			return o;
+		}
+
+		sampler2D _MainTex;
+		sampler2D _RampTex;
+
+		float _AmbientStrength;
+		float _SpecStrength;
+		float _DiffStrength;
+		float _RimStrength;
+		float _RimAmount;
+
+		float4 _TintColor;
+		float4 _RimColor;
+		float _SpecPow;
+		float _Brightness;
+		float _OutlineAmount;
+		float4 _OutlineColor;
+
+		float4 frag(v2f i) : SV_Target
+		{
+			float4 baseColor = tex2D(_MainTex, i.uv) ;
+			float3 normal = normalize(i.normal);
+			//ambient
+			float3 ambient = _LightColor0 * _AmbientStrength;
+
+			//diffuse
+			float NdotL = dot(i.normal, _WorldSpaceLightPos0);
+			float2 uv = float2((NdotL * 0.5 + 0.5), 0);
+			float3 ramp = tex2D(_RampTex, uv);
+
+			float3 diff = (NdotL &lt; 0) ? 0 : 1 * _LightColor0 * _DiffStrength;// 把(NdotL &lt; 0) ? 0 : 1 改成ramp 如果需要用自己的texture
+
+			//specular
+			float3 reflectDir = reflect(-_WorldSpaceLightPos0, normal);
+			float spec = pow(max(dot(i.viewDir, reflectDir), 0.0), _SpecPow);
+			float3 specSmooth = smoothstep(0.005, 0.01, spec) * _LightColor0 * _SpecStrength;
+
+			//rimlight
+			float NdotV = 1 - dot(i.normal, i.viewDir);
+			float rimSmooth = max(0,NdotL) * smoothstep(_RimAmount - 0.01, _RimAmount + 0.01, NdotV) ;
+			float3 rimlight = rimSmooth * _LightColor0 * _RimStrength;
+
+			////Solid color outline
+			float4 final_color;
+			if (NdotV &lt; _OutlineAmount) {
+				final_color = float4((diff + ambient + specSmooth + rimlight), 1.0) * _Brightness * baseColor * _TintColor;
+			}
+			else {
+				final_color = _OutlineColor;
+			}
+
+			//final color
+			//float4 final_color = float4((diff + ambient+ specSmooth + rimlight),1.0) * _Brightness * baseColor * _TintColor;
+			
+			return final_color;
+		}
+		ENDCG
+	}
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Leet Code1~500持续更新]]></title>
         <id>https://Wei715547.github.io/post/leet-code1~500-chi-xu-geng-xin/</id>
@@ -1083,7 +1210,25 @@ if (people == null || people.Length == 0) return 0;</p>
     }
 }
 </code></pre>
-<p><strong>——————————————————————————————————</strong><br>
+<p><strong>989数组形式的整数加法</strong><br>
+public static List<int> AddToArrayForm(int[] A, int K)<br>
+{<br>
+int ans = 0;<br>
+for (int i = 0; i &lt; A.Length; i++)<br>
+{<br>
+ans = ans * 10 + A[i];<br>
+}<br>
+ans += K;<br>
+List<int> res = new List<int>();<br>
+while(ans&gt;0)<br>
+{<br>
+res.Add(ans % 10);<br>
+ans /= 10;<br>
+}<br>
+res.Reverse();<br>
+return res;<br>
+}<br>
+<strong>——————————————————————————————————</strong><br>
 <strong>class LC1456定长子串中元音最大的数目</strong><br>
 {<br>
 /// <summary><br>
@@ -3960,455 +4105,6 @@ private GameObject ClickScene()
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[C++：静态，常量，内存申请，构造/析构，继承多态，友元]]></title>
-        <id>https://Wei715547.github.io/post/cclass/</id>
-        <link href="https://Wei715547.github.io/post/cclass/">
-        </link>
-        <updated>2020-11-03T12:37:47.000Z</updated>
-        <content type="html"><![CDATA[<p>int a[3] = { 0,1,2 };//数组<br>
-char cl[3];//类C字符串逐个位赋值，cl = &quot;zla&quot;不合法--C++提供字符串类&quot;string&quot;<br>
-cl[0] = 'z';<br>
-cl[1] = 'l';<br>
-cl[2] = 'a';<br>
-//cin &gt;&gt; cl;<br>
-for (int i = 0; i &lt; 3; i++)<br>
-{<br>
-cout &lt;&lt; cl[i]&lt;&lt; endl;<br>
-}<br>
-struct Person<br>
-{<br>
-string name;<br>
-int age;<br>
-char sex;<br>
-float height;<br>
-};<br>
-Person p1 = { &quot;Wei&quot;,27,'W',175};<br>
-声明：<br>
-class 类名<br>
-{<br>
-public:<br>
-外部调用方法<br>
-属性get,set;<br>
-private:<br>
-属性<br>
-}<br>
-//在类外部定义“类中声明的方法”（必须加以“::”作为域限定符，用于声明函数属于哪个类）<br>
-函数返回值  类名::函数名（参数）<br>
-{<br>
-方法体；//在类内实现定义的函数系统能够默认为内联函数。<br>
-}<br>
-内联函数(避免方法在栈空间中频繁存取释放)：只有在类外定义的成员函数规模较且调用频率较高时，才将成员函数指定为内联函数，(返回值2加inline ,类中的声明同样加上inline)。<br>
-成员访问：<br>
-1.对象名.成员名；<br>
-2.指针-&gt;成员名<br>
-3.引用名.成员名<br>
-类：get,set方法：读写类的私有成员（保护作用）。<br>
-类：成员函数：</p>
-<p>类的成员函数声明与实现，分离；<br>
-在头文件&quot;.h&quot;文件中进行类的声明；<br>
-在源代码/程序文件&quot;.cpp&quot;文件中进行类成员函数的实现；<br>
-在主函数&quot;main.cpp&quot;文件中使用类 的成员函数；</p>
-<p>Re.h文件<br>
-cood&lt;&gt;<br>
-using namespace std;<br>
-calss Re<br>
-{<br>
-public:<br>
-int Area();<br>
-int Perimeter;<br>
-int getLength();<br>
-void setLength(int Len);<br>
-int getWidth();<br>
-void setWidth（int Wid）;<br>
-private:<br>
-int length,width,<br>
-}</p>
-<p>Re.cpp文件：<br>
-#include &quot;Re.h&quot;//引入要实现类的头文件<br>
-int Re::Area()<br>
-{<br>
-return length*width;<br>
-}<br>
-int Re::getLength ()<br>
-{<br>
-return length;<br>
-}<br>
-void Re::setLength(int Len)<br>
-{<br>
-length = Len;<br>
-}</p>
-<p>main.cpp主函数<br>
-#include &quot;Re.h&quot;//引入使用类头文件,预编译时使用Re.h中的内容替换引用<br>
-using namespace std;<br>
-int main (int arge,char *argv[])<br>
-{</p>
-<p>}<br>
-构造函数：类名（）；{}<br>
-1）无返回值，非void<br>
-2）可以有多个构造函数，根据参数类型重载<br>
-3）类对象创建时自动调用（new调用，delete调用析构函数）<br>
-1、在类类内定义<br>
-class Re<br>
-{<br>
-public:<br>
-Re()//构造<br>
-{<br>
-length = 1;<br>
-width = 1;<br>
-}<br>
-}<br>
-2、在类外定义<br>
-Re::Re()<br>
-{<br>
-length = 1;<br>
-width = 1;<br>
-}<br>
-带参数构造函数：类名（类型 形参）；<br>
-class Re<br>
-{<br>
-public:<br>
-Re(int Len,int Wid)//构造<br>
-{<br>
-length = Len;<br>
-width = Wid;<br>
-}<br>
-}<br>
-参数初始化表对数据成员初始化：<br>
-class Re<br>
-{<br>
-public:<br>
-Re(int Len,int Wid):length(Len),width(Wid) {}//&quot;{}&quot;不能省略<br>
-private:<br>
-int length,windle;<br>
-}<br>
-默认参数值构造函数：用户不指定是，编译器使用默认值<br>
-Re(int Len = 1,int Wid = 2)//构造<br>
-{<br>
-length = Len;<br>
-width = Wid;<br>
-}<br>
-析构函数：~与类名相同 （）前面加上“~”<br>
-1）与构造函数对应用于释放对象所占用内存(并不是删除对象)，由delete调用<br>
-2）析构函数同样没有返回值，但也没有参数由于没有参数也不能重载，一个类存在多个构造函数但只存在一个析构函数。<br>
-3）析构函数也可用于最后一次使用类对象后执行的操作（写在方法体中）<br>
-4）后创建的对象先被释放<br>
-5）静态局部对象在函数执行结束时不调用析构函数，只在main函数结束或调用exit函数时才调用。<br>
-6）对于全局对象，当程序离开其作区域时调用i构造函数。<br>
-class Re<br>
-{<br>
-public:<br>
-Re(){}<br>
-~Re(){}<br>
-}</p>
-<pre><code>new malloc区别
-</code></pre>
-<p>1、	new分配内存按照数据类型进行分配，malloc分配内存按照指定的大小分配；<br>
-malloc 是函数，开辟内存需要传入字节数，如 malloc(100)；表示在堆上开辟了 100 个字 节的内存，返回 void*，表示分配的堆内存的起始地址，因此 malloc 的返回值需要强转成指 定类型的地址；new 是运算符，开辟内存需要指定类型，返回指定类型的地址，因此不需要 进行强转。<br>
-2、	malloc 和 new 都是在堆上开辟内存的，malloc 只负责开辟内存，没有初始化功能，需要 用户自己初始化；new 不但开辟内存，还可以进行初始化，<br>
-3、	malloc 开辟内存失败返回 NULL，new 开辟内存失败抛出 bad_alloc 类型的异常，需要捕 获异常才能判断内存开辟成功或失败，new 运算符其实是 operator new 函数的调用，它底 层调用的也是 malloc 来开辟内存的，new 它比 malloc 多的就是初始化功能，对于类类型来 说，所谓初始化，就是调用相应的构造函数。<br>
-4、	new分配的内存要用delete销毁，malloc要用free来销毁；delete销毁的时候会调用对象的析构函数，而free则不会。</p>
-<p>CONST<br>
-共有数据<br>
-常量数据成员：const在不同位置标示不同含义：<br>
-const int aa//使用const的普通数据成员常量<br>
-const int * bb//在int前使用const的指针数据成员<br>
-int <em>const cc//在int后使用const的指针数据成员<br>
-const int <em>const dd//在int类型前后使用const的指针数据成员<br>
-const int &amp;cc //使用const的引用类型成员<br>
-1）aa为整型常量，初始化后不能被改变，（在类中，必须在构造函数的初始化列表中进行初始化（不能在类定义时初始化：const int aa = 5//错误））<br>
-2）在指针数据类型前时：指针指向的值不能改变<br>
-3）在指针数据类型后时：指针变量值不能改变<br>
-4）在指针数据类型前后时：指针指向值与指针值都不改变<br>
-常量创建后不能将整型常量的地址赋值给一个int</em>指针，应赋值给cosnt int</em>指针。<br>
-const int mm = 30；<br>
-int *pp = &amp;mm;//应改为：const int *pp = &amp;mm<br>
-C++允许创建指针常量，所指向的普通变量不是常量：<br>
-int mm = 30;<br>
-const int *pp = &amp;mm;//可以将非常量赋值给指针常量，但不能通过pp改变mm值。<br>
-常成员函数：<br>
-声明：<br>
-void showDate() const;//const在参数列表后。<br>
-定义：<br>
-void Class::showDate() cosnt//在调用时不需加const<br>
-{<br>
-方法体;<br>
-}<br>
-常类对象：<br>
-声明<br>
-Re const r1 = {len = 2; wid = 3;}//定义常队形时必须进行初始化，而且其数据成员不能被更新（数据成员变为const）。<br>
-注意：如果一个对象被声明为常对象，则通过该常对象只能调用它的常成员函数（不能调用非const型成员函数）(系统自动隐式调用的)构造/析构除外).<br>
-静态成员：<br>
-声明：<br>
-static flot AccounntSum;<br>
-初始化：<br>
-float AccountRecord::AccountSum = 0;//C++中静态成员必须在类外进行，不能在构造函数中(C#中可定义静态构造函数用于初始化静态成员)</p>
-<pre><code>1）静态字段 仅仅存储一份 所有对象共享 常驻内存中
-2）静态方法只能访问静态成员（非静态成员依赖于对象生成） ，非静态方法静态非静态都可以访问，
-3）*不能实例化，只能包含静态成员， 静态类不能被继承（工具类）
- /* 静态适用
-    * 利：单独空间存储，所有对象共享，可直接被类名调用
-    * 弊：静态方法中只能访问静态成员，共享数据被多个对象访问时会出现并发。
-    * 适用场合：
-    * 1.所有对象需要共享的数据。
-    * 2.在没有对象是就要访问成员。
-    * 3.工具类适合做静态类（常用，不需要过多数据）
-</code></pre>
-<p>继承，派生：<br>
-继承的语法：<code>class 子类 : 继承方式 父类</code><br>
-多继承语法：：class 派生类 ：继承方式1 基类1，继承方式2 基类2....<br>
-{<br>
-派生类新成员；<br>
-}</p>
-<p><strong>继承方式一共有三种：</strong></p>
-<ul>
-<li>公共继承</li>
-<li>保护继承</li>
-<li>私有继承<br>
-<img src="https://Wei715547.github.io/post-images/1604666547871.png" alt="" loading="lazy"></li>
-</ul>
-<p>**问题：**从父类继承过来的成员，哪些属于子类对象中？<br>
-父类中私有成员也是被子类继承下去了，只是由编译器给隐藏后访问不到（子类的sizeof包括子类成员以及所有父类成员//包括私有成员）<br>
-父类的方法也是单独储存的，子类调用时由this指针指向调用的对象实现调用。</p>
-<p>**问题：父类和子类的构造和析构顺序是谁先谁后？<br>
-继承中 先调用父类构造函数，再调用子类构造函数，析构顺序与构造相反</p>
-<p>派生类构造函数：<br>
-派生类名::派生类名（arg_derived_list）：基类名（arg_base_list）<br>
-{<br>
-//派生类新增数据成员初始化语句；<br>
-}<br>
-派生类存在与基类同名函数时使用，基类::函数名()来调用基类同名函数 （::作用域符）</p>
-<p><strong>多态</strong>（C++以(纯)/虚函数实现多态:C#则在C++的虚函数基础上分出虚函数，抽象类接口(纯虚函数）</p>
-<p>1）虚函数<br>
-class 基类<br>
-{<br>
-public:<br>
-virtural 函数返回值 虚函数名（形式参数表）<br>
-{<br>
-函数体<br>
-}<br>
-}<br>
-class 派生类： public 基类<br>
-{<br>
-public:<br>
-virtual 函数返回值 虚函数名（形参表）//virtual可不写出，派生类中与基类同名函数默认为虚函数<br>
-{<br>
-函数体；<br>
-}<br>
-}<br>
-C++中不采用虚函数时，通过定义多个指向各派生类的指针来调用派生类中同名的函数。<br>
-pt&gt;函数名();<br>
-虚函数，指针指向派生类时，调用同名方法为运行期绑定（动态）非编译期绑定。(动态绑定通过实际指向类的虚函数表获取函数地址)<br>
-运行期绑定只通过指针/引用来操作，采用定向直接调用函数将采用编译期绑定来调用虚函数</p>
-<p>构造函数与析构函数<br>
-构造函数不能时虚函数，析构函数可以是虚函数。<br>
-<strong>（1）为什么父类的析构函数必须是虚函数？（虚析构）</strong><br>
-当我们动态申请一个子类对象时，使用基类指针指向该对象，如果不用虚函数，基类指针在析构时，子类的析构函数不能得到调用，也就是为了在释放基类指针时可以释放掉子类申请的空间，防止内存泄漏.<br>
-析构函数声明为虚函数后，通过指针来删除所指向的对象时，编译器进行运行期绑定，由于基类型指针实际指向的是派生类对象，则派生类析构函数被调用，随后基类析构函数被调用，(析构函数调用时沿着继承树自下而上进行，通过将析构函数声明为虚函数，来保证下层派生类析构函数得到调用，防止内存泄漏)<br>
-<strong>纯虚析构</strong>：<br>
-virtual Animal() =0;//在类中声明纯虚析构后需在类外实现纯虚析构，<br>
-Animal::Animal()<br>
-[<br>
-函数体;<br>
-]<br>
-<strong>（2）为什么C++默认的析构函数不是虚函数？</strong><br>
-因为虚函数需要额外的虚表指针指向虚函数表，占用额外的内存4字节。而对于不会被继承的类来说，其析构函数如果是虚函数，就会浪费内存。</p>
-<p><strong>纯虚函数</strong>：在虚函数声明的结尾加上“=0”（派生类必须实现基类的纯虚数）（公共接口）<br>
-一个类只要拥有一个纯虚函数，它就是抽象类（包含纯虚函数的类时无法创建对象的）<br>
-基类<br>
-public:<br>
-virtual float SurfaceArea()=0;<br>
-vitual float Volme()=0;<br>
-派生类<br>
-public Cube:public Base<br>
-{<br>
-public:<br>
-Cube(float len):length(len){}<br>
-float SurfaceArea();<br>
-float Volume();</p>
-<pre><code>private:
-float length;
-</code></pre>
-<p>};<br>
-float Cube::SurfaceArea()<br>
-[<br>
-函数体<br>
-]</p>
-<p><strong>友元/friend</strong> （使外部，全局/局部函数，类，作为本类的友元，使其可以访问本类中的私有成员）<br>
-1）全局函数做友元</p>
-<pre><code class="language-C++">class Building
-{
-	//告诉编译器 goodGay全局函数 是 Building类的好朋友，可以访问类中的私有内容
-	**friend void goodGay(Building * building);**
-
-public:
-
-	Building()
-	{
-		this-&gt;m_SittingRoom = &quot;客厅&quot;;
-		this-&gt;m_BedRoom = &quot;卧室&quot;;
-	}
-
-
-public:
-	string m_SittingRoom; //客厅
-
-private:
-	string m_BedRoom; //卧室
-};
-
-
-void goodGay(Building * building)
-{
-	cout &lt;&lt; &quot;好基友正在访问： &quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
-	cout &lt;&lt; &quot;好基友正在访问： &quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
-}
-
-
-void test01()
-{
-	Building b;
-	goodGay(&amp;b);
-}
-
-int main(){
-
-	test01();
-
-	system(&quot;pause&quot;);
-	return 0;
-}
-</code></pre>
-<p>2）类做友元</p>
-<pre><code class="language-C++">class Building;
-class goodGay
-{
-public:
-
-	goodGay();
-	void visit();
-
-private:
-	Building *building;
-};
-
-
-class Building
-{
-	//告诉编译器 goodGay类是Building类的好朋友，可以访问到Building类中私有内容
-	**friend class goodGay;**
-
-public:
-	Building();
-
-public:
-	string m_SittingRoom; //客厅
-private:
-	string m_BedRoom;//卧室
-};
-
-Building::Building()
-{
-	this-&gt;m_SittingRoom = &quot;客厅&quot;;
-	this-&gt;m_BedRoom = &quot;卧室&quot;;
-}
-
-goodGay::goodGay()
-{
-	building = new Building;
-}
-
-void goodGay::visit()
-{
-	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
-	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
-}
-
-void test01()
-{
-	goodGay gg;
-	gg.visit();
-
-}
-
-int main(){
-
-	test01();
-
-	system(&quot;pause&quot;);
-	return 0;
-}
-</code></pre>
-<p>3）成员函数做友元</p>
-<pre><code class="language-C++">
-class Building;
-class goodGay
-{
-public:
-
-	goodGay();
-	void visit(); //只让visit函数作为Building的好朋友，可以发访问Building中私有内容
-	void visit2(); 
-
-private:
-	Building *building;
-};
-
-
-class Building
-{
-	//告诉编译器  goodGay类中的visit成员函数 是Building好朋友，可以访问私有内容
-	**friend void GoodGay::visit();**
-
-public:
-	Building();
-
-public:
-	string m_SittingRoom; //客厅
-private:
-	string m_BedRoom;//卧室
-};
-
-Building::Building()
-{
-	this-&gt;m_SittingRoom = &quot;客厅&quot;;
-	this-&gt;m_BedRoom = &quot;卧室&quot;;
-}
-
-goodGay::goodGay()
-{
-	building = new Building;
-}
-
-void goodGay::visit()
-{
-	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
-	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
-}
-
-void goodGay::visit2()
-{
-	cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_SittingRoom &lt;&lt; endl;
-	//cout &lt;&lt; &quot;好基友正在访问&quot; &lt;&lt; building-&gt;m_BedRoom &lt;&lt; endl;
-}
-
-void test01()
-{
-	goodGay  gg;
-	gg.visit();
-
-}
-
-int main(){
-    
-	test01();
-
-	system(&quot;pause&quot;);
-	return 0;
-}
-</code></pre>
 ]]></content>
     </entry>
 </feed>

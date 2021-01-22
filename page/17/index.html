@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>简单工厂设计模式 | WeiBlog</title>
+<title>WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,15 +18,9 @@
 
 
 
-    <meta name="description" content="using System;
-namespace 简单工厂设计模式//（抽象类实现的多态）
-{
-class Program
-{
-static void Main(string[] args)
-{
-string brand = Console...." />
-    <meta name="keywords" content="" />
+    <meta name="description" content="年月增长，我宜强盛。
+用于Unity+开发的技术积累">
+    
   </head>
   <body>
     <div id="app" class="main">
@@ -109,85 +103,36 @@ string brand = Console...." />
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">简单工厂设计模式</h2>
-            <div class="post-date">2020-07-24</div>
-            
-            <div class="post-content" v-pre>
-              <p>using System;</p>
-<p>namespace 简单工厂设计模式//（抽象类实现的多态）<br>
-{<br>
-class Program<br>
-{<br>
-static void Main(string[] args)<br>
-{<br>
-string brand = Console.ReadLine();<br>
-NoteBook cosm = GetNoteBook(brand);<br>
-cosm.Say();<br>
-}</p>
-<pre><code>    public static NoteBook GetNoteBook(string brand)
-    {
-        NoteBook nb = null;
-        switch(brand)
-        {
-            case &quot;Lenovo&quot;:nb = new Lenovo();
-                break;
-            case &quot;Acre&quot;:nb = new Acre();
-                break;
-            case &quot;IBM&quot;:nb = new IBM();
-                break;
-        }
-        return nb;
-    }
-
-    public abstract class NoteBook
-    {
-        public abstract void Say();
-    }
-
-    public class Lenovo : NoteBook
-    {
-        public override void Say()
-        {
-            Console.WriteLine(&quot;Lenovo&quot;);
-        }
-    }
-
-    public class Acre:NoteBook
-    {
-        public override void Say()
-        {
-            Console.WriteLine(&quot;Acre&quot;);
-        }
-    }
-
-    public class IBM:NoteBook
-    {
-        public override void Say()
-        {
-            Console.WriteLine(&quot;IBM&quot;);
-        }
-    }
-}
-</code></pre>
-<p>}</p>
-
-            </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/fang-wen-xiu-shi-fu/">
-                  <h3 class="post-title">
-                    访问修饰符
-                  </h3>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://Wei715547.github.io/post/hello-gridea/">
+                  <h2 class="post-title">Hello Gridea</h2>
                 </a>
+                <div class="post-date">
+                  2018-12-12
+                </div>
+                <div class="post-abstract">
+                  <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+
+                </div>
               </div>
-            
+              
+                <a class="right" href="https://Wei715547.github.io/post/hello-gridea/">
+                  <div class="feature-container" style="background-image: url('https://Wei715547.github.io/post-images/hello-gridea.png')">
+                  </div>
+                </a>
+              
+            </article>
+          
 
-            
-
-          </div>
+          <div class="pagination-container">
+  
+    <a href="https://Wei715547.github.io/page/16/" class="prev"><i class="icon-arrow-ios-back-outline"></i> 上一页</a>
+  
+  
+</div>
 
         </div>
       </div>
