@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1611328238480">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1611418930127">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -19,15 +19,10 @@
 
 
     <meta name="description" content="LeetCode题库
-/// 
-** /// 19:删除链表d第n个节点**
-/// 
-/// 
-/// 
-/// 
-public ListNode RemoveNthFromEnd(ListNode head, int n)
+/// 三数之和
+public static List&lt;List&gt; ThreeSum(int[] nums)
 {
-if (..." />
+List&lt;List&gt; res = new List&lt;List&gt;();..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -37,7 +32,7 @@ if (..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1611328238480" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1611418930127" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -116,7 +111,42 @@ if (..." />
             <div class="post-date">2021-01-02</div>
             
             <div class="post-content" v-pre>
-              <p><a href ="https://leetcode-cn.com/problemset/all/"><strong>LeetCode题库</strong></a><br>
+              <p><a href ="https://leetcode-cn.com/problemset/all/"><strong>LeetCode题库</strong></a></p>
+<p><strong>/// 三数之和</strong><br>
+public static List&lt;List<int>&gt; ThreeSum(int[] nums)<br>
+{<br>
+List&lt;List<int>&gt; res = new List&lt;List<int>&gt;();//返回值<br>
+Array.Sort<int>(nums);//对数组进行排序<br>
+if (nums == null || nums[0] &gt;= 0 || nums.Length &lt; 3) return res;//数组为空，排序后最小值大于0，长度小于3，则没有结果返回空列表<br>
+for (int i = 0; i &lt; nums.Length-2; i++)//外部总循环次数小于长度减2，由于包含satrt与end两个位置指针<br>
+{<br>
+if(i<mark>0||nums[i]!=nums[i-1])//首次循环或不重复时执行<br>
+{<br>
+int start = i + 1;//左指针较小的值，结果小于0时右移<br>
+int end = nums.Length - 1;//右指针较大的值，结果大于0时向左移<br>
+while(start&lt;end)//内循环左指针小于右指针<br>
+{<br>
+if (nums[i] + nums[start] + nums[end] == 0)//满足条件将结果加入返回列表<br>
+{<br>
+res.Add(new List<int> { nums[i], nums[start], nums[end] });<br>
+start++;//左指针右移<br>
+end--;//右指针左移//寻找其他满足条件的组合<br>
+while (start &lt; end &amp;&amp; nums[start] == nums[start - 1])//保证不与之前的值重复<br>
+start++;<br>
+while (start &lt; end &amp;&amp; nums[end] == nums[end + 1])//保证不与之前的值重复<br>
+end--;<br>
+}else if(nums[i] + nums[start] + nums[end]&lt;0)//小于0，start右移到更大的数<br>
+{<br>
+start++;<br>
+}else//大于0，end左移到更小的数<br>
+{<br>
+end--;<br>
+}<br>
+}<br>
+}<br>
+}<br>
+return res;<br>
+}<br>
 /// <summary><br>
 ** /// 19:删除链表d第n个节点**<br>
 /// </summary><br>
@@ -153,7 +183,7 @@ public static bool IsValid(string s)<br>
 Stack<char> st = new Stack<char>();<br>
 foreach (char c in s)<br>
 {<br>
-if(c=='('||c=='['||c=='{')<br>
+if(c</mark>'('||c=='['||c=='{')<br>
 {<br>
 st.Push(c);<br>
 }else<br>
@@ -289,6 +319,61 @@ return 0;</p>
             else//都为负数时即得到最大的负数
                 sum = n;//出现和小于0有负数加入，找到下一个从正数开始的元素
             res = Math.Max(res, sum);//每次填入一个数时会取res，sum最大的值
+        }
+        return res;
+    }
+}
+</code></pre>
+<p><strong>class LC54螺旋矩阵</strong><br>
+{<br>
+public List<int> SpiralOrder(int[][] matrix)<br>
+{<br>
+if(matrix<mark>null||matrix.Length</mark>0) return new List<int>();</p>
+<pre><code>        int top = 0;
+        int bottom = matrix.Length - 1;
+        int left = 0;
+        int right = matrix[0].Length - 1;
+
+        string direction = &quot;right&quot;;
+        List&lt;int&gt; res = new List&lt;int&gt;();
+        while (left &lt;= right &amp;&amp; top &lt;= bottom)
+        {
+            if (direction == &quot;right&quot;)
+            {
+                for (int i = left; i &lt;= right; i++)
+                {
+                    res.Add(matrix[top][i]);
+                }
+                top += 1;
+                direction = &quot;down&quot;;
+            }
+            else if (direction == &quot;down&quot;)
+            {
+                for (int i = top; i &lt;= bottom; i++)
+                {
+                    res.Add(matrix[i][right]);
+                }
+                right -= 1;
+                direction = &quot;left&quot;;
+            }
+            else if (direction == &quot;left&quot;)
+            {
+                for (int i = right; i &gt;= left; i--)
+                {
+                    res.Add(matrix[bottom][i]);
+                }
+                bottom -= 1;
+                direction = &quot;top&quot;;
+            }
+            else if (direction == &quot;top&quot;)
+            {
+                for (int i = bottom; i &gt;= top; i--)
+                {
+                    res.Add(matrix[i][left]);
+                }
+                left += 1;
+                direction = &quot;right&quot;;
+            }
         }
         return res;
     }

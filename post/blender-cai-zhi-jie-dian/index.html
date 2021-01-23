@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>最高分排序 | WeiBlog</title>
+<title>Blender材质节点 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,19 @@
 
 
 
-    <meta name="description" content="public  void SaveScore (int score)
-{
-List list = bestScoreArr.ToList();//先将数组转化为List
-//系统:Linq方法(using System.Linq;)
-lis..." />
+    <meta name="description" content="一、输入
+1.物体信息
+位置：模型中心到世界原点的距离
+颜色：物体属性中视图显示中的物体颜色与材质无关
+物体编号
+材质编号
+随机：物体生成时随机产生的0~1之间的值
+变化不同位置产生颜色变化示例
+
+2.属性：可获取顶点颜色
+
+
+..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -107,121 +115,31 @@ lis..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">最高分排序</h2>
-            <div class="post-date">2020-05-10</div>
+            <h2 class="post-title">Blender材质节点</h2>
+            <div class="post-date">2021-01-23</div>
             
             <div class="post-content" v-pre>
-              <p>public  void SaveScore (int score)<br>
-{<br>
-List<int> list = bestScoreArr.ToList();//先将数组转化为List<br>
-//系统:Linq方法(using System.Linq;)<br>
-list.Sort((x, y) =&gt; (-x.CompareTo(y)));//调用List的Sort方法，从大到小对list进行排序[（-x）(从小到大改为x<br>
-bestScoreArr = list.ToArray();//将排好序的list转给数组</p>
-<pre><code>    //50  20  10 加入传score为60，则将60排在低 bestScoreArr[0]
-
-    int index = -1;
-    for (int i = 0; i &lt; bestScoreArr .Count() ; i++)
-    {
-        if (score &gt;bestScoreArr [i])//score依次与数组中的数进行对比，当比一个数大时，记录这个数的索引将后面的数都向后移。
-        {
-            index = i;
-        }
-    }
-    if (index == -1) return;//score比数组中的值都小，不需保存，退出方法。
-
-    for (int i = bestScoreArr .Length -1; i &gt;index ; i--)//从后向前将index之后的数据依次向后移
-    {
-        bestScoreArr[i] = bestScoreArr[i - 1];
-
-    }
-    bestScoreArr[index] = score;//将score填入空出位。
-    Save();//保存。
-}
-//获取最大值方法(Linq)
-public int GetBestScore()
-{
-    return bestScoreArr.Max();
-}
-</code></pre>
-<p>//要存储的游戏数据类<br>
-public class GameDate<br>
-{<br>
-public  static bool IsAgainGame =false ;</p>
-<pre><code>private bool isFirstGame;
-private bool isMusicOn;
-
-private int[] bestScoreArr;
-public void SetBestScoreArr(int[] bestScoreArr)
-{
-    this.bestScoreArr = bestScoreArr;
-}
- public int [] GetBestScoreArr()
-{
-    return bestScoreArr;
-}
-//（其他......get;set方法省略）
-
-private int selectSkin;
-private bool[] skinUnlocked;
-private int diamondCount;
-</code></pre>
-<p>}</p>
-<pre><code>/// &lt;summary&gt;
-/// 储存数据
-/// &lt;/summary&gt;
-private void Save()
-{
-    try
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File.Create(Application.persistentDataPath + &quot;/DameData.data&quot;))
-
-        {
-            data.SetBestScoreArr(bestScoreArr);
-            data.SetDiamondCount(diamondCount);
-            data.SetIsFirstGame(isFirstGame);
-            data.SetMusicOn(isMusicOn);
-            data.SetSelectSkin(selectSkin);
-            data.SetSkinUnlocked(skinUnlocked);
-            bf.Serialize(fs, data);
-
-        }
-    }
-    catch (System.Exception e)
-    {
-        Debug.Log(e.Message);
-
-    }
-}
-/// &lt;summary&gt;
-/// 读取数据
-///using System.Runtime.Serialization.Formatters.Binary;
-///using System.IO;
-/// &lt;/summary&gt;
-private void Read()
-{
-    try
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        using (FileStream fs = File .Open (Application.persistentDataPath + &quot;/DameData.data&quot;,FileMode.Open ))
-        {
-            data = (GameDate )bf.Deserialize(fs);
-        }
-    }
-    catch (System.Exception e)
-    {
-        Debug.Log(e.Message);
-    }
-}</code></pre>
+              <p><strong>一、输入</strong><br>
+<strong>1.物体信息</strong><br>
+位置：模型中心到世界原点的距离<br>
+颜色：物体属性中视图显示中的物体颜色与材质无关<br>
+物体编号<br>
+材质编号<br>
+随机：物体生成时随机产生的0~1之间的值<br>
+变化不同位置产生颜色变化示例<br>
+<img src="https://Wei715547.github.io/post-images/1611381548318.PNG" alt="" loading="lazy"><br>
+<strong>2.属性</strong>：可获取顶点颜色<br>
+<img src="https://Wei715547.github.io/post-images/1611383219732.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1611383224559.PNG" alt="" loading="lazy"></p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/ray/">
+                <a href="https://Wei715547.github.io/post/qia-tong-shader/">
                   <h3 class="post-title">
-                    Ray
+                    卡通Shader
                   </h3>
                 </a>
               </div>
