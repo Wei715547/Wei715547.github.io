@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-23T16:22:15.033Z</updated>
+    <updated>2021-01-24T04:14:56.992Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -381,83 +381,47 @@ return 0;</p>
 {<br>
 public List<int> SpiralOrder(int[][] matrix)<br>
 {<br>
-if(matrix<mark>null||matrix.Length</mark>0) return new List<int>();</p>
-<pre><code>        int top = 0;
-        int bottom = matrix.Length - 1;
-        int left = 0;
-        int right = matrix[0].Length - 1;
+if (matrix == null || matrix.Length == 0) return new List<int>();</p>
+<pre><code>        //数组边界值
+        int top = 0,left = 0;
+        int bottom = matrix.Length - 1, right = matrix[0].Length - 1;
 
-        string direction = &quot;right&quot;;
+        int direction = 1;//1,2,3,4：右下左上
         List&lt;int&gt; res = new List&lt;int&gt;();
         while (left &lt;= right &amp;&amp; top &lt;= bottom)
         {
-            if (direction == &quot;right&quot;)
+            switch (direction)
             {
-                for (int i = left; i &lt;= right; i++)
-                {
-                    res.Add(matrix[top][i]);
-                }
-                top += 1;
-                direction = &quot;down&quot;;
-            }
-            else if (direction == &quot;down&quot;)
-            {
-                for (int i = top; i &lt;= bottom; i++)
-                {
-                    res.Add(matrix[i][right]);
-                }
-                right -= 1;
-                direction = &quot;left&quot;;
-            }
-            else if (direction == &quot;left&quot;)
-            {
-                for (int i = right; i &gt;= left; i--)
-                {
-                    res.Add(matrix[bottom][i]);
-                }
-                bottom -= 1;
-                direction = &quot;top&quot;;
-            }
-            else if (direction == &quot;top&quot;)
-            {
-                for (int i = bottom; i &gt;= top; i--)
-                {
-                    res.Add(matrix[i][left]);
-                }
-                left += 1;
-                direction = &quot;right&quot;;
+                case 1://右移
+                        for (int i = left; i &lt;= right; i++)//从左到右遍历
+                            res.Add(matrix[top][i]);//第一行从左到右加入返回列表
+                        top += 1;//第一行遍历结束加一到下一行
+                        direction = 2;
+                    break;
+                case 2://下移
+                        for (int i = top; i &lt;= bottom; i++)//从上到下遍历
+                            res.Add(matrix[i][right]);//最后一列从上到下
+                        right -= 1;//左后一列遍历后减1，下次遍历前一列
+                        direction = 3;
+                    break;
+                case 3://左移
+                        for (int i = right; i &gt;=left ; i--)//从右到左遍历
+                            res.Add(matrix[bottom][i]);//最后一行从右到左遍历
+                        bottom -= 1;//遍历结束，下次从右到左遍历上一行
+                        direction = 4;
+                    break;
+                case 4://上移
+                        for (int i = bottom; i &gt;=top ; i--)//从下到上遍历
+                            res.Add(matrix[i][left]);//第一列从下到上遍历，
+                        left += 1;//下次从下到上遍历下一列
+                        direction = 1;
+                    break;
             }
         }
         return res;
     }
 }
 </code></pre>
-<p><strong>————————————————————————————————————</strong><br>
-<strong>56.合并区间</strong><br>
-class LC56<br>
-{<br>
-public static int[][] Merge(int [][]intervals)<br>
-{<br>
-List&lt;int[]&gt; result = new List&lt;int[]&gt;() ;<br>
-if (intervals == null || intervals.Length &lt; 2)<br>
-return intervals;<br>
-//先对二维数组坐标第一个值进行从小到大排序<br>
-Array.Sort(intervals, (a, b) =&gt; a[0] - b[0]);<br>
-foreach (int[] interval in intervals)<br>
-{<br>
-//返回类表为空或者类表最后一个坐标右边的值比排序后的二维数组中第一的坐标的左边的值小时，则范围不重合即将范围添加到返回列表中<br>
-if(result.Count==0||interval[0]&gt;result[result.Count-1][1])<br>
-{<br>
-result.Add(interval);<br>
-}else//重合则合并区间，取右边最大的值(左边的值排序后，二维数组中第一个值不可能比返回列表中的值小<br>
-{<br>
-//右范围取最大值<br>
-result[result.Count - 1][1] = Math.Max(result[result.Count-1][1], interval[1]);<br>
-}<br>
-}<br>
-return result.ToArray();//列表转数组返回<br>
-}<br>
-}</p>
 <p>class LC62不同路径<br>
 {<br>
 /// <summary><br>
