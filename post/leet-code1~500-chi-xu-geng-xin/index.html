@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1611466196605">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1611755862068">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ List&lt;List&gt; res = new List&lt;List&gt;();..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1611466196605" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1611755862068" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -369,6 +369,17 @@ if (matrix == null || matrix.Length == 0) return new List<int>();</p>
     }
 }
 </code></pre>
+<p>** // 55.跳跃游戏** ,贪心算法：maxjunp初始为最大索引，当前一个索引与此数组索引值相加大于maxump时则一定可以到达maxjump,maxjump一道前一个索引位置，最后判断maxjump是否等于0则返回true否则说明中间断开返回false<br>
+public bool Jump(int [] nums)<br>
+{<br>
+int maxjump = nums.Length;<br>
+for (int i = nums.Length-2; i &gt;=0 ; i--)<br>
+{<br>
+if (i + nums[i] &gt;= maxjump)<br>
+maxjump = i;<br>
+}<br>
+return maxjump == 0 ? true : false;<br>
+}</p>
 <p>class LC62不同路径<br>
 {<br>
 /// <summary><br>

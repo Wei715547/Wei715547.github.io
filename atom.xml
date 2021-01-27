@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-24T05:30:14.944Z</updated>
+    <updated>2021-01-27T13:57:50.908Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -30,9 +30,14 @@
 <img src="https://Wei715547.github.io/post-images/1611383219732.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1611383224559.PNG" alt="" loading="lazy"><br>
 <strong>3.倒角</strong>：Cycles适用，在视图显示中产生倒角效果（使用连接至着色器法相）<br>
-<strong>顶点颜色</strong>：低点颜色与Alpha通道，多用于遮罩<br>
+<strong>4.顶点颜色</strong>：低点颜色与Alpha通道，多用于遮罩<br>
 <img src="https://Wei715547.github.io/post-images/1611466142579.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1611466149778.PNG" alt="" loading="lazy"></p>
+<img src="https://Wei715547.github.io/post-images/1611466149778.PNG" alt="" loading="lazy"><br>
+<strong>6.黑体节点</strong>：色温黑体辐射K，可用于Cycles光源色温标准输出，自发光物体发光颜色<br>
+<img src="https://Wei715547.github.io/post-images/1611475715838.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1611477570439.PNG" alt="" loading="lazy"><br>
+<strong>7.波长</strong><br>
+<img src="https://Wei715547.github.io/post-images/1611479151358.PNG" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
     <entry>
@@ -426,6 +431,17 @@ if (matrix == null || matrix.Length == 0) return new List<int>();</p>
     }
 }
 </code></pre>
+<p>** // 55.跳跃游戏** ,贪心算法：maxjunp初始为最大索引，当前一个索引与此数组索引值相加大于maxump时则一定可以到达maxjump,maxjump一道前一个索引位置，最后判断maxjump是否等于0则返回true否则说明中间断开返回false<br>
+public bool Jump(int [] nums)<br>
+{<br>
+int maxjump = nums.Length;<br>
+for (int i = nums.Length-2; i &gt;=0 ; i--)<br>
+{<br>
+if (i + nums[i] &gt;= maxjump)<br>
+maxjump = i;<br>
+}<br>
+return maxjump == 0 ? true : false;<br>
+}</p>
 <p>class LC62不同路径<br>
 {<br>
 /// <summary><br>
