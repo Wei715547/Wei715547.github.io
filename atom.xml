@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-27T13:57:50.908Z</updated>
+    <updated>2021-01-28T15:31:00.950Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -37,7 +37,17 @@
 <img src="https://Wei715547.github.io/post-images/1611475715838.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1611477570439.PNG" alt="" loading="lazy"><br>
 <strong>7.波长</strong><br>
-<img src="https://Wei715547.github.io/post-images/1611479151358.PNG" alt="" loading="lazy"></p>
+<img src="https://Wei715547.github.io/post-images/1611479151358.PNG" alt="" loading="lazy"><br>
+<strong>8.映射</strong>：纹理空间在模型面上的投影，包括，位置旋转缩放<br>
+类型：点，先计算缩放然后旋转位置<br>
+纹理，先计算位置然后旋转缩放<br>
+矢量，不计算位置<br>
+法向，归一化后的矢量<br>
+<img src="https://Wei715547.github.io/post-images/1611808408345.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1611808414557.PNG" alt="" loading="lazy"><br>
+<strong>9.矢量变换</strong>：对矢量(点包含位置)进行不同空间坐标系下的转换：物体、世界、相机(屏幕剪切空间)<br>
+<img src="https://Wei715547.github.io/post-images/1611833642696.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1611841772393.PNG" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
     <entry>
@@ -442,7 +452,7 @@ maxjump = i;<br>
 }<br>
 return maxjump == 0 ? true : false;<br>
 }</p>
-<p>class LC62不同路径<br>
+<p><strong>class LC62不同路径</strong><br>
 {<br>
 /// <summary><br>
 /// 动态规划，dp[m,n] = dp[m-1,n]+dp[m,n-1];<br>
@@ -467,8 +477,109 @@ dp[i, j] += dp[i, j - 1];<br>
 return dp[m - 1, n - 1];</p>
 <pre><code>    }
 }
+public int UniquePath2(int m, int n)
+    {
+        int[,] dp = new int[m, n];
+        for (int i = 0; i &lt; m; i++)
+            dp[i, 0] = 1;
+        for (int i = 0; i &lt; n; i++)
+            dp[0, n] = 1;
+        for (int i = 1; i &lt; m; i++)
+        {
+            for (int j = 1; j &lt; n; j++)
+            {
+                dp[i, j] = dp[i, j - 1] + dp[i - 1, j];
+            }
+        }
+        return dp[m - 1, n - 1];
+    }
 </code></pre>
-<p><strong>class LC74搜索矩阵</strong><br>
+<p><strong>66.加一</strong><br>
+public int[] PlusOne(int[] digits)<br>
+{<br>
+for (int i = digits.Length - 1; i &gt;= 0; i--)<br>
+{<br>
+if (digits[i] != 9)<br>
+{<br>
+digits[i] += 1;<br>
+return digits;<br>
+}<br>
+else<br>
+digits[i] = 0;<br>
+}<br>
+List<int> res = new List<int>(digits);<br>
+res.Insert(0, 1);<br>
+return res.ToArray();<br>
+}<br>
+<strong>70.爬楼梯</strong><br>
+public int ClimbStairs(int n)<br>
+{<br>
+if (n &lt; 2) return 1;<br>
+int[] res = new int[n];<br>
+res[0] = 1;<br>
+res[1] = 2;<br>
+for (int i = 2; i &lt; n; i++)<br>
+{<br>
+res[i] = res[i - 1] + res[i - 2];<br>
+}<br>
+return res[n - 1];<br>
+}<br>
+<strong>//73,矩阵置0</strong><br>
+public void SetZeroes(int[][] matrix)<br>
+{<br>
+bool firstoColContentZero = false;<br>
+bool firstoRowContentZero = false;<br>
+//检测第一列是否有0<br>
+for (int i = 0; i &lt; matrix.Length; i++)<br>
+{<br>
+if (matrix[i][0] == 0)<br>
+firstoColContentZero = true;<br>
+}<br>
+//检查第一行是否有0<br>
+for (int i = 0; i &lt; matrix[0].Length; i++)<br>
+{<br>
+if (matrix[0][i] == 0)<br>
+firstoRowContentZero = true;<br>
+}<br>
+//使用第一行与第一列标记0<br>
+for (int i = 1; i &lt; matrix.Length; i++)<br>
+{<br>
+for (int j = 1; j &lt; matrix[0].Length; j++)<br>
+{<br>
+if(matrix[i][j]==0)<br>
+{<br>
+matrix[i][0] = 0;<br>
+matrix[0][j] = 0;<br>
+}<br>
+}<br>
+}<br>
+//使用第一行列中的0处理矩阵中的元素<br>
+for (int i = 1; i &lt; matrix.Length; i++)<br>
+{<br>
+for (int j = 1; j &lt; matrix[0].Length; j++)<br>
+{<br>
+if (matrix[i][0] == 0 || matrix[0][j] == 0)<br>
+matrix[i][j] = 0;<br>
+}<br>
+}<br>
+//首行存在0，本行全部置为0<br>
+if(firstoRowContentZero)<br>
+{<br>
+for (int i = 0; i &lt; matrix[0].Length; i++)<br>
+{<br>
+matrix[0][i] = 0;<br>
+}<br>
+}<br>
+//首列存在0，本列全部置为0<br>
+if(firstoColContentZero)<br>
+{<br>
+for (int i = 0; i &lt; matrix.Length; i++)<br>
+{<br>
+matrix[i][0] = 0;<br>
+}<br>
+}<br>
+}<br>
+<strong>class LC74搜索矩阵</strong><br>
 {<br>
 /// <summary><br>
 /// 二分法，一维，二维数组索引转换<br>

@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1611755862068">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1611847855860">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ List&lt;List&gt; res = new List&lt;List&gt;();..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1611755862068" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1611847855860" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -380,7 +380,7 @@ maxjump = i;<br>
 }<br>
 return maxjump == 0 ? true : false;<br>
 }</p>
-<p>class LC62不同路径<br>
+<p><strong>class LC62不同路径</strong><br>
 {<br>
 /// <summary><br>
 /// 动态规划，dp[m,n] = dp[m-1,n]+dp[m,n-1];<br>
@@ -405,8 +405,109 @@ dp[i, j] += dp[i, j - 1];<br>
 return dp[m - 1, n - 1];</p>
 <pre><code>    }
 }
+public int UniquePath2(int m, int n)
+    {
+        int[,] dp = new int[m, n];
+        for (int i = 0; i &lt; m; i++)
+            dp[i, 0] = 1;
+        for (int i = 0; i &lt; n; i++)
+            dp[0, n] = 1;
+        for (int i = 1; i &lt; m; i++)
+        {
+            for (int j = 1; j &lt; n; j++)
+            {
+                dp[i, j] = dp[i, j - 1] + dp[i - 1, j];
+            }
+        }
+        return dp[m - 1, n - 1];
+    }
 </code></pre>
-<p><strong>class LC74搜索矩阵</strong><br>
+<p><strong>66.加一</strong><br>
+public int[] PlusOne(int[] digits)<br>
+{<br>
+for (int i = digits.Length - 1; i &gt;= 0; i--)<br>
+{<br>
+if (digits[i] != 9)<br>
+{<br>
+digits[i] += 1;<br>
+return digits;<br>
+}<br>
+else<br>
+digits[i] = 0;<br>
+}<br>
+List<int> res = new List<int>(digits);<br>
+res.Insert(0, 1);<br>
+return res.ToArray();<br>
+}<br>
+<strong>70.爬楼梯</strong><br>
+public int ClimbStairs(int n)<br>
+{<br>
+if (n &lt; 2) return 1;<br>
+int[] res = new int[n];<br>
+res[0] = 1;<br>
+res[1] = 2;<br>
+for (int i = 2; i &lt; n; i++)<br>
+{<br>
+res[i] = res[i - 1] + res[i - 2];<br>
+}<br>
+return res[n - 1];<br>
+}<br>
+<strong>//73,矩阵置0</strong><br>
+public void SetZeroes(int[][] matrix)<br>
+{<br>
+bool firstoColContentZero = false;<br>
+bool firstoRowContentZero = false;<br>
+//检测第一列是否有0<br>
+for (int i = 0; i &lt; matrix.Length; i++)<br>
+{<br>
+if (matrix[i][0] == 0)<br>
+firstoColContentZero = true;<br>
+}<br>
+//检查第一行是否有0<br>
+for (int i = 0; i &lt; matrix[0].Length; i++)<br>
+{<br>
+if (matrix[0][i] == 0)<br>
+firstoRowContentZero = true;<br>
+}<br>
+//使用第一行与第一列标记0<br>
+for (int i = 1; i &lt; matrix.Length; i++)<br>
+{<br>
+for (int j = 1; j &lt; matrix[0].Length; j++)<br>
+{<br>
+if(matrix[i][j]==0)<br>
+{<br>
+matrix[i][0] = 0;<br>
+matrix[0][j] = 0;<br>
+}<br>
+}<br>
+}<br>
+//使用第一行列中的0处理矩阵中的元素<br>
+for (int i = 1; i &lt; matrix.Length; i++)<br>
+{<br>
+for (int j = 1; j &lt; matrix[0].Length; j++)<br>
+{<br>
+if (matrix[i][0] == 0 || matrix[0][j] == 0)<br>
+matrix[i][j] = 0;<br>
+}<br>
+}<br>
+//首行存在0，本行全部置为0<br>
+if(firstoRowContentZero)<br>
+{<br>
+for (int i = 0; i &lt; matrix[0].Length; i++)<br>
+{<br>
+matrix[0][i] = 0;<br>
+}<br>
+}<br>
+//首列存在0，本列全部置为0<br>
+if(firstoColContentZero)<br>
+{<br>
+for (int i = 0; i &lt; matrix.Length; i++)<br>
+{<br>
+matrix[i][0] = 0;<br>
+}<br>
+}<br>
+}<br>
+<strong>class LC74搜索矩阵</strong><br>
 {<br>
 /// <summary><br>
 /// 二分法，一维，二维数组索引转换<br>
