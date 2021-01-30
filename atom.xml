@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-01-30T02:22:32.938Z</updated>
+    <updated>2021-01-30T07:43:19.652Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -54,7 +54,13 @@
 <img src="https://Wei715547.github.io/post-images/1611892237631.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1611892245272.PNG" alt="" loading="lazy"><br>
 <strong>12.透明着色器</strong><br>
-<img src="https://Wei715547.github.io/post-images/1611893692097.PNG" alt="" loading="lazy"></p>
+<img src="https://Wei715547.github.io/post-images/1611893692097.PNG" alt="" loading="lazy"><br>
+<strong>13.线框</strong>显示网格线框<br>
+<img src="https://Wei715547.github.io/post-images/1611978489940.PNG" alt="" loading="lazy"><br>
+<strong>14.白噪波纹理</strong>：随机值生成1-4D<br>
+<img src="https://Wei715547.github.io/post-images/1611981742064.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1611981746778.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1611981752413.PNG" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
     <entry>
