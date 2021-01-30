@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1611847855860">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1611973047445">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ List&lt;List&gt; res = new List&lt;List&gt;();..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1611847855860" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1611973047445" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -506,6 +506,48 @@ for (int i = 0; i &lt; matrix.Length; i++)<br>
 matrix[i][0] = 0;<br>
 }<br>
 }<br>
+}<br>
+<strong>//83.删除链表重复元素</strong><br>
+public ListNode DeleteDuplicates(ListNode head)<br>
+{<br>
+if (head == null) return head;<br>
+HashSet<int> set = new HashSet<int>();<br>
+ListNode res = new ListNode();<br>
+res.next = head;<br>
+ListNode pov = new ListNode();<br>
+pov.next = head;<br>
+while (head != null)<br>
+{<br>
+if (!set.Contains(head.val))<br>
+{<br>
+set.Add(head.val);<br>
+head = head.next;<br>
+pov = pov.next;<br>
+}<br>
+else<br>
+{<br>
+pov.next = head.next;<br>
+head = head.next;<br>
+}<br>
+}<br>
+return res.next;<br>
+}<br>
+//链表为排好序的链表<br>
+public ListNode DeleteDuplicates2(ListNode head)<br>
+{<br>
+if (head == null || head.next == null) return head;<br>
+ListNode res = new ListNode();<br>
+res.next = head;<br>
+while (head != null &amp;&amp; head.next != null)<br>
+{<br>
+if (head.val == head.next.val)<br>
+{<br>
+head.next = head.next.next;<br>
+}<br>
+else<br>
+head = head.next;<br>
+}<br>
+return res.next;<br>
 }<br>
 <strong>class LC74搜索矩阵</strong><br>
 {<br>
