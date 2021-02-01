@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1611981755420">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1612148204072">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ List&lt;List&gt; res = new List&lt;List&gt;();..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1611981755420" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1612148204072" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -668,6 +668,41 @@ List&lt;List<int>&gt; resLast = new List&lt;List<int>&gt;();</p>
     }
 }
 </code></pre>
+<p><strong>//121.买股票的最佳时机</strong><br>
+public int MaxProfit(int[] prices)<br>
+{<br>
+if (prices == null || prices.Length == 0) return 0;<br>
+int minp = prices[0];<br>
+int maxp = 0;<br>
+for (int i = 1; i &lt; prices.Length; i++)<br>
+{<br>
+if (prices[i] &lt; minp)<br>
+minp = prices[i];<br>
+else if (prices[i] - minp &gt; maxp)<br>
+maxp = prices[i] - minp;<br>
+}<br>
+return maxp;<br>
+}<br>
+<strong>//122.买股票的最佳时机II</strong><br>
+public static int MaxProfitII(int[] prices)<br>
+{<br>
+if (prices == null || prices.Length == 0) return 0;</p>
+<pre><code>        int allprice = 0;
+        int lop = prices[0], top = prices[0];
+        int i = 0;
+        while(i&lt;prices.Length-1)
+        {
+            while (i&lt;prices.Length-1 &amp;&amp; prices[i] &gt;= prices[i + 1])
+                i += 1;
+            lop = i;
+            while (i &lt; prices.Length - 1 &amp;&amp; prices[i] &lt; prices[i + 1])
+                i += 1;
+            top = i;
+            allprice += prices[top] - prices[lop];
+        }
+        return allprice;
+    }
+</code></pre>
 <p><strong>class _141环形链表</strong><br>
 {<br>
 public bool HasCycle(ListNode head)<br>
@@ -1021,7 +1056,16 @@ return false;<br>
     }
 }
 </code></pre>
-<p><strong>————————————————————————————————————</strong><br>
+<p><strong>//125.回文字符串</strong><br>
+public static bool IsPalindrome(string s)<br>
+{<br>
+string str = Regex.Replace(s, &quot;[^A-Za-z0-9]&quot;, &quot;&quot;).ToLower();<br>
+Console.WriteLine(str);<br>
+char[] array = str.ToCharArray();<br>
+Array.Reverse(array);<br>
+return str.Equals(new string(array));<br>
+}<br>
+<strong>————————————————————————————————————</strong><br>
 <strong>234.回文链表</strong><br>
 /// <summary><br>
 /// 请判断一个链表是否为回文链表。回文正反相同的，1；121；1221.<br>
