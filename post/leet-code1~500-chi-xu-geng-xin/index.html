@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1612148204072">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1612327558614">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ List&lt;List&gt; res = new List&lt;List&gt;();..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1612148204072" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1612327558614" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -323,8 +323,37 @@ return 0;</p>
         return res;
     }
 }
+/// &lt;summary&gt;
+    /// 动态规划
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;nums&quot;&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public static int Maxsubarray2(int[] nums)
+    {
+        List&lt;int&gt; memolist = new List&lt;int&gt;();//动态规划列表
+        memolist.Add(nums[0]);
+        for (int i = 1; i &lt; nums.Length; i++)            
+            memolist.Add(Math.Max(nums[i] + memolist[i - 1], nums[i]));//判断当前元素计入子数组和后，与当前元素值比较，取大值决定计入总和还是从当前开始
+        memolist.Sort((a, b) =&gt; a &gt; b?-1:1);//取动态规划数组中的最大值返回，避免首位就值最大
+        return memolist[0];
+    }
 </code></pre>
-<p><strong>class LC54螺旋矩阵</strong><br>
+<p><strong>//152.乘积最大子数组</strong><br>
+public static int MaxSubProduct(int[]nums)<br>
+{<br>
+List<int> memomax = new List<int>();<br>
+List<int> memomin = new List<int>();<br>
+memomax.Add(nums[0]);<br>
+memomin.Add(nums[0]);<br>
+for (int i = 1; i &lt; nums.Length; i++)<br>
+{<br>
+memomax.Add(Math.Max(Math.Max(nums[i]*memomax[i - 1], nums[i]*memomin[i-1]), nums[i]));<br>
+memomin.Add(Math.Min( Math.Min(nums[i] * memomin[i - 1],nums[i]*memomax[i-1]), nums[i]));<br>
+}<br>
+memomax.Sort();<br>
+return memomax[memomax.Count - 1];<br>
+}<br>
+<strong>class LC54螺旋矩阵</strong><br>
 {<br>
 public List<int> SpiralOrder(int[][] matrix)<br>
 {<br>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-02-01T02:56:55.633Z</updated>
+    <updated>2021-02-03T04:46:15.759Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -408,8 +408,37 @@ return 0;</p>
         return res;
     }
 }
+/// &lt;summary&gt;
+    /// 动态规划
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;nums&quot;&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public static int Maxsubarray2(int[] nums)
+    {
+        List&lt;int&gt; memolist = new List&lt;int&gt;();//动态规划列表
+        memolist.Add(nums[0]);
+        for (int i = 1; i &lt; nums.Length; i++)            
+            memolist.Add(Math.Max(nums[i] + memolist[i - 1], nums[i]));//判断当前元素计入子数组和后，与当前元素值比较，取大值决定计入总和还是从当前开始
+        memolist.Sort((a, b) =&gt; a &gt; b?-1:1);//取动态规划数组中的最大值返回，避免首位就值最大
+        return memolist[0];
+    }
 </code></pre>
-<p><strong>class LC54螺旋矩阵</strong><br>
+<p><strong>//152.乘积最大子数组</strong><br>
+public static int MaxSubProduct(int[]nums)<br>
+{<br>
+List<int> memomax = new List<int>();<br>
+List<int> memomin = new List<int>();<br>
+memomax.Add(nums[0]);<br>
+memomin.Add(nums[0]);<br>
+for (int i = 1; i &lt; nums.Length; i++)<br>
+{<br>
+memomax.Add(Math.Max(Math.Max(nums[i]*memomax[i - 1], nums[i]*memomin[i-1]), nums[i]));<br>
+memomin.Add(Math.Min( Math.Min(nums[i] * memomin[i - 1],nums[i]*memomax[i-1]), nums[i]));<br>
+}<br>
+memomax.Sort();<br>
+return memomax[memomax.Count - 1];<br>
+}<br>
+<strong>class LC54螺旋矩阵</strong><br>
 {<br>
 public List<int> SpiralOrder(int[][] matrix)<br>
 {<br>
