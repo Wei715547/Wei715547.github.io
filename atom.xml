@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-02-04T08:15:55.878Z</updated>
+    <updated>2021-02-04T15:14:30.253Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -893,7 +893,29 @@ return false;<br>
     }
 }
 </code></pre>
-<p><strong>class LC162寻找峰值</strong><br>
+<p><strong>//160.相交链表</strong><br>
+public ListNode GetIntersectionNode(ListNode headA, ListNode headB)<br>
+{<br>
+if (headA == null || headB == null) return null;<br>
+HashSet<ListNode> list = new HashSet<ListNode>();<br>
+while(headA!=null)<br>
+{<br>
+list.Add(headA);<br>
+headA = headA.next;<br>
+}<br>
+while(headB!=null)<br>
+{<br>
+if (!list.Contains(headB))<br>
+{<br>
+list.Add(headB);<br>
+headB = headB.next;<br>
+}<br>
+else<br>
+return headB;<br>
+}<br>
+return null;<br>
+}<br>
+<strong>class LC162寻找峰值</strong><br>
 {<br>
 /// <summary><br>
 /// 峰值元素是指其值大于左右相邻值的元素。二分法<br>
