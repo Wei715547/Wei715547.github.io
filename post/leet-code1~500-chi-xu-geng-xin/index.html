@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1612327558614">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1612410779183">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ List&lt;List&gt; res = new List&lt;List&gt;();..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1612327558614" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1612410779183" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -338,7 +338,60 @@ return 0;</p>
         return memolist[0];
     }
 </code></pre>
-<p><strong>//152.乘积最大子数组</strong><br>
+<p><strong>//128.最长连续序列</strong><br>
+public static int LongestConsecutive(int[] nums)<br>
+{<br>
+if (nums == null || nums.Length == 0) return 0;</p>
+<pre><code>        Array.Sort(nums);//排序后去重
+        HashSet&lt;int&gt; set = new HashSet&lt;int&gt;();//使用集合不要求在原数组中连续
+        for (int i = 0; i &lt; nums.Length; i++)
+        {
+            set.Add(nums[i]);
+        }
+
+        List&lt;int&gt; reslist = new List&lt;int&gt;();//结果列表，长度即为返回值
+        int res = 1;//数组长度大于0则至少返回1；
+        foreach (int n in set)
+        {
+            if (reslist.Count!=0 &amp;&amp; reslist[reslist.Count - 1] + 1 == n)//不为空且连续时，计入返回列表
+            {
+                reslist.Add(n);
+                res = Math.Max(res, reslist.Count);//取返回列表长度最大值
+            }
+            else
+            {
+                reslist.Clear();//不连续时清空，重新计入
+                reslist.Add(n);
+            }
+        }
+        return res;
+    }
+</code></pre>
+<p><strong>//134.加油站</strong><br>
+public int CanCompleteCircuit(int[] gas, int[] cost)<br>
+{<br>
+int allgas = 0;<br>
+int allcast = 0;<br>
+for (int i = 0; i &lt; gas.Length; i++)<br>
+{<br>
+allgas += gas[i];<br>
+allcast += cost[i];<br>
+}<br>
+if (allgas &lt; allcast) return -1;<br>
+int gascurten = 0;<br>
+int start = 0;<br>
+for (int i = 0; i &lt; gas.Length; i++)<br>
+{<br>
+gascurten = gascurten + gas[i] - cost[i];<br>
+if (gascurten &lt; 0)<br>
+{<br>
+gascurten = 0;<br>
+start = i + 1;<br>
+}<br>
+}<br>
+return start;<br>
+}<br>
+<strong>//152.乘积最大子数组</strong><br>
 public static int MaxSubProduct(int[]nums)<br>
 {<br>
 List<int> memomax = new List<int>();<br>
