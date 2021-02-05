@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1612534841107">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1612538096681">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ for (int i = 0; ..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1612534841107" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1612538096681" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -508,7 +508,32 @@ memomin.Add(Math.Min( Math.Min(nums[i] * memomin[i - 1],nums[i]*memomax[i-1]), n
 memomax.Sort();<br>
 return memomax[memomax.Count - 1];<br>
 }<br>
-<strong>class LC54螺旋矩阵</strong><br>
+<strong>// 153. 寻找旋转排序数组中的最小值</strong><br>
+:假设按照升序排序的数组在预先未知的某个点上进行了旋转。例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] 。<br>
+public int FindMin(int[] nums)<br>
+{<br>
+//长度为1或未旋转时返回首位<br>
+if (nums.Length == 1 || nums[nums.Length - 1] &gt; nums[0]) return nums[0];<br>
+//二分查找<br>
+int left = 0;<br>
+int right = nums.Length - 1;</p>
+<pre><code>        while(left&lt;right)
+        {
+            int mid = left + (right - left) / 2;//中间值索引
+
+            if (nums[mid] &gt; nums[mid + 1])//中间值恰好为旋转前的末尾最大值，则mid+1即为最小值
+                return nums[mid + 1];
+            else if (nums[mid] &lt; nums[mid - 1])//中间值恰好指向旋转前的最小值，则返回m
+                return nums[mid];
+            else if (nums[mid] &gt; nums[left])//其他情况mid落在旋转后的两端数组中间时
+                left = mid + 1;//mid比left大则落在左半边，最小值在右边
+            else
+                right = mid - 1;//mid比left小则落在右半边，最小值在左边
+        }
+        return nums[0];//语法条件返回值无意义
+    }
+</code></pre>
+<p><strong>class LC54螺旋矩阵</strong><br>
 {<br>
 public List<int> SpiralOrder(int[][] matrix)<br>
 {<br>
