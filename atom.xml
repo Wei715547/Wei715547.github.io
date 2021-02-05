@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-02-05T12:00:42.614Z</updated>
+    <updated>2021-02-05T14:21:38.274Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -196,8 +196,106 @@ SubShader
         <link href="https://Wei715547.github.io/post/leet-code1~500-chi-xu-geng-xin/">
         </link>
         <updated>2021-01-02T12:12:34.000Z</updated>
-        <content type="html"><![CDATA[<p><a href ="https://leetcode-cn.com/problemset/all/"><strong>LeetCode题库</strong></a></p>
-<p><strong>/// 三数之和</strong><br>
+        <content type="html"><![CDATA[<p><a href ="https://leetcode-cn.com/problemset/all/"><strong>LeetCode题库</strong></a><br>
+<strong>排序查找算法、冒泡/选择/插入/快排/二分查找</strong><br>
+/// <summary><br>
+/// 冒泡排序<br>
+/// </summary><br>
+/// <param name="array"></param><br>
+public static void BubbleSort(int [] nums)<br>
+{<br>
+for (int i = 0; i &lt; nums.Length; i++)<br>
+{<br>
+for (int j = 0; j &lt; nums.Length-1-i; j++)<br>
+{<br>
+if (nums[j] &gt; nums[j + 1])<br>
+Swap(ref nums[j], ref nums[j + 1]);<br>
+}<br>
+}<br>
+}<br>
+/// <summary><br>
+/// 选择排序：默认第一个为最小值，在后面找到更小的时就和默认最小的交换。再默认第二个为最小往下循环。<br>
+/// </summary><br>
+/// <param name="array"></param><br>
+static void ChooseSort(int[] array)<br>
+{<br>
+for (int i = 0; i &lt; array.Length-1; i++)<br>
+{<br>
+int minnum = array[i];<br>
+int minindex = i;<br>
+for (int j = i+1; j &lt; array.Length; j++)<br>
+{<br>
+if(array[j]&lt;minnum)<br>
+{<br>
+minnum = array[j];<br>
+minindex = j;<br>
+}<br>
+}<br>
+if(minindex!=i)<br>
+{<br>
+int temp = array[i];<br>
+array[i] = minnum;<br>
+array[minindex] = temp;<br>
+}<br>
+}<br>
+}<br>
+/// <summary><br>
+/// 直插排序<br>
+/// </summary><br>
+/// <param name="array"></param><br>
+public static void InsertSort2(int[] nums)<br>
+{<br>
+int index, value;<br>
+for (int i = 1; i &lt; nums.Length; i++)<br>
+{<br>
+value = nums[i];<br>
+index = i-1;<br>
+while(index&gt;=0&amp;&amp;nums[index]&gt;value)<br>
+{<br>
+nums[index+1] = nums[index];<br>
+index -= 1;<br>
+}<br>
+nums[index+1] = value;<br>
+}<br>
+}<br>
+//快速排序<br>
+static void Qsort(int[] array,int left,int right)<br>
+{<br>
+if(left&lt;right)<br>
+{<br>
+int i = left;<br>
+int j = right + 1;<br>
+int provt = array[i];<br>
+do<br>
+{<br>
+do i++; while (array[i] &lt; provt &amp;&amp; i &lt; array.Length-1);<br>
+do j--; while (array[j] &gt; provt &amp;&amp; j &gt;= 0);<br>
+if(i&lt;j)<br>
+{<br>
+Swap(ref array[i], ref array[j]);<br>
+}<br>
+} while (i&lt;j);<br>
+Swap(ref array[left], ref array[j]);<br>
+Qsort(array, left, j - 1);<br>
+Qsort(array, j + 1, right);<br>
+}<br>
+}<br>
+//二分查找<br>
+static int BinarySearch_R(int[] dateArray, int x, int left, int right)<br>
+{<br>
+if (left &lt;= right)<br>
+{<br>
+int mind = (left + right) / 2;<br>
+if (x &lt; dateArray[mind])<br>
+return BinarySearch_R(dateArray, x, left, mind - 1);<br>
+else if (x &gt; dateArray[mind])<br>
+return BinarySearch_R(dateArray, x, mind + 1, right);<br>
+else if (x == dateArray[mind])<br>
+return mind;<br>
+}<br>
+return -1;<br>
+}<br>
+<strong>/// 三数之和</strong><br>
 public static List&lt;List<int>&gt; ThreeSum(int[] nums)<br>
 {<br>
 List&lt;List<int>&gt; res = new List&lt;List<int>&gt;();//返回值<br>
