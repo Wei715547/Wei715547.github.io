@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-02-05T15:15:17.122Z</updated>
+    <updated>2021-02-17T08:48:46.153Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -1192,8 +1192,29 @@ s.Append(item);<br>
 return s.ToString();</em>/<br>
 if (nums[0].Equals(&quot;0&quot;)) return &quot;0&quot;;<br>
 else return string.Join(&quot;-&quot;, st);//使用字符连接字符串数组，返回连接后的字符<br>
-}</p>
-<p><strong>206.反转链表</strong><br>
+}<br>
+<strong>187.重复的DNA序列</strong><br>
+public static List<string> FindRepeatedDnaSequences2(string s)<br>
+{<br>
+List<string> res = new List<string>();<br>
+if (s == null || s.Length &lt; 11) return res;<br>
+Dictionary&lt;string, int&gt; dic = new Dictionary&lt;string, int&gt;();<br>
+//StringBuilder ele = new StringBuilder();<br>
+int i = 0;<br>
+while(i+10&lt;=s.Length)<br>
+{<br>
+/<em>ele.Clear();<br>
+ele.Append(s.Substring(i, 10));</em>/<br>
+string ele = s.Substring(i, 10);<br>
+if (!dic.ContainsKey(ele.ToString()))<br>
+dic.Add(ele.ToString(), 1);<br>
+else if(!res.Contains(ele))<br>
+res.Add(ele.ToString());<br>
+i++;<br>
+}<br>
+return res;<br>
+}<br>
+<strong>206.反转链表</strong><br>
 class LC206<br>
 {<br>
 public static ListNode ReversList(ListNode head)<br>
