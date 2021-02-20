@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1613750074134">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1613836500955">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ for (int i = 0; ..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1613750074134" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1613836500955" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -1577,6 +1577,23 @@ if (s == null || s.Length == 0) return;</p>
         s[l] = s[r];
         s[r] = temp;            
     }
+</code></pre>
+<p><strong>class LC349相交数组</strong><br>
+{<br>
+public int[] Intersection(int[] nums1, int[] nums2)<br>
+{<br>
+List<int> res = new List<int>();<br>
+if (nums1 == null || nums1 == null || nums1.Length == 0 || nums2.Length == 0) return res .ToArray();<br>
+HashSet<int> set1 = new HashSet<int>(nums1);<br>
+HashSet<int> set2 = new HashSet<int>(nums2);</p>
+<pre><code>        foreach (var item in set1)
+        {
+            if (set2.Contains(item))
+                res.Add(item);
+        }
+        return res.ToArray();            
+    }        
+}
 </code></pre>
 <p><strong>class LC485.最大连续1的个数</strong><br>
 {<br>

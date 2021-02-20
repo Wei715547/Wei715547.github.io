@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-02-19T15:54:40.411Z</updated>
+    <updated>2021-02-20T15:55:06.858Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -1658,6 +1658,23 @@ if (s == null || s.Length == 0) return;</p>
         s[l] = s[r];
         s[r] = temp;            
     }
+</code></pre>
+<p><strong>class LC349相交数组</strong><br>
+{<br>
+public int[] Intersection(int[] nums1, int[] nums2)<br>
+{<br>
+List<int> res = new List<int>();<br>
+if (nums1 == null || nums1 == null || nums1.Length == 0 || nums2.Length == 0) return res .ToArray();<br>
+HashSet<int> set1 = new HashSet<int>(nums1);<br>
+HashSet<int> set2 = new HashSet<int>(nums2);</p>
+<pre><code>        foreach (var item in set1)
+        {
+            if (set2.Contains(item))
+                res.Add(item);
+        }
+        return res.ToArray();            
+    }        
+}
 </code></pre>
 <p><strong>class LC485.最大连续1的个数</strong><br>
 {<br>
