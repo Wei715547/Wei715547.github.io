@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-02-21T14:40:42.386Z</updated>
+    <updated>2021-02-22T16:26:52.621Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -1785,7 +1785,59 @@ if (n &lt; 2) return n == 1 ? 1 : 0;</p>
         }
         return res[n];
     }
+    //动态规划，空间复杂度优化
+    public int Fib3(int n)
+    {
+        if (n &lt;= 1) return n;
+
+        int prev1 = 0;
+        int prev2 = 1;
+        int res = 0;
+        for (int i = 2; i &lt;= n; i++)
+        {
+            res = prev1 + prev2;
+            prev1 = prev2;
+            prev2 = res;
+        }
+        return res;
+    }
 }
+</code></pre>
+<p><strong>//680.回文字符串II,允许删除一个字符实现回文字符串</strong><br>
+public static bool IsPalindrome2(string s)<br>
+{<br>
+int left = 0;<br>
+int right = s.Length - 1;<br>
+while(left&lt;right)<br>
+{<br>
+if(s[left]!=s[right])<br>
+{<br>
+return IsPs(s.Remove(left,1)) || IsPs(s.Remove(right,1));<br>
+}<br>
+left++;<br>
+right--;<br>
+}<br>
+return true;<br>
+}<br>
+public static bool IsPs(string s)<br>
+{<br>
+/<em>int left = 0;<br>
+int right = s.Length - 1;<br>
+while (left &lt; right)<br>
+{<br>
+if (s[left] != s[right])<br>
+{<br>
+return false;<br>
+}<br>
+left++;<br>
+right--;<br>
+}<br>
+return true;</em>/</p>
+<pre><code>        char[] sarray = s.ToCharArray();
+        Array.Reverse(sarray);
+
+        return s.Equals(new string(sarray));
+    }
 </code></pre>
 <p><strong>class LC720词典中最长的单词</strong><br>
 {<br>
