@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-02-23T07:37:11.501Z</updated>
+    <updated>2021-02-23T15:46:56.688Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -1214,7 +1214,80 @@ i++;<br>
 }<br>
 return res;<br>
 }<br>
-//219：重复元素2：数组中存在相同元素，且索引值之差绝对值之多为k(小于等于)<br>
+<strong>//200.岛屿数量</strong><br>
+/// <summary><br>
+/// 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。<br>
+/// </summary><br>
+/// <param name="grid"></param><br>
+/// <returns> 岛屿数量，遍历二维数值，找到1后岛屿数量加1，然后深度优先DFS将与1上下左右相连的1递归变为0。之后继续遍历数组找1</returns><br>
+public static int CountIsland(char[][]grid)<br>
+{<br>
+if (grid == null || grid.Length == 0)<br>
+return 0;<br>
+int row = grid.Length;<br>
+int col = grid[0].Length;<br>
+int count = 0;<br>
+for (int i = 0; i &lt; row; i++)<br>
+{<br>
+for (int j = 0; j &lt; col; j++)<br>
+{<br>
+if (grid[i][j] == '1')<br>
+{<br>
+count++;<br>
+DFS(grid, i, j);<br>
+}<br>
+}<br>
+}<br>
+return count;<br>
+}<br>
+static void DFS(char[][] grid,int i,int j)<br>
+{<br>
+if(i&lt;0||j&lt;0||i&gt;=grid.Length||j&gt;=grid[0].Length||grid[i][j]=='0')<br>
+{<br>
+return;<br>
+}<br>
+grid[i][j] = '0';<br>
+DFS(grid, i + 1, j);<br>
+DFS(grid, i - 1, j);<br>
+DFS(grid, i, j + 1);<br>
+DFS(grid, i, j - 1);<br>
+}<br>
+<strong>//695.岛屿最大面积</strong><br>
+public int MaxIsLandAre(int[][]grid)<br>
+{<br>
+if (grid == null || grid.Length == 0)<br>
+return 0;<br>
+int res = 0;<br>
+for (int i = 0; i &lt; grid.Length; i++)<br>
+{<br>
+for (int j = 0; j &lt; grid[0].Length; j++)<br>
+{<br>
+if(grid[i][j]==1)<br>
+{<br>
+int curentAre = DFS2(grid,i,j);<br>
+res = Math.Max(res, curentAre);<br>
+}<br>
+}<br>
+}<br>
+return res;<br>
+}<br>
+public int DFS2(int[][]grid,int i,int j)<br>
+{<br>
+if (i &lt; 0 || j &lt; 0 || i &gt;= grid.Length || j &gt;= grid[0].Length || grid[i][j] ==0)<br>
+{<br>
+return 0;<br>
+}<br>
+grid[i][j] = 0;<br>
+int are = 1;<br>
+are += DFS2(grid, i + 1, j);<br>
+are += DFS2(grid, i , j+1);<br>
+are += DFS2(grid, i - 1, j);<br>
+are += DFS2(grid, i , j-1);<br>
+return are;</p>
+<pre><code>    }
+}
+</code></pre>
+<p>//219：重复元素2：数组中存在相同元素，且索引值之差绝对值之多为k(小于等于)<br>
 public bool ContainsNearbyDuplicate(int[] nums, int k)<br>
 {<br>
 Dictionary&lt;int, int&gt; dic = new Dictionary&lt;int, int&gt;();<br>
