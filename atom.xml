@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-03-05T09:01:20.488Z</updated>
+    <updated>2021-03-05T14:01:59.099Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,15 +11,6 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, WeiBlog</rights>
-    <entry>
-        <title type="html"><![CDATA[test7]]></title>
-        <id>https://Wei715547.github.io/post/test7/</id>
-        <link href="https://Wei715547.github.io/post/test7/">
-        </link>
-        <updated>2021-03-05T08:57:48.000Z</updated>
-        <content type="html"><![CDATA[<p>8990880988</p>
-]]></content>
-    </entry>
     <entry>
         <title type="html"><![CDATA[Blender材质节点(更新ing)]]></title>
         <id>https://Wei715547.github.io/post/blender-cai-zhi-jie-dian/</id>
@@ -4749,6 +4740,17 @@ int main() {
 <blockquote>
 <p>总结：如果属性有在堆区开辟的，一定要自己提供拷贝构造函数，防止浅拷贝带来的问题</p>
 </blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Graphic Raycaster：检测所有Canvas上的UI]]></title>
+        <id>https://Wei715547.github.io/post/graphic-raycasterjian-ce-suo-you-canvas-shang-de-ui/</id>
+        <link href="https://Wei715547.github.io/post/graphic-raycasterjian-ce-suo-you-canvas-shang-de-ui/">
+        </link>
+        <updated>2020-11-14T12:31:11.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1605357183735.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1605357192515.PNG" alt="" loading="lazy"></p>
+<p>The Graphic Raycaster is used to raycast against a Canvas. The Raycaster looks at all Graphics on the canvas and determines if any of them have been hit.</p>
 ]]></content>
     </entry>
 </feed>
