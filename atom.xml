@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-03-09T09:02:08.540Z</updated>
+    <updated>2021-03-11T15:52:28.781Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -1949,7 +1949,20 @@ if (words == null || words.Length == 0) return &quot;&quot;;</p>
     }
 }
 </code></pre>
-<p><strong>881.救生艇</strong><br>
+<p><strong>876.链表中间节点</strong><br>
+//快慢指针法<br>
+public ListNode MiddleNode(ListNode head)<br>
+{<br>
+ListNode slow = head;<br>
+ListNode fast = head;<br>
+while(fast!=null&amp;&amp;fast.next!=null)<br>
+{<br>
+slow = slow.next;<br>
+fast = fast.next.next;<br>
+}<br>
+return slow;<br>
+}<br>
+<strong>881.救生艇</strong><br>
 /// <summary><br>
 /// 第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。<br>
 /// 每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。<br>
