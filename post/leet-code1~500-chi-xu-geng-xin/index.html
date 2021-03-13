@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1615477943610">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1615626678087">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ for (int i = 0; ..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1615477943610" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1615626678087" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -1052,7 +1052,18 @@ if (nums == null || nums.Length == 0) return -1;</p>
     #endregion
 </code></pre>
 <p><strong>————————————————————————————————————</strong><br>
-<strong>179.最大数(网易面试题)</strong><br>
+public static string Maxnum(int[]nums)<br>
+{<br>
+StringBuilder snums = new StringBuilder();<br>
+for (int i = 0; i &lt; nums.Length; i++)<br>
+{<br>
+snums.Append(nums[i]);<br>
+}<br>
+char[] cs = snums.ToString().ToCharArray();<br>
+Array.Sort<char>(cs, (a, b) =&gt; { return b.CompareTo(a); });<br>
+return string.Join(&quot;&quot;, cs);<br>
+}</p>
+<p><strong>179.最大数(网易面试题)</strong><br>
 /// <summary><br>
 ///179： 给定一组非负整数 nums，重新排列它们每个数字的顺序（每个数字不可拆分）使之组成一个最大的整数。<br>
 /// 用List对string进行排序<br>
