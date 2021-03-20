@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-03-19T09:08:58.026Z</updated>
+    <updated>2021-03-20T04:21:15.416Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -17,7 +17,8 @@
         <link href="https://Wei715547.github.io/post/xuan-ran-guan-xian/">
         </link>
         <updated>2021-03-19T07:04:00.000Z</updated>
-        <content type="html"><![CDATA[<p>一、应用程序:<br>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1616211232568.png" alt="" loading="lazy"><br>
+一、应用程序:<br>
 1.CPU将数据加载到显存：顶点位置信息，法线方向，顶点颜色，uv坐标<br>
 2.设置渲染状态：使用哪个顶点着色器，片元着色器，光源属性材质等<br>
 3.调用Draw Call：由CPU发起命令GPU渲染图像。指向一个需要被渲染的图元列表(以传入显存中)。</p>
@@ -31,8 +32,13 @@
 三角形遍历：检查每个像素是否被一个三角形覆盖，如果都被一个三角形所覆盖，就会生成一个片元。同时也会根据三个顶点信息对所覆盖的像素的深度插值计算。这一阶段也称扫描变换。即输出是一系列片元序列（包含很多状态集合：屏幕坐标，深度信息及顶点信息）。<br>
 片元着色器：颜色插值，纹理采样（此时的片元并不是真正意义上的像素）<br>
 逐片元操作(输出合并阶段)：主要进行片元可见性判断和颜色混合<br>
-模板测试：<br>
-深度测试：（可以指定是否开启深度测试与深度写入）与深度缓冲区中的值进行对比，小于深度缓冲中的值(更近)时有权利是否写入Z-Buffer。<br>
+透明测试：有时会与提前测试发生冲突。API:clip(tex.r-_Cutoff);<br>
+模板测试：（蒙版/遮罩）<br>
+<img src="https://Wei715547.github.io/post-images/1616214031623.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1616214040771.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1616214048833.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1616214055096.jpg" alt="" loading="lazy"><br>
+深度测试：（可以指定是否开启深度测试与深度写入）与深度缓冲区中的值进行对比，小于深度缓冲中的值(更近)时有权利是否写入Z-Buffer。（Early-Z提前执行）<br>
 合并：得到的目标颜色根据是否进行混合，半透明物体-与颜色缓冲区中的颜色值进行混合得到新颜色，或直接覆盖原颜色缓冲区中的颜色。</p>
 ]]></content>
     </entry>

@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616144604542">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616214058901">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -18,10 +18,11 @@
 
 
 
-    <meta name="description" content="一、应用程序:
+    <meta name="description" content="
+一、应用程序:
 1.CPU将数据加载到显存：顶点位置信息，法线方向，顶点颜色，uv坐标
 2.设置渲染状态：使用哪个顶点着色器，片元着色器，光源属性材质等
-3.调用Draw Call：由CPU发起命令GPU渲染图像。指向一个需要被渲染的图元列..." />
+3.调用Draw Call：由CPU发起命令GPU渲染图像。指向一个需要被渲染的图元..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -31,7 +32,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1616144604542" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1616214058901" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -110,7 +111,8 @@
             <div class="post-date">2021-03-19</div>
             
             <div class="post-content" v-pre>
-              <p>一、应用程序:<br>
+              <p><img src="https://Wei715547.github.io/post-images/1616211232568.png" alt="" loading="lazy"><br>
+一、应用程序:<br>
 1.CPU将数据加载到显存：顶点位置信息，法线方向，顶点颜色，uv坐标<br>
 2.设置渲染状态：使用哪个顶点着色器，片元着色器，光源属性材质等<br>
 3.调用Draw Call：由CPU发起命令GPU渲染图像。指向一个需要被渲染的图元列表(以传入显存中)。</p>
@@ -124,8 +126,13 @@
 三角形遍历：检查每个像素是否被一个三角形覆盖，如果都被一个三角形所覆盖，就会生成一个片元。同时也会根据三个顶点信息对所覆盖的像素的深度插值计算。这一阶段也称扫描变换。即输出是一系列片元序列（包含很多状态集合：屏幕坐标，深度信息及顶点信息）。<br>
 片元着色器：颜色插值，纹理采样（此时的片元并不是真正意义上的像素）<br>
 逐片元操作(输出合并阶段)：主要进行片元可见性判断和颜色混合<br>
-模板测试：<br>
-深度测试：（可以指定是否开启深度测试与深度写入）与深度缓冲区中的值进行对比，小于深度缓冲中的值(更近)时有权利是否写入Z-Buffer。<br>
+透明测试：有时会与提前测试发生冲突。API:clip(tex.r-_Cutoff);<br>
+模板测试：（蒙版/遮罩）<br>
+<img src="https://Wei715547.github.io/post-images/1616214031623.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1616214040771.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1616214048833.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1616214055096.jpg" alt="" loading="lazy"><br>
+深度测试：（可以指定是否开启深度测试与深度写入）与深度缓冲区中的值进行对比，小于深度缓冲中的值(更近)时有权利是否写入Z-Buffer。（Early-Z提前执行）<br>
 合并：得到的目标颜色根据是否进行混合，半透明物体-与颜色缓冲区中的颜色值进行混合得到新颜色，或直接覆盖原颜色缓冲区中的颜色。</p>
 
             </div>
