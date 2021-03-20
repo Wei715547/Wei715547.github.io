@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-03-20T05:13:43.087Z</updated>
+    <updated>2021-03-20T07:40:11.095Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -34,6 +34,7 @@
 逐片元操作(输出合并阶段)：主要进行片元可见性判断和颜色混合<br>
 透明测试：有时会与提前测试发生冲突。API:clip(tex.r-_Cutoff);<br>
 模板测试：（蒙版/遮罩）<br>
+<a href="https://b23.tv/BV1NJ41167Ec">参考视频</a><br>
 <img src="https://Wei715547.github.io/post-images/1616214031623.jpg" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1616214040771.jpg" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1616214048833.jpg" alt="" loading="lazy"><br>
