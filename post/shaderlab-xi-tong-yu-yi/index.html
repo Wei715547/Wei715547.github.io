@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616226004122">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616313712605">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -33,7 +33,7 @@ Shader "Custom/FW03exeable"
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1616226004122" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1616313712605" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -126,6 +126,7 @@ Shader "Custom/FW03exeable"
 		 #pragma vertex vert//声明顶点着色器
 		 #pragma fragment frag//声明片段着色器
 <pre><code>	 //定义结构体-方便传值
+     语义中的数据来自Mesh Rander组件，每帧调用Draw Call时此组件将模型数据发给Shader
 	 struct a2v {//从应用程序传递到顶点函数的语义POSITION:顶点坐标，NURMAL:法线(模型空间下)，TEXCOORD0-n:纹理坐标，COLOR:顶点颜色
 			float4 vertex:POSITION;//获取顶点坐标
 			float3 nol:NORMAL;//获取法线方向
@@ -146,7 +147,7 @@ Shader "Custom/FW03exeable"
 	  }
 	 
 
-	fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值
+	fixed4 frag(v2f f) :SV_Target//片原函数，片段在屏幕上像素颜色，返回颜色值存储到渲染目标，帧缓存
 	{
 	return fixed4(f.temp,1);//返回法线
 	}
@@ -165,11 +166,15 @@ Shader "Custom/FW03exeable"
 3.漫反射 Diffuse = 直射光颜色 * cos夹角(光与法线)<br>
 4.环境光<br>
 ——————————————————————————————————————<br>
-UnityCG.cginc中一些常用函数<br>
+<strong>包含文件</strong>Unity.cginc、UnityShaderVariables.cginc:自动包含不需引入，包含许多内置全局变量如MVP矩阵、Lighting.cgin:包含各种光照模型，Surface Shader会自动包含。HLSLSupport.cginc:着色器编译时自动包含，声明了许多跨平台编程的宏和定义</p>
+<p><strong>一、UnityCG.cginc包含文件中一些常用函数、宏、结构体</strong><br>
+结构体:<br>
+<img src="https://Wei715547.github.io/post-images/1616304209915.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1616304414596.jpg" alt="" loading="lazy"><br>
 摄像机方向<br>
 float3 WorldSpaceViewDir(Float4 v)//根据模型空间下的顶点坐标 -》世界空间下从这一点到相机的观察方向（返回值需要归一化）<br>
 float3 UnityWorldSpaceViewDir(float4 v)//世界空间中的顶点坐标-》世界空间从这一顶点到摄像机的方向<br>
-float3 ObjSpaceViewDir(float4 v)//模型空间中的顶点坐标-》模型空间下这个点到摄像机的观察方向<br>
+float3 ObjSpaceViewDir(float4 v)//模型空间中的顶点坐标-》模型空间下这个点到摄像机的观察方<br>
 光源方向<br>
 float3 WorldSpaceLightDir(Float4 v)//根据模型空间下的顶点坐标 -》世界空间下从这一点到光源的方向（返回值需要归一化）<br>
 float3 UnityWorldSpaceLightDir(float4 v)//世界空间中的顶点坐标-》世界空间从这一顶点到光源的方向<br>

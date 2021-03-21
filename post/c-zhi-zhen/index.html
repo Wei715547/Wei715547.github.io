@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616226004122">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616313712605">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -21,7 +21,7 @@
     <meta name="description" content="定义：type * p_address; (type:数据类型)
 p_address = &amp; valu; (&amp;取引用)
 *p_address； 表示地址中的值（解引用）
-值帧/数组  int array[3] = [7,1,..." />
+指针/数组  int array[3] = [7,1,..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -31,7 +31,7 @@ p_address = &amp; valu; (&amp;取引用)
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1616226004122" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1616313712605" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -113,12 +113,12 @@ p_address = &amp; valu; (&amp;取引用)
               <p>定义：type * p_address; (type:数据类型)<br>
 p_address = &amp; valu; (&amp;取引用)<br>
 *p_address； 表示地址中的值（解引用）</p>
-<p>值帧/数组  int array[3] = [7,1,5];<br>
+<p>指针/数组  int array[3] = [7,1,5];<br>
 int* p_array = array;<br>
 (int类型(4字节)数组array所指向的是array[0]的地址，即&amp;array[0],<br>
 一旦将array赋值给p_array，此时array和p_array都指向数组的第一个元素的地址，可以通过指针像数组一样操作数组，p_array[0] , array[0]含义相同)<br>
 指针运算：p_array++ 和p_array+1都指向数组的下一个元素（int类型占4个字节+1地址偏移4位(C++不会进行数组越界检测)）<br>
-如上所有数组索引表达式可以写成指针镓屁啊你量形式：<br>
+如上所有数组索引表达式可以写成指针加偏移量的形式：<br>
 array[1] 与 <em>(p_array+1)相同<br>
 数组声明：type array [n];<br>
 array含义1：代表这个数组其类型时type[n];<br>
@@ -129,7 +129,7 @@ type &amp;b = a;<br>
 指针与引用：声明：double x = 7.5;<br>
 double* p = &amp;x;<br>
 //引用声明 （引用声明时必须指定引用对象，且绑定关系不可改变）<br>
-double&amp; y = x;<br>
+double&amp; y = x;9<br>
 上述“&amp;”“<em>”为定义引用与指针，非取址与解引用。通过</em>p与y都可对x值进行更改；<br>
 指针与函数：指针作为函数参数<br>
 void swap (int * a ,int * b)//<br>

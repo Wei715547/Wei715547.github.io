@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616226004122">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616313712605">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -18,12 +18,9 @@
 
 
 
-    <meta name="description" content="Shader &quot;Custom/Alpha&quot;
-{
-Properties//属性
-{
-_MainTex(&quot;Main Tex&quot;,2D) = &quot;white&quot;{}//贴图代替漫反射颜色
-_C..." />
+    <meta name="description" content="透明测试或透明混合实现
+开启深度写入的半透明效果，通过两个pass块实现，第一个测试深度：ColorMask 0//设置颜色通道写掩码，0-不输出颜色，只测试深度。
+双面透明渲染：通过Cull Back/Front/Off来剔除面/关闭剔除..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -33,7 +30,7 @@ _C..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1616226004122" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1616313712605" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -112,7 +109,13 @@ _C..." />
             <div class="post-date">2020-08-20</div>
             
             <div class="post-content" v-pre>
-              <p>Shader &quot;Custom/Alpha&quot;<br>
+              <p>透明测试或透明混合实现<br>
+开启深度写入的半透明效果，通过两个pass块实现，第一个测试深度：ColorMask 0//设置颜色通道写掩码，0-不输出颜色，只测试深度。<br>
+双面透明渲染：通过Cull Back/Front/Off来剔除面/关闭剔除<br>
+<img src="https://Wei715547.github.io/post-images/1616311420685.jpg" alt="" loading="lazy"><br>
+混合模式：<br>
+<img src="https://Wei715547.github.io/post-images/1616313530408.jpg" alt="" loading="lazy"><br>
+Shader &quot;Custom/Alpha&quot;<br>
 {<br>
 Properties//属性<br>
 {<br>

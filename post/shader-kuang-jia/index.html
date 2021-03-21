@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616226004122">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616313712605">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -31,7 +31,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1616226004122" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1616313712605" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -163,9 +163,15 @@ Shader "Custom/FW"
                 "PreviewType" = "Plane"//设置材质面板以何种形式预览该材质，默认为球体，可设置为“Plane”,"Skybox"等
 <pre><code>    }
 
+    //RenderSetup:状态设置
+    Cull Balk//Front//Off  //设置剔除模式
+    ZTest Always//设置深度测试时使用的函数（与缓存区值进行对比&gt;=&lt;/通过测试/不通过测试）
+    ZWrite On//Off//开启/关闭深度写入
+    Blend SrcFactor//DstFactor//开启并设置混合模式
+
 	Pass//着色器具体绘制方式，同样可以有多个，（尽量写在一个中只提交一次）
 	{
-        Tags
+        Tags//标签类型
         {
                 //设置为前项渲染
                 &quot;LightMode&quot; = &quot;ForwardBase&quot;//定义该Pass在Unity的渲染流水线中的角色，
