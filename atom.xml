@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-03-25T10:51:54.314Z</updated>
+    <updated>2021-03-25T12:09:27.951Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -714,6 +714,92 @@ return mind;<br>
 }<br>
 return -1;<br>
 }<br>
+<strong>225.队列实现栈-</strong><br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace LeetCode复习<br>
+{<br>
+class MyStack<br>
+{<br>
+/*#region 双队列实现<br>
+Queue<int> q1;<br>
+Queue<int> q2;<br>
+public MyStack()<br>
+{<br>
+q1 = new Queue<int>();<br>
+q2 = new Queue<int>();<br>
+}</p>
+<pre><code>    public void Push(int n)
+    {
+        q1.Enqueue(n);
+    }
+
+    public int Pop()
+    {
+        if (q1.Count == 1)
+            return q1.Dequeue();
+        else
+        {
+            while (q1.Count != 1)
+                q2.Enqueue(q1.Dequeue());                
+        }
+        int temp = q1.Dequeue();
+        while (q2.Count != 0)
+            q1.Enqueue(q2.Dequeue());
+        return temp;
+    }
+    public int Top()
+    {
+        int temp = Pop();
+        q1.Enqueue(temp);
+        return temp;
+    }
+
+    public bool Empty()
+    {
+        if (q1.Count == 0)
+            return true;
+        else return false;
+    }
+    #endregion*/
+    #region 单队列实现
+
+    Queue&lt;int&gt; QueueInput = new Queue&lt;int&gt;();
+    public void Push(int x)/** Push element x onto stack. */
+    {
+        
+         QueueInput.Enqueue(x);
+
+         for (int i = 0; i &lt; QueueInput.Count - 1; ++i)//将新入队的数移动N-1次后队列最前端
+         {
+             QueueInput.Enqueue(QueueInput.Dequeue());
+         }
+    }            
+    /** Removes the element on top of the stack and returns that element. */
+    public int Pop()
+    {
+        return QueueInput.Dequeue();
+
+    }
+
+    /** Get the top element. */
+    public int Top()
+    {
+        return QueueInput.Peek();
+    }
+
+    /** Returns whether the stack is empty. */
+    public bool Empty()
+    {
+        return QueueInput.Count == 0;
+    }
+    
+    #endregion
+
+}
+</code></pre>
+<p>}<br>
 <strong>/// 三数之和</strong><br>
 public static List&lt;List<int>&gt; ThreeSum(int[] nums)<br>
 {<br>
