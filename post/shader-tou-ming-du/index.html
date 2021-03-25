@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616333552203">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616669485771">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -18,9 +18,10 @@
 
 
 
-    <meta name="description" content="透明测试或透明混合实现
-开启深度写入的半透明效果，通过两个pass块实现，第一个测试深度：ColorMask 0//设置颜色通道写掩码，0-不输出颜色，只测试深度。
-双面透明渲染：通过Cull Back/Front/Off来剔除面/关闭剔除..." />
+    <meta name="description" content="透明测试实现
+SubShader
+{
+Tags{&quot;Queue&quot; = &quot;AlphaTest&quot;/模型渲染队列/ &quot;IngnoreProjector&quot; = &quot;True&quot..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -30,7 +31,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1616333552203" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1616669485771" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -109,12 +110,22 @@
             <div class="post-date">2020-08-20</div>
             
             <div class="post-content" v-pre>
-              <p>透明测试或透明混合实现<br>
-开启深度写入的半透明效果，通过两个pass块实现，第一个测试深度：ColorMask 0//设置颜色通道写掩码，0-不输出颜色，只测试深度。<br>
-双面透明渲染：通过Cull Back/Front/Off来剔除面/关闭剔除<br>
-<img src="https://Wei715547.github.io/post-images/1616311420685.jpg" alt="" loading="lazy"><br>
+              <p><strong>透明测试实现</strong><br>
+SubShader<br>
+{<br>
+Tags{&quot;Queue&quot; = &quot;AlphaTest&quot;/<em>模型渲染队列</em>/ &quot;IngnoreProjector&quot; = &quot;True&quot; &quot;RanderType&quot; = &quot;Transparent&quot;}//Pass块参数标签</p>
+<pre><code>		Pass
+		{
+			Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UNITY内部光照变量
+            fixed4 texColor = tex2D(_MainTex, f.uv.xy) * _Color;//获取纹理坐标下贴图像素点的颜色*与外部属性控制的贴图颜色混合
+		clip(texColor.a-_Cutoff);
+</code></pre>
+<p>通过透明贴图实现显示与透明（非半透明）。</p>
+<p>开启深度写入的半透明效果，通过两个pass块实现，第一个测试深度：ColorMask 0//设置颜色通道写掩码，0-不输出颜色，只测试深度。</p>
+<p><img src="https://Wei715547.github.io/post-images/1616311420685.jpg" alt="" loading="lazy"><br>
 混合模式：<br>
 <img src="https://Wei715547.github.io/post-images/1616313530408.jpg" alt="" loading="lazy"><br>
+<strong>透明混合实现</strong><br>
 Shader &quot;Custom/Alpha&quot;<br>
 {<br>
 Properties//属性<br>
@@ -127,7 +138,7 @@ _AlphaScale(&quot;_AlphaScale&quot;,Float) = 1<br>
 }<br>
 SubShader<br>
 {<br>
-Tags{&quot;Queue&quot; = &quot;Transparent&quot;/<em>模型渲染队列</em>/ &quot;IngnoreProjector&quot; = &quot;True&quot; &quot;RanderType&quot; = &quot;Transparent&quot;}//Pass块参数标签<br>
+Tags{&quot;Queue&quot; = &quot;Transparent&quot;/<em>设置模型渲染队列为透明度混合</em>/ &quot;IngnoreProjector&quot; = &quot;True&quot; &quot;RanderType&quot; = &quot;Transparent&quot;}//Pass块参数标签<br>
 <img src="https://Wei715547.github.io/post-images/1598164914894.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1598166460428.PNG" alt="" loading="lazy"><br>
 Pass<br>
@@ -211,6 +222,7 @@ Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UN
 
 		fixed3 tempColor = diffuse + UNITY_LIGHTMODEL_AMBIENT.rgb * texColor;//漫反射+高光+环境光*纹理，相加混合（环境光与纹理混合：使强光下的纹理仍保持清晰）
 		return fixed4(tempColor,_AlphaScale*texColor.a);//外部属性与纹理贴图Alpha值混合控制
+        //开启Blend混合后片元的透明通道才有影响
 	}
 	ENDCG
 }
@@ -218,7 +230,16 @@ Tags {&quot;Lighting&quot; = &quot;ForwardBase&quot;} //定义LightMode,获取UN
 	}
 		FallBack &quot;Diffuse&quot;
 </code></pre>
-<p>}</p>
+<p>}<br>
+双面透明渲染：通过Cull Back/Front/Off来剔除面/关闭剔除<br>
+透明测试双面渲染<br>
+Pass<br>
+{<br>
+Tags{LightMode =&quot;ForwardBase&quot;}<br>
+Cull Off<br>
+}<br>
+透明度混合的上面渲染<br>
+通过两个Pass块实现，第一个Pass只渲染背面-Cull Front，第二个Pass只渲染正面-Cull-Back</p>
 
             </div>
             

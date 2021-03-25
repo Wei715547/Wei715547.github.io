@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-03-21T13:32:38.993Z</updated>
+    <updated>2021-03-25T10:51:54.314Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -409,11 +409,11 @@ FallBack &quot;Diffuse&quot;
 1.CPU将数据加载到显存：顶点位置信息，法线方向，顶点颜色，uv坐标<br>
 2.设置渲染状态：使用哪个顶点着色器，片元着色器，光源属性材质等<br>
 3.调用Draw Call：由CPU发起命令GPU渲染图像。指向一个需要被渲染的图元列表(以传入显存中)。</p>
-<p>二、几何阶段：顶点着色器-曲面细着色器-几何着色器-裁剪-屏幕映射<br>
-其中曲面，几何着色器可选分别用于细分图元，着色或产生新图元。裁剪也是可配置的提出相机视椎体外的顶点。最后屏幕映射，将顶点坐标转换到屏幕坐标系中。<br>
+<p>二、几何阶段：顶点着色器-曲面细分着色器-几何着色器-裁剪-屏幕映射<br>
+其中曲面，几何着色器可选分别用于细分图元，着色或产生新图元。裁剪也是可配置的剔除相机视椎体外的顶点。最后屏幕映射，将顶点坐标转换到屏幕坐标系中。<br>
 顶点着色器：将顶点坐标从模型空间转换到齐次裁剪空间<br>
-如：v2f.pos = UnityObjectToClipPos(a22v.pos);  或  mul(UNITY_MVP, a2v.pos)//通过MVP矩阵转换得到齐次裁剪坐标，再由硬件做透视除法，得到设备坐标NDC（OpenGL中z分量[-1,1]，DX中[0,1]）。<br>
-屏幕映射：将每个图元的x,y坐标（不对z进行操作）转换到品目坐标系下/OpenGL从左下到右上，DX从左上到右下，实际上屏幕坐标系与z坐标组成窗口坐标系，这些值一起被传递到光栅化阶段。</p>
+如：v2f.pos = UnityObjectToClipPos(a2v.pos);  或  mul(UNITY_MVP, a2v.pos)//通过MVP矩阵转换得到齐次裁剪坐标，再由硬件做透视除法，得到设备坐标NDC（OpenGL中z分量[-1,1]，DX中[0,1]）。<br>
+屏幕映射：将每个图元的x,y坐标（不对z进行操作）转换到屏幕坐标系下/OpenGL从左下到右上，DX从左上到右下，实际上屏幕坐标系与z坐标组成窗口坐标系，这些值一起被传递到光栅化阶段。</p>
 <p>三、光栅化阶段：三角形设置-三角形遍历-片元着色器-逐片元操作（计算每个图元覆盖了那些像素，计算着些像素的颜色）<br>
 三角形设置：计算光栅化一个三角形所需的信息<br>
 三角形遍历：检查每个像素是否被一个三角形覆盖，如果都被一个三角形所覆盖，就会生成一个片元。同时也会根据三个顶点信息对所覆盖的像素的深度插值计算。这一阶段也称扫描变换。即输出是一系列片元序列（包含很多状态集合：屏幕坐标，深度信息及顶点信息）。<br>
@@ -940,7 +940,22 @@ return 0;</p>
         return memolist[0];
     }
 </code></pre>
-<p><strong>//128.最长连续序列</strong><br>
+<p><strong>70.啊爬楼梯(青蛙跳台阶)</strong>//动态规划/类似斐波那数列-LC509<br>
+public class Solution {<br>
+public int NumWays(int n) {<br>
+if (n &lt; 2) return 1;</p>
+<pre><code>        int[] res = new int[n];
+        res[0] = 1;
+        res[1] = 2;
+        for (int i = 2; i &lt; n; i++)
+        {
+            res[i] = (res[i - 1] + res[i - 2]);//%1000000007;要求取余时
+        }
+        return res[n - 1];
+}
+</code></pre>
+<p>}<br>
+<strong>//128.最长连续序列</strong><br>
 public static int LongestConsecutive(int[] nums)<br>
 {<br>
 if (nums == null || nums.Length == 0) return 0;</p>

@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616333552203">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616669485771">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ for (int i = 0; ..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1616333552203" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1616669485771" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -440,7 +440,22 @@ return 0;</p>
         return memolist[0];
     }
 </code></pre>
-<p><strong>//128.最长连续序列</strong><br>
+<p><strong>70.啊爬楼梯(青蛙跳台阶)</strong>//动态规划/类似斐波那数列-LC509<br>
+public class Solution {<br>
+public int NumWays(int n) {<br>
+if (n &lt; 2) return 1;</p>
+<pre><code>        int[] res = new int[n];
+        res[0] = 1;
+        res[1] = 2;
+        for (int i = 2; i &lt; n; i++)
+        {
+            res[i] = (res[i - 1] + res[i - 2]);//%1000000007;要求取余时
+        }
+        return res[n - 1];
+}
+</code></pre>
+<p>}<br>
+<strong>//128.最长连续序列</strong><br>
 public static int LongestConsecutive(int[] nums)<br>
 {<br>
 if (nums == null || nums.Length == 0) return 0;</p>
