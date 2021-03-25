@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616674148413">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616687370167">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ for (int i = 0; ..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1616674148413" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1616687370167" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -227,15 +227,15 @@ Queue<int> q1;<br>
 Queue<int> q2;<br>
 public MyStack()<br>
 {<br>
-q1 = new Queue<int>();<br>
-q2 = new Queue<int>();<br>
+q1 = new Queue<int>();//入队<br>
+q2 = new Queue<int>();//中间队<br>
 }</p>
-<pre><code>    public void Push(int n)
+<pre><code>    public void Push(int n)//入栈时直接压入入队
     {
         q1.Enqueue(n);
     }
 
-    public int Pop()
+    public int Pop()//弹出时将入队中的元素弹如中间队，只留下最后进入的-弹出元素，
     {
         if (q1.Count == 1)
             return q1.Dequeue();
@@ -249,24 +249,23 @@ q2 = new Queue<int>();<br>
             q1.Enqueue(q2.Dequeue());
         return temp;
     }
-    public int Top()
+    public int Top()//直接使用弹出，在压入入队
     {
         int temp = Pop();
         q1.Enqueue(temp);
         return temp;
     }
 
-    public bool Empty()
+    public bool Empty()//元素全部存在入队中
     {
-        if (q1.Count == 0)
-            return true;
-        else return false;
+        return q1.Count == 0;
     }
     #endregion*/
     #region 单队列实现
 
     Queue&lt;int&gt; QueueInput = new Queue&lt;int&gt;();
-    public void Push(int x)/** Push element x onto stack. */
+    /** Push element x onto stack. */
+    public void Push(int x)//压入后，对队列进行移动，将新进入的元素移动到队首
     {
         
          QueueInput.Enqueue(x);
@@ -300,7 +299,60 @@ q2 = new Queue<int>();<br>
 }
 </code></pre>
 <p>}<br>
-<strong>/// 三数之和</strong><br>
+<strong>232.栈实现队列</strong><br>
+using System;<br>
+using System.Collections.Generic;<br>
+using System.Text;</p>
+<p>namespace LeetCode复习<br>
+{<br>
+class MyQueue<br>
+{<br>
+Stack<int> a;<br>
+Stack<int> b;</p>
+<pre><code>    /** Initialize your data structure here. */
+    public MyQueue()
+    {
+        a = new Stack&lt;int&gt;();//压入入栈
+        b = new Stack&lt;int&gt;();//弹出栈
+    }
+
+    /** Push element x to the back of queue. */
+    public void Push(int x)//压入直接存入a
+    {
+        a.Push(x);
+    }
+
+    /** Removes the element from in front of queue and returns that element. */
+    public int Pop()//a全部弹出压入b得到的b即与a排序相反，通过b弹出即实现队列
+    {
+        if(b.Count==0)
+        {
+            while (a.Count != 0)
+                b.Push(a.Pop());                    
+        }
+        return b.Pop();
+    }
+
+    /** Get the front element. */
+    public int Peek()//
+    {
+        if(b.Count == 0)
+        {
+            while (a.Count != 0)
+                b.Push(a.Pop());
+        }
+        return b.Peek();
+    }
+
+    /** Returns whether the queue is empty. */
+    public bool Empty()
+    {
+        return a.Count == 0 &amp;&amp; b.Count == 0;
+    }
+}
+</code></pre>
+<p>}</p>
+<p><strong>/// 三数之和</strong><br>
 public static List&lt;List<int>&gt; ThreeSum(int[] nums)<br>
 {<br>
 List&lt;List<int>&gt; res = new List&lt;List<int>&gt;();//返回值<br>
