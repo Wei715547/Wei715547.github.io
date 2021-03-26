@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-03-26T09:48:39.279Z</updated>
+    <updated>2021-03-26T14:31:03.120Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,104 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[Leet Code持续更新（2）]]></title>
+        <id>https://Wei715547.github.io/post/leet-code-chi-xu-geng-xin-2/</id>
+        <link href="https://Wei715547.github.io/post/leet-code-chi-xu-geng-xin-2/">
+        </link>
+        <updated>2021-03-26T09:50:25.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>//1035.不相交的线：动态规划</strong><br>
+public static int MaxUncrossLines(int[] A,int[] B)<br>
+{<br>
+int[,] dp = new int[A.Length + 1, B.Length + 1];//动态规划数组<br>
+for (int i = 1; i &lt;= A.Length; i++)//遍历规划数组并赋值0行与列初始为0<br>
+{<br>
+for (int j = 1; j &lt;= B.Length; j++)<br>
+{<br>
+//a=b时:  dp(a, b) = dp(a - 1, b - 1) + 1<br>
+//a!=b时: dp(a, b) = max(dp(a - 1, b), dp(a, b - 1))</p>
+<pre><code>                dp[i, j] = A[i - 1] == B[j - 1] ? dp[i - 1, j - 1] + 1 : (int)MathF.Max(dp[i - 1, j], dp[i, j - 1]);
+            }
+        }
+        return dp[A.Length, B.Length];
+    }
+</code></pre>
+<p><strong>//419:甲板上的军舰</strong><br>
+//DFS<br>
+public int CountBattleships(char[][] board)<br>
+{<br>
+if (board == null || board.Length == 0) return 0;</p>
+<pre><code>        int res = 0;
+        for (int i = 0; i &lt; board.Length; i++)
+        {
+            for (int j = 0; j &lt; board[0].Length; j++)
+            {
+                if (board[i][j] == 'X')
+                {
+                    res++;
+                    DFSZ(board, i, j);
+                }
+            }
+        }
+        return res;
+    }
+    static void DFSZ(char[][] grid, int i, int j)
+    {
+        if (i &lt; 0 || j &lt; 0 || i &gt;= grid.Length || j &gt;= grid[0].Length || grid[i][j] == '.')
+        {
+            return;
+        }
+        grid[i][j] = '.';
+        DFSZ(grid, i + 1, j);
+        DFSZ(grid, i - 1, j);
+        DFSZ(grid, i, j + 1);
+        DFSZ(grid, i, j - 1);
+    }
+//进阶：用一次扫描算法，只使用O(1)额外空间，并且不修改甲板的值来解决这个问题吗？
+    public int CountBattleships2(char[][] board)
+    {
+        if (board == null || board.Length == 0) return 0;
+
+        int res = 0;
+        for (int i = 0; i &lt; board.Length; i++)
+        {
+            for (int j = 0; j &lt; board[0].Length; j++)
+            {
+                if (board[i][j] == 'X')
+                {
+                    //战舰只能水平或垂直分布，自诩找战舰的头部（或尾部）中间的甲板不计数
+                    if (i &gt; 0 &amp;&amp; board[i - 1][j] == 'X' ||j&gt;0&amp;&amp;board[i][j-1]=='X')
+                        continue;
+                    res++;                        
+                }
+            }
+        }
+        return res;
+    }
+</code></pre>
+<p><strong>509：斐波那契数列</strong><br>
+public int Fib(int n)<br>
+{<br>
+if (n &lt; 2) return n == 1 ? 1 : 0;</p>
+<pre><code>        int sum = Fib(n - 1) + Fib(n - 2);
+        return sum;
+    }
+</code></pre>
+<p><strong>70：爬楼梯</strong>-<br>
+public int NumWays2(int n)<br>
+{<br>
+if (n &lt; 2) return 1;</p>
+<pre><code>        int[] res = new int[n + 1];
+        res[1] = 1;
+        res[2] = 2;
+        for (int i = 3; i &lt;= n; i++)
+        {
+            res[i] = res[i - 1] + res[i - 2];
+        }
+        return res[n];
+    }</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Grass交互]]></title>
         <id>https://Wei715547.github.io/post/grass-jiao-hu/</id>
@@ -610,7 +708,7 @@ SubShader
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Leet Code1~500持续更新]]></title>
+        <title type="html"><![CDATA[Leet Code持续更新（1）]]></title>
         <id>https://Wei715547.github.io/post/leet-code1~500-chi-xu-geng-xin/</id>
         <link href="https://Wei715547.github.io/post/leet-code1~500-chi-xu-geng-xin/">
         </link>
@@ -1091,7 +1189,7 @@ return 0;</p>
         return memolist[0];
     }
 </code></pre>
-<p><strong>70.啊爬楼梯(青蛙跳台阶)</strong>//动态规划/类似斐波那数列-LC509<br>
+<p><strong>70.爬楼梯(青蛙跳台阶)</strong>//动态规划/类似斐波那数列-LC509<br>
 public class Solution {<br>
 public int NumWays(int n) {<br>
 if (n &lt; 2) return 1;</p>
@@ -1103,6 +1201,15 @@ if (n &lt; 2) return 1;</p>
             res[i] = (res[i - 1] + res[i - 2]);//%1000000007;要求取余时
         }
         return res[n - 1];
+        //索引对应形式
+        int[] res = new int[n + 1];
+        res[1] = 1;
+        res[2] = 2;
+        for (int i = 3; i &lt;= n; i++)
+        {
+            res[i] = res[i - 1] + res[i - 2];
+        }
+        return res[n];
 }
 </code></pre>
 <p>}<br>
@@ -4581,422 +4688,6 @@ for (map&lt;int,int, MyMapSort&gt;::iterator it = m.begin(); it!=m.end(); it++)
 }
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[C++运算符重载]]></title>
-        <id>https://Wei715547.github.io/post/cyun-suan-fu-chong-zai/</id>
-        <link href="https://Wei715547.github.io/post/cyun-suan-fu-chong-zai/">
-        </link>
-        <updated>2020-11-26T10:39:57.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="45-运算符重载">4.5 运算符重载</h3>
-<p>运算符重载概念：对已有的运算符重新进行定义，赋予其另一种功能，以适应不同的数据类型</p>
-<h4 id="451-加号运算符重载">4.5.1 加号运算符重载</h4>
-<p>作用：实现两个自定义数据类型相加的运算</p>
-<pre><code class="language-C++">class Person {
-public:
-	Person() {};
-	Person(int a, int b)
-	{
-		this-&gt;m_A = a;
-		this-&gt;m_B = b;
-	}
-	//成员函数实现 + 号运算符重载
-	Person operator+(const Person&amp; p) {
-		Person temp;
-		temp.m_A = this-&gt;m_A + p.m_A;
-		temp.m_B = this-&gt;m_B + p.m_B;
-		return temp;
-	}
-
-
-public:
-	int m_A;
-	int m_B;
-};
-
-//全局函数实现 + 号运算符重载
-//Person operator+(const Person&amp; p1, const Person&amp; p2) {
-//	Person temp(0, 0);
-//	temp.m_A = p1.m_A + p2.m_A;
-//	temp.m_B = p1.m_B + p2.m_B;
-//	return temp;
-//}
-
-//运算符重载 可以发生函数重载 
-Person operator+(const Person&amp; p2, int val)  
-{
-	Person temp;
-	temp.m_A = p2.m_A + val;
-	temp.m_B = p2.m_B + val;
-	return temp;
-}
-
-void test() {
-
-	Person p1(10, 10);
-	Person p2(20, 20);
-
-	//成员函数方式
-	Person p3 = p2 + p1;  //相当于 p2.operaor+(p1)
-	cout &lt;&lt; &quot;mA:&quot; &lt;&lt; p3.m_A &lt;&lt; &quot; mB:&quot; &lt;&lt; p3.m_B &lt;&lt; endl;
-
-
-	Person p4 = p3 + 10; //相当于 operator+(p3,10)
-	cout &lt;&lt; &quot;mA:&quot; &lt;&lt; p4.m_A &lt;&lt; &quot; mB:&quot; &lt;&lt; p4.m_B &lt;&lt; endl;
-
-}
-
-int main() {
-
-	test();
-
-	system(&quot;pause&quot;);
-
-	return 0;
-}
-</code></pre>
-<blockquote>
-<p>总结1：对于内置的数据类型的表达式的的运算符是不可能改变的</p>
-</blockquote>
-<blockquote>
-<p>总结2：不要滥用运算符重载</p>
-</blockquote>
-<hr>
-<h4 id="452-左移运算符重载">4.5.2 左移运算符重载</h4>
-<p>作用：可以输出自定义数据类型</p>
-<pre><code class="language-C++">class Person {
-	friend ostream&amp; operator&lt;&lt;(ostream&amp; out, Person&amp; p);//友元：全局运算符重载函数访问类的私有成员
-
-public:
-
-	Person(int a, int b)
-	{
-		this-&gt;m_A = a;
-		this-&gt;m_B = b;
-	}
-
-	//成员函数 实现不了  p &lt;&lt; cout 不是我们想要的效果
-	//void operator&lt;&lt;(Person&amp; p){
-	//}
-
-private:
-	int m_A;
-	int m_B;
-};
-
-//全局函数实现左移重载
-//ostream对象只能有一个
-ostream&amp; operator&lt;&lt;(ostream&amp; out, Person&amp; p) {
-	out &lt;&lt; &quot;a:&quot; &lt;&lt; p.m_A &lt;&lt; &quot; b:&quot; &lt;&lt; p.m_B;
-	return out;
-}
-
-void test() {
-
-	Person p1(10, 20);
-
-	cout &lt;&lt; p1 &lt;&lt; &quot;hello world&quot; &lt;&lt; endl; //链式编程
-}
-
-int main() {
-
-	test();
-
-	system(&quot;pause&quot;);
-
-	return 0;
-}
-</code></pre>
-<blockquote>
-<p>总结：重载左移运算符配合友元可以实现输出自定义数据类型</p>
-</blockquote>
-<hr>
-<h4 id="453-递增运算符重载">4.5.3 递增运算符重载</h4>
-<p>作用： 通过重载递增运算符，实现自己的整型数据</p>
-<pre><code class="language-C++">
-class MyInteger {
-
-	friend ostream&amp; operator&lt;&lt;(ostream&amp; out, MyInteger myint);
-
-public:
-	MyInteger() {
-		m_Num = 0;
-	}
-	//前置++
-	MyInteger&amp; operator++() {
-		//先++
-		m_Num++;
-		//再返回
-		return *this;
-	}
-
-	//后置++
-	MyInteger operator++(int) {
-		//先返回
-		MyInteger temp = *this; //记录当前本身的值，然后让本身的值加1，但是返回的是以前的值，达到先返回后++；
-		m_Num++;
-		return temp;
-	}
-
-private:
-	int m_Num;
-};
-
-
-ostream&amp; operator&lt;&lt;(ostream&amp; out, MyInteger myint) {
-	out &lt;&lt; myint.m_Num;
-	return out;
-}
-
-
-//前置++ 先++ 再返回
-void test01() {
-	MyInteger myInt;
-	cout &lt;&lt; ++myInt &lt;&lt; endl;
-	cout &lt;&lt; myInt &lt;&lt; endl;
-}
-
-//后置++ 先返回 再++
-void test02() {
-
-	MyInteger myInt;
-	cout &lt;&lt; myInt++ &lt;&lt; endl;
-	cout &lt;&lt; myInt &lt;&lt; endl;
-}
-
-int main() {
-
-	test01();
-	//test02();
-
-	system(&quot;pause&quot;);
-
-	return 0;
-}
-</code></pre>
-<blockquote>
-<p>总结： 前置递增返回引用，后置递增返回值</p>
-</blockquote>
-<h4 id="454-赋值运算符重载">4.5.4 赋值运算符重载</h4>
-<p>c++编译器至少给一个类添加4个函数</p>
-<ol>
-<li>默认构造函数(无参，函数体为空)</li>
-<li>默认析构函数(无参，函数体为空)</li>
-<li>默认拷贝构造函数，对属性进行值拷贝</li>
-<li>赋值运算符 operator=, 对属性进行值拷贝</li>
-</ol>
-<p>如果类中有属性指向堆区，做赋值操作时也会出现深浅拷贝问题</p>
-<p><strong>示例：</strong></p>
-<pre><code class="language-C++">class Person
-{
-public:
-
-	Person(int age)
-	{
-		//将年龄数据开辟到堆区
-		m_Age = new int(age);
-	}
-
-	//重载赋值运算符 
-	Person&amp; operator=(Person &amp;p)
-	{
-		if (m_Age != NULL)
-		{
-			delete m_Age;
-			m_Age = NULL;
-		}
-		//编译器提供的代码是浅拷贝
-		//m_Age = p.m_Age;
-
-		//提供深拷贝 解决浅拷贝的问题
-		m_Age = new int(*p.m_Age);
-
-		//返回自身
-		return *this;
-	}
-
-
-	~Person()
-	{
-		if (m_Age != NULL)
-		{
-			delete m_Age;
-			m_Age = NULL;
-		}
-	}
-
-	//年龄的指针
-	int *m_Age;
-
-};
-
-
-void test01()
-{
-	Person p1(18);
-
-	Person p2(20);
-
-	Person p3(30);
-
-	p3 = p2 = p1; //赋值操作
-
-	cout &lt;&lt; &quot;p1的年龄为：&quot; &lt;&lt; *p1.m_Age &lt;&lt; endl;
-
-	cout &lt;&lt; &quot;p2的年龄为：&quot; &lt;&lt; *p2.m_Age &lt;&lt; endl;
-
-	cout &lt;&lt; &quot;p3的年龄为：&quot; &lt;&lt; *p3.m_Age &lt;&lt; endl;
-}
-
-int main() {
-
-	test01();
-
-	//int a = 10;
-	//int b = 20;
-	//int c = 30;
-
-	//c = b = a;
-	//cout &lt;&lt; &quot;a = &quot; &lt;&lt; a &lt;&lt; endl;
-	//cout &lt;&lt; &quot;b = &quot; &lt;&lt; b &lt;&lt; endl;
-	//cout &lt;&lt; &quot;c = &quot; &lt;&lt; c &lt;&lt; endl;
-
-	system(&quot;pause&quot;);
-
-	return 0;
-}
-</code></pre>
-<h4 id="455-关系运算符重载">4.5.5 关系运算符重载</h4>
-<p>**作用：**重载关系运算符，可以让两个自定义类型对象进行对比操作</p>
-<p><strong>示例：</strong></p>
-<pre><code class="language-C++">class Person
-{
-public:
-	Person(string name, int age)
-	{
-		this-&gt;m_Name = name;
-		this-&gt;m_Age = age;
-	};
-
-	bool operator==(Person &amp; p)
-	{
-		if (this-&gt;m_Name == p.m_Name &amp;&amp; this-&gt;m_Age == p.m_Age)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	bool operator!=(Person &amp; p)
-	{
-		if (this-&gt;m_Name == p.m_Name &amp;&amp; this-&gt;m_Age == p.m_Age)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
-
-	string m_Name;
-	int m_Age;
-};
-
-void test01()
-{
-	//int a = 0;
-	//int b = 0;
-
-	Person a(&quot;孙悟空&quot;, 18);
-	Person b(&quot;孙悟空&quot;, 18);
-
-	if (a == b)
-	{
-		cout &lt;&lt; &quot;a和b相等&quot; &lt;&lt; endl;
-	}
-	else
-	{
-		cout &lt;&lt; &quot;a和b不相等&quot; &lt;&lt; endl;
-	}
-
-	if (a != b)
-	{
-		cout &lt;&lt; &quot;a和b不相等&quot; &lt;&lt; endl;
-	}
-	else
-	{
-		cout &lt;&lt; &quot;a和b相等&quot; &lt;&lt; endl;
-	}
-}
-
-
-int main() {
-
-	test01();
-
-	system(&quot;pause&quot;);
-
-	return 0;
-}
-</code></pre>
-<h4 id="456-函数调用运算符重载">4.5.6 函数调用运算符重载</h4>
-<ul>
-<li>函数调用运算符 ()  也可以重载</li>
-<li>由于重载后使用的方式非常像函数的调用，因此称为仿函数</li>
-<li>仿函数没有固定写法，非常灵活</li>
-</ul>
-<p><strong>示例：</strong></p>
-<pre><code class="language-C++">class MyPrint
-{
-public:
-	void operator()(string text)
-	{
-		cout &lt;&lt; text &lt;&lt; endl;
-	}
-
-};
-void test01()
-{
-	//重载的（）操作符 也称为仿函数
-	MyPrint myFunc;
-	myFunc(&quot;hello world&quot;);
-}
-
-
-class MyAdd
-{
-public:
-	int operator()(int v1, int v2)
-	{
-		return v1 + v2;
-	}
-};
-
-void test02()
-{
-	MyAdd add;
-	int ret = add(10, 10);
-	cout &lt;&lt; &quot;ret = &quot; &lt;&lt; ret &lt;&lt; endl;
-
-	//匿名对象调用  
-	cout &lt;&lt; &quot;MyAdd()(100,100) = &quot; &lt;&lt; MyAdd()(100, 100) &lt;&lt; endl;
-}
-
-int main() {
-
-	test01();
-	test02();
-
-	system(&quot;pause&quot;);
-
-	return 0;
-}
-</code></pre>
 ]]></content>
     </entry>
 </feed>

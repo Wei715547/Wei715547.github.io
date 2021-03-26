@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Ray | WeiBlog</title>
+<title>Leet Code持续更新（2） | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,12 +18,10 @@
 
 
 
-    <meta name="description" content="void Update()
+    <meta name="description" content="//1035.不相交的线：动态规划
+public static int MaxUncrossLines(int[] A,int[] B)
 {
-if (Input.GetMouseButtonDown(1))
-{
-Ray ray = Camera .main .ScreenPointToRay ( Input.mousePosition);
-Rayc..." />
+int[,] dp = new int[A.Length + 1, B.Length + 1];/..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -108,35 +106,109 @@ Rayc..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Ray</h2>
-            <div class="post-date">2020-05-09</div>
+            <h2 class="post-title">Leet Code持续更新（2）</h2>
+            <div class="post-date">2021-03-26</div>
             
             <div class="post-content" v-pre>
-              <p>void Update()<br>
+              <p><strong>//1035.不相交的线：动态规划</strong><br>
+public static int MaxUncrossLines(int[] A,int[] B)<br>
 {<br>
-if (Input.GetMouseButtonDown(1))<br>
+int[,] dp = new int[A.Length + 1, B.Length + 1];//动态规划数组<br>
+for (int i = 1; i &lt;= A.Length; i++)//遍历规划数组并赋值0行与列初始为0<br>
 {<br>
-Ray ray = Camera .main .ScreenPointToRay ( Input.mousePosition);<br>
-RaycastHit hit;<br>
-if (!Physics.Raycast(ray, out hit))<br>
+for (int j = 1; j &lt;= B.Length; j++)<br>
 {<br>
-//hit.collider .gameObject //射线打到的物体<br>
-return;<br>
-}<br>
-navMeshAgent.destination = hit.point ;//碰撞点<br>
-}</p>
-<pre><code>}
-![](https://Wei715547.github.io/post-images/1589025091557.jpg)
-![](https://Wei715547.github.io/post-images/1589025123139.jpg)</code></pre>
+//a=b时:  dp(a, b) = dp(a - 1, b - 1) + 1<br>
+//a!=b时: dp(a, b) = max(dp(a - 1, b), dp(a, b - 1))</p>
+<pre><code>                dp[i, j] = A[i - 1] == B[j - 1] ? dp[i - 1, j - 1] + 1 : (int)MathF.Max(dp[i - 1, j], dp[i, j - 1]);
+            }
+        }
+        return dp[A.Length, B.Length];
+    }
+</code></pre>
+<p><strong>//419:甲板上的军舰</strong><br>
+//DFS<br>
+public int CountBattleships(char[][] board)<br>
+{<br>
+if (board == null || board.Length == 0) return 0;</p>
+<pre><code>        int res = 0;
+        for (int i = 0; i &lt; board.Length; i++)
+        {
+            for (int j = 0; j &lt; board[0].Length; j++)
+            {
+                if (board[i][j] == 'X')
+                {
+                    res++;
+                    DFSZ(board, i, j);
+                }
+            }
+        }
+        return res;
+    }
+    static void DFSZ(char[][] grid, int i, int j)
+    {
+        if (i &lt; 0 || j &lt; 0 || i &gt;= grid.Length || j &gt;= grid[0].Length || grid[i][j] == '.')
+        {
+            return;
+        }
+        grid[i][j] = '.';
+        DFSZ(grid, i + 1, j);
+        DFSZ(grid, i - 1, j);
+        DFSZ(grid, i, j + 1);
+        DFSZ(grid, i, j - 1);
+    }
+//进阶：用一次扫描算法，只使用O(1)额外空间，并且不修改甲板的值来解决这个问题吗？
+    public int CountBattleships2(char[][] board)
+    {
+        if (board == null || board.Length == 0) return 0;
+
+        int res = 0;
+        for (int i = 0; i &lt; board.Length; i++)
+        {
+            for (int j = 0; j &lt; board[0].Length; j++)
+            {
+                if (board[i][j] == 'X')
+                {
+                    //战舰只能水平或垂直分布，自诩找战舰的头部（或尾部）中间的甲板不计数
+                    if (i &gt; 0 &amp;&amp; board[i - 1][j] == 'X' ||j&gt;0&amp;&amp;board[i][j-1]=='X')
+                        continue;
+                    res++;                        
+                }
+            }
+        }
+        return res;
+    }
+</code></pre>
+<p><strong>509：斐波那契数列</strong><br>
+public int Fib(int n)<br>
+{<br>
+if (n &lt; 2) return n == 1 ? 1 : 0;</p>
+<pre><code>        int sum = Fib(n - 1) + Fib(n - 2);
+        return sum;
+    }
+</code></pre>
+<p><strong>70：爬楼梯</strong>-<br>
+public int NumWays2(int n)<br>
+{<br>
+if (n &lt; 2) return 1;</p>
+<pre><code>        int[] res = new int[n + 1];
+        res[1] = 1;
+        res[2] = 2;
+        for (int i = 3; i &lt;= n; i++)
+        {
+            res[i] = res[i - 1] + res[i - 2];
+        }
+        return res[n];
+    }</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/cha-zhi/">
+                <a href="https://Wei715547.github.io/post/grass-jiao-hu/">
                   <h3 class="post-title">
-                    插值/自定义曲线
+                    Grass交互
                   </h3>
                 </a>
               </div>
