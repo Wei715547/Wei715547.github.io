@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-03-25T15:53:49.220Z</updated>
+    <updated>2021-03-26T08:26:28.488Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -616,6 +616,19 @@ SubShader
         </link>
         <updated>2021-01-02T12:12:34.000Z</updated>
         <content type="html"><![CDATA[<p><a href ="https://leetcode-cn.com/problemset/all/"><strong>LeetCode题库</strong></a><br>
+<strong>C#二维数组/参差数组定义</strong><br>
+//C#数组-额理性未赋值为初始自int-0;bool-false;引用-null<br>
+int[] array = new int[10];<br>
+int[] array2 = new int[3] { 1,2,3 };<br>
+//2、二维数组<br>
+int[,] mar = new int[3, 3];<br>
+int[,] mar2 = new int[3, 3] { {1,2,3},{ 4,5,6},{ 7,8,9} };<br>
+//3、参差数组<br>
+//两行，第一行两列，第二行三列的参差数组<br>
+int[][] cc = new int[2][];//先定义两行<br>
+cc[0] = new int[2] { 2, 2 };//在定义每行列数<br>
+cc[1] = new int[3] { 3, 3, 3 };<br>
+<strong>-------------------------------------------------</strong><br>
 <strong>排序查找算法、冒泡/选择/插入/快排/二分查找</strong><br>
 /// <summary><br>
 /// 冒泡排序<br>
