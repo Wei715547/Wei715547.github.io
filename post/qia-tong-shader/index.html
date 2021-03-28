@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616775362030">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1616927884431">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -19,12 +19,13 @@
 
 
     <meta name="description" content="
+//渐变纹理贴图与梯度渐变函数，
+//轮廓线使用法线与视线点乘。
 Shader &quot;Shader103.5/Rimlight&quot;
 {
 Properties
 {
-_MainTex(&quot;Base texture&quot;, 2D) = &quot;white&quot; {}
-_R..." />
+_MainTex(&quot;Base texture&quo..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -34,7 +35,7 @@ _R..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1616775362030" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1616927884431" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -114,7 +115,9 @@ _R..." />
             
             <div class="post-content" v-pre>
               <p><img src="https://Wei715547.github.io/post-images/1611328235122.PNG" alt="" loading="lazy"><br>
-Shader &quot;Shader103.5/Rimlight&quot;<br>
+//渐变纹理贴图与梯度渐变函数，<br>
+//轮廓线使用法线与视线点乘。</p>
+<p>Shader &quot;Shader103.5/Rimlight&quot;<br>
 {<br>
 Properties<br>
 {<br>
@@ -201,7 +204,9 @@ SubShader
 			float2 uv = float2((NdotL * 0.5 + 0.5), 0);
 			float3 ramp = tex2D(_RampTex, uv);
 
-			float3 diff = (NdotL &lt; 0) ? 0 : 1 * _LightColor0 * _DiffStrength;// 把(NdotL &lt; 0) ? 0 : 1 改成ramp 如果需要用自己的texture
+			//float3 diff = (NdotL &lt; 0) ? 0 : 1 * _LightColor0 * _DiffStrength;
+			// 把(NdotL &lt; 0) ? 0 : 1 改成ramp 如果需要用自己的texture
+			float diff =  _LightColor0 * _DiffStrength*ramp;
 
 			//specular
 			float3 reflectDir = reflect(-_WorldSpaceLightPos0, normal);

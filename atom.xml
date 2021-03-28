@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-03-26T16:21:18.850Z</updated>
+    <updated>2021-03-28T10:38:13.603Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -587,7 +587,9 @@ FallBack &quot;Diffuse&quot;
         </link>
         <updated>2021-01-22T15:02:01.000Z</updated>
         <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1611328235122.PNG" alt="" loading="lazy"><br>
-Shader &quot;Shader103.5/Rimlight&quot;<br>
+//渐变纹理贴图与梯度渐变函数，<br>
+//轮廓线使用法线与视线点乘。</p>
+<p>Shader &quot;Shader103.5/Rimlight&quot;<br>
 {<br>
 Properties<br>
 {<br>
@@ -674,7 +676,9 @@ SubShader
 			float2 uv = float2((NdotL * 0.5 + 0.5), 0);
 			float3 ramp = tex2D(_RampTex, uv);
 
-			float3 diff = (NdotL &lt; 0) ? 0 : 1 * _LightColor0 * _DiffStrength;// 把(NdotL &lt; 0) ? 0 : 1 改成ramp 如果需要用自己的texture
+			//float3 diff = (NdotL &lt; 0) ? 0 : 1 * _LightColor0 * _DiffStrength;
+			// 把(NdotL &lt; 0) ? 0 : 1 改成ramp 如果需要用自己的texture
+			float diff =  _LightColor0 * _DiffStrength*ramp;
 
 			//specular
 			float3 reflectDir = reflect(-_WorldSpaceLightPos0, normal);
