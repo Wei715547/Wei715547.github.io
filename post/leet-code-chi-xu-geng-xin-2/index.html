@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617010473841">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617034559068">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -31,7 +31,7 @@ int[,] dp = new int[A.Length + 1, B.Length + 1];/..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1617010473841" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1617034559068" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -199,6 +199,65 @@ if (n &lt; 2) return 1;</p>
             res[i] = res[i - 1] + res[i - 2];
         }
         return res[n];
+    }
+</code></pre>
+<p><strong>LC148:链表排序</strong><br>
+public ListNode SortList(ListNode head)<br>
+{<br>
+if (head == null||head.next==null) return head;<br>
+//1:使用数组排序后输出<br>
+/*List<int> reslist = new List<int>();</p>
+<pre><code>        while(head!=null)
+        {
+            reslist.Add(head.val);
+            head = head.next;
+        }
+
+        reslist.Sort((a, b) =&gt; a &lt; b ? -1 : 1);
+        ListNode p = new ListNode();
+        ListNode newhead = new ListNode(reslist[0]);
+        p.next = newhead;
+        for (int i = 1; i &lt; reslist.Count; i++)
+        {
+            newhead.next = new ListNode();
+            newhead.next.val = reslist[i];
+            newhead = newhead.next;
+        }
+        return p.next;*/
+
+        //2.归并排序，递归，快慢指针
+        //快慢指针将链表分成两部分
+        ListNode fast = head.next;
+        ListNode slow = head;
+        while(fast!=null&amp;&amp;fast.next!=null)
+        {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode temp = slow.next;
+        slow.next = null;
+        //对两部分进行递归排序，分为一个节点时返回
+        ListNode left = SortList(head);
+        ListNode right = SortList(temp);
+        //对比两部分大小，小的排在前面
+        ListNode h = new ListNode();
+        ListNode res = h;
+        while(left!=null&amp;&amp;right!=null)
+        {
+            if (left.val &lt; right.val)
+            {
+                h.next = left;
+                left = left.next;
+            }
+            else
+            {
+                h.next = right;
+                right = right.next;
+            }
+            h = h.next;
+        }
+        h.next = left == null ? right : left;
+        return res.next;    
     }</code></pre>
 
             </div>

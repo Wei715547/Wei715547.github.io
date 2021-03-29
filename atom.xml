@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-03-29T09:39:44.286Z</updated>
+    <updated>2021-03-29T16:16:09.084Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -106,6 +106,65 @@ if (n &lt; 2) return 1;</p>
             res[i] = res[i - 1] + res[i - 2];
         }
         return res[n];
+    }
+</code></pre>
+<p><strong>LC148:链表排序</strong><br>
+public ListNode SortList(ListNode head)<br>
+{<br>
+if (head == null||head.next==null) return head;<br>
+//1:使用数组排序后输出<br>
+/*List<int> reslist = new List<int>();</p>
+<pre><code>        while(head!=null)
+        {
+            reslist.Add(head.val);
+            head = head.next;
+        }
+
+        reslist.Sort((a, b) =&gt; a &lt; b ? -1 : 1);
+        ListNode p = new ListNode();
+        ListNode newhead = new ListNode(reslist[0]);
+        p.next = newhead;
+        for (int i = 1; i &lt; reslist.Count; i++)
+        {
+            newhead.next = new ListNode();
+            newhead.next.val = reslist[i];
+            newhead = newhead.next;
+        }
+        return p.next;*/
+
+        //2.归并排序，递归，快慢指针
+        //快慢指针将链表分成两部分
+        ListNode fast = head.next;
+        ListNode slow = head;
+        while(fast!=null&amp;&amp;fast.next!=null)
+        {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode temp = slow.next;
+        slow.next = null;
+        //对两部分进行递归排序，分为一个节点时返回
+        ListNode left = SortList(head);
+        ListNode right = SortList(temp);
+        //对比两部分大小，小的排在前面
+        ListNode h = new ListNode();
+        ListNode res = h;
+        while(left!=null&amp;&amp;right!=null)
+        {
+            if (left.val &lt; right.val)
+            {
+                h.next = left;
+                left = left.next;
+            }
+            else
+            {
+                h.next = right;
+                right = right.next;
+            }
+            h = h.next;
+        }
+        h.next = left == null ? right : left;
+        return res.next;    
     }</code></pre>
 ]]></content>
     </entry>
