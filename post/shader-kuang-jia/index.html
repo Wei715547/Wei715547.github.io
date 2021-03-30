@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617078784087">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617099461893">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -31,7 +31,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1617078784087" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1617099461893" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -134,7 +134,11 @@
 <p>6.片元着色器：进行光照处理效果表现，每个像素都会执行应尽量减少其中的计算量避免三角函数，开放等计算。</p>
 <p>7.输出合并阶段：颜色缓存，深度缓存，多重采用缓存和模板缓存的信息进行加工处理，以决定最终输出像素是什么。(垂直同步可限制显卡刷新一帧的速度)</p>
 <p>延迟渲染/前向渲染/批次合并渲染<br>
-<img src="https://Wei715547.github.io/post-images/1616923468768.PNG" alt="" loading="lazy"><br>
+通常使用前项渲染（方便使用一些内置光照函数）：按照光照类型进行不同光源下的渲染然后合并输出<br>
+光照类型，逐像素光，逐顶点光，球谐函数，<br>
+可以包含多个Pass块，BasePass中计算主方向光下的渲染情况<br>
+AdditionalPass中计算其他影响该物体的次要光源渲染情况（Blend One One 混合）</p>
+<p><img src="https://Wei715547.github.io/post-images/1616923468768.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1616924014471.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1616923898601.PNG" alt="" loading="lazy"></p>
 <code>
