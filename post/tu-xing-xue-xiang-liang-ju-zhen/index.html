@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>图形学：向量/矩阵 | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617530984957">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="向量：点乘，叉乘
+//点乘：ab = axbx+ayby+azbz =|a| |b|cos(x),ab夹角：
+//b在a上的投影：|b|cos(x) = (ab)/|a| = ba(A),//单位矢量a
+应用：
+a为平面法线，求b在平面上的..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1617530984957" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">图形学：向量/矩阵</h2>
+            <div class="post-date">2021-04-04</div>
+            
+            <div class="post-content" v-pre>
+              <p><strong>向量：点乘，叉乘</strong><br>
+//点乘：a<em>b = axbx+ayby+azbz =|a| |b|cos(x),ab夹角：<br>
+//b在a上的投影：|b|cos(x) = (a</em>b)/|a| = b<em>a(A),//单位矢量a<br>
+应用：<br>
+a为平面法线，求b在平面上的投影<br>
+b在a向量上的投影向量为c = Vector.Dot(a,b)/a.magintude ()<em>a.normalized<br>
+则b在平面上的投影为：b-c;<br>
+<img src="https://Wei715547.github.io/post-images/1617524585593.png" alt="" loading="lazy"><br>
+//点乘Vector3.Dot();v2在v1上投影的标量。V1( x1, y1)   V2(x2, y2) = x1</em>x2 + y1</em>y2<br>
+//叉乘Vector3.Cross();v1v2平面的法线向量。V1(x1, y1) X V2(x2, y2) = x1y2 – y1x2<br>
+（右手顺时v1指向v2）。即叉乘的第一个向量在第二个向量右边时为正，否则为负。<br>
+A x B = |A||B|Sin(θ)<br>
+<img src="https://Wei715547.github.io/post-images/1617524798354.png" alt="" loading="lazy"><br>
+<strong>矩阵</strong><br>
+矩阵相乘：A（rxc）,B（cxn）矩阵只允许A的列数等于B的行数时两矩阵才能相乘得到r行n列的新矩阵<br>
+新矩阵C的i行j列元素等于A的i行与B的j列点乘<br>
+<img src="https://Wei715547.github.io/post-images/1617525313203.PNG" alt="" loading="lazy"><br>
+<strong>特殊矩阵</strong><br>
+方块矩阵：行列数相同的矩阵<br>
+对角矩阵：除了对角元素m11,m22,m33等其他元素都为0的矩阵<br>
+单位矩阵：对角元素为1的矩阵{[1 0 0],[0 1 0],[0 0 1]}任何矩阵与其相乘还是原来的矩阵</p>
+<p>转置矩阵：  对矩阵的一种运算，将元素的行变为列，列变为行<br>
+<img src="https://Wei715547.github.io/post-images/1617525786685.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617525838429.PNG" alt="" loading="lazy"><br>
+逆矩阵：原矩阵与其逆矩阵(纯在逆矩阵，元素都为0的矩阵不存在逆矩阵)相乘=单位矩阵<br>
+一个矩阵有对应的逆矩阵即是可逆的又称非奇异的  ，没有逆矩阵则是不可逆的，奇异的<br>
+<img src="https://Wei715547.github.io/post-images/1617526690926.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617526823864.PNG" alt="" loading="lazy"><br>
+正交矩阵：若矩阵与该矩阵的转置矩阵相乘得到单位矩阵，即该矩阵的转置正交也是该矩阵的逆矩阵<br>
+<img src="https://Wei715547.github.io/post-images/1617527574679.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617527627513.PNG" alt="" loading="lazy"><br>
+由上得出对于3x3的正交矩阵实际上即是三维空间坐标轴，若它们长度为1构成标准正交基则被称为标准正交矩阵<br>
+正交矩阵可用于构造变换矩阵，对应的逆变换(逆矩阵计算复杂)可直接由转置矩阵得到。</p>
+<p><strong>关于矢量变为行矩阵还是列矩阵</strong>：在U3D中将矢量放在矩阵右边进行相乘计算（当做列矩阵）。<br>
+<img src="https://Wei715547.github.io/post-images/1617528382482.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617528390964.PNG" alt="" loading="lazy"></p>
+<p><strong>变换</strong><br>
+线性变换：那些可以保留矢量相加标量相乘的变换。包括缩放、旋转、正交投影等。<br>
+仿射变换：由于平移不是线性变换，因此仿射变换是合并线性变换和平移变换的变换类型。<br>
+仿射变换可以使用4x4的矩阵来表示-齐次坐标空间：三维转四维：对于点w=1；对于矢量w=0(当平移作用于矢量时不会产生影响)<br>
+<img src="https://Wei715547.github.io/post-images/1617529382160.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617529442695.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617529477199.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617529549995.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617529575805.PNG" alt="" loading="lazy"></p>
+<p><strong>复核变换</strong>：矢量转为列矩阵计算，顺序从右到左<br>
+<img src="https://Wei715547.github.io/post-images/1617530502589.PNG" alt="" loading="lazy"><br>
+绝大多数下先进行缩放，再旋转，最后平移<br>
+关于xyz轴的旋转顺序：U3D中的旋转顺序是z,x,y，但矩阵的计算顺序不需要从右到左(由于坐标系的旋转)<br>
+<img src="https://Wei715547.github.io/post-images/1617530788048.PNG" alt="" loading="lazy"></p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/leet-code-chi-xu-geng-xin-2/">
+                  <h3 class="post-title">
+                    Leet Code持续更新（2）
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

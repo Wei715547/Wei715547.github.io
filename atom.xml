@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-04-02T16:00:02.920Z</updated>
+    <updated>2021-04-04T10:09:52.560Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,64 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[图形学：向量/矩阵]]></title>
+        <id>https://Wei715547.github.io/post/tu-xing-xue-xiang-liang-ju-zhen/</id>
+        <link href="https://Wei715547.github.io/post/tu-xing-xue-xiang-liang-ju-zhen/">
+        </link>
+        <updated>2021-04-04T08:14:03.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>向量：点乘，叉乘</strong><br>
+//点乘：a<em>b = axbx+ayby+azbz =|a| |b|cos(x),ab夹角：<br>
+//b在a上的投影：|b|cos(x) = (a</em>b)/|a| = b<em>a(A),//单位矢量a<br>
+应用：<br>
+a为平面法线，求b在平面上的投影<br>
+b在a向量上的投影向量为c = Vector.Dot(a,b)/a.magintude ()<em>a.normalized<br>
+则b在平面上的投影为：b-c;<br>
+<img src="https://Wei715547.github.io/post-images/1617524585593.png" alt="" loading="lazy"><br>
+//点乘Vector3.Dot();v2在v1上投影的标量。V1( x1, y1)   V2(x2, y2) = x1</em>x2 + y1</em>y2<br>
+//叉乘Vector3.Cross();v1v2平面的法线向量。V1(x1, y1) X V2(x2, y2) = x1y2 – y1x2<br>
+（右手顺时v1指向v2）。即叉乘的第一个向量在第二个向量右边时为正，否则为负。<br>
+A x B = |A||B|Sin(θ)<br>
+<img src="https://Wei715547.github.io/post-images/1617524798354.png" alt="" loading="lazy"><br>
+<strong>矩阵</strong><br>
+矩阵相乘：A（rxc）,B（cxn）矩阵只允许A的列数等于B的行数时两矩阵才能相乘得到r行n列的新矩阵<br>
+新矩阵C的i行j列元素等于A的i行与B的j列点乘<br>
+<img src="https://Wei715547.github.io/post-images/1617525313203.PNG" alt="" loading="lazy"><br>
+<strong>特殊矩阵</strong><br>
+方块矩阵：行列数相同的矩阵<br>
+对角矩阵：除了对角元素m11,m22,m33等其他元素都为0的矩阵<br>
+单位矩阵：对角元素为1的矩阵{[1 0 0],[0 1 0],[0 0 1]}任何矩阵与其相乘还是原来的矩阵</p>
+<p>转置矩阵：  对矩阵的一种运算，将元素的行变为列，列变为行<br>
+<img src="https://Wei715547.github.io/post-images/1617525786685.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617525838429.PNG" alt="" loading="lazy"><br>
+逆矩阵：原矩阵与其逆矩阵(纯在逆矩阵，元素都为0的矩阵不存在逆矩阵)相乘=单位矩阵<br>
+一个矩阵有对应的逆矩阵即是可逆的又称非奇异的  ，没有逆矩阵则是不可逆的，奇异的<br>
+<img src="https://Wei715547.github.io/post-images/1617526690926.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617526823864.PNG" alt="" loading="lazy"><br>
+正交矩阵：若矩阵与该矩阵的转置矩阵相乘得到单位矩阵，即该矩阵的转置正交也是该矩阵的逆矩阵<br>
+<img src="https://Wei715547.github.io/post-images/1617527574679.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617527627513.PNG" alt="" loading="lazy"><br>
+由上得出对于3x3的正交矩阵实际上即是三维空间坐标轴，若它们长度为1构成标准正交基则被称为标准正交矩阵<br>
+正交矩阵可用于构造变换矩阵，对应的逆变换(逆矩阵计算复杂)可直接由转置矩阵得到。</p>
+<p><strong>关于矢量变为行矩阵还是列矩阵</strong>：在U3D中将矢量放在矩阵右边进行相乘计算（当做列矩阵）。<br>
+<img src="https://Wei715547.github.io/post-images/1617528382482.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617528390964.PNG" alt="" loading="lazy"></p>
+<p><strong>变换</strong><br>
+线性变换：那些可以保留矢量相加标量相乘的变换。包括缩放、旋转、正交投影等。<br>
+仿射变换：由于平移不是线性变换，因此仿射变换是合并线性变换和平移变换的变换类型。<br>
+仿射变换可以使用4x4的矩阵来表示-齐次坐标空间：三维转四维：对于点w=1；对于矢量w=0(当平移作用于矢量时不会产生影响)<br>
+<img src="https://Wei715547.github.io/post-images/1617529382160.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617529442695.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617529477199.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617529549995.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1617529575805.PNG" alt="" loading="lazy"></p>
+<p><strong>复核变换</strong>：矢量转为列矩阵计算，顺序从右到左<br>
+<img src="https://Wei715547.github.io/post-images/1617530502589.PNG" alt="" loading="lazy"><br>
+绝大多数下先进行缩放，再旋转，最后平移<br>
+关于xyz轴的旋转顺序：U3D中的旋转顺序是z,x,y，但矩阵的计算顺序不需要从右到左(由于坐标系的旋转)<br>
+<img src="https://Wei715547.github.io/post-images/1617530788048.PNG" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Leet Code持续更新（2）]]></title>
         <id>https://Wei715547.github.io/post/leet-code-chi-xu-geng-xin-2/</id>
@@ -4336,446 +4394,6 @@ void DrawLine(Vector3 startPos,Vector3 endPos,Color startColor,Color endColor,fl
 </code></pre>
 <p>}<br>
 </cood></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[C++泛型/STL]]></title>
-        <id>https://Wei715547.github.io/post/cfan-xing-stl/</id>
-        <link href="https://Wei715547.github.io/post/cfan-xing-stl/">
-        </link>
-        <updated>2020-11-28T12:20:41.000Z</updated>
-        <content type="html"><![CDATA[<p><strong>函数模板</strong><br>
-与普通函数区别：<br>
-1.普通函数调用存在隐式类型转换<br>
-2.自动类型推导调用时，不发生隐式类型转换<br>
-3.显示指定类型调用可以发生隐式类型转换<br>
-与普通函数重名时：<br>
-1,.默认调用普通函数<br>
-2.通过空模板参数类表(Max&lt;&gt;)强制调用函数模板<br>
-3.函数模板可发生重载(参数个数不同)<br>
-4.函数模板可产生更好的匹配时优先调用函数模板<br>
-例：普通函数：void Fun(int a,int b){}<br>
-函数模板：template<class T> viod Fun (T a,T b){};<br>
-调用Fun(a,b)//a,b为char类型时普通函数需隐式转换int为char，函数模板只需将T制定为char类型，即优先调用函数模板。<br>
-模板局限性：如自定义类型对比（解决方法1.在自定义类型中重置内置运算符，2.利用具体化模板实现代码）=&gt;template &lt;&gt; bool Compare(Person p1,Person p2)<br>
-{<br>
-if(p1.name ==p2.name&amp;&amp;p1.age == p2.age)<br>
-return true;<br>
-else<br>
-return false;<br>
-};<br>
-声明格式：<br>
-template <class T>//或写成<typename T>与class无区别<br>
-//需要不同类型参数时&lt;typename T1,typename T2&gt;u77<br>
-返回值 函数名 （形参表）<br>
-{<br>
-函数体；<br>
-}<br>
-template <class T><br>
-T Max(T Inpute1, T Inpuet2)<br>
-{<br>
-return (Inpute1 &gt; Inpute2) ? Inpute1 : Inpute2;<br>
-}<br>
-使用：<br>
-1.自动类型推导<br>
-Max(a,b);<br>
-2.显示指定类型<br>
-Max<int>(a,b);<br>
-<strong>类模板</strong>//与函数模板区别：1.没有自动类型推导，<br>
-2.在模板参数列表中可以有默认参数template <typename T = int>//未指定类型是默认为int</p>
-<p>template <typename T><br>
-class 类名<br>
-{<br>
-类定义；<br>
-}<br>
-template &lt;class T1,class T2&gt;<br>
-class Person<br>
-{<br>
-public:<br>
-Person(T1 name,T2 age)<br>
-{<br>
-this-&gt;Name = name;<br>
-this-&gt;Age =age;<br>
-}<br>
-void ShowPerson(T1 name,T2 age);<br>
-private:<br>
-T1 Name;<br>
-T2 Age;<br>
-}<br>
-在类外定义成员函数时：<br>
-template <typename T><br>
-返回值类型 类名<T>::函数名(T x,T y)<br>
-{<br>
-函数体；<br>
-}<br>
-template &lt;typename T1, typenme T2&gt;<br>
-void Person&lt;T1,T2&gt;::ShowPerson(T1 name,T2 age)<br>
-{<br>
-cout&lt;&lt;name&lt;&lt;age&lt;&lt;endl;<br>
-}<br>
-类模板声明对象：<br>
-类名&lt;泛型数据类型&gt; 对象名；<br>
-Person&lt;string,int&gt; p (&quot;Wei&quot;,17);</p>
-<p><strong>类模板对象作为函数参数</strong><br>
-1.指定传入类型<br>
-void PrintPerson(Person&lt;string ,int&gt; &amp;p)<br>
-{<br>
-p.ShowPerson(p.name,p.age);<br>
-}<br>
-2.参数模板化<br>
-template &lt;class T1,class T2&gt;<br>
-void PrintPerson(Person&lt;T1 ,T3&gt; &amp;p)<br>
-{<br>
-p.ShowPerson(p.name,p.age);<br>
-}<br>
-3.整个类模板化<br>
-template <class T><br>
-void PrintPerson(T &amp;p)<br>
-{<br>
-p.ShowPerson(p.name,p.age);<br>
-}</p>
-<p><strong>类模板与继承</strong><br>
-1.当子类继承的父类为一个类模板时，子类在声明时必须指定父类中T的类型。<br>
-template <class T><br>
-class Base<br>
-{<br>
-T m;<br>
-}<br>
-class Son :public Base<int>//指定父类T类型<br>
-{</p>
-<p>};<br>
-2.如果不指定 ，编译器无法为子类分配内存。<br>
-3.如想灵活指定父类T类型，则需将子类也定义为类模板。<br>
-template &lt;class T1, class T2&gt;//子类也定义为类模板<br>
-class Son :public Base<T2><br>
-{<br>
-T1 obj;<br>
-};<br>
-Son&lt;int,char&gt; s1;<br>
-——————————————————————————————————————<br>
-<strong>STL</strong></p>
-<p><strong>Vector</strong>:单端数组，动态拓展：开辟一块更大的空间拷贝数据，释放原来空间。<br>
-迭代器：v.begin()//指向容器首位置<br>
-v.end()//指向容器最后一位的下一个位置<br>
-v.rend()//首位的前一位置<br>
-v.rbegin()//指向最后一位元素<br>
-支持随机访问<br>
-构造函数：<br>
-vector<T> v;//              默认构造函数<br>
-vector(v.begin(),v.end())//         将v的首末拷贝到本身<br>
-vector(n,elem)//            将n个elem拷贝给本身<br>
-vector(const vector &amp;vec)//         拷贝构造函数<br>
-赋值操作：<br>
-operator=<br>
-v.assign(v1.begin(), v1.end())<br>
-v.assign(n,elem);<br>
-容量大小方法：<br>
-empty()//判断容易是否为空；<br>
-capacity()//容器容量<br>
-size()//容器中元素的个数<br>
-resize(int num)//重新制定容器的长度为num<br>
-resize(int num elem)//重新定义容器长度，并默认以elem填充<br>
-插入/删除方法：<br>
-push_back(ele);//在尾部插入数据<br>
-pop_back()//在尾部删除数据<br>
-insert(const_iterator  pos, ele)//在迭代器所指向位置插入ele<br>
-insert(const_iterator  pos, int count, ele)//在迭代器所指向位置插入count个ele<br>
-erase(const_iterator pos);//删除迭代器所指向的元素<br>
-erase(const_iterator start, const_iterator end)//清除迭代器s-e之间的元素<br>
-clear();//清空元素</p>
-<p>#include <iostream><br>
-#include &quot;pch.cpp&quot;<br>
-#include<vector><br>
-#include<algorithm><br>
-using namespace std;</p>
-<p>int main()<br>
-{<br>
-//cout &lt;&lt; &quot;WEI&quot; &lt;&lt; endl;<br>
-Fun1();<br>
-return 0;</p>
-<p>}<br>
-void Fun1()<br>
-{<br>
-//创建Vector容器<br>
-vector<int> v;</p>
-<pre><code>//向容器中插入数据
-v.push_back(10);
-v.push_back(20);
-v.push_back(30);
-v.push_back(40);
-v.push_back(50);
-
-////通过迭代器访问容器中的数据
-//vector&lt;int &gt;::iterator itBegin = v.begin();//起始迭代器，指向容器第一个元素
-//vector&lt;int &gt;::iterator itEnd = v.end();//结束迭代器，指向最后一个元素的下一个位置
-
-////遍历方式
-//while (itBegin != itEnd)
-//{
-//	cout &lt;&lt; *itBegin &lt;&lt; endl;
-//	itBegin++;
-//}
-
-//遍历方式二
-for (vector&lt;int&gt;::iterator it = v.begin(); it != v.end(); it++)
-{
-	cout &lt;&lt; *it &lt;&lt; endl;
-}
-
-//第三种 STL提供的遍历算法
-for_each (v.begin(), v.end(), MyPrint);
-</code></pre>
-<h2 id="void-myprintint-varcout-var-endl">}<br>
-void MyPrint(int var)<br>
-{<br>
-cout &lt;&lt; var &lt;&lt; endl;<br>
-}</h2>
-<p><strong>C++链表List</strong><br>
-优点：可在任意位置插入大量元素，修改指针即可不需要移动大量元素；动态内存分配，不会造成内存浪费和溢出<br>
-缺点：空间(占用空间比较大)，时间(遍历速度慢)的额外消耗较大；插入和删除操作不会造成原来的迭代器失效，这在vector中是不成立的（数组装满后会开辟新的更大的空间拷贝源数据，但迭代器仍指向原地址）<br>
-//遍历方法<br>
-void MyList::printList(const list<int>&amp; L)<br>
-{<br>
-for (list<int>::const_iterator it = L.begin(); it!= L.end(); it++)<br>
-{<br>
-cout &lt;&lt; *it &lt;&lt; &quot; &quot;;<br>
-}<br>
-cout &lt;&lt; endl;<br>
-}<br>
-void MyList::List()<br>
-{<br>
-//创建Lis容器<br>
-list<int> Li; //默认构造</p>
-<pre><code>	//添加数据
-	Li.push_back(10);
-	Li.push_back(20);
-	Li.push_back(30);
-	Li.push_back(40);
-
-	//遍历容器
-	printList(Li);
-
-	//区间构造
-	list&lt;int&gt; L2(Li.begin(), Li.end());
-	printList(L2);
-
-	//拷贝构造
-	list&lt;int &gt; L3 (L2);
-	printList(L3);
-
-	//N个ELE构造
-	list&lt;int&gt; L4(10, 999);
-	printList(L4);
-
-    //**赋值 **=
-	list&lt;int&gt; L5;
-	L5 = L4;
-	//区间
-	list&lt;int&gt; L6;
-	L6.assign(L4.begin(), L4.end());
-	//n*Ele
-	list&lt;int&gt; L7;
-	L7.assign(5, 7);
-
-	//交换
-	printList(L6);
-	printList(L7);
-	L7.swap(L6);
-	printList(L6);
-	printList(L7);
-
-    //**list大小操作**
-	cout&lt;&lt;L7.size()&lt;&lt;endl;//返回容器元素个数
-	cout &lt;&lt; L7.empty()&lt;&lt;endl;//容器是否为空
-	L7.resize(7);//重新定义容器长度，多则0填充，少则从末尾删除
-	printList(L7);
-	L7.resize(10, 777);//重新定义容器长度，多则ele填充，少则从末尾删除
-	printList(L7);
-
-    //**插入/删除**
-	list&lt;int&gt; insDle(5,7);
-	//头插
-	insDle.push_front(3);
-	insDle.push_front(2);
-	insDle.push_front(1);
-	//尾插
-	insDle.push_back(7);
-	insDle.push_back(8);
-	insDle.push_back(9);
-	printList(insDle);
-	//尾删除
-	insDle.pop_back();
-	//头部删除
-	insDle.pop_front();
-	printList(insDle);
-
-	//insert插入
-	list&lt;int&gt;::iterator it = insDle.begin();
-	insDle.insert(++it, 23);
-	printList(insDle);
-	//删除
-	it = insDle.begin();
-	insDle.erase(it);
-	printList(insDle);
-	//移除所有同样的元素
-	insDle.remove(7);
-	printList(insDle);
-	//清空
-	insDle.clear();
-	printList(insDle);
-    //数据存取
-	L7.front();
-	L7.back();
-	list&lt;int&gt;::iterator Linklist_it = L7.begin();
-	Linklist_it++;//支持双向
-	Linklist_it--;//不支持--则为单相访问
-	//Linklist_it = Linklist_it + 1;//可以这样写着表示可以支持随机访问，链表不支持随机访问。
-
-	//链表反转/排序
-	printList(L7);
-	L7.reverse();
-	printList(L7);
-	//排序
-	list&lt;int&gt; ls;
-	ls.push_back(3);
-	ls.push_back(1);
-	ls.push_back(2);
-	//所有不支持随机访问到迭代器的容器，不支持标准算法
-	//容器内部会提供对应的一些算法
-	ls.sort();//默认升生序排序
-	//MyList l;
-	//ls.sort(l.MyCompare);
-	printList(ls);
-}
-}
-例：两数之和LC
-list&lt;int&gt; TowAddList(list&lt;int&gt;* l1, list&lt;int&gt;* l2)
-</code></pre>
-<p>{<br>
-list<int> res;<br>
-list<int>::iterator pos1 = l1-&gt;begin();<br>
-list<int>::iterator pos2 = l2-&gt;begin();<br>
-int digit = 0;<br>
-while (pos1!=l1-&gt;end()||pos2!=l2-&gt;end())<br>
-{<br>
-int total = digit;<br>
-if (pos1 != l1-&gt;end())<br>
-{<br>
-total += *pos1;<br>
-pos1++;<br>
-}<br>
-if (pos2 != l2-&gt;end())<br>
-{<br>
-total += *pos2;<br>
-pos2++;<br>
-}<br>
-digit = total / 10;<br>
-res.push_back(total % 10);<br>
-}<br>
-if (digit != 0)<br>
-{<br>
-res.push_back(digit);<br>
-}<br>
-return res;<br>
-}<br>
-—————————————————————————————————————————<br>
-<strong>哈希表/(键值对)</strong><br>
-map/multimap：元素为pair键值对，底层容器由二叉树实现<br>
-优点：根据key可以快速找到value<br>
-map不允许有重复的key<br>
-multimap允许有重复的key<br>
-class MyTable<br>
-{<br>
-public:<br>
-void MapText()<br>
-{<br>
-//默认构造<br>
-map&lt;int, string&gt; m1;//map会根据键的值进行默认的排序，与先后插入顺序无关<br>
-m1.insert(pair&lt;int, string&gt;(1, &quot;A&quot;));<br>
-m1.insert(pair&lt;int, string&gt;(3, &quot;C&quot;));<br>
-m1.insert(map&lt;int, string&gt;::value_type(2,&quot;B&quot;));<br>
-//m1.insert(pair&lt;int, string&gt;(3, &quot;C&quot;));<br>
-m1.insert(pair&lt;int, string&gt;(7, &quot;W&quot;));<br>
-printMap(m1);</p>
-<pre><code>		//拷贝构造
-		map&lt;int, string&gt;m2(m1);
-		printMap(m2);
-		//赋值
-		map&lt;int, string&gt; m3 = m2;
-		m3.erase(7);
-		m3.insert(pair&lt;int ,string&gt;(11, &quot;Z&quot;));
-		printMap(m3);
-
-		//大小和交换
-		cout &lt;&lt; m1.size()&lt;&lt;endl;
-		cout &lt;&lt; m1.empty()&lt;&lt;endl;
-
-		m2.swap(m3);
-		printMap(m2);
-		printMap(m3);
-
-		//插入/删除
-		map&lt;int, string&gt; m7;
-		m7.insert(pair&lt;int ,string&gt;(1, &quot;A&quot;));			
-		m7.insert(pair(2, &quot;B&quot;));
-		m7.insert(make_pair(3, &quot;C&quot;));
-		m7.insert(map&lt;int, string&gt;::value_type(7, &quot;W&quot;));
-		m7[5] = &quot;Z&quot;;//不存在Key时，会创建该键值为类型默认值，不建议使用，可以用来读取键中的值
-		printMap(m7);
-
-		//删除
-		m7.erase(m7.begin());
-		m7.erase(3);//按照key删除
-		//m7.erase(m7.begin(), m7.end());
-		//m7.clear();
-		m7.insert(pair(17, &quot;Z&quot;));
-		printMap(m7);
-
-		//查找,返回值为迭代器，未找到2时返回容器的end()
-		map&lt;int, string&gt;::iterator pos = m7.find(7);
-		if (pos != m7.end())
-			cout &lt;&lt; (*pos).first &lt;&lt;&quot; &quot;&lt;&lt;(*pos).second &lt;&lt; endl;
-		//统计,1/0，multimap允许键重复适用此方法
-		int n = m7.count(7);
-		cout &lt;&lt; n &lt;&lt; endl;
-	}
-	void printMap(map&lt;int, string&gt; m)
-	{
-		for (map&lt;int, string&gt;::iterator it = m.begin(); it != m.end(); it++)
-		{
-			cout &lt;&lt; &quot;KEY: &quot;&lt;&lt;(*it).first &lt;&lt;&quot; &quot;&lt;&lt; &quot;Value:&quot;&lt;&lt;(*it).second&lt;&lt;endl;
-		}
-		cout &lt;&lt; endl;
-	}
-};
-
-//改为降序排序的仿函数
-</code></pre>
-<p>class MyMapSort<br>
-{<br>
-public:<br>
-bool operator() (int a,int b)<br>
-{<br>
-//降序：第一个数大于第二个数<br>
-return a &gt; b;<br>
-}<br>
-};<br>
-void textmap()<br>
-{<br>
-map&lt;int, int,MyMapSort&gt; m;//默认按照键从小到大排序<br>
-m.insert(pair(1, 1));<br>
-m.insert(pair(3, 3));<br>
-m.insert(pair(2, 2));</p>
-<pre><code>//m.insert(pair(3, 3));
-m.insert(pair(4, 4));
-m.insert(pair(5, 5));
-
-for (map&lt;int,int, MyMapSort&gt;::iterator it = m.begin(); it!=m.end(); it++)
-{
-	cout &lt;&lt; &quot;key:&quot; &lt;&lt; (*it).first &lt;&lt; &quot; &quot; &lt;&lt; (*it).second &lt;&lt; endl;
-}
-</code></pre>
-<p>}</p>
 ]]></content>
     </entry>
 </feed>
