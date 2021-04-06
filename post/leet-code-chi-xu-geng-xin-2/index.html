@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617636197492">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617724552134">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -31,7 +31,7 @@ int[,] dp = new int[A.Length + 1, B.Length + 1];/..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1617636197492" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1617724552134" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -199,6 +199,29 @@ if (n &lt; 2) return 1;</p>
             res[i] = res[i - 1] + res[i - 2];
         }
         return res[n];
+    }
+</code></pre>
+<p><strong>//80：删除有序数组中的重复项:每个元素最多出现两次</strong><br>
+public int RemoveDuplicates(int[] nums)<br>
+{<br>
+/*int n = nums.Length;<br>
+if (n &lt;= 2) return n;<br>
+int slow = 2,fast =2;<br>
+while(fast&lt;n)<br>
+{<br>
+if(nums[slow-2]!=nums[fast])<br>
+{<br>
+nums[slow] = nums[fast];<br>
+slow++;<br>
+}<br>
+fast++;<br>
+}<br>
+return slow; */</p>
+<pre><code>        int i = 0;
+        foreach (int n in nums)
+            if (i &lt; 2 || n &gt; nums[i - 2])//覆盖重复的第三的元素
+                nums[i++] = n;
+        return i;
     }
 </code></pre>
 <p><strong>LC148:链表排序</strong><br>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-04-05T15:25:43.326Z</updated>
+    <updated>2021-04-06T15:55:57.553Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -164,6 +164,29 @@ if (n &lt; 2) return 1;</p>
             res[i] = res[i - 1] + res[i - 2];
         }
         return res[n];
+    }
+</code></pre>
+<p><strong>//80：删除有序数组中的重复项:每个元素最多出现两次</strong><br>
+public int RemoveDuplicates(int[] nums)<br>
+{<br>
+/*int n = nums.Length;<br>
+if (n &lt;= 2) return n;<br>
+int slow = 2,fast =2;<br>
+while(fast&lt;n)<br>
+{<br>
+if(nums[slow-2]!=nums[fast])<br>
+{<br>
+nums[slow] = nums[fast];<br>
+slow++;<br>
+}<br>
+fast++;<br>
+}<br>
+return slow; */</p>
+<pre><code>        int i = 0;
+        foreach (int n in nums)
+            if (i &lt; 2 || n &gt; nums[i - 2])//覆盖重复的第三的元素
+                nums[i++] = n;
+        return i;
     }
 </code></pre>
 <p><strong>LC148:链表排序</strong><br>
