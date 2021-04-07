@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617725048033">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617778992169">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ a为平面法线，求b在平面上的..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1617725048033" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1617778992169" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -163,9 +163,15 @@ A x B = |A||B|Sin(θ)<br>
 <img src="https://Wei715547.github.io/post-images/1617530788048.PNG" alt="" loading="lazy"></p>
 <p><strong>空间变换</strong><br>
 模型空间-&gt;世界空间-&gt;观察空间-&gt;裁剪空间-&gt;屏幕空间NDC<br>
-M：m-&gt;w变换矩阵 平移<em>旋转</em>缩放<br>
-V：w-&gt;v变换矩阵 根据参数将相机移动到世界原点(对z取反)<br>
-P：透视投影，正交投影。</p>
+M：m-&gt;w变换矩阵 平移<em>旋转</em>缩放（移动整个坐标系坐标系中的点也跟随移动）<br>
+<img src="https://Wei715547.github.io/post-images/1617778015972.PNG" alt="" loading="lazy"><br>
+V：w-&gt;v变换矩阵 根据参数对相机进行逆变换移动到世界原点(对z取反)<br>
+<img src="https://Wei715547.github.io/post-images/1617778125927.PNG" alt="" loading="lazy"><br>
+P：<br>
+透视投影，<br>
+<img src="https://Wei715547.github.io/post-images/1617778934812.PNG" alt="" loading="lazy"><br>
+正交投影。<br>
+<img src="https://Wei715547.github.io/post-images/1617778988783.PNG" alt="" loading="lazy"></p>
 
             </div>
             
