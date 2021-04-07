@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617778992169">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617809266392">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ int[] array2 = new int[3] ..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1617778992169" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1617809266392" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -547,6 +547,49 @@ strsGroupDict[key.ToString()].Add(s);<br>
 }<br>
 return new List&lt;List<string>&gt;(strsGroupDict.Values);//返回数组类表，即字典的所有值<br>
 }<br>
+}<br>
+<strong>//LC3无重复最长子串</strong><br>
+public int LengthOfLongestSubstring(string s)<br>
+{<br>
+if (s == null || s.Length == 0) return 0;<br>
+int res = 0;<br>
+int l = 0;<br>
+HashSet<char> set = new HashSet<char>();<br>
+for (int i = 0; i &lt; s.Length; i++)<br>
+{<br>
+if (!set.Contains(s[i]))<br>
+{<br>
+set.Add(s[i]);<br>
+res = Math.Max(res, set.Count);<br>
+}<br>
+else//包含时，顺序移除字符串中的字符直至不重复，加入集合<br>
+{<br>
+while (set.Contains(s[i]))<br>
+{<br>
+set.Remove(s[l]);<br>
+l += 1;<br>
+}<br>
+set.Add(s[i]);<br>
+}<br>
+}<br>
+return res;<br>
+}<br>
+<strong>//LC4：两有序数组中位数</strong><br>
+public static double FindMedianSortedArrays(int[] nums1, int[] nums2)<br>
+{<br>
+if (nums1.Length == 0 &amp;&amp; nums2.Length == 0) return (double)0;<br>
+List<int> res = new List<int>(nums1);<br>
+double mid;<br>
+foreach (int n in nums2)<br>
+res.Add(n);<br>
+res.Sort();<br>
+if (res.Count % 2 == 1)<br>
+mid = res[res.Count / 2];<br>
+else<br>
+{<br>
+mid = (double)(res[res.Count / 2] + res[res.Count / 2 - 1]) / 2;<br>
+}<br>
+return mid;<br>
 }<br>
 <strong>LC53.最大子数组和</strong><br>
 /// <summary><br>

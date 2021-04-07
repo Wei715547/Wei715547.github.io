@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-04-07T07:10:06.290Z</updated>
+    <updated>2021-04-07T15:27:52.925Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -1329,6 +1329,49 @@ strsGroupDict[key.ToString()].Add(s);<br>
 }<br>
 return new List&lt;List<string>&gt;(strsGroupDict.Values);//返回数组类表，即字典的所有值<br>
 }<br>
+}<br>
+<strong>//LC3无重复最长子串</strong><br>
+public int LengthOfLongestSubstring(string s)<br>
+{<br>
+if (s == null || s.Length == 0) return 0;<br>
+int res = 0;<br>
+int l = 0;<br>
+HashSet<char> set = new HashSet<char>();<br>
+for (int i = 0; i &lt; s.Length; i++)<br>
+{<br>
+if (!set.Contains(s[i]))<br>
+{<br>
+set.Add(s[i]);<br>
+res = Math.Max(res, set.Count);<br>
+}<br>
+else//包含时，顺序移除字符串中的字符直至不重复，加入集合<br>
+{<br>
+while (set.Contains(s[i]))<br>
+{<br>
+set.Remove(s[l]);<br>
+l += 1;<br>
+}<br>
+set.Add(s[i]);<br>
+}<br>
+}<br>
+return res;<br>
+}<br>
+<strong>//LC4：两有序数组中位数</strong><br>
+public static double FindMedianSortedArrays(int[] nums1, int[] nums2)<br>
+{<br>
+if (nums1.Length == 0 &amp;&amp; nums2.Length == 0) return (double)0;<br>
+List<int> res = new List<int>(nums1);<br>
+double mid;<br>
+foreach (int n in nums2)<br>
+res.Add(n);<br>
+res.Sort();<br>
+if (res.Count % 2 == 1)<br>
+mid = res[res.Count / 2];<br>
+else<br>
+{<br>
+mid = (double)(res[res.Count / 2] + res[res.Count / 2 - 1]) / 2;<br>
+}<br>
+return mid;<br>
 }<br>
 <strong>LC53.最大子数组和</strong><br>
 /// <summary><br>
