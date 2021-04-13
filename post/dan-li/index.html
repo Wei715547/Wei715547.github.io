@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1617809266392">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1618311375785">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -34,7 +34,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1617809266392" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1618311375785" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -126,6 +126,36 @@
 (触发)collsion.SendMessage(&quot;方法名&quot;);<br>
 调用对方脚本中的方法<br>
 <img src="https://Wei715547.github.io/post-images/1589272112653.PNG" alt="" loading="lazy"></p>
+<p><strong>单例基类：</strong><br>
+//手动挂载1个<br>
+public class BaseSingleton<T> : MonoBehaviour where T:MonoBehaviour<br>
+{<br>
+private static T instance;<br>
+public static T GetInstence()<br>
+{<br>
+return instance;<br>
+}<br>
+protected virtual void Awake()<br>
+{<br>
+instance = this as T;<br>
+}<br>
+}<br>
+//自动生成<br>
+public class SingleTe<T> : MonoBehaviour where T : MonoBehaviour<br>
+{<br>
+private static T instance;<br>
+public static T GetInstance()<br>
+{<br>
+if(instance == null)<br>
+{<br>
+GameObject obj = new GameObject();<br>
+obj.name = typeof(T).ToString();<br>
+DontDestroyOnLoad(obj);<br>
+instance = obj.AddComponent<T>();<br>
+}<br>
+return instance;<br>
+}<br>
+}</p>
 <p>//4.单例模式<br>
 using System.Collections;<br>
 using System.Collections.Generic;<br>
