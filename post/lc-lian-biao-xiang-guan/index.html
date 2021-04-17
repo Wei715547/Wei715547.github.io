@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>LC链表相关 | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1618654573886">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="1.反转链表
+public ListNode ReversListNode(ListNode head)
+{
+if (head == null || head.next == null) return head;
+        ListN..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1618654573886" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">LC链表相关</h2>
+            <div class="post-date">2021-04-16</div>
+            
+            <div class="post-content" v-pre>
+              <p><strong>1.反转链表</strong><br>
+public ListNode ReversListNode(ListNode head)<br>
+{<br>
+if (head == null || head.next == null) return head;</p>
+<pre><code>        ListNode res = ReversListNode(head.next);
+        head.next.next = head;
+        head.next = null;
+        return res;
+    }
+</code></pre>
+<p><strong>2.单链表排序</strong><br>
+public ListNode SortList(ListNode head)<br>
+{<br>
+if (head == null||head.next==null) return head;<br>
+ListNode fast = head.next;<br>
+ListNode slow = head;<br>
+while(fast!=null&amp;&amp;fast.next!=null)<br>
+{<br>
+slow = slow.next;<br>
+fast = fast.next.next;<br>
+}<br>
+ListNode temp = slow.next;<br>
+slow.next = null;<br>
+//对两部分进行递归排序，分为一个节点时返回<br>
+ListNode left = SortList(head);<br>
+ListNode right = SortList(temp);<br>
+//对比两部分大小，小的排在前面<br>
+ListNode h = new ListNode();<br>
+ListNode res = h;<br>
+while(left!=null&amp;&amp;right!=null)<br>
+{<br>
+if (left.val &lt; right.val)<br>
+{<br>
+h.next = left;<br>
+left = left.next;<br>
+}<br>
+else<br>
+{<br>
+h.next = right;<br>
+right = right.next;<br>
+}<br>
+h = h.next;<br>
+}<br>
+h.next = left == null ? right : left;<br>
+return res.next;<br>
+}<br>
+<strong>3.合并有序链表</strong><br>
+public static ListNode MergeTwoLists(ListNode l1, ListNode l2)<br>
+{<br>
+if (l1 == null || l2 == null) return l1 == null ? l2 : l1;</p>
+<pre><code>        if (l1.val &lt; l2.val)
+        {
+            l1.next = MergeTwoLists(l1.next, l2);
+            return l1;
+        }
+        else
+        {
+            l2.next = MergeTwoLists(l1, l2.next);
+            return l2;
+        }
+    }
+    public static ListNode MergeTwoLists2(ListNode l1, ListNode l2)
+    {
+        ListNode head = new ListNode();
+        ListNode res = head;
+        while(l1 != null &amp;&amp; l2!=null)
+        {
+            if(l1.val&lt; l2.val)
+            {
+                head.next = l1;
+                l1 = l1.next;
+            }else
+            {
+                head.next = l2;
+                l2 = l2.next;
+            }
+            head = head.next;
+        }
+        head.next = l1 == null ? l2 : l1;
+        return res.next;
+    }
+    **4.排序链表去重**
+    public ListNode DeleteDuplicates(ListNode head)
+    {
+        if (head == null || head.next == null) return head;
+        ListNode res = new ListNode();
+        res.next = head;
+        while (head != null &amp;&amp; head.next != null)
+        {
+            if (head.val == head.next.val)
+            {
+                head.next = head.next.next;
+            }
+            else
+                head = head.next;
+        }
+        return res.next;
+    }
+</code></pre>
+<p><strong>5.链表倒数第K个节点</strong><br>
+public ListNode GetKthFromEnd(ListNode head, int k) {<br>
+if (head == null) return null;<br>
+ListNode l = head;<br>
+ListNode r = head;<br>
+for (int i = 0; i &lt; k; i++)<br>
+{<br>
+r = r.next;<br>
+}<br>
+while(r!=null)<br>
+{<br>
+l = l.next;<br>
+r = r.next;<br>
+}<br>
+return l;<br>
+}<br>
+<strong>6.回文链表</strong><br>
+static ListNode p = new ListNode();<br>
+public static bool IsPalindrome2(ListNode head)<br>
+{<br>
+p = head;<br>
+return Recursion(head);<br>
+}<br>
+public static bool Recursion(ListNode head)<br>
+{<br>
+if (head == null)<br>
+return true;<br>
+if (!Recursion(head.next))<br>
+return false;</p>
+<pre><code>        if (p.val != head.val)
+            return false;
+        p = p.next;
+        return true;
+    }   
+</code></pre>
+<p><strong>7.相交链表</strong><br>
+public ListNode GetIntersectionNode(ListNode headA, ListNode headB) {<br>
+if (headA == null || headB == null) return null;</p>
+<pre><code>        HashSet&lt;ListNode&gt; list = new HashSet&lt;ListNode&gt;();
+        while(headA!=null)
+        {
+            list.Add(headA);
+            headA = headA.next;
+        }
+        while(headB!=null)
+        {
+            if (!list.Contains(headB))
+            {
+                list.Add(headB);
+                headB = headB.next;
+            }
+            else
+                return headB;
+        }
+        return null;
+}</code></pre>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/shader-wen-li-ding-dian-dong-hua/">
+                  <h3 class="post-title">
+                    Shader纹理/顶点动画
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
