@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1618672912917">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1618730522731">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -21,8 +21,7 @@
     <meta name="description" content="1.反转链表
 public ListNode ReversListNode(ListNode head)
 {
-if (head == null || head.next == null) return head;
-        ListN..." />
+if (head == null || head.next == null) return head;//返回条件到最后一个节点时..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -32,7 +31,7 @@ if (head == null || head.next == null) return head;
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1618672912917" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1618730522731" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -114,8 +113,8 @@ if (head == null || head.next == null) return head;
               <p><strong>1.反转链表</strong><br>
 public ListNode ReversListNode(ListNode head)<br>
 {<br>
-if (head == null || head.next == null) return head;</p>
-<pre><code>        ListNode res = ReversListNode(head.next);
+if (head == null || head.next == null) return head;//返回条件到最后一个节点时返回</p>
+<pre><code>        ListNode res = ReversListNode(head.next);//当前节点与上一个节点变换指向
         head.next.next = head;
         head.next = null;
         return res;
@@ -303,6 +302,18 @@ if (head == null || head.next == null) return head;</p>
         }
         odd.next = evenHead;
         return head;
+    }
+   ** //10.两两交换链表中的节点**
+    public ListNode SwapPairs(ListNode head)
+    {
+        if (head == null || head.next == null)
+        {
+            return head;
+        }
+        ListNode next = head.next;
+        head.next = SwapPairs(head.next.next);
+        next.next = head;
+        return next;
     }</code></pre>
 
             </div>

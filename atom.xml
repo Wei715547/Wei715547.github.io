@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-04-17T15:21:58.116Z</updated>
+    <updated>2021-04-18T07:22:23.798Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -141,8 +141,8 @@ FallBack&quot;Diffuse&quot;
         <content type="html"><![CDATA[<p><strong>1.反转链表</strong><br>
 public ListNode ReversListNode(ListNode head)<br>
 {<br>
-if (head == null || head.next == null) return head;</p>
-<pre><code>        ListNode res = ReversListNode(head.next);
+if (head == null || head.next == null) return head;//返回条件到最后一个节点时返回</p>
+<pre><code>        ListNode res = ReversListNode(head.next);//当前节点与上一个节点变换指向
         head.next.next = head;
         head.next = null;
         return res;
@@ -330,6 +330,18 @@ if (head == null || head.next == null) return head;</p>
         }
         odd.next = evenHead;
         return head;
+    }
+   ** //10.两两交换链表中的节点**
+    public ListNode SwapPairs(ListNode head)
+    {
+        if (head == null || head.next == null)
+        {
+            return head;
+        }
+        ListNode next = head.next;
+        head.next = SwapPairs(head.next.next);
+        next.next = head;
+        return next;
     }</code></pre>
 ]]></content>
     </entry>
