@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1618730522731">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1619092533919">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -31,7 +31,7 @@ if (head == null || head.next == null) return head;//返回条件到最后一个
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1618730522731" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1619092533919" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -234,13 +234,13 @@ return Recursion(head);<br>
 }<br>
 public static bool Recursion(ListNode head)<br>
 {<br>
-if (head == null)<br>
+if (head == null)//到最后节点时返回<br>
 return true;<br>
-if (!Recursion(head.next))<br>
+if (!Recursion(head.next))//不满足回文即退出<br>
 return false;</p>
-<pre><code>        if (p.val != head.val)
+<pre><code>        if (p.val != head.val)//不相等时即不是回文链表
             return false;
-        p = p.next;
+        p = p.next;//相等头结点下一，返回上一层节点继续比较
         return true;
     }   
 </code></pre>
@@ -310,10 +310,28 @@ if (head == null || head.next == null) return head;</p>
         {
             return head;
         }
-        ListNode next = head.next;
-        head.next = SwapPairs(head.next.next);
-        next.next = head;
+        ListNode next = head.next;//后一个节点
+        head.next = SwapPairs(head.next.next);//前一个节点等于下一层递归返回的后一个节点
+        next.next = head;//后一个节点指向前一个节点
         return next;
+    }
+    public ListNode SwapPairs2(ListNode head)
+    {
+        ListNode dummy = new ListNode();            
+        ListNode res = dummy;
+        dummy.next = head;
+        ListNode first = new ListNode();
+        ListNode second = new ListNode();
+        while(dummy.next!=null&amp;&amp;dummy.next.next!=null)
+        {
+            first = dummy.next;
+            second = dummy.next.next;
+            first.next = second.next;
+            second.next = first;
+            dummy.next = second;
+            dummy = dummy.next.next;
+        }
+        return res.next;
     }</code></pre>
 
             </div>

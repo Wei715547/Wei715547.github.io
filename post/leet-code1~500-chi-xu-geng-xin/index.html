@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1618730522731">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1619092533919">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -32,7 +32,7 @@ int[] array2 = new int[3] ..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1618730522731" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1619092533919" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -628,6 +628,17 @@ return 0;</p>
             memolist.Add(Math.Max(nums[i] + memolist[i - 1], nums[i]));//判断当前元素计入子数组和后，与当前元素值比较，取大值决定计入总和还是从当前开始
         memolist.Sort((a, b) =&gt; a &gt; b?-1:1);//取动态规划数组中的最大值返回，避免首位就值最大
         return memolist[0];
+    }
+    //动态规划内存优化
+    public static int Maxsubarray2(int[] nums)
+    {
+        int per =0, max = nums[0];
+        foreach (int n in nums)
+        {
+            per = Math.Max(per + n, n);
+            max = Math.Max(max, per);
+        }
+        return max;
     }
 </code></pre>
 <p><strong>70.爬楼梯(青蛙跳台阶)</strong>//动态规划/类似斐波那数列-LC509<br>
@@ -1297,6 +1308,17 @@ if (nums.Length == 1) return nums[0].ToString();</p>
     
         if (numsList[0].Equals(&quot;0&quot;)) return &quot;0&quot;;
         else return  string.Join(&quot;&quot;,numsList.ToArray());
+    }
+    //数组中的数组成最小整数
+    public string PrintMinNumber(List&lt;int&gt; numbers)
+    {          
+        List&lt;string&gt; slist = new List&lt;string&gt;();
+        foreach (int n in numbers)
+        {
+            slist.Add(n.ToString());
+        }
+        slist.Sort((a, b) =&gt; { return int.Parse(a + b) &gt; int.Parse(b + a) ? 1 : -1; });//(a+b).CompareTo(b+a)
+        return string.Join(&quot;&quot;, slist);
     }
 </code></pre>
 <p>/// </summary><br>

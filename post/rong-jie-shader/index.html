@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>护盾Shader | WeiBlog</title>
+<title>溶解Shader | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -19,13 +19,12 @@
 
 
     <meta name="description" content="
-视频
-
-Shader &quot;Unlit/ShileShader&quot;
+Shader &quot;Unlit/Dissolve2&quot;
 {
 Properties
 {
-[HDR]_Color (&quot;Color&quot;, Color) = (1,1,1,1)             ..." />
+_ResAmount(&quot;溶解&quot;,Range(0.0,1.0)) = 0.0
+_LineWidth (&quot;Lin..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -110,133 +109,125 @@ Properties
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">护盾Shader</h2>
-            <div class="post-date">2021-04-17</div>
+            <h2 class="post-title">溶解Shader</h2>
+            <div class="post-date">2021-04-22</div>
             
             <div class="post-content" v-pre>
-              <p><img src="https://Wei715547.github.io/post-images/1618655258132.PNG" alt="" loading="lazy"><br>
-<a href = "https://www.bilibili.com/video/BV1kv411r7x2?p=4">视频</a><br>
-<img src="https://Wei715547.github.io/post-images/1618654561889.PNG" alt="" loading="lazy"><br>
-Shader &quot;Unlit/ShileShader&quot;<br>
+              <p><img src="https://Wei715547.github.io/post-images/1619092502635.PNG" alt="" loading="lazy"><br>
+Shader &quot;Unlit/Dissolve2&quot;<br>
 {<br>
 Properties<br>
 {<br>
-[HDR]_Color (&quot;Color&quot;, Color) = (1,1,1,1)                    //控制每一个蜂巢网格的边缘光颜色<br>
-[HDR]_Color1 (&quot;Color1&quot;, Color) = (1,1,1,1)                    //控制每一个蜂巢网格的主体颜色<br>
-[HDR]_FresnelColor (&quot;FresnelColor&quot;, Color) = (1,1,1,1)        //控制防护罩的边缘高光颜色<br>
-_FresnelPower (&quot;FresnelPower&quot;, Range(0.1, 11)) = 1            //控制防护罩的边缘高光强度<br>
-_FresnelAlpha (&quot;FresnelAlpha&quot;, Range(0, 50)) = 1            //控制防护罩的不透明度<br>
-_MainTex (&quot;MainTex&quot;, 2D) = &quot;white&quot; {}<br>
-_ShieldTex (&quot;ShieldTex&quot;, 2D) = &quot;white&quot; {}<br>
-_OffsetFactor (&quot;OffsetFactor&quot;, Float) = 0.0001                //控制网格偏移程度<br>
-_RollSpeed (&quot;RollSpeed&quot;, Range(0, 5)) = 1                    //控制滚动速度</p>
-<pre><code>	_AlphaTex(&quot;AlphaTex&quot;, 2D) = &quot;white&quot; {}
-	_ScaleOffset (&quot;ScaleOffset&quot;, Range(0, 5)) = 1            //控制防护罩缩放的程度
-	_ScaleSpeed (&quot;ScaleSpeed&quot;, Range(0, 10)) = 1            //控制防护罩缩放的速度
-}
-SubShader
-{
-    Tags{&quot;Queue&quot; = &quot;Transparent&quot;/*模型渲染队列*/ &quot;IngnoreProjector&quot; = &quot;True&quot; &quot;RanderType&quot; = &quot;Transparent&quot;}//Pass块参数标签
-    LOD 100
-
-    Pass
-    {
-		ZWrite Off
-		Blend SrcAlpha OneMinusSrcAlpha
-		
-        CGPROGRAM
-		float4 _Color;
-		float4 _Color1;
-		float4 _FresnelColor;
-		float _FresnelPower;
-		float _FresnelAlpha;
-		sampler2D _MainTex;
-		float4 _MainTex_ST;
-		sampler2D _ShieldTex;
-		float4 _ShieldTex_ST;
-		float _OffsetFactor;
-		float _RollSpeed;
-
-		sampler2D _AlphaTex;
-		fixed _ScaleOffset;
-		fixed _ScaleSpeed;
-
+_ResAmount(&quot;溶解&quot;,Range(0.0,1.0)) = 0.0<br>
+_LineWidth (&quot;LineWidth&quot;, Range(0.0,0.2)) = 0.1<br>
+_MainTex (&quot;Texture&quot;, 2D) = &quot;white&quot; {}<br>
+_Gloss(&quot;Gliss&quot;,Range(1,100)) = 1<br>
+_NormalST(&quot;NormalST&quot;, Float) = 1<br>
+_NormalMap(&quot;NormalMap&quot;,2D) = &quot;while&quot;{}<br>
+_ResMap(&quot;ResMap&quot;,2D) = &quot;while&quot;{}<br>
+_EDGColor (&quot;EDGColor&quot;,Color) = (1,1,1,1)<br>
+}<br>
+SubShader<br>
+{<br>
+Pass<br>
+{<br>
+//Tags{&quot;LightMode&quot; = &quot;ForwardBase&quot;}<br>
+Cull Off</p>
+<pre><code>        CGPROGRAM
         #pragma vertex vert
         #pragma fragment frag
+		#include &quot;UnityCG.cginc&quot;
+		#include &quot;Lighting.cginc&quot;
 
-        #include &quot;UnityCG.cginc&quot;
+		float _ResAmount;
+		float _LineWidth;
+		sampler2D _MainTex;
+		float4 _MainTex_ST;
+		float _Gloss;
+		float _NormalST;
+		sampler2D _NormalMap;
+		float4 _NormalMap_ST;
+		sampler2D _ResMap;
+		float4 _ResMap_ST;
+		float4 _EDGColor;
 
         struct appdata
         {
             float4 vertex : POSITION;
             float2 uv : TEXCOORD0;
 			float3 normal:NORMAL;
+			float4 tangent:TANGENT;
         };
 
         struct v2f
         {
-			float4 vertex : SV_POSITION;
-            float2 uv1 : TEXCOORD0;
-			float2 uv2 : TEXCOORD1;               
-			float3 worldNormal:TEXCOORD2;
-			float3 worldPos:TEXCOORD3;
+            float2 uvMaintex : TEXCOORD0;
+			float2 uvNormal : TEXCOORD1;
+			float3 lightDir : TEXCOORD2;
+			float3 worldvertex : TEXCOORD3;
+			float3 viewDir : TEXCOORD4;
+			float2 uvResMap:TEXCOORD5;
+            float4 vertex : SV_POSITION;
         };
 
-        v2f vert (appdata v)
-	{
-		v2f o;
-		//注意uv的范围是0~1
-		float2 uv = v.normal.xy * 0.5 + 0.5;
-		//加上_MainTex贴图的缩放和偏移
-		uv = uv * _MainTex_ST.xy + _MainTex_ST.zw;
-		//用_RollSpeed来控制滚动速度
-		uv.y += _Time.y * _RollSpeed;
-		//利用texDlod函数来进行采样
-		float3 offset = tex2Dlod(_MainTex, float4(uv.x, uv.y, 0,0));
-		offset = smoothstep(0, 1, offset);
-		v.vertex.xyz += normalize(v.normal) * (offset * _OffsetFactor);
-		v.vertex.xyz += normalize(v.normal) * sin(_Time.y * _ScaleSpeed) * _ScaleOffset * 0.0005;
 
-		o.vertex = UnityObjectToClipPos(v.vertex);
-		//uv1和uv相同
-		o.uv1 = uv;
-		//uv2为物体本身的uv
-		o.uv2 = v.uv * _ShieldTex_ST.xy + _ShieldTex_ST.zw;
-		o.worldNormal = normalize(UnityObjectToWorldNormal(v.normal));
-		o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-		return o;
-	}
+        v2f vert (appdata v)
+        {
+            v2f o;
+            o.vertex = UnityObjectToClipPos(v.vertex);
+            o.uvMaintex = TRANSFORM_TEX(v.uv, _MainTex);
+			o.uvNormal = TRANSFORM_TEX(v.uv,_NormalMap);
+			o.uvResMap = TRANSFORM_TEX(v.uv,_ResMap);
+
+			TANGENT_SPACE_ROTATION;
+			o.lightDir = mul(rotation,ObjSpaceLightDir(v.vertex)).xyz;
+			o.worldvertex = mul(unity_ObjectToWorld,v.vertex).xyz;
+			o.viewDir = mul(rotation, ObjSpaceViewDir(v.vertex)).xyz;
+            return o;
+        }
 
         fixed4 frag (v2f i) : SV_Target
-	{
-		//Fresnel
-		float NdotV = dot(i.worldNormal, normalize(UnityWorldSpaceViewDir(i.worldPos)));
-		NdotV = 1 - NdotV;
-		fixed3 fresnelCol = pow(NdotV * _FresnelColor, _FresnelPower);
+        {
+			fixed3 res = tex2D(_ResMap,i.uvResMap).rgb;
+			clip(res.r-_ResAmount);//小于0时剔除像素
 
-	 //Single Shield Color
-		fixed3 sCol = tex2D(_ShieldTex, i.uv2) * _Color.rgb;
+			//计算漫反射
+			float3 tangenLightDir = normalize(i.lightDir);
+			fixed3 tangentNormalDir = UnpackNormal(tex2D(_NormalMap,i.uvNormal));
+			tangentNormalDir.xy = tangentNormalDir.xy*_NormalST;
+			float3 diff = tex2D(_MainTex,i.uvMaintex);
+			fixed3 diffuse = _LightColor0.rgb*diff*max(dot(tangenLightDir,tangentNormalDir)*0.5+0.5,0);
+			//计算高光
+			fixed3 viewDir = normalize(i.viewDir);//视线方向
+			fixed3 harfDir = normalize(viewDir + tangenLightDir);//视角与平行光的平分方向
+			fixed3 specular = _LightColor0.rgb * diff * pow(max(dot(tangentNormalDir, harfDir),0), _Gloss);
+            fixed3 col = diffuse + specular+UNITY_LIGHTMODEL_AMBIENT.rgb*diff;
+			//添加边线颜色				
+			fixed3 eColor = _EDGColor;//边线颜色
+			eColor = pow(eColor,5);//加强
+			fixed t = 1-smoothstep(0.0,_LineWidth,res.r-_ResAmount);//像素未被剔除时差值大于线宽输出1，相减t=0：未剔除的显示原色。
+			//差值小于边线，接近0时输出接近0，t增大：将被剔除的像素显色边界色
+			fixed3 finalColor = lerp(col,eColor,t*step(0.0001,_ResAmount));//_ResAmount大于0时t即生效t=0原色，=1边界色
 
-		fixed4 col = tex2D(_MainTex, i.uv1) * _Color1;
-		fixed colAlpha = tex2D(_AlphaTex, i.uv1).a;
-
-		return fixed4(fresnelCol + col + sCol, pow(NdotV, _FresnelAlpha) + colAlpha);
-	}
+            return fixed4( finalColor,1);
+        }
         ENDCG
     }
 }
-FallBack&quot;Diffuse&quot;
 </code></pre>
-<p>}</p>
+<p>}<br>
+//调用脚本(Update中)<br>
+r = Mathf.Lerp(0, 1, r+=Time.deltaTime/rtime);//rtime时间内r变为1<br>
+mt.SetFloat(&quot;_ResAmount&quot;, r);</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/lc-lian-biao-xiang-guan/">
+                <a href="https://Wei715547.github.io/post/hu-dun-shader/">
                   <h3 class="post-title">
-                    LC链表相关
+                    护盾Shader
                   </h3>
                 </a>
               </div>
