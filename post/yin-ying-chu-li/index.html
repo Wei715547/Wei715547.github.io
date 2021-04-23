@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>溶解Shader | WeiBlog</title>
+<title>Shader阴影投射/接收 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,13 +18,10 @@
 
 
 
-    <meta name="description" content="
-Shader &quot;Unlit/Dissolve2&quot;
-{
-Properties
-{
-_ResAmount(&quot;溶解&quot;,Range(0.0,1.0)) = 0.0
-_LineWidth (&quot;Lin..." />
+    <meta name="description" content="1. 向其他物体投射阴影需要ShadowCaster的Pass
+Diffuse的Fallback调用的VertexLit中的ShadowCaster Pass来实现向其他物体投射阴影
+Pass{
+Name&quot;ShadowCaster..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -109,116 +106,88 @@ _LineWidth (&quot;Lin..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">溶解Shader</h2>
-            <div class="post-date">2021-04-22</div>
+            <h2 class="post-title">Shader阴影投射/接收</h2>
+            <div class="post-date">2021-04-23</div>
             
             <div class="post-content" v-pre>
-              <p><img src="https://Wei715547.github.io/post-images/1619092502635.PNG" alt="" loading="lazy"><br>
-Shader &quot;Unlit/Dissolve2&quot;<br>
-{<br>
-Properties<br>
-{<br>
-_ResAmount(&quot;溶解&quot;,Range(0.0,1.0)) = 0.0<br>
-_LineWidth (&quot;LineWidth&quot;, Range(0.0,0.2)) = 0.1<br>
-_MainTex (&quot;Texture&quot;, 2D) = &quot;white&quot; {}<br>
-_Gloss(&quot;Gliss&quot;,Range(1,100)) = 1<br>
-_NormalST(&quot;NormalST&quot;, Float) = 1<br>
-_NormalMap(&quot;NormalMap&quot;,2D) = &quot;while&quot;{}<br>
-_ResMap(&quot;ResMap&quot;,2D) = &quot;while&quot;{}<br>
-_EDGColor (&quot;EDGColor&quot;,Color) = (1,1,1,1)<br>
+              <p><strong>1. 向其他物体投射阴影需要ShadowCaster的Pass</strong><br>
+Diffuse的Fallback调用的VertexLit中的ShadowCaster Pass来实现向其他物体投射阴影<br>
+Pass{<br>
+Name&quot;ShadowCaster&quot;<br>
+Tage{&quot;LightMde&quot; = &quot;ShadowCaster&quot;}</p>
+<pre><code>CGPROGRAM
+#pragma vertex vert
+#pragma fragment frag    
+#pragma multi_compile_shadowcaster    
+#include &quot;UnityCG.cginc&quot;
+
+Struct v2f {
+V2F SHADOW CASTER; 
+);
+
+v2f vert(appdata_base v)
+｛
+        v2f o;
+        TRANSFER_SHADOW_CASTER_NORMALOFFSET(o)//需要v中含有顶点位置与法线信息
+        return o;
+}
+float4 frag(v2f i) : SV_Target
+｛
+        SHADOW_CASTER_FRAGMENT(i)
+    }
+</code></pre>
+<p>ENDCG<br>
 }<br>
-SubShader<br>
-{<br>
+<strong>对物体添加顶点动画或局部剔除时要使阴影与变化一致：需要在ShadowCaster的Pass中做出相应的调整</strong><br>
+#例如：在顶点动画中<br>
 Pass<br>
 {<br>
-//Tags{&quot;LightMode&quot; = &quot;ForwardBase&quot;}<br>
-Cull Off</p>
-<pre><code>        CGPROGRAM
-        #pragma vertex vert
-        #pragma fragment frag
-		#include &quot;UnityCG.cginc&quot;
-		#include &quot;Lighting.cginc&quot;
+Tags{&quot;LightMode&quot; = &quot;ShadowCaster&quot;}<br>
+CGPROGRAM</p>
+<pre><code>	float _Manitude;
+	float _Frequency;
+	float _InvWaveLength;
+	float _Speed;
 
-		float _ResAmount;
-		float _LineWidth;
-		sampler2D _MainTex;
-		float4 _MainTex_ST;
-		float _Gloss;
-		float _NormalST;
-		sampler2D _NormalMap;
-		float4 _NormalMap_ST;
-		sampler2D _ResMap;
-		float4 _ResMap_ST;
-		float4 _EDGColor;
+	#pragma vertex vert
+	#pragma fragment frag
 
-        struct appdata
-        {
-            float4 vertex : POSITION;
-            float2 uv : TEXCOORD0;
-			float3 normal:NORMAL;
-			float4 tangent:TANGENT;
-        };
+	#pragma multi_compile_shadowcaster
+	#include &quot;UnityCG.cginc&quot;
 
-        struct v2f
-        {
-            float2 uvMaintex : TEXCOORD0;
-			float2 uvNormal : TEXCOORD1;
-			float3 lightDir : TEXCOORD2;
-			float3 worldvertex : TEXCOORD3;
-			float3 viewDir : TEXCOORD4;
-			float2 uvResMap:TEXCOORD5;
-            float4 vertex : SV_POSITION;
-        };
+	struct a2v{
+		float4 vertex : POSITION;			
+		float4 normal :NORMAL;
+	};
 
+	struct v2f{
+		V2F_SHADOW_CASTER;
+	};
 
-        v2f vert (appdata v)
-        {
-            v2f o;
-            o.vertex = UnityObjectToClipPos(v.vertex);
-            o.uvMaintex = TRANSFORM_TEX(v.uv, _MainTex);
-			o.uvNormal = TRANSFORM_TEX(v.uv,_NormalMap);
-			o.uvResMap = TRANSFORM_TEX(v.uv,_ResMap);
+	v2f vert(a2v v)
+	{
+		v2f o;
+		float4 offset ;
+		offset.xzw = float3(0.0,0.0,0.0);
+		offset.y = sin(_Frequency*_Time.y + v.vertex.x * _InvWaveLength + v.vertex.y*_InvWaveLength + v.vertex.z*_InvWaveLength )*_Manitude;
+		v.vertex = v.vertex+offset;
 
-			TANGENT_SPACE_ROTATION;
-			o.lightDir = mul(rotation,ObjSpaceLightDir(v.vertex)).xyz;
-			o.worldvertex = mul(unity_ObjectToWorld,v.vertex).xyz;
-			o.viewDir = mul(rotation, ObjSpaceViewDir(v.vertex)).xyz;
-            return o;
-        }
-
-        fixed4 frag (v2f i) : SV_Target
-        {
-			fixed3 res = tex2D(_ResMap,i.uvResMap).rgb;
-			clip(res.r-_ResAmount);//小于0时剔除像素
-
-			//计算漫反射
-			float3 tangenLightDir = normalize(i.lightDir);
-			fixed3 tangentNormalDir = UnpackNormal(tex2D(_NormalMap,i.uvNormal));
-			tangentNormalDir.xy = tangentNormalDir.xy*_NormalST;
-			float3 diff = tex2D(_MainTex,i.uvMaintex);
-			fixed3 diffuse = _LightColor0.rgb*diff*max(dot(tangenLightDir,tangentNormalDir)*0.5+0.5,0);
-			//计算高光
-			fixed3 viewDir = normalize(i.viewDir);//视线方向
-			fixed3 harfDir = normalize(viewDir + tangenLightDir);//视角与平行光的平分方向
-			fixed3 specular = _LightColor0.rgb * diff * pow(max(dot(tangentNormalDir, harfDir),0), _Gloss);
-            fixed3 col = diffuse + specular+UNITY_LIGHTMODEL_AMBIENT.rgb*diff;
-			//添加边线颜色				
-			fixed3 eColor = _EDGColor;//边线颜色
-			eColor = pow(eColor,5);//加强
-			fixed t = 1-smoothstep(0.0,_LineWidth,res.r-_ResAmount);//像素未被剔除时差值大于线宽输出1，相减t=0：未剔除的显示原色。
-			//差值小于边线，接近0时输出接近0，t增大：将被剔除的像素显色边界色
-			fixed3 finalColor = lerp(col,eColor,t*step(0.0001,_ResAmount));//_ResAmount大于0时t即生效t=0原色，=1边界色
-
-            return fixed4( finalColor,1);
-        }
-        ENDCG
-    }
-    //消融部分阴影处理
-    Pass {
-	Tags{&quot;LightMode&quot; = &quot;ShadowCaster&quot;}
-	CGPROGRAM
-	
-	float _ResAmount;
+		TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);//
+		return o;
+	}
+	fixed4 frag(v2f i):SV_Target
+	{
+		SHADOW_CASTER_FRAGMENT(i)
+	}
+	ENDCG
+}
+</code></pre>
+<p>#例如：存在部分剔除时<br>
+Pass<br>
+{<br>
+Tags{&quot;LightMode&quot; = &quot;ShadowCaster&quot;}<br>
+CGPROGRAM</p>
+<pre><code>	float _ResAmount;
 	sampler2D _ResMap;
 	float4 _ResMap_ST;
 
@@ -248,21 +217,45 @@ Cull Off</p>
 	}
 	ENDCG
 }
-}
 </code></pre>
-<p>}<br>
-//调用脚本(Update中)<br>
-r = Mathf.Lerp(0, 1, r+=Time.deltaTime/rtime);//rtime时间内r变为1<br>
-mt.SetFloat(&quot;_ResAmount&quot;, r);</p>
+<p><strong>2. 接收其他物体阴影</strong><br>
+（1）首先需要引入内置文件：包含计算阴影时所包含的宏<br>
+#include &quot;AutoLight.cginc&quot;<br>
+（2）在v2f中添加内置的SHADOW_COORDS宏（用于声明一个用于阴影采样的坐标）<br>
+struct v2f {<br>
+float4 pos : SV_POSITION;<br>
+float3 worldNormal : TEXCOORD0;<br>
+float3 worldPos : TEXCOORD1;<br>
+SHADOW_COORD(2);//参数为下一个可用的寄存器<br>
+}<br>
+（3）在顶点着色器中用TRANSFER_SHADOW计算阴影纹理坐标<br>
+v2f vert(atv v){<br>
+v2f o;<br>
+......<br>
+TRANSFER_SHADOW(o);//使用上一步在v2f中定义的SHADOW_COORD<br>
+}<br>
+（4）在片原着色器中使用计算阴影<br>
+fixed shadow = SHADOW_ATTENUATION(i)//参数为v2f，得到阴影值与漫反、高光相乘即可实现接收阴影</p>
+<p><strong>3.使用UNITY_LIGHT_ATTENUATION统一计算阴影与光衰</strong><br>
+代码基本同上引用<br>
+#include &quot;Lighting.cginc&quot;<br>
+#include &quot;AutoLight.cginc&quot;<br>
+在片元着色器中使用宏同时计算光衰与阴影<br>
+fixed4 frag(v2f i):SV_Target{<br>
+......<br>
+UNITY_LIGHT_ATTENUATION(atten,i,i.worldPos);//第一各参数主动生成，第二个参数v2f用于SHADOW_ATTENUATION计算阴影，第三个参数为世界空间坐标<br>
+return fixed4(ambient+(diffuse+specular)*atten,1);<br>
+}<br>
+<strong>FallBack &quot;Transparent/VertexLit&quot;//对于混合实现的透明物体很难实现投射与接收阴影</strong></p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/hu-dun-shader/">
+                <a href="https://Wei715547.github.io/post/rong-jie-shader/">
                   <h3 class="post-title">
-                    护盾Shader
+                    溶解Shader
                   </h3>
                 </a>
               </div>
