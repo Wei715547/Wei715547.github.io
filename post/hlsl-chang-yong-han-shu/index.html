@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>HLSL常用函数 | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1619343372099">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="CSDN
+一.CG/HLSL/GLSL
+1.CG
+Unity shader的入门时，不管是《入门精要》还是庄老师的课，都是从CG语言开始学习的。它是由NVIDIA公司所开发的，基于C语言同时被OpenGL和Direct3D所支持的开发语言，..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1619343372099" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">HLSL常用函数</h2>
+            <div class="post-date">2021-04-24</div>
+            
+            <div class="post-content" v-pre>
+              <p><a href = "https://blog.csdn.net/qq_43210334/article/details/115870675">CSDN</a><br>
+<strong>一.CG/HLSL/GLSL</strong><br>
+1.CG<br>
+Unity shader的入门时，不管是《入门精要》还是庄老师的课，都是从CG语言开始学习的。它是由NVIDIA公司所开发的，基于C语言同时被OpenGL和Direct3D所支持的开发语言，其语法和HLSL类似。在《GPU编程与CG语言之阳春白雪》中虽然曾认为CG会越来越受欢迎，但遗憾的是，NVIDIA还是抛弃了CG，目前CG的最终版本是3.1。虽然在一些简单的shader编写上还是可以使用，但是在新的硬件环境下还是可能不支持，且对一些新功能的支持较差。</p>
+<p>2.GLSL<br>
+GLSL是基于OpenGL的接口，其语法体系自成一家。闫老师的Games课程，以及学校的图形学教学中，一般还是使用GLSL。但是它不支持DirectX，就不得不放弃仅支持DirectX的Xbox等平台。</p>
+<p>3.HLSL<br>
+HLSL是由微软开发的，在Windows平台上一家独大，多用于游戏领域。语法类似CG语言，在Unity中CG和HLSL等价。</p>
+<p><strong>二.HLSL常用函数</strong><br>
+1.基本数学运算<br>
+<img src="https://Wei715547.github.io/post-images/1619340526887.PNG" alt="" loading="lazy"><br>
+<a href = "https://graphtoy.com/">graphtoy</a></p>
+<p>2.幂指对函数<br>
+<img src="https://Wei715547.github.io/post-images/1619341012896.PNG" alt="" loading="lazy"></p>
+<p>3.三角函数与双曲函数<br>
+<img src="https://Wei715547.github.io/post-images/1619341373189.PNG" alt="" loading="lazy"></p>
+<p>4.数据范围类<br>
+<img src="https://Wei715547.github.io/post-images/1619341545125.PNG" alt="" loading="lazy"></p>
+<p>5.类型判断类<br>
+<img src="https://Wei715547.github.io/post-images/1619341600552.PNG" alt="" loading="lazy"></p>
+<p>6.向量与矩阵类<br>
+<img src="https://Wei715547.github.io/post-images/1619341637736.PNG" alt="" loading="lazy"></p>
+<p>7.光线运算类<br>
+<img src="https://Wei715547.github.io/post-images/1619341725403.PNG" alt="" loading="lazy"></p>
+<p>8.2D纹理查找<br>
+<img src="https://Wei715547.github.io/post-images/1619341791205.PNG" alt="" loading="lazy"></p>
+<p>10.3D纹理查找<br>
+<img src="https://Wei715547.github.io/post-images/1619341893660.PNG" alt="" loading="lazy"></p>
+<p>11.立体纹理查找<br>
+<img src="https://Wei715547.github.io/post-images/1619341941577.PNG" alt="" loading="lazy"></p>
+<p>#关于ddx和ddy</p>
+<p>函数ddx和ddy用于求取相邻像素间某属性差值；<br>
+函数ddx和ddy输入参数通常是纹理坐标；<br>
+函数ddx和ddy返回相邻像素键的属性差值；<br>
+这里是测试的在片元着色器中利用底下的代码，可以表现世界空间法线；<br>
+float3 col=normalize(cross(ddy(i.worldPos),ddx(i.worldPos))).xyz;<br>
+<img src="https://Wei715547.github.io/post-images/1619342973207.PNG" alt="" loading="lazy"></p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/yin-ying-chu-li/">
+                  <h3 class="post-title">
+                    Shader阴影投射/接收
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
