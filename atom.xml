@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-04-25T09:37:37.604Z</updated>
+    <updated>2021-04-26T09:58:58.595Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,126 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[水面Shader]]></title>
+        <id>https://Wei715547.github.io/post/shui-mian-shader/</id>
+        <link href="https://Wei715547.github.io/post/shui-mian-shader/">
+        </link>
+        <updated>2021-04-26T09:57:03.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1619431100957.PNG" alt="" loading="lazy"><br>
+Shader &quot;Unlit/Wave&quot;<br>
+{<br>
+Properties<br>
+{<br>
+_Color(&quot;MainColor&quot;, Color) = (1,1,1,1)<br>
+_MainTex (&quot;Texture&quot;, 2D) = &quot;white&quot; {}<br>
+_WaveMap(&quot;WaveMap&quot;,2D) = &quot;while&quot;{}<br>
+_CubMap(&quot;CubMap&quot;,Cube) = &quot;_Skybox&quot;{}<br>
+_WaveSpeedX(&quot;WaveSpeedX&quot;,Range(-0.1,0.1)) = 0.1<br>
+_WaveSpeedY(&quot;WaveSpeedY&quot;,Range(-0.1,0.1)) = 0.1<br>
+_Distortion(&quot;Distortion&quot;,Range(0,100)) = 10<br>
+}<br>
+SubShader<br>
+{<br>
+Tags {&quot;Queue&quot; = &quot;Transparent&quot; &quot;RenderType&quot;=&quot;Opaque&quot; }<br>
+//GrabPass{&quot;_RefractionTex&quot;}<br>
+Pass<br>
+{<br>
+CGPROGRAM</p>
+<pre><code>		float4 _Color;
+		sampler2D _MainTex;
+        float4 _MainTex_ST;
+		sampler2D _WaveMap;
+		float4 _WaveMap_ST;
+		samplerCUBE _CubMap;
+		fixed _WaveSpeedX;
+		fixed _WaveSpeedY;
+		float _Distortion;
+		//sampler2D _RefractionTex;
+		//float4 _RefractionTex_ST;
+		//float4 _RefractionTex_TexeSize;
+
+        #pragma vertex vert
+        #pragma fragment frag
+
+        #include &quot;UnityCG.cginc&quot;
+		#include &quot;AutoLight.cginc&quot;
+
+        struct a2v
+        {
+            float4 vertex : POSITION;
+            float2 texcoord : TEXCOORD0;
+			float4 normal :NORMAL;
+			float4 tangent :TANGENT;
+        };
+
+        struct v2f
+        {                
+            float4 pos : SV_POSITION;
+			float4 scrPos : TEXCOORD0;
+			float4 uv : TEXCOORD1;
+			float4 TtoW0 :TEXCOORD2;
+			float4 TtoW1 :TEXCOORD3;
+			float4 TtoW2 : TEXCOORD4;
+			SHADOW_COORDS(5)
+        };
+        
+
+        v2f vert (a2v v)
+        {
+            v2f o;
+            o.pos = UnityObjectToClipPos(v.vertex);
+			o.scrPos = ComputeGrabScreenPos(o.pos);
+
+			o.uv.xy = TRANSFORM_TEX(v.texcoord,_MainTex);
+			o.uv.zw = TRANSFORM_TEX(v.texcoord,_WaveMap);
+
+			float3 worldPos = mul(unity_ObjectToWorld,v.vertex);
+			float3 worldNormal = UnityObjectToWorldNormal(v.normal);
+			float3 worldTangent = UnityObjectToWorldDir(v.tangent.xyz);
+			float3 worldBinormal = cross(worldNormal,worldTangent)*v.tangent.w;
+
+			o.TtoW0 = float4 (worldTangent.x,worldBinormal.x,worldNormal.x,worldPos.x);
+			o.TtoW1 = float4 (worldTangent.y,worldBinormal.y,worldNormal.y,worldPos.y);
+			o.TtoW2 = float4 (worldTangent.z,worldBinormal.z,worldNormal.z,worldPos.z);
+			TRANSFER_SHADOW(o);
+            return o;
+        }
+
+        fixed4 frag (v2f i) : SV_Target
+        {
+            float3 worldPos = float3(i.TtoW0.w,i.TtoW1.w,i.TtoW2.w);
+			fixed3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
+			float2 speed = _Time.y*float2(_WaveSpeedX,_WaveSpeedY);
+
+			fixed3 bump1 = UnpackNormal(tex2D(_WaveMap,i.uv.zw+speed)).rgb;
+			fixed3 bump2 = UnpackNormal(tex2D(_WaveMap,i.uv.zw-speed)).rgb;
+			fixed3 bump = normalize(bump1+bump2);
+
+			float2 offset = bump.xy*_Distortion;//*_RefractionTex_TexeSize.xy;
+			i.scrPos.xy = offset*i.scrPos.z + i.scrPos.xy;
+			//fixed3 refrCol = tex2D(_RefractionTex,i.scrPos.xy/i.scrPos.w).rgb;
+
+			bump = normalize(half3(dot(i.TtoW0.xyz,bump),dot(i.TtoW1.xyz,bump),dot(i.TtoW2.xyz,bump)));
+			fixed4 texColor = tex2D(_MainTex,i.uv.xy+speed);
+			fixed3 refDir = reflect(-viewDir,bump);
+			fixed3 refCol = texCUBE(_CubMap,refDir).rgb * texColor.rgb * _Color.rgb;
+
+			fixed fresnel = pow(1-saturate(dot(viewDir,bump)),4);
+
+			fixed shadow = SHADOW_ATTENUATION(i);
+
+			fixed3 finalColor = (fresnel+refCol*(1-fresnel))*shadow;
+            return fixed4(finalColor,1);
+        }
+        ENDCG
+    }
+}
+FallBack &quot;Diffuse&quot;
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[HLSL常用函数]]></title>
         <id>https://Wei715547.github.io/post/hlsl-chang-yong-han-shu/</id>
@@ -178,7 +298,7 @@ struct v2f {<br>
 float4 pos : SV_POSITION;<br>
 float3 worldNormal : TEXCOORD0;<br>
 float3 worldPos : TEXCOORD1;<br>
-SHADOW_COORD(2);//参数为下一个可用的寄存器<br>
+SHADOW_COORDS(2) //参数为下一个可用的寄存器<br>
 }<br>
 （3）在顶点着色器中用TRANSFER_SHADOW计算阴影纹理坐标<br>
 v2f vert(atv v){<br>
@@ -363,9 +483,9 @@ Shader &quot;Unlit/ShileShader&quot;<br>
 {<br>
 Properties<br>
 {<br>
-[HDR]_Color (&quot;Color&quot;, Color) = (1,1,1,1)                    //控制每一个蜂巢网格的边缘光颜色<br>
-[HDR]_Color1 (&quot;Color1&quot;, Color) = (1,1,1,1)                    //控制每一个蜂巢网格的主体颜色<br>
-[HDR]_FresnelColor (&quot;FresnelColor&quot;, Color) = (1,1,1,1)        //控制防护罩的边缘高光颜色<br>
+[HDR]_Color (&quot;六边形边缘颜色&quot;, Color) = (1,1,1,1)                    //控制每一个蜂巢网格的边缘光颜色<br>
+[HDR]_Color1 (&quot;条带颜色&quot;, Color) = (1,1,1,1)                    //控制每一个蜂巢网格的主体颜色<br>
+[HDR]_FresnelColor (&quot;菲尼尔颜色&quot;, Color) = (1,1,1,1)        //控制防护罩的边缘高光颜色<br>
 _FresnelPower (&quot;FresnelPower&quot;, Range(0.1, 11)) = 1            //控制防护罩的边缘高光强度<br>
 _FresnelAlpha (&quot;FresnelAlpha&quot;, Range(0, 50)) = 1            //控制防护罩的不透明度<br>
 _MainTex (&quot;MainTex&quot;, 2D) = &quot;white&quot; {}<br>
@@ -378,7 +498,8 @@ _RollSpeed (&quot;RollSpeed&quot;, Range(0, 5)) = 1                    //控制�
 }
 SubShader
 {
-    Tags{&quot;Queue&quot; = &quot;Transparent&quot;/*模型渲染队列*/ &quot;IngnoreProjector&quot; = &quot;True&quot; &quot;RanderType&quot; = &quot;Transparent&quot;}//Pass块参数标签
+    Tags{&quot;Queue&quot; = &quot;Transparent&quot;/*模型渲染队列*/ &quot;IngnoreProjector&quot; = &quot;True&quot; &quot;RanderType&quot; = &quot;Transparent&quot;
+	&quot;DisableBatching&quot; = &quot;True&quot;}//Pass块参数标签
     LOD 100
 
     Pass
@@ -451,23 +572,24 @@ SubShader
 
         fixed4 frag (v2f i) : SV_Target
 	{
-		//Fresnel
-		float NdotV = dot(i.worldNormal, normalize(UnityWorldSpaceViewDir(i.worldPos)));
-		NdotV = 1 - NdotV;
-		fixed3 fresnelCol = pow(NdotV * _FresnelColor, _FresnelPower);
+		//菲尼尔系数Fresnel：F = pow(1-max(dot(v.n),0),_FresnelPower)
+		float NdotV = max(dot(i.worldNormal, normalize(UnityWorldSpaceViewDir(i.worldPos))),0);//模型边缘NdotV接近0
+		NdotV = 1 - NdotV;//取反：模型边缘为1
+		fixed3 fresnelCol = pow(NdotV * _FresnelColor, _FresnelPower);//模型边缘颜色
 
 	 //Single Shield Color
-		fixed3 sCol = tex2D(_ShieldTex, i.uv2) * _Color.rgb;
+		fixed3 sCol = tex2D(_ShieldTex, i.uv2) * _Color.rgb;//六边形边缘光颜色
+		fixed4 col = tex2D(_MainTex, i.uv1) * _Color1;//偏移UV采样六边形颜色
 
-		fixed4 col = tex2D(_MainTex, i.uv1) * _Color1;
-		fixed colAlpha = tex2D(_AlphaTex, i.uv1).a;
+		fixed colAlpha = tex2D(_AlphaTex, i.uv1).a;//偏移UV采样遮罩
 
 		return fixed4(fresnelCol + col + sCol, pow(NdotV, _FresnelAlpha) + colAlpha);
+		//(模型边缘颜色+六边形本身颜色+添加边线颜色，边缘不透明+采样遮罩部分不透明)
 	}
         ENDCG
     }
-}
-FallBack&quot;Diffuse&quot;
+    }
+    FallBack &quot;Transparent/VertexLit&quot;//混合透明物体无法投射与接收阴影
 </code></pre>
 <p>}</p>
 ]]></content>
@@ -1416,58 +1538,6 @@ FallBack &quot;Diffuse&quot;
 <img src="https://Wei715547.github.io/post-images/1616214055096.jpg" alt="" loading="lazy"><br>
 深度测试：（可以指定是否开启深度测试与深度写入）与深度缓冲区中的值进行对比，小于深度缓冲中的值(更近)时有权利是否写入Z-Buffer。（Early-Z提前执行）<br>
 合并：得到的目标颜色根据是否进行混合，半透明物体-与颜色缓冲区中的颜色值进行混合得到新颜色，或直接覆盖原颜色缓冲区中的颜色。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Blender材质节点(更新ing)]]></title>
-        <id>https://Wei715547.github.io/post/blender-cai-zhi-jie-dian/</id>
-        <link href="https://Wei715547.github.io/post/blender-cai-zhi-jie-dian/">
-        </link>
-        <updated>2021-01-23T05:35:19.000Z</updated>
-        <content type="html"><![CDATA[<p><strong>一、输入</strong><br>
-<strong>1.物体信息</strong><br>
-位置：模型中心到世界原点的距离<br>
-颜色：物体属性中视图显示中的物体颜色与材质无关<br>
-物体编号<br>
-材质编号<br>
-随机：物体生成时随机产生的0~1之间的值<br>
-变化不同位置产生颜色变化示例<br>
-<img src="https://Wei715547.github.io/post-images/1611381548318.PNG" alt="" loading="lazy"><br>
-<strong>2.属性</strong>：可获取顶点颜色<br>
-<img src="https://Wei715547.github.io/post-images/1611383219732.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1611383224559.PNG" alt="" loading="lazy"><br>
-<strong>3.倒角</strong>：Cycles适用，在视图显示中产生倒角效果（使用连接至着色器法相）<br>
-<strong>4.顶点颜色</strong>：低点颜色与Alpha通道，多用于遮罩<br>
-<img src="https://Wei715547.github.io/post-images/1611466142579.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1611466149778.PNG" alt="" loading="lazy"><br>
-<strong>6.黑体节点</strong>：色温黑体辐射K，可用于Cycles光源色温标准输出，自发光物体发光颜色<br>
-<img src="https://Wei715547.github.io/post-images/1611475715838.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1611477570439.PNG" alt="" loading="lazy"><br>
-<strong>7.波长</strong><br>
-<img src="https://Wei715547.github.io/post-images/1611479151358.PNG" alt="" loading="lazy"><br>
-<strong>8.映射</strong>：纹理空间在模型面上的投影，包括，位置旋转缩放<br>
-类型：点，先计算缩放然后旋转位置<br>
-纹理，先计算位置然后旋转缩放<br>
-矢量，不计算位置<br>
-法向，归一化后的矢量<br>
-<img src="https://Wei715547.github.io/post-images/1611808408345.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1611808414557.PNG" alt="" loading="lazy"><br>
-<strong>9.矢量变换</strong>：对矢量(点包含位置)进行不同空间坐标系下的转换：物体、世界、相机(屏幕剪切空间)<br>
-<img src="https://Wei715547.github.io/post-images/1611833642696.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1611841772393.PNG" alt="" loading="lazy"><br>
-<strong>10.钳制</strong>：对数值范围进行限制<br>
-<img src="https://Wei715547.github.io/post-images/1611890049132.PNG" alt="" loading="lazy"><br>
-<strong>11.映射范围</strong>：从a,b映射到c,d。包含：线性，阶梯，平滑等插值类型<br>
-<img src="https://Wei715547.github.io/post-images/1611892237631.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1611892245272.PNG" alt="" loading="lazy"><br>
-<strong>12.透明着色器</strong><br>
-<img src="https://Wei715547.github.io/post-images/1611893692097.PNG" alt="" loading="lazy"><br>
-<strong>13.线框</strong>显示网格线框<br>
-<img src="https://Wei715547.github.io/post-images/1611978489940.PNG" alt="" loading="lazy"><br>
-<strong>14.白噪波纹理</strong>：随机值生成1-4D<br>
-<img src="https://Wei715547.github.io/post-images/1611981742064.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1611981746778.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1611981752413.PNG" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>

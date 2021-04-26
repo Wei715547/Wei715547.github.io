@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1619343372099">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1619431131233">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -25,7 +25,7 @@ Shader &quot;Unlit/ShileShader&quot;
 {
 Properties
 {
-[HDR]_Color (&quot;Color&quot;, Color) = (1,1,1,1)             ..." />
+[HDR]_Color (&quot;六边形边缘颜色&quot;, Color) = (1,1,1,1)           ..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -35,7 +35,7 @@ Properties
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1619343372099" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1619431131233" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -121,9 +121,9 @@ Shader &quot;Unlit/ShileShader&quot;<br>
 {<br>
 Properties<br>
 {<br>
-[HDR]_Color (&quot;Color&quot;, Color) = (1,1,1,1)                    //控制每一个蜂巢网格的边缘光颜色<br>
-[HDR]_Color1 (&quot;Color1&quot;, Color) = (1,1,1,1)                    //控制每一个蜂巢网格的主体颜色<br>
-[HDR]_FresnelColor (&quot;FresnelColor&quot;, Color) = (1,1,1,1)        //控制防护罩的边缘高光颜色<br>
+[HDR]_Color (&quot;六边形边缘颜色&quot;, Color) = (1,1,1,1)                    //控制每一个蜂巢网格的边缘光颜色<br>
+[HDR]_Color1 (&quot;条带颜色&quot;, Color) = (1,1,1,1)                    //控制每一个蜂巢网格的主体颜色<br>
+[HDR]_FresnelColor (&quot;菲尼尔颜色&quot;, Color) = (1,1,1,1)        //控制防护罩的边缘高光颜色<br>
 _FresnelPower (&quot;FresnelPower&quot;, Range(0.1, 11)) = 1            //控制防护罩的边缘高光强度<br>
 _FresnelAlpha (&quot;FresnelAlpha&quot;, Range(0, 50)) = 1            //控制防护罩的不透明度<br>
 _MainTex (&quot;MainTex&quot;, 2D) = &quot;white&quot; {}<br>
@@ -136,7 +136,8 @@ _RollSpeed (&quot;RollSpeed&quot;, Range(0, 5)) = 1                    //控制�
 }
 SubShader
 {
-    Tags{&quot;Queue&quot; = &quot;Transparent&quot;/*模型渲染队列*/ &quot;IngnoreProjector&quot; = &quot;True&quot; &quot;RanderType&quot; = &quot;Transparent&quot;}//Pass块参数标签
+    Tags{&quot;Queue&quot; = &quot;Transparent&quot;/*模型渲染队列*/ &quot;IngnoreProjector&quot; = &quot;True&quot; &quot;RanderType&quot; = &quot;Transparent&quot;
+	&quot;DisableBatching&quot; = &quot;True&quot;}//Pass块参数标签
     LOD 100
 
     Pass
@@ -209,23 +210,24 @@ SubShader
 
         fixed4 frag (v2f i) : SV_Target
 	{
-		//Fresnel
-		float NdotV = dot(i.worldNormal, normalize(UnityWorldSpaceViewDir(i.worldPos)));
-		NdotV = 1 - NdotV;
-		fixed3 fresnelCol = pow(NdotV * _FresnelColor, _FresnelPower);
+		//菲尼尔系数Fresnel：F = pow(1-max(dot(v.n),0),_FresnelPower)
+		float NdotV = max(dot(i.worldNormal, normalize(UnityWorldSpaceViewDir(i.worldPos))),0);//模型边缘NdotV接近0
+		NdotV = 1 - NdotV;//取反：模型边缘为1
+		fixed3 fresnelCol = pow(NdotV * _FresnelColor, _FresnelPower);//模型边缘颜色
 
 	 //Single Shield Color
-		fixed3 sCol = tex2D(_ShieldTex, i.uv2) * _Color.rgb;
+		fixed3 sCol = tex2D(_ShieldTex, i.uv2) * _Color.rgb;//六边形边缘光颜色
+		fixed4 col = tex2D(_MainTex, i.uv1) * _Color1;//偏移UV采样六边形颜色
 
-		fixed4 col = tex2D(_MainTex, i.uv1) * _Color1;
-		fixed colAlpha = tex2D(_AlphaTex, i.uv1).a;
+		fixed colAlpha = tex2D(_AlphaTex, i.uv1).a;//偏移UV采样遮罩
 
 		return fixed4(fresnelCol + col + sCol, pow(NdotV, _FresnelAlpha) + colAlpha);
+		//(模型边缘颜色+六边形本身颜色+添加边线颜色，边缘不透明+采样遮罩部分不透明)
 	}
         ENDCG
     }
-}
-FallBack&quot;Diffuse&quot;
+    }
+    FallBack &quot;Transparent/VertexLit&quot;//混合透明物体无法投射与接收阴影
 </code></pre>
 <p>}</p>
 
