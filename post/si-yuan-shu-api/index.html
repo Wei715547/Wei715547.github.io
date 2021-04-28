@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1619431131233">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1619603050364">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -31,7 +31,7 @@ public class QuaternionAPI : MonoBehaviou..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1619431131233" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1619603050364" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -117,7 +117,16 @@ using UnityEngine;</p>
 {<br>
 public Transform  tf;<br>
 public AnimationCurve a;<br>
-private float x;</p>
+private float x;<br>
+<strong>四元数*向量：表示对向量做旋转变化</strong><br>
+<strong>//2D视图3D物体前方朝向鼠标位置</strong><br>
+private void Rotext()<br>
+{<br>
+Vector3 fdir = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;<br>
+float rotY = Mathf.Atan2(fdir.x, fdir.y) * Mathf.Rad2Deg;<br>
+//采用四元数设置旋转角度：先在世界x轴旋转-90的在*得加世界z轴目标旋转值<br>
+transform.rotation = Quaternion.AngleAxis(-90, Vector3.right) * Quaternion.AngleAxis(-rotY, Vector3.up);<br>
+}</p>
 <pre><code>private void OnGUI()
 {
     if (GUILayout.Button (&quot;&quot;))
