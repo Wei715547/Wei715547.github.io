@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1619605082025">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1619694686786">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -18,13 +18,13 @@
 
 
 
-    <meta name="description" content="
-Shader &quot;Unlit/Wave&quot;
+    <meta name="description" content="#2D
+
+Shader &quot;Unlit/Water&quot;
 {
 Properties
 {
-_Color(&quot;MainColor&quot;, Color) = (1,1,1,1)
-_MainTex (&quot;Texture&q..." />
+_ColorOpacity(&quot;Water Tint (RGB) &amp; Opacity (A)&quot;, 2D) = &..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -34,7 +34,7 @@ _MainTex (&quot;Texture&q..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1619605082025" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1619694686786" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -113,7 +113,101 @@ _MainTex (&quot;Texture&q..." />
             <div class="post-date">2021-04-26</div>
             
             <div class="post-content" v-pre>
-              <p><img src="https://Wei715547.github.io/post-images/1619431100957.PNG" alt="" loading="lazy"><br>
+              <p>#2D<br>
+<img src="https://Wei715547.github.io/post-images/1619694485822.PNG" alt="" loading="lazy"><br>
+Shader &quot;Unlit/Water&quot;<br>
+{<br>
+Properties<br>
+{<br>
+_ColorOpacity(&quot;Water Tint (RGB) &amp; Opacity (A)&quot;, 2D) = &quot;white&quot; {}<br>
+_DistortionNormalMap(&quot;Normal Map&quot;, 2D) = &quot;bump&quot; {}<br>
+_DistortionStrength(&quot;Distortion strength&quot;, Float) = 1.0<br>
+}<br>
+SubShader<br>
+{<br>
+Tags { &quot;RenderType&quot;=&quot;Opaque&quot; &quot;Queue&quot;=&quot;Transparent&quot; }<br>
+LOD 100</p>
+<pre><code>	// Grab the screen behind the object into _BackgroundTexture
+	GrabPass
+	{
+		&quot;_BackgroundTexture&quot;
+	}
+
+	Pass
+	{
+		CGPROGRAM
+		#pragma vertex vert
+		#pragma fragment frag
+
+
+		#include &quot;UnityCG.cginc&quot;
+
+		struct appdata
+		{
+			float4 vertex : POSITION;
+			float2 uv : TEXCOORD0;
+			float2 uv2 : TEXCOORD1;
+		};
+
+		struct v2f
+		{
+			float2 uv : TEXCOORD0;
+			float2 uv2 : TEXCOORD1;
+			float4 grabPos : TEXCOORD2;
+			float4 vertex : SV_POSITION;
+		};
+
+		sampler2D _BackgroundTexture;
+		sampler2D _ColorOpacity;
+		sampler2D _DistortionNormalMap;
+
+		float _DistortionStrength;
+		float4 _DistortionNormalMap_ST;
+		float4 _BackgroundTexture_TexelSize;
+
+		v2f vert (appdata v)
+		{
+			v2f o;
+			o.vertex = UnityObjectToClipPos(v.vertex);
+			o.grabPos = ComputeGrabScreenPos(o.vertex);//获取截取屏幕的采样坐标
+</code></pre>
+<p>#if !UNITY_UV_STARTS_AT_TOP<br>
+if(_BackgroundTexture_TexelSize.y &lt; 0)<br>
+o.grabPos.y = 1.0 - o.grabPos.y;<br>
+#endif<br>
+o.uv = v.uv;<br>
+o.uv2 = v.uv2;</p>
+<pre><code>			return o;
+		}
+
+		fixed4 frag (v2f i) : SV_Target
+		{
+			float2 properuv = _DistortionNormalMap_ST.zw + (i.uv2.xy * _DistortionNormalMap_ST.xy);
+
+			float3 normal1 = UnpackNormal(tex2D(_DistortionNormalMap, properuv + _Time.y));
+			float3 normal2 = UnpackNormal(tex2D(_DistortionNormalMap, (1.0f - properuv) + _Time.y));
+
+			float3 norm = (normal1 + normal2) * 0.5f * _DistortionStrength;
+
+			half4 coloropa = tex2D(_ColorOpacity, i.uv + norm.xy * 0.1f);
+
+			half4 bgcolor = tex2Dproj(_BackgroundTexture, i.grabPos + float4(norm.x*0.5f, norm.y*0.5f, 0, 0));
+
+			//col = lerp(col, float4(1, 1, 1, 1), step(0.98f, i.uv.y));
+
+			bgcolor.rgb = lerp(bgcolor.rgb, coloropa.rgb, coloropa.a);
+			bgcolor.rgb *= coloropa.rgb;
+
+			return bgcolor;
+			//return float4(i.uv2.x, i.uv2.y, 0, 1);
+		}
+		ENDCG
+	}
+}
+</code></pre>
+<p>}</p>
+<p>#3D<br>
+<img src="https://Wei715547.github.io/post-images/1619431100957.PNG" alt="" loading="lazy"><br>
 Shader &quot;Unlit/Wave&quot;<br>
 {<br>
 Properties<br>
