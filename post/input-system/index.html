@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Input System | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1620552701645">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="#1.导入包
+
+#2.创建Input Actions
+
+#3.添加输入地图，绑定其中的数据类型及输入设备
+
+#4.使用Input Actions生成C#代码
+
+#5.创建Actions中的对应Action的可实例化回调接口
+如对应Move的..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1620552701645" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Input System</h2>
+            <div class="post-date">2021-05-09</div>
+            
+            <div class="post-content" v-pre>
+              <p>#1.导入包<br>
+<img src="https://Wei715547.github.io/post-images/1620550852403.PNG" alt="" loading="lazy"><br>
+#2.创建Input Actions<br>
+<img src="https://Wei715547.github.io/post-images/1620551006582.PNG" alt="" loading="lazy"><br>
+#3.添加输入地图，绑定其中的数据类型及输入设备<br>
+<img src="https://Wei715547.github.io/post-images/1620551266011.PNG" alt="" loading="lazy"><br>
+#4.使用Input Actions生成C#代码<br>
+<img src="https://Wei715547.github.io/post-images/1620551368934.PNG" alt="" loading="lazy"><br>
+#5.创建Actions中的对应Action的可实例化回调接口<br>
+如对应Move的PlayerInput<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.InputSystem;</p>
+<p>[CreateAssetMenu(menuName = &quot;Player Input&quot;)]//可创建的实例化<br>
+public class PlayerInput : ScriptableObject, InputActions.IGameplayActions//继承InputActions中对应输入地图的回调接口<br>
+{<br>
+public event Action<Vector2> onMove;<br>
+public event Action onStopMove;</p>
+<pre><code>InputActions inputActions;
+private void OnEnable()//实例化输入，设置此为对应地图回调
+{
+    inputActions = new InputActions();
+    inputActions.Gameplay.SetCallbacks(this);
+}
+private void OnDisable()//禁用输入
+{
+    DisableAllInputs();
+}
+public void DisableAllInputs()
+{
+    inputActions.Gameplay.Disable();
+}
+
+public void EnableGamePlayerInput()//外部启用方法
+{
+    inputActions.Gameplay.Enable();
+    //启用时鼠标隐藏，锁定
+    Cursor.visible = false;
+    Cursor.lockState = CursorLockMode.Locked;
+}
+//实现回调接口方法
+public void OnMove(InputAction.CallbackContext context)
+{
+    //根据输入，调用订阅对应事件的方法
+    if (context.phase == InputActionPhase.Performed)//按键处于按下状态时
+        onMove?.Invoke(context.ReadValue&lt;Vector2&gt;());
+
+    if (context.phase == InputActionPhase.Canceled)//松开按键时
+        onStopMove?.Invoke();
+}
+</code></pre>
+<p>}<br>
+#6.添加角色控制脚本，获取回调接口，订阅其中输入对应的事件，与实现逻辑<br>
+<img src="https://Wei715547.github.io/post-images/1620552666059.PNG" alt="" loading="lazy"><br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>[RequireComponent(typeof(Rigidbody2D))]//特性添加组件<br>
+public class Player : MonoBehaviour<br>
+{<br>
+[SerializeField] PlayerInput input;//回调接口<br>
+Rigidbody2D rig;<br>
+[SerializeField] float moveSpeed = 10f;<br>
+private void Awake()<br>
+{<br>
+rig = GetComponent<Rigidbody2D>();<br>
+}<br>
+private void OnEnable()<br>
+{<br>
+input.onMove += OnMove;<br>
+input.onStopMove += OnStopMove;<br>
+}<br>
+// Start is called before the first frame update<br>
+void Start()<br>
+{<br>
+rig.gravityScale = 0;<br>
+input.EnableGamePlayerInput();//激活动作表<br>
+}</p>
+<pre><code>// Update is called once per frame
+void Update()
+{
+    
+}
+private void OnMove(Vector2 dir)//根据输入实现逻辑
+{
+    //Vector2 moveAmount = dir * moveSpeed;
+    rig.velocity = dir * moveSpeed;
+}
+private void OnStopMove()
+{
+    rig.velocity = Vector2.zero;
+}
+</code></pre>
+<p>}</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/shui-mian-shader/">
+                  <h3 class="post-title">
+                    水面Shader
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

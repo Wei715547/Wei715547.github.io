@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-05-07T08:37:21.407Z</updated>
+    <updated>2021-05-09T09:34:12.609Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,110 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[Input System]]></title>
+        <id>https://Wei715547.github.io/post/input-system/</id>
+        <link href="https://Wei715547.github.io/post/input-system/">
+        </link>
+        <updated>2021-05-09T08:36:56.000Z</updated>
+        <content type="html"><![CDATA[<p>#1.导入包<br>
+<img src="https://Wei715547.github.io/post-images/1620550852403.PNG" alt="" loading="lazy"><br>
+#2.创建Input Actions<br>
+<img src="https://Wei715547.github.io/post-images/1620551006582.PNG" alt="" loading="lazy"><br>
+#3.添加输入地图，绑定其中的数据类型及输入设备<br>
+<img src="https://Wei715547.github.io/post-images/1620551266011.PNG" alt="" loading="lazy"><br>
+#4.使用Input Actions生成C#代码<br>
+<img src="https://Wei715547.github.io/post-images/1620551368934.PNG" alt="" loading="lazy"><br>
+#5.创建Actions中的对应Action的可实例化回调接口<br>
+如对应Move的PlayerInput<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.InputSystem;</p>
+<p>[CreateAssetMenu(menuName = &quot;Player Input&quot;)]//可创建的实例化<br>
+public class PlayerInput : ScriptableObject, InputActions.IGameplayActions//继承InputActions中对应输入地图的回调接口<br>
+{<br>
+public event Action<Vector2> onMove;<br>
+public event Action onStopMove;</p>
+<pre><code>InputActions inputActions;
+private void OnEnable()//实例化输入，设置此为对应地图回调
+{
+    inputActions = new InputActions();
+    inputActions.Gameplay.SetCallbacks(this);
+}
+private void OnDisable()//禁用输入
+{
+    DisableAllInputs();
+}
+public void DisableAllInputs()
+{
+    inputActions.Gameplay.Disable();
+}
+
+public void EnableGamePlayerInput()//外部启用方法
+{
+    inputActions.Gameplay.Enable();
+    //启用时鼠标隐藏，锁定
+    Cursor.visible = false;
+    Cursor.lockState = CursorLockMode.Locked;
+}
+//实现回调接口方法
+public void OnMove(InputAction.CallbackContext context)
+{
+    //根据输入，调用订阅对应事件的方法
+    if (context.phase == InputActionPhase.Performed)//按键处于按下状态时
+        onMove?.Invoke(context.ReadValue&lt;Vector2&gt;());
+
+    if (context.phase == InputActionPhase.Canceled)//松开按键时
+        onStopMove?.Invoke();
+}
+</code></pre>
+<p>}<br>
+#6.添加角色控制脚本，获取回调接口，订阅其中输入对应的事件，与实现逻辑<br>
+<img src="https://Wei715547.github.io/post-images/1620552666059.PNG" alt="" loading="lazy"><br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;</p>
+<p>[RequireComponent(typeof(Rigidbody2D))]//特性添加组件<br>
+public class Player : MonoBehaviour<br>
+{<br>
+[SerializeField] PlayerInput input;//回调接口<br>
+Rigidbody2D rig;<br>
+[SerializeField] float moveSpeed = 10f;<br>
+private void Awake()<br>
+{<br>
+rig = GetComponent<Rigidbody2D>();<br>
+}<br>
+private void OnEnable()<br>
+{<br>
+input.onMove += OnMove;<br>
+input.onStopMove += OnStopMove;<br>
+}<br>
+// Start is called before the first frame update<br>
+void Start()<br>
+{<br>
+rig.gravityScale = 0;<br>
+input.EnableGamePlayerInput();//激活动作表<br>
+}</p>
+<pre><code>// Update is called once per frame
+void Update()
+{
+    
+}
+private void OnMove(Vector2 dir)//根据输入实现逻辑
+{
+    //Vector2 moveAmount = dir * moveSpeed;
+    rig.velocity = dir * moveSpeed;
+}
+private void OnStopMove()
+{
+    rig.velocity = Vector2.zero;
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[水面Shader]]></title>
         <id>https://Wei715547.github.io/post/shui-mian-shader/</id>
@@ -1591,47 +1695,6 @@ SubShader
 FallBack &quot;Diffuse&quot;
 </code></pre>
 <p>}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[渲染管线]]></title>
-        <id>https://Wei715547.github.io/post/xuan-ran-guan-xian/</id>
-        <link href="https://Wei715547.github.io/post/xuan-ran-guan-xian/">
-        </link>
-        <updated>2021-03-19T07:04:00.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1617077796123.jpg" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1616211232568.png" alt="" loading="lazy"><br>
-<a href = "https://b23.tv/BV1L54y1s7xw/p2">渲染管线参考视频</a><br>
-一、应用程序:-准备基本场景数据-加速算法粗粒度剔除-设置渲染状态-调用DrawCall输出渲染图元到显存<br>
-1.基本场景数据包括：物体位置/网格；光源信息类型/位置（设置阴影逐光源绘制阴影贴图）；相机参数<br>
-2.加速算法粗粒度剔除：可见光裁剪；可见场景裁剪（八叉树，BSP/K——D树，BVH）<br>
-3.渲染设置：绘制设置（使用着色器，合批方式）；绘制物体顺序（相对摄像机距离，渲染队列，UI设置）渲染目标（输出到帧缓存或渲染贴图）；渲染模式（前项渲染/延迟渲染）<br>
-/*<br>
-1.CPU将数据加载到显存：顶点位置信息，法线方向，顶点颜色，uv坐标<br>
-2.设置渲染状态：使用哪个顶点着色器，片元着色器，光源属性材质等<br>
-3.调用Draw Call：由CPU发起命令GPU渲染图像。指向一个需要被渲染的图元列表(以传入显存中)。<br>
-*/<br>
-二、几何阶段：顶点着色器-曲面细分着色器-几何着色器-投影-裁剪-屏幕映射<br>
-其中曲面，几何着色器可选分别用于细分图元，着色或产生新图元（网格细分/粒子点生成新图元）。。最后屏幕映射，将顶点坐标转换到屏幕坐标系中。<br>
-顶点着色器：将顶点坐标从模型空间转换到齐次裁剪空间<br>
-如：v2f.pos = UnityObjectToClipPos(a2v.pos);  或  mul(UNITY_MVP, a2v.pos)//通过MVP矩阵转换得到齐次裁剪坐标，<br>
-投影：再由硬件做透视除法，得到设备坐标NDC（OpenGL中z分量[-1,1]，DX中[0,1]）。<br>
-裁剪：CVV剔除视平面外的顶点，正面/背面剔除可配置<br>
-屏幕映射：将每个图元的x,y坐标（不对z进行操作）转换到屏幕坐标系下/OpenGL从左下到右上，DX从左上到右下，实际上屏幕坐标系与z坐标组成窗口坐标系，这些值一起被传递到光栅化阶段。</p>
-<p>三、光栅化阶段：三角形设置-三角形遍历-片元着色器-逐片元操作（计算每个图元覆盖了那些像素，计算着些像素的颜色）<br>
-三角形设置：计算光栅化一个三角形所需的信息<br>
-三角形遍历：检查每个像素是否被一个三角形覆盖，如果都被一个三角形所覆盖，就会生成一个片元。同时也会根据三个顶点信息对所覆盖的像素的深度插值计算。这一阶段也称扫描变换。即输出是一系列片元序列（包含很多状态集合：屏幕坐标，深度信息及顶点信息）。（抗锯齿MSAA：1.SSAA：渲染到放大n倍的buffer然后对其采样。2.MSAA：只有此方式在光栅化阶段，计算多个覆盖样本。3.FXAA/TXAA：后处理技术不再此阶段）<br>
-片元着色器：颜色插值，纹理采样（此时的片元并不是真正意义上的像素）<br>
-逐片元操作(输出合并阶段)：主要进行片元可见性判断和颜色混合<br>
-透明测试：有时会与提前测试发生冲突。API:clip(tex.r-_Cutoff);<br>
-模板测试：（蒙版/遮罩）<br>
-<a href="https://b23.tv/BV1NJ41167Ec">参考视频</a><br>
-<img src="https://Wei715547.github.io/post-images/1616214031623.jpg" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1616214040771.jpg" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1616214048833.jpg" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1616214055096.jpg" alt="" loading="lazy"><br>
-深度测试：（可以指定是否开启深度测试与深度写入）与深度缓冲区中的值进行对比，小于深度缓冲中的值(更近)时有权利是否写入Z-Buffer。（Early-Z提前执行）<br>
-合并：得到的目标颜色根据是否进行混合，半透明物体-与颜色缓冲区中的颜色值进行混合得到新颜色，或直接覆盖原颜色缓冲区中的颜色。</p>
 ]]></content>
     </entry>
 </feed>
