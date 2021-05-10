@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-05-10T07:25:47.551Z</updated>
+    <updated>2021-05-10T16:15:28.419Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -125,6 +125,22 @@ private void OnStopMove()
 <p>}<br>
 #设置文件<br>
 <img src="https://Wei715547.github.io/post-images/1620629585832.PNG" alt="" loading="lazy"></p>
+<p>#添加新的Action:Fire<br>
+<img src="https://Wei715547.github.io/post-images/1620661870528.PNG" alt="" loading="lazy"><br>
+<strong>保存后@InputActions中更新IGameplayActions接口中的方法</strong><br>
+<strong>之后实现PlayerInput继承的IGameplayActions中的方法</strong><br>
+//实现回调接口方法<br>
+public event Action onFire;<br>
+public event Action stopFire;</p>
+<pre><code>public void OnFire(InputAction.CallbackContext context)
+{
+    if (context.phase == InputActionPhase.Performed)//按键处于按下状态时
+        onFire?.Invoke();
+
+    if (context.phase == InputActionPhase.Canceled)//松开按键时
+        stopFire?.Invoke();
+}
+</code></pre>
 ]]></content>
     </entry>
     <entry>

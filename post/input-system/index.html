@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1620629588314">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1620662778015">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -37,7 +37,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1620629588314" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1620662778015" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -214,6 +214,22 @@ private void OnStopMove()
 <p>}<br>
 #设置文件<br>
 <img src="https://Wei715547.github.io/post-images/1620629585832.PNG" alt="" loading="lazy"></p>
+<p>#添加新的Action:Fire<br>
+<img src="https://Wei715547.github.io/post-images/1620661870528.PNG" alt="" loading="lazy"><br>
+<strong>保存后@InputActions中更新IGameplayActions接口中的方法</strong><br>
+<strong>之后实现PlayerInput继承的IGameplayActions中的方法</strong><br>
+//实现回调接口方法<br>
+public event Action onFire;<br>
+public event Action stopFire;</p>
+<pre><code>public void OnFire(InputAction.CallbackContext context)
+{
+    if (context.phase == InputActionPhase.Performed)//按键处于按下状态时
+        onFire?.Invoke();
+
+    if (context.phase == InputActionPhase.Canceled)//松开按键时
+        stopFire?.Invoke();
+}
+</code></pre>
 
             </div>
             
