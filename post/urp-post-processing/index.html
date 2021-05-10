@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>EventSystems | WeiBlog</title>
+<title>URP Post Processing | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,13 +18,9 @@
 
 
 
-    <meta name="description" content="简易方式
-public class Drag : MonoBehaviour,IDragHandler（只使用一个接口实现）
-{
-private RectTransform self;
-private void Awake()
-{
-    ..." />
+    <meta name="description" content="
+
+..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -109,80 +105,21 @@ private void Awake()
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">EventSystems</h2>
-            <div class="post-date">2020-04-12</div>
+            <h2 class="post-title">URP Post Processing</h2>
+            <div class="post-date">2021-05-10</div>
             
             <div class="post-content" v-pre>
-              <p>简易方式<br>
-public class Drag : MonoBehaviour,IDragHandler（只使用一个接口实现）<br>
-{<br>
-private RectTransform self;</p>
-<pre><code>private void Awake()
-{
-    self = GetComponent&lt;RectTransform&gt;();
-}
-
-public void OnDrag(PointerEventData eventData)
-{
-    //锚点的位置加上鼠标移动
-    self.anchoredPosition += eventData.delta;
-}
-</code></pre>
-<p>}</p>
-<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.EventSystems;<br>
-public class DIalogDrag : MonoBehaviour, IPointerDownHandler,IDragHandler,IPointerClickHandler<br>
-{<br>
-private RectTransform parentRTF;<br>
-private void Start()<br>
-{<br>
-//设置UI长宽<br>
-RectTransform rtf = GetComponent<RectTransform>();<br>
-rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 700);<br>
-rtf.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 400);</p>
-<pre><code>    parentRTF = this.transform.parent as RectTransform;
-}
-private Vector3 siftVector;
-//按下时执行
-public void OnPointerDown(PointerEventData eventData)
-{
-    //记录按下点到中心点偏移量
-
-    Vector3 wordPoint;
-    //屏幕坐标--&gt;世界坐标
-    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
-    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
-    siftVector = this.transform.position - wordPoint;
-}
-//拖拽时执行
-public void OnDrag(PointerEventData eventData)
-{
-    Vector3 wordPoint;
-    //屏幕坐标--&gt;世界坐标
-    //(父物体的变换组件，屏幕坐标，摄像机，out 世界坐标)
-    RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRTF, eventData.position, eventData.pressEventCamera, out wordPoint);
-    this.transform.position = wordPoint + siftVector ;
-    
-}
-
-public void OnPointerClick(PointerEventData eventData)
-{
-    if (eventData.clickCount == 2)
-        Destroy (this .gameObject );
-}
-</code></pre>
-<p>}</p>
+              <p><img src="https://Wei715547.github.io/post-images/1620629367082.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1620629450549.PNG" alt="" loading="lazy"></p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/hp-attack-shell/">
+                <a href="https://Wei715547.github.io/post/input-system/">
                   <h3 class="post-title">
-                    HP-Attack-Shell
+                    Input System
                   </h3>
                 </a>
               </div>
