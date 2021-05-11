@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8" >
 
-<title>URP Post Processing | WeiBlog</title>
+<title>URP Post Processing/Base Shader | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1620702091069">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1620708593863">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -20,7 +20,13 @@
 
     <meta name="description" content="
 
-..." />
+URP中基础Shader
+
+Shader &quot;Unlit/URPTestShader&quot;
+{
+Properties
+{
+_BaseColor(&quot;BaseColor&quot;, Color) = (1,1,1,..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -30,7 +36,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1620702091069" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1620708593863" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -105,12 +111,72 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">URP Post Processing</h2>
+            <h2 class="post-title">URP Post Processing/Base Shader</h2>
             <div class="post-date">2021-05-10</div>
             
             <div class="post-content" v-pre>
               <p><img src="https://Wei715547.github.io/post-images/1620629367082.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1620629450549.PNG" alt="" loading="lazy"></p>
+<p><strong>URP中基础Shader</strong><br>
+<img src="https://Wei715547.github.io/post-images/1620708581418.PNG" alt="" loading="lazy"><br>
+Shader &quot;Unlit/URPTestShader&quot;<br>
+{<br>
+Properties<br>
+{<br>
+_BaseColor(&quot;BaseColor&quot;, Color) = (1,1,1,1)<br>
+_MainTex (&quot;Texture&quot;, 2D) = &quot;white&quot; {}<br>
+}<br>
+SubShader<br>
+{<br>
+Tags { &quot;RenderType&quot;=&quot;Opaque&quot; &quot;RanderPipeline&quot; = &quot;UniversalPipeline&quot; }</p>
+<pre><code>    Pass//URP单Pass前项渲染的管线
+    {
+		HLSLPROGRAM//使用HLSL语言
+		#pragma vertex vert
+        #pragma fragment frag
+		#include &quot;Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl&quot;//引入URP核心文件
+		
+		sampler2D _MainTex;
+        //float4 _MainTex_ST;
+		//half4 _BaseColor;
+		
+		//兼容SRP属性
+		CBUFFER_START(UnityPerMaterial)
+			float4 _MainTex_ST;
+			half4 _BaseColor;
+		CBUFFER_END
+
+		struct appdata
+        {
+            float4 vertex : POSITION;
+            float2 uv : TEXCOORD0;
+        };
+
+        struct v2f
+        {
+            float2 uv : TEXCOORD0;
+            float4 vertex : SV_POSITION;
+        };
+
+        v2f vert (appdata v)
+        {
+            v2f o;
+            o.vertex = TransformObjectToHClip(v.vertex.xyz);//
+            o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+            return o;
+        }
+
+        half4 frag (v2f i) : SV_Target//HLSL中不再使用fixed类型(精度低)
+        {
+            // sample the texture
+            half4 col = tex2D(_MainTex, i.uv)*_BaseColor;
+            return col;
+        }
+		ENDHLSL
+    }
+}
+</code></pre>
+<p>}</p>
 
             </div>
             
