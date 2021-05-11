@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-05-11T05:01:33.030Z</updated>
+    <updated>2021-05-11T07:25:39.602Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -754,7 +754,77 @@ Cull Off</p>
 <p>}<br>
 //调用脚本(Update中)<br>
 r = Mathf.Lerp(0, 1, r+=Time.deltaTime/rtime);//rtime时间内r变为1<br>
-mt.SetFloat(&quot;_ResAmount&quot;, r);</p>
+mt.SetFloat(&quot;_ResAmount&quot;, r);<br>
+//仅溶解部分代码<br>
+<img src="https://Wei715547.github.io/post-images/1620714757624.PNG" alt="" loading="lazy"><br>
+Shader &quot;Unlit/Dissolve&quot;<br>
+{<br>
+Properties<br>
+{<br>
+_BurnAmount (&quot;Burn Amount&quot;, Range(0.0,1.0)) = 0.0<br>
+_LineWidth (&quot;LineWidth&quot;, Range(0.0,0.2)) = 0.1<br>
+_EdgLightST(&quot;边缘光强度&quot;,Range(1,5)) = 3<br>
+_BaseColor(&quot;BaseColor&quot;,Color) = (1,1,1,1)<br>
+_BurnMap(&quot;BurnMap&quot;,2D) = &quot;while&quot;{}<br>
+//_Color1 (&quot;Color1&quot;,Color) = (1,1,1,1)<br>
+[HDR]_Color2 (&quot;Color2&quot;,Color) = (1,1,1,1)<br>
+}<br>
+SubShader<br>
+{<br>
+Pass{<br>
+//Tags{&quot;LightMode&quot; = &quot;ForwardBase&quot;}<br>
+Cull Off//双面可见</p>
+<pre><code>    CGPROGRAM
+
+    float _BurnAmount;
+	float _LineWidth;
+	int _EdgLightST;
+	float4 _BaseColor;
+	sampler2D _BurnMap;
+	float4 _BurnMap_ST;
+	
+	
+	//float4 _Color1;
+	float4 _Color2;
+
+	#pragma vertex vert
+    #pragma fragment frag
+	#include &quot;UnityCG.cginc&quot;
+	//#pragma multi_compile_fwdbase
+
+    struct a2v
+        {
+            float4 vertex : POSITION;
+            float2 uv : TEXCOORD0;
+        };
+
+        struct v2f
+        {                
+            float4 pos : SV_POSITION;
+			float2 uvBurnMap: TEXCOORD2;				
+        };
+
+	v2f vert(a2v v){
+		v2f o;
+		o.pos = UnityObjectToClipPos(v.vertex);		
+		o.uvBurnMap = TRANSFORM_TEX(v.uv,_BurnMap);
+		return o;
+	}
+	fixed4 frag(v2f i):SV_Target{
+		fixed3 burn = tex2D(_BurnMap,i.uvBurnMap).rgb;
+		clip(burn.r-_BurnAmount);
+
+		fixed t = 1-smoothstep(0.0,_LineWidth,burn.r-_BurnAmount);
+		fixed3 burnColor = _Color2;//lerp(_Color1,_Color2,t);
+		burnColor = pow(burnColor,_EdgLightST);
+		fixed3 finalColor = lerp(_BaseColor,burnColor,t*step(0.0001,_BurnAmount));
+		return fixed4(finalColor,1);
+	}
+	ENDCG
+}
+}			
+</code></pre>
+<p>}</p>
 ]]></content>
     </entry>
     <entry>
