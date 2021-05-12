@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-05-12T14:36:39.089Z</updated>
+    <updated>2021-05-12T16:10:19.518Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -17,7 +17,7 @@
         <link href="https://Wei715547.github.io/post/cha-zhi-qu-xian-zi-dan/">
         </link>
         <updated>2021-05-12T13:37:27.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1620828840969.PNG" alt="" loading="lazy"><br>
+        <content type="html"><![CDATA[<p><a href = "https://www.bilibili.com/video/BV1kv411r7x2?p=5"><img src="https://Wei715547.github.io/post-images/1620828840969.PNG" alt="" loading="lazy"></a><br>
 <strong>子弹脚本</strong><br>
 using System.Collections;<br>
 using System.Collections.Generic;<br>
