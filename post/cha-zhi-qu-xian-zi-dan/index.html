@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>创建资源类 | WeiBlog</title>
+<title>插值曲线子弹 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,10 +18,12 @@
 
 
 
-    <meta name="description" content="using System.Collections;
+    <meta name="description" content="
+子弹脚本
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//[CreateAssetMenu (menuName = &quot;Crea..." />
+public class FLProjectile : MonoBeh..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -106,40 +108,135 @@ using UnityEngine;
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">创建资源类</h2>
-            <div class="post-date">2020-04-15</div>
+            <h2 class="post-title">插值曲线子弹</h2>
+            <div class="post-date">2021-05-12</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
+              <p><img src="https://Wei715547.github.io/post-images/1620828840969.PNG" alt="" loading="lazy"><br>
+<strong>子弹脚本</strong><br>
+using System.Collections;<br>
 using System.Collections.Generic;<br>
 using UnityEngine;</p>
-<p>//[CreateAssetMenu (menuName = &quot;CreatManagerVarsContainer&quot;)]<br>
-public class ManagerVars : ScriptableObject<br>
+<p>public class FLProjectile : MonoBehaviour<br>
 {<br>
-public static ManagerVars GetManagerVars()<br>
+[SerializeField]<br>
+float speed = 10f;<br>
+[SerializeField]<br>
+float rotateSpeed = 0.5f;<br>
+Vector2 dir;</p>
+<pre><code>GameObject[] enemys;
+[SerializeField]
+Transform enemyPos;
+
+TrailRenderer trail;
+BoxCollider2D collider;
+private void Awake()
+{
+    trail = GetComponentInChildren&lt;TrailRenderer&gt;();
+    collider = GetComponent&lt;BoxCollider2D&gt;();
+    collider.isTrigger = true;
+}
+private void OnEnable()
+{
+    enemys = GameObject.FindGameObjectsWithTag(&quot;Enemy&quot;);
+    enemyPos = GetTargertEnemyPos();
+    StartCoroutine(MoveDirectly());
+}
+private void OnDisable()
+{
+    trail.Clear();
+}
+Transform GetTargertEnemyPos()
+{
+    if (enemys.Length != 0)
+        return enemys[Random.Range(0, enemys.Length)].transform;
+    else return null;
+
+}
+//曲线移动
+IEnumerator MoveDirectly()
+{
+    while (gameObject.activeSelf)
+    {
+        if (enemyPos != null)            
+            transform.up = Vector3.Slerp(transform.up, enemyPos.position - transform.position,
+                rotateSpeed / Vector2.Distance(this.transform.position, enemyPos.position));                            
+        transform.position += transform.up * speed * Time.deltaTime;
+
+        yield return null;            
+    }
+    
+}
+private void OnTriggerEnter2D(Collider2D collision)
+{
+    gameObject.SetActive(false);//协成依赖于mono的Update,物体禁用后协成也不再执行
+}
+</code></pre>
+<p>}</p>
+<p><strong>角色控制部分</strong><br>
+private void Update()<br>
 {<br>
-return Resources.Load<ManagerVars>(&quot;ManageVarContain&quot;);<br>
+if (power &gt;= 100)//能量达到100执行<br>
+{<br>
+StartCoroutine(nameof(StartRangeFire));<br>
+power = 0;<br>
 }<br>
-public List<Sprite> BGThemSpriteList = new List<Sprite>();<br>
-public GameObject noamlPlatform;<br>
-public GameObject characterPre;<br>
-public float nettXPos = 0.554f, nextYPos = 0.645f;<br>
-}</p>
-<p>调用方法<br>
-private ManagerVars vars;<br>
-private void Start()<br>
+}<br>
+IEnumerator StartRangeFire()<br>
 {<br>
-vars = ManagerVars.GetManagerVars();<br>
-}</p>
+StartCoroutine(nameof(RFire));//开启曲线子弹<br>
+yield return new WaitForSeconds(RFireTime);//设定时间后<br>
+StopCoroutine(nameof(RFire));//结束<br>
+StartCoroutine(nameof(DesShiled));//护盾消失<br>
+}<br>
+IEnumerator RFire()<br>
+{<br>
+//判断护盾是否显示<br>
+if (!shiled.gameObject.activeSelf)//未显示则，则显示护盾<br>
+{<br>
+shiled.material.SetColor(&quot;_FresnelColor&quot;, Color.red * 2.5f);<br>
+shiled.gameObject.SetActive(true);<br>
+shiled.gameObject.transform.DOScale(Vector3.one*100, 0.5f);<br>
+}<br>
+else//显示则改变护盾颜色<br>
+shiled.material.SetColor(&quot;_FresnelColor&quot;, Color.red * 2.5f);</p>
+<pre><code>    while (true)
+    {
+        PoolManager.Release(projectile4, pointR.position, pointR.rotation);
+        PoolManager.Release(projectile4, pointR2.position, pointR2.rotation);
+        yield return Rtime;
+    }
+}
+//护盾消失
+IEnumerator DesShiled()
+{ 
+    while (true)
+    {
+        t += Time.deltaTime;//rtime时间内r变为1
+        shiled.material.SetFloat(&quot;_BurnAmount&quot;, t);
+        yield return null;
+        if(t&gt;1)
+        {
+            t = 0;
+            break;
+        }
+        
+    }
+    shiled.gameObject.SetActive(false);
+    shiled.material.SetFloat(&quot;_BurnAmount&quot;, 0);
+    shiled.material.SetColor(&quot;_FresnelColor&quot;, shiledIdColor);
+    shiled.gameObject.transform.localScale = Vector3.zero;
+    StopCoroutine(nameof(DesShiled));
+}</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/peng-zhuang-hong-fa/">
+                <a href="https://Wei715547.github.io/post/urp-post-processing/">
                   <h3 class="post-title">
-                    碰撞，触发
+                    URP Post Processing/Base Shader
                   </h3>
                 </a>
               </div>
