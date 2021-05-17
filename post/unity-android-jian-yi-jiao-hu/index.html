@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Unity-Android简易交互 | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1621248385813">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="#1.在AS中新建Empty Activity工程
+
+#2.在Android视图下选中app右键选中Module，创建新的 Android Library
+
+
+
+后续只对mysdk模块进行操作。
+#3、引入Unity对接Android的库文..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1621248385813" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Unity-Android简易交互</h2>
+            <div class="post-date">2021-05-16</div>
+            
+            <div class="post-content" v-pre>
+              <p>#1.在AS中新建Empty Activity工程<br>
+<img src="https://Wei715547.github.io/post-images/1621226119337.PNG" alt="" loading="lazy"><br>
+#2.在Android视图下选中app右键选中Module，创建新的 Android Library<br>
+<img src="https://Wei715547.github.io/post-images/1621226388190.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1621226399526.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1621226915813.PNG" alt="" loading="lazy"><br>
+后续只对mysdk模块进行操作。<br>
+#3、引入Unity对接Android的库文件<br>
+导入classes.jar文件：<br>
+2018版本中路径为：C:\Program Files\Unity\Editor\Data\PlaybackEngines\AndroidPlayer\Variations\mono\Development\Classes\classes.jar<br>
+将classes.jar粘贴到mysdk模块的libs目录下**（需要将工程切换到project视图）**<br>
+<img src="https://Wei715547.github.io/post-images/1621227156448.png" alt="" loading="lazy"><br>
+这个classes.jar文件就被引入到工程后，展开三角，可以看到如下三个模块，其中就有com.unity3d.player。<br>
+<img src="https://Wei715547.github.io/post-images/1621227294564.PNG" alt="" loading="lazy"></p>
+<h1 id="4-创建本模块的activity文件">4、创建本模块的Activity文件</h1>
+<p>展开mysdk模块下的src目录，选中com.***.mysdk，然后右键，新建一个Activity，选择Empty Activity，输入Activity Name以及Package Name和Language，勾掉Generate Layout File, 完成。<br>
+<img src="https://Wei715547.github.io/post-images/1621227391165.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1621227460448.PNG" alt="" loading="lazy"><br>
+脚本初始为：<br>
+<code><br>
+package com.example.mysdk;</p>
+<p>import android.os.Bundle;</p>
+<p>import androidx.appcompat.app.AppCompatActivity;</p>
+<p>public class PrMainActivity extends AppCompatActivity {</p>
+<pre><code>@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+}
+</code></pre>
+<p>}<br>
+</code><br>
+现将SDKMainActivity脚本内容修改为继续自UnityPlayerActivity ，并添加两个方法 UnityCallAndroid 和 AndroidCallUnity，<br>
+<code><br>
+package com.example.mysdk;</p>
+<p>import android.os.Bundle;<br>
+import android.widget.Toast;</p>
+<p>import com.unity3d.player.UnityPlayer;<br>
+import com.unity3d.player.UnityPlayerActivity;</p>
+<p>public class SDKMainActivity extends UnityPlayerActivity {</p>
+<pre><code>@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+}
+
+//unity调用Android
+public void UnityCallAndroid () {
+
+    Toast.makeText(this,&quot;unity调用android成功&quot;, Toast.LENGTH_LONG).show();
+
+    AndroidCallUnity();
+}
+
+//android调用unity
+public void AndroidCallUnity () {
+
+    //第1个参数为Unity场景中用于接收android消息的对象名称
+    //第2个参数为对象上的脚本的一个成员方法名称（脚本名称不限制）
+    //第3个参数为unity方法的参数
+    UnityPlayer.UnitySendMessage(&quot;receiveObj&quot;, &quot;UnityMethod&quot;, &quot;This is args.&quot;);
+}
+</code></pre>
+<p>}<br>
+</code><br>
+#5、将模块打包<br>
+打包方法有两种。</p>
+<p>一是手动进行构建，然后在Build/intermediates/packaged-classes/release目录下找到相应的jar包（这个jar包默认名称为classes.jar，为了区分，需要自己改名称）；</p>
+<p>二是用gradle命令。<br>
+<img src="https://Wei715547.github.io/post-images/1621227877786.PNG" alt="" loading="lazy"><br>
+打开本模块的build.gradle文件，在文件尾添加如下的一组命令。<br>
+<code><br>
+//----------------这是一组将module导出为jar的gradle命令-------------------<br>
+// mysdk为自定义的jar包名称<br>
+//task to delete the old jar<br>
+task deleteOldJar(type: Delete) {<br>
+delete 'release/mysdk.jar'<br>
+}</p>
+<p>//task to export contents as jar<br>
+task exportJar(type: Copy) {<br>
+from('build/intermediates/packaged-classes/release/')<br>
+into('release/')<br>
+include('classes.jar')<br>
+///Rename the jar<br>
+rename('classes.jar', 'mysdk.jar')<br>
+}</p>
+<p>exportJar.dependsOn(deleteOldJar, build)<br>
+//---------------------------命令结束------------------------------<br>
+</code><br>
+build.gradle文件修改后，会提示要求同步，直接同步即可。同步结束，在IDE右上点开Gradle窗口，在other下找到exportJar命令。在mysdk/release/目录下得到生成的jar包。<br>
+<img src="https://Wei715547.github.io/post-images/1621227995616.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1621228090667.PNG" alt="" loading="lazy"><br>
+#6、修改AndroidManifest.xml文件<br>
+<img src="https://Wei715547.github.io/post-images/1621228177215.PNG" alt="" loading="lazy"><br>
+文件初始只有一对application标签和activity标签<br>
+修改为：<br>
+<code></p>
+<?xml version="1.0" encoding="utf-8"?>
+<p><manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.letui.mysdk"></p>
+<pre><code>&lt;application android:label=&quot;MySDK&quot;&gt;
+    &lt;activity android:name=&quot;com.example.mysdk.PrMainActivity&quot;&gt;&lt;/activity&gt;
+    &lt;!-- 这个android:name的值必须为包名+类名 --&gt;
+    &lt;activity android:name=&quot;com.example.mysdk.SDKMainActivity&quot;&gt;
+        &lt;intent-filter&gt;
+            &lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;
+
+            &lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;
+        &lt;/intent-filter&gt;
+
+        &lt;!-- 这一行不能少，否则会闪退 --&gt;
+        &lt;meta-data
+            android:name=&quot;unityplayer.UnityActivity&quot;
+            android:value=&quot;true&quot; /&gt;
+    &lt;/activity&gt;
+&lt;/application&gt;
+</code></pre>
+</manifest>
+</code>
+<p>#在unity中使用jar文件<br>
+新建一个Unity工程，在Assets目录下新建Plugins/Android/bin目录。<br>
+AndroidManifest.xml文件拷贝到Assets/Plugins/Android目录下<br>
+mysdk.jar文件拷贝到Assets/Plugins/Android/bin目录下<br>
+<img src="https://Wei715547.github.io/post-images/1621245851653.PNG" alt="" loading="lazy"><br>
+#制作测试UI界面<br>
+<img src="https://Wei715547.github.io/post-images/1621246006840.PNG" alt="" loading="lazy"><br>
+<strong>receiveObj</strong>的名称必须与SDKMainActivity类的AndroidCallUnity方法中的UnityPlayer.UnitySendMessage方法的第一个参数保持一致。<br>
+<img src="https://Wei715547.github.io/post-images/1621246926017.PNG" alt="" loading="lazy"><br>
+创建SDKTest脚本挂载到receiveObj上<br>
+<code><br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using UnityEngine;<br>
+using UnityEngine.UI;</p>
+<p>public class SDKTest : MonoBehaviour<br>
+{<br>
+private AndroidJavaClass jc;<br>
+private AndroidJavaObject jo;</p>
+<pre><code>private Button btn;
+private Text text;
+
+private void Awake()
+{
+    btn = transform.Find(&quot;Button&quot;).GetComponent&lt;Button&gt;();
+    text = transform.Find(&quot;Text&quot;).GetComponent&lt;Text&gt;();
+
+    //这两行是固定写法
+    jc = new AndroidJavaClass(&quot;com.unity3d.player.UnityPlayer&quot;);
+    jo = jc.GetStatic&lt;AndroidJavaObject&gt;(&quot;currentActivity&quot;);
+
+    btn.onClick.AddListener(OnBtnClickHandler);
+}
+
+private void OnBtnClickHandler()
+{
+    //调用Android中的方法UnityCallAndroid
+    jo.Call(&quot;UnityCallAndroid&quot;);
+}
+
+/// &lt;summary&gt;
+///  被Android中AndroidCallUnity调用
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;str&quot;&gt;&lt;/param&gt;
+public void UnityMethod(string str)
+{
+    Debug.Log(&quot;UnityMethod被调用，参数：&quot; + str);
+    text.text = str;
+}
+</code></pre>
+<p>}<br>
+</code><br>
+#打包并测试。<br>
+<img src="https://Wei715547.github.io/post-images/1621247554063.jpg" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1621248382498.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1621248227474.PNG" alt="" loading="lazy"></p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/cha-zhi-qu-xian-zi-dan/">
+                  <h3 class="post-title">
+                    插值曲线子弹
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
