@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>EgoFramework-Cfg | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1624852878106">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="&lt;!doctype html&gt;
+
+
+
+配置表系统html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1624852878106" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">EgoFramework-Cfg</h2>
+            <div class="post-date">2021-06-28</div>
+            
+            <div class="post-content" v-pre>
+              <p>&lt;!doctype html&gt;</p>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>配置表系统</title><link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 40px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
+.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none 0s ease 0s; }
+.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; margin-top: 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+svg[id^="mermaidChart"] { line-height: 1em; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+mark .md-meta { color: rgb(0, 0, 0); opacity: 0.3 !important; }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+<p>.CodeMirror { height: auto; }<br>
+.CodeMirror.cm-s-inner { background: inherit; }<br>
+.CodeMirror-scroll { overflow: auto hidden; z-index: 3; }<br>
+.CodeMirror-gutter-filler, .CodeMirror-scrollbar-filler { background-color: rgb(255, 255, 255); }<br>
+.CodeMirror-gutters { border-right: 1px solid rgb(221, 221, 221); background: inherit; white-space: nowrap; }<br>
+.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }<br>
+.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }<br>
+.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }<br>
+.cm-s-inner .cm-number { color: rgb(17, 102, 68); }<br>
+.cm-s-inner .cm-def { color: rgb(0, 0, 255); }<br>
+.cm-s-inner .cm-variable { color: rgb(0, 0, 0); }<br>
+.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }<br>
+.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }<br>
+.cm-s-inner .cm-string { color: rgb(170, 17, 17); }<br>
+.cm-s-inner .cm-property { color: rgb(0, 0, 0); }<br>
+.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }<br>
+.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }<br>
+.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }<br>
+.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }<br>
+.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }<br>
+.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }<br>
+.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }<br>
+.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }<br>
+.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }<br>
+.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: rgb(0, 0, 255); }<br>
+.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }<br>
+.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }<br>
+.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }<br>
+.cm-negative { color: rgb(221, 68, 68); }<br>
+.cm-positive { color: rgb(34, 153, 34); }<br>
+.cm-header, .cm-strong { font-weight: 700; }<br>
+.cm-del { text-decoration: line-through; }<br>
+.cm-em { font-style: italic; }<br>
+.cm-link { text-decoration: underline; }<br>
+.cm-error { color: red; }<br>
+.cm-invalidchar { color: red; }<br>
+.cm-constant { color: rgb(38, 139, 210); }<br>
+.cm-defined { color: rgb(181, 137, 0); }<br>
+div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }<br>
+div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }<br>
+.cm-s-inner .CodeMirror-activeline-background { background: inherit; }<br>
+.CodeMirror { position: relative; overflow: hidden; }<br>
+.CodeMirror-scroll { height: 100%; outline: 0px; position: relative; box-sizing: content-box; background: inherit; }<br>
+.CodeMirror-sizer { position: relative; }<br>
+.CodeMirror-gutter-filler, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-vscrollbar { position: absolute; z-index: 6; display: none; }<br>
+.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow: hidden; }<br>
+.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow: hidden; }<br>
+.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }<br>
+.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }<br>
+.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 30px; z-index: 3; }<br>
+.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }<br>
+.CodeMirror-gutter-wrapper { position: absolute; z-index: 4; background: 0px 0px !important; border: none !important; }<br>
+.CodeMirror-gutter-background { position: absolute; top: 0px; bottom: 0px; z-index: 4; }<br>
+.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }<br>
+.CodeMirror-lines { cursor: text; }<br>
+.CodeMirror pre { border-radius: 0px; border-width: 0px; background: 0px 0px; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; overflow-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; }<br>
+.CodeMirror-wrap pre { overflow-wrap: break-word; white-space: pre-wrap; word-break: normal; }<br>
+.CodeMirror-code pre { border-right: 30px solid transparent; width: fit-content; }<br>
+.CodeMirror-wrap .CodeMirror-code pre { border-right: none; width: auto; }<br>
+.CodeMirror-linebackground { position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 0; }<br>
+.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }<br>
+.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }<br>
+.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }<br>
+.CodeMirror-measure pre { position: static; }<br>
+.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right: none; width: 0px; }<br>
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }<br>
+.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }<br>
+.cm-searching { background: rgba(255, 255, 0, 0.4); }<br>
+@media print {<br>
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }<br>
+}</p>
+<p>:root {<br>
+--side-bar-bg-color: #fafafa;<br>
+--control-text-color: #777;<br>
+}</p>
+<p>@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&amp;subset=latin,latin-ext);</p>
+<p>/* open-sans-regular - latin-ext_latin <em>/<br>
+/</em> open-sans-italic - latin-ext_latin <em>/<br>
+/</em> open-sans-700 - latin-ext_latin <em>/<br>
+/</em> open-sans-700italic - latin-ext_latin */<br>
+html {<br>
+font-size: 16px;<br>
+}</p>
+<p>body {<br>
+font-family: &quot;Open Sans&quot;,&quot;Clear Sans&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;<br>
+color: rgb(51, 51, 51);<br>
+line-height: 1.6;<br>
+}</p>
+<p>#write {<br>
+max-width: 860px;<br>
+margin: 0 auto;<br>
+padding: 30px;<br>
+padding-bottom: 100px;<br>
+}</p>
+<p>@media only screen and (min-width: 1400px) {<br>
+#write {<br>
+max-width: 1024px;<br>
+}<br>
+}</p>
+<p>@media only screen and (min-width: 1800px) {<br>
+#write {<br>
+max-width: 1200px;<br>
+}<br>
+}</p>
+<p>#write &gt; ul:first-child,<br>
+#write &gt; ol:first-child{<br>
+margin-top: 30px;<br>
+}</p>
+<p>a {<br>
+color: #4183C4;<br>
+}<br>
+h1,<br>
+h2,<br>
+h3,<br>
+h4,<br>
+h5,<br>
+h6 {<br>
+position: relative;<br>
+margin-top: 1rem;<br>
+margin-bottom: 1rem;<br>
+font-weight: bold;<br>
+line-height: 1.4;<br>
+cursor: text;<br>
+}<br>
+h1:hover a.anchor,<br>
+h2:hover a.anchor,<br>
+h3:hover a.anchor,<br>
+h4:hover a.anchor,<br>
+h5:hover a.anchor,<br>
+h6:hover a.anchor {<br>
+text-decoration: none;<br>
+}<br>
+h1 tt,<br>
+h1 code {<br>
+font-size: inherit;<br>
+}<br>
+h2 tt,<br>
+h2 code {<br>
+font-size: inherit;<br>
+}<br>
+h3 tt,<br>
+h3 code {<br>
+font-size: inherit;<br>
+}<br>
+h4 tt,<br>
+h4 code {<br>
+font-size: inherit;<br>
+}<br>
+h5 tt,<br>
+h5 code {<br>
+font-size: inherit;<br>
+}<br>
+h6 tt,<br>
+h6 code {<br>
+font-size: inherit;<br>
+}<br>
+h1 {<br>
+font-size: 2.25em;<br>
+line-height: 1.2;<br>
+border-bottom: 1px solid #eee;<br>
+}<br>
+h2 {<br>
+font-size: 1.75em;<br>
+line-height: 1.225;<br>
+border-bottom: 1px solid #eee;<br>
+}</p>
+<p>/*@media print {<br>
+.typora-export h1,<br>
+.typora-export h2 {<br>
+border-bottom: none;<br>
+padding-bottom: initial;<br>
+}</p>
+<pre><code>.typora-export h1::after,
+.typora-export h2::after {
+    content: &quot;&quot;;
+    display: block;
+    height: 100px;
+    margin-top: -96px;
+    border-top: 1px solid #eee;
+}
+</code></pre>
+<p>}*/</p>
+<p>h3 {<br>
+font-size: 1.5em;<br>
+line-height: 1.43;<br>
+}<br>
+h4 {<br>
+font-size: 1.25em;<br>
+}<br>
+h5 {<br>
+font-size: 1em;<br>
+}<br>
+h6 {<br>
+font-size: 1em;<br>
+color: #777;<br>
+}<br>
+p,<br>
+blockquote,<br>
+ul,<br>
+ol,<br>
+dl,<br>
+table{<br>
+margin: 0.8em 0;<br>
+}<br>
+li&gt;ol,<br>
+li&gt;ul {<br>
+margin: 0 0;<br>
+}<br>
+hr {<br>
+height: 2px;<br>
+padding: 0;<br>
+margin: 16px 0;<br>
+background-color: #e7e7e7;<br>
+border: 0 none;<br>
+overflow: hidden;<br>
+box-sizing: content-box;<br>
+}</p>
+<p>li p.first {<br>
+display: inline-block;<br>
+}<br>
+ul,<br>
+ol {<br>
+padding-left: 30px;<br>
+}<br>
+ul:first-child,<br>
+ol:first-child {<br>
+margin-top: 0;<br>
+}<br>
+ul:last-child,<br>
+ol:last-child {<br>
+margin-bottom: 0;<br>
+}<br>
+blockquote {<br>
+border-left: 4px solid #dfe2e5;<br>
+padding: 0 15px;<br>
+color: #777777;<br>
+}<br>
+blockquote blockquote {<br>
+padding-right: 0;<br>
+}<br>
+table {<br>
+padding: 0;<br>
+word-break: initial;<br>
+}<br>
+table tr {<br>
+border-top: 1px solid #dfe2e5;<br>
+margin: 0;<br>
+padding: 0;<br>
+}<br>
+table tr:nth-child(2n),<br>
+thead {<br>
+background-color: #f8f8f8;<br>
+}<br>
+table tr th {<br>
+font-weight: bold;<br>
+border: 1px solid #dfe2e5;<br>
+border-bottom: 0;<br>
+margin: 0;<br>
+padding: 6px 13px;<br>
+}<br>
+table tr td {<br>
+border: 1px solid #dfe2e5;<br>
+margin: 0;<br>
+padding: 6px 13px;<br>
+}<br>
+table tr th:first-child,<br>
+table tr td:first-child {<br>
+margin-top: 0;<br>
+}<br>
+table tr th:last-child,<br>
+table tr td:last-child {<br>
+margin-bottom: 0;<br>
+}</p>
+<p>.CodeMirror-lines {<br>
+padding-left: 4px;<br>
+}</p>
+<p>.code-tooltip {<br>
+box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);<br>
+border-top: 1px solid #eef2f2;<br>
+}</p>
+<p>.md-fences,<br>
+code,<br>
+tt {<br>
+border: 1px solid #e7eaed;<br>
+background-color: #f8f8f8;<br>
+border-radius: 3px;<br>
+padding: 0;<br>
+padding: 2px 4px 0px 4px;<br>
+font-size: 0.9em;<br>
+}</p>
+<p>code {<br>
+background-color: #f3f4f4;<br>
+padding: 0 2px 0 2px;<br>
+}</p>
+<p>.md-fences {<br>
+margin-bottom: 15px;<br>
+margin-top: 15px;<br>
+padding-top: 8px;<br>
+padding-bottom: 6px;<br>
+}</p>
+<p>.md-task-list-item &gt; input {<br>
+margin-left: -1.3em;<br>
+}</p>
+<p>@media print {<br>
+html {<br>
+font-size: 13px;<br>
+}<br>
+table,<br>
+pre {<br>
+page-break-inside: avoid;<br>
+}<br>
+pre {<br>
+word-wrap: break-word;<br>
+}<br>
+}</p>
+<p>.md-fences {<br>
+background-color: #f8f8f8;<br>
+}<br>
+#write pre.md-meta-block {<br>
+padding: 1rem;<br>
+font-size: 85%;<br>
+line-height: 1.45;<br>
+background-color: #f7f7f7;<br>
+border: 0;<br>
+border-radius: 3px;<br>
+color: #777777;<br>
+margin-top: 0 !important;<br>
+}</p>
+<p>.mathjax-block&gt;.code-tooltip {<br>
+bottom: .375rem;<br>
+}</p>
+<p>.md-mathjax-midline {<br>
+background: #fafafa;<br>
+}</p>
+<p>#write&gt;h3.md-focus:before{<br>
+left: -1.5625rem;<br>
+top: .375rem;<br>
+}<br>
+#write&gt;h4.md-focus:before{<br>
+left: -1.5625rem;<br>
+top: .285714286rem;<br>
+}<br>
+#write&gt;h5.md-focus:before{<br>
+left: -1.5625rem;<br>
+top: .285714286rem;<br>
+}<br>
+#write&gt;h6.md-focus:before{<br>
+left: -1.5625rem;<br>
+top: .285714286rem;<br>
+}<br>
+.md-image&gt;.md-meta {<br>
+/<em>border: 1px solid #ddd;</em>/<br>
+border-radius: 3px;<br>
+padding: 2px 0px 0px 4px;<br>
+font-size: 0.9em;<br>
+color: inherit;<br>
+}</p>
+<p>.md-tag {<br>
+color: #a7a7a7;<br>
+opacity: 1;<br>
+}</p>
+<p>.md-toc {<br>
+margin-top:20px;<br>
+padding-bottom:20px;<br>
+}</p>
+<p>.sidebar-tabs {<br>
+border-bottom: none;<br>
+}</p>
+<p>#typora-quick-open {<br>
+border: 1px solid #ddd;<br>
+background-color: #f8f8f8;<br>
+}</p>
+<p>#typora-quick-open-item {<br>
+background-color: #FAFAFA;<br>
+border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;<br>
+border-style: solid;<br>
+border-width: 1px;<br>
+}</p>
+<p>/** focus mode */<br>
+.on-focus-mode blockquote {<br>
+border-left-color: rgba(85, 85, 85, 0.12);<br>
+}</p>
+<p>header, .context-menu, .megamenu-content, footer{<br>
+font-family: &quot;Segoe UI&quot;, &quot;Arial&quot;, sans-serif;<br>
+}</p>
+<p>.file-node-content:hover .file-node-icon,<br>
+.file-node-content:hover .file-node-open-state{<br>
+visibility: visible;<br>
+}</p>
+<p>.mac-seamless-mode #typora-sidebar {<br>
+background-color: #fafafa;<br>
+background-color: var(--side-bar-bg-color);<br>
+}</p>
+<p>.md-lang {<br>
+color: #b4654d;<br>
+}</p>
+<p>.html-for-mac .context-menu {<br>
+--item-hover-bg-color: #E6F0FE;<br>
+}</p>
+<p>#md-notification .btn {<br>
+border: 0;<br>
+}</p>
+<p>.dropdown-menu .divider {<br>
+border-color: #e5e5e5;<br>
+}</p>
+<p>.ty-preferences .window-content {<br>
+background-color: #fafafa;<br>
+}</p>
+<p>.ty-preferences .nav-group-item.active {<br>
+color: white;<br>
+background: #999;<br>
+}</p>
+</style>
+</head>
+<body class='typora-export os-windows'>
+<div id='write'  class=''><h2><a name="配置表系统" class="md-header-anchor"></a><span>配置表系统</span></h2><ul><li><h3><a name="配置表介绍" class="md-header-anchor"></a><span>配置表介绍</span></h3><p><span>每个游戏中都或多或少都有一些游戏配置，而团队又是由各个不同职位的成员组合，有程序、策划、美术等等，不同的职位需要同时对游戏逻辑进行干涉，这就造成了耦合关系，如果没处理好耦合关系的话，就会使效率变慢，配置表的意义就是程序实现好了逻辑之后，策划可以根据策划的需求去调整配置表。</span></p><p><span>该配置表系统采用csv的格式配置文件。csv，又称为逗号分隔值文件格式，是按照固定分隔字符（一般是逗号）分隔的纯文本文件，因为是纯文本文件，所以在不同平台不会有兼容性问题，支持Excel编辑并输出csv格式，比xml或json少了很多重复键值的定义，文件占用小，编辑和查看更加方便，是一种广泛商业使用的格式。</span></p><p><span>csv的文件格式如下：item.csv（注意：id不能重复）</span></p><figure><table><thead><tr><th><span>id</span></th><th><span>itemName</span></th><th><span>price</span></th><th><span>effect</span></th></tr></thead><tbody><tr><td><span>#自增id</span></td><td><span>物品名称</span></td><td><span>价格</span></td><td><span>使用效果(hug：饥饿值#加多少;gold:金币#加多少)</span></td></tr><tr><td><span>1001</span></td><td><span>鱼蛋</span></td><td><span>10</span></td><td><span>hug#10;gold#-10;</span></td></tr><tr><td><span>1002</span></td><td><span>麻球</span></td><td><span>20</span></td><td><span>hug#20;gold#-20;</span></td></tr></tbody></table></figure><hr /></li><li><h3><a name="快速开始" class="md-header-anchor"></a><span>快速开始</span></h3><ul><li><p><strong><span>使用方法1（该方法只是初级用法，正式开发请使用方法2）</span></strong></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">TextAsset</span> <span class="cm-variable">csvText</span> <span class="cm-operator">=</span> <span class="cm-variable">Resources</span>.<span class="cm-variable">Load</span> (<span class="cm-string">"item"</span>, <span class="cm-keyword">typeof</span>(<span class="cm-variable">TextAsset</span>)) <span class="cm-keyword">as</span> <span class="cm-variable">TextAsset</span>;</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">//使用TextAsset初始化</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">CSV</span> <span class="cm-variable">csv</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">CSV</span>(<span class="cm-variable">csvText</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">//获取1001那行的itemName</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">csv</span>.<span class="cm-variable">GetValueByLineAndRow</span>(<span class="cm-string">"1001"</span>, <span class="cm-string">"itemName"</span>);</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 115px;"></div><div class="CodeMirror-gutters" style="display: none; height: 115px;"></div></div></div></pre><p><span>或</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">//读取外部txt配置</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">LoadTextAction</span> <span class="cm-variable">textAction</span><span class="cm-operator">=</span><span class="cm-keyword">new</span> <span class="cm-variable">LoadTextAction</span>(<span class="cm-variable">Application</span>.<span class="cm-variable">streamingAssetsPath</span><span class="cm-operator">+</span><span class="cm-string">"/"</span><span class="cm-operator">+</span><span class="cm-string">"item.csv"</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">textAction</span>.<span class="cm-variable">Start</span>(<span class="cm-keyword">delegate</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable-3">string</span> <span class="cm-variable">text</span> <span class="cm-operator">=</span> <span class="cm-variable">textAction</span>.<span class="cm-variable">TextValue</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-comment">//使用TextAsset初始化</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">CSV</span> <span class="cm-variable">csv</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">CSV</span>(<span class="cm-string">"item"</span>, <span class="cm-variable">text</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-comment">//获取1001那行的itemName</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">csv</span>.<span class="cm-variable">GetValueByLineAndRow</span>(<span class="cm-string">"1001"</span>, <span class="cm-string">"itemName"</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">});</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 230px;"></div><div class="CodeMirror-gutters" style="display: none; height: 230px;"></div></div></div></pre></li><li><p><strong><span>使用方法2（正式开发请使用该方式）</span></strong></p><ol start='' ><li><p><strong><span>将配置表与类关联（对于上面csv，转成的类如下，下面会详细介绍如何快速将配置表转换类）</span></strong></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">using</span> <span class="cm-variable">System</span>.<span class="cm-variable">Collections</span>.<span class="cm-variable">Generic</span>;</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">class</span> <span class="cm-def">ItemCfg</span>:<span class="cm-variable">CSVConfig</span><span class="cm-operator">&lt;</span><span class="cm-variable">ItemVO</span>,<span class="cm-variable">ItemCfg</span><span class="cm-operator">&gt;</span>,<span class="cm-variable">IConfigView</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">public</span> <span class="cm-variable">ItemCfg</span>():<span class="cm-keyword">base</span>(<span class="cm-string">"Config/item"</span>){}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">protected</span> <span class="cm-keyword">override</span> <span class="cm-variable">ItemVO</span> <span class="cm-variable">OnDecodeCSVHandle</span>(<span class="cm-variable">CSVLine</span> <span class="cm-variable">data</span>, <span class="cm-keyword">out</span> <span class="cm-variable-3">string</span> <span class="cm-variable">key</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">ItemVO</span> <span class="cm-variable">vo</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">ItemVO</span>();</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">vo</span>.<span class="cm-variable">id</span> <span class="cm-operator">=</span> <span class="cm-variable">data</span>.<span class="cm-variable">GetString</span>(<span class="cm-string">"id"</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-variable">vo</span>.<span class="cm-variable">itemName</span> <span class="cm-operator">=</span> <span class="cm-variable">data</span>.<span class="cm-variable">GetString</span>(<span class="cm-string">"itemName"</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-variable">vo</span>.<span class="cm-variable">price</span> <span class="cm-operator">=</span> <span class="cm-variable">data</span>.<span class="cm-variable">GetInt</span>(<span class="cm-string">"price"</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-variable">vo</span>.<span class="cm-variable">effect</span> <span class="cm-operator">=</span> <span class="cm-variable">ConfigUtil</span>.<span class="cm-variable">ParserToKeyDatas</span><span class="cm-operator">&lt;</span><span class="cm-variable">ItemEffectData</span><span class="cm-operator">&gt;</span>(<span class="cm-variable">data</span>.<span class="cm-variable">GetString</span>(<span class="cm-string">"effect"</span>));</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">key</span> <span class="cm-operator">=</span> <span class="cm-variable">vo</span>.<span class="cm-variable">id</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">return</span> <span class="cm-variable">vo</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">protected</span> <span class="cm-keyword">override</span> <span class="cm-keyword">void</span> <span class="cm-variable">OnProviderEditorItemHandle</span>(<span class="cm-variable">ConfigEditorItem</span> <span class="cm-variable">editorItem</span>, <span class="cm-variable">ItemVO</span> <span class="cm-variable">vo</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">editorItem</span>.<span class="cm-variable">displayName</span> <span class="cm-operator">=</span> <span class="cm-variable-3">string</span>.<span class="cm-variable">Format</span>(<span class="cm-string">"{0}({1})"</span>, <span class="cm-variable">vo</span>.<span class="cm-variable">id</span>, <span class="cm-variable">vo</span>.<span class="cm-variable">itemName</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">class</span> <span class="cm-def">ItemVO</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">public</span> <span class="cm-variable-3">string</span> <span class="cm-variable">id</span>;<span class="cm-comment">//自增id</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">public</span> <span class="cm-variable-3">string</span> <span class="cm-variable">itemName</span>;<span class="cm-comment">//物品名称</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">public</span> <span class="cm-variable-3">int</span> <span class="cm-variable">price</span>;<span class="cm-comment">//价格</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">public</span> <span class="cm-variable">List</span><span class="cm-operator">&lt;</span><span class="cm-variable">ItemEffectData</span><span class="cm-operator">&gt;</span> <span class="cm-variable">effect</span>;<span class="cm-comment">//使用效果</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">class</span> <span class="cm-def">ItemEffectData</span> : <span class="cm-variable">BaseKeyData</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">public</span> <span class="cm-variable-3">string</span> <span class="cm-variable">effectType</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">public</span> <span class="cm-variable-3">int</span> <span class="cm-variable">effectValue</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" class="cm-tab-wrap-hack" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">protected</span> <span class="cm-keyword">override</span> <span class="cm-keyword">void</span> <span class="cm-variable">OnRead</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span>{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-variable">effectType</span> <span class="cm-operator">=</span> <span class="cm-variable">GetString</span>(<span class="cm-number">0</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-variable">effectValue</span> <span class="cm-operator">=</span> <span class="cm-variable">GetInt</span>(<span class="cm-number">1</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span>}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">protected</span> <span class="cm-keyword">override</span> <span class="cm-keyword">void</span> <span class="cm-variable">OnWrite</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span>{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-variable">WriteData</span>(<span class="cm-variable">effectType</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-variable">WriteData</span>(<span class="cm-variable">effectValue</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span>}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 1104px;"></div><div class="CodeMirror-gutters" style="display: none; height: 1104px;"></div></div></div></pre></li><li><h5><a name="直接通过代码即可快速获取数据该类的基类已经处理了加载流程）" class="md-header-anchor"></a><span>直接通过代码即可快速获取数据（该类的基类已经处理了加载流程）</span></h5><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation"><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">ItemVO</span> <span class="cm-variable">itemVo</span> <span class="cm-operator">=</span> <span class="cm-variable">ItemCfg</span>.<span class="cm-variable">Instance</span>.<span class="cm-variable">GetData</span>(<span class="cm-string">"1001"</span>);</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">Debug</span>.<span class="cm-variable">Log</span>(<span class="cm-variable">itemVo</span>.<span class="cm-variable">id</span><span class="cm-operator">+</span><span class="cm-string">"=="</span><span class="cm-operator">+</span><span class="cm-variable">itemVo</span>.<span class="cm-variable">itemName</span><span class="cm-operator">+</span><span class="cm-string">"=="</span><span class="cm-operator">+</span><span class="cm-variable">itemVo</span>.<span class="cm-variable">price</span>);</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 46px;"></div><div class="CodeMirror-gutters" style="display: none; height: 46px;"></div></div></div></pre></li></ol><hr /></li></ul></li><li><h3><a name="配置表工具" class="md-header-anchor"></a><span>配置表工具</span></h3><ul><li><p><strong><span>Config Setting</span></strong><span>-工具设置（打开方式：Egogame-Config/Config Setting Window）</span></p><p><img src="配置表系统.assets/image-20201026140818180.png" alt="image-20201026140818180"  /><span> </span></p><p><strong><span>说明</span></strong></p><p><span>该工具是配置配置表的路径，列出当前自动识别到的文件，以及提供一些同步按钮，支持快速更新/同步配置表文件</span></p><p><strong><span>工具介绍</span></strong></p><ul><li><p><strong><span>原始配置表路径(xlsx)：</span></strong><span>配置原始配置表(xlsx格式)的路径，一般是在art目录下</span></p><blockquote><p><span>如：D:\felix\cottongame\art\BoyVolunteers\doc\配置表</span></p></blockquote></li><li><p><strong><span>美术svn的CSV路径：</span></strong><span>配置导出的csv配置表的路径，原始配置表会导出csv放到该路径，然后同步到Unity</span></p><blockquote><p><span>如：D:\felix\cottongame\art\BoyVolunteers\export\Resources\Config</span></p></blockquote></li><li><p><strong><span>Unity项目的csv路径：</span></strong><span>csv在Unity的存放路径，默认是在Assets/Game/Resources/Config，配置为该路径即可</span></p></li><li><p><strong><span>csv导出软件路径：</span></strong><span>配置xlsx导出csv格式文件的软件安装路径(.exe路径下)，推荐使用LibreOffice，Excel也可以但是Excel是使用VB导出的，有点慢</span></p><blockquote><p><span>LibreOffice默认安装路径：C:\Program Files\LibreOffice\program</span></p><p><span>Excel默认安装路径：C:\Program Files\Microsoft Office\root\Office16</span></p></blockquote></li><li><p><strong><span>CSV配置表：</span></strong><span>自动找到“Unity项目的csv路径“下的csv文件，列出来，可以点击编辑/生成类/外部打开。一般主要用到生成类，该操作是自动生成对应的继承CSVConfig的类，如ItemCfg，生成的路径在Assets/Game/Scripts/Config</span></p><blockquote><p><span>生成类也可以使用另外一种方式：在Unity编辑器选择csv，右键Config/Create也可创建类</span></p></blockquote></li><li><p><strong><span>配置表类：</span></strong><span>列出当前已经生成了类的项，可以点击编辑进行数据编辑，通过该工具可以将数据修改并写入Excel原始表中。</span></p></li><li><p><strong><span>同步Art配置表到Unity：</span></strong><span>更新美术svn的CSV路径，并自动拷贝到Unity项目</span></p></li><li><p><strong><span>提交Unity的配置表：</span></strong><span>提交Unity的csv配置表到svn。</span></p></li><li><p><strong><span>提交Art的配置表：</span></strong><span>弹出svn窗口，将美术资源svn的csv文件提交到svn</span></p></li><li><p><strong><span>打开配置工具：</span></strong><span>打开配置工具，进行原始数据的修改。</span></p><hr /></li></ul><p><strong><span>使用方法</span></strong></p><p><span>以上述Item表为例：</span></p><ol><li><p><span>准备一个Item表源文件，item.xlsx，并配置好header头和数据，如上面的配置表</span></p></li><li><p><span>在ConfigSettingWindow配置对应路径</span></p></li><li><p><span>配置了“原始配置表路径”后，会多出一个Tab标签，列出当前路径下的所有xlsx源文件</span></p><p><img src="配置表系统.assets/image-20201102105824540.png" referrerpolicy="no-referrer" alt="image-20201102105824540"><span> </span></p></li><li><p><span>在原始配置表中找到对应xlsx源文件项，点击“导出csv”按钮，自动将配置表导出csv格式到“美术svn的CSV路径”下。</span></p></li><li><p><span>点击“同步Art配置表到Unity”按钮，将导出的csv同步到unity</span></p></li><li><p><span>在“CSV配置表”标签下找到对应的csv文件项，点击生成类，会自动生成对应的类。如：ItemCfg</span></p><blockquote><p><span>生成的路径在：Assets/Game/Scripts/Config</span></p></blockquote></li><li><p><span>修改该类的解析方式和变量类型</span></p></li></ol><hr /></li><li><p><strong><span>Config Editor Window</span></strong><span>-原始Excel数据修改（打开方式：Egogame/Config/Config Editor Window）</span></p><p><img src="配置表系统.assets/image-20201026144915134.png" referrerpolicy="no-referrer" alt="image-20201026144915134"><span> </span></p><p><strong><span>描述</span></strong></p><p><span>使用Excel编辑数据的缺点是，对于一些数据不能可视化显示，如道具id为1001，没法编辑时显示为“鱼蛋”，但是保存时保存为1001，还有一些下拉列表等特殊需求，没法可视化显示出来。该工具就是重绘制这些属性，并且支持直接在这个工具修改并保存Excel。上面图片的下拉菜单就是个例子。</span></p><p><strong><span>使用方法</span></strong></p><p><span>以上述Item表为例：</span></p><ol start='' ><li><p><span>找到上面创建出来的ItemCfg类</span></p></li><li><p><span>自动生成的类应该已经重写displayName，该displayName就是窗口左边&quot;3001(原木)&quot;那个区域显示数据，按照需求修改displayName赋值</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">class</span> <span class="cm-def">ItemCfg</span>:<span class="cm-variable">CSVConfig</span><span class="cm-operator">&lt;</span><span class="cm-variable">ItemVO</span>,<span class="cm-variable">ItemCfg</span><span class="cm-operator">&gt;</span>,<span class="cm-variable">IConfigView</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">protected</span> <span class="cm-keyword">override</span> <span class="cm-keyword">void</span> <span class="cm-variable">OnProviderEditorItemHandle</span>(<span class="cm-variable">ConfigEditorItem</span> <span class="cm-variable">editorItem</span>, <span class="cm-variable">ItemVO</span> <span class="cm-variable">vo</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span>{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-variable">editorItem</span>.<span class="cm-variable">displayName</span> <span class="cm-operator">=</span> <span class="cm-variable-3">string</span>.<span class="cm-variable">Format</span>(<span class="cm-string">"{0}({1})"</span>, <span class="cm-variable">vo</span>.<span class="cm-variable">id</span>, <span class="cm-variable">vo</span>.<span class="cm-variable">itemName</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span>}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 161px;"></div><div class="CodeMirror-gutters" style="display: none; height: 161px;"></div></div></div></pre></li><li><p><span>给VO类添加标签</span></p><blockquote><p><span>LabelText：将变量名重新绘制</span></p><p><span>Range：Unity自带标签，使数据在区间调节</span></p></blockquote><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">class</span> <span class="cm-def">ItemVO</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">public</span> <span class="cm-variable-3">string</span> <span class="cm-variable">id</span>;<span class="cm-comment">//自增id</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span>[<span class="cm-variable">LabelText</span>(<span class="cm-string">"物品名称："</span>)]</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">public</span> <span class="cm-variable-3">string</span> <span class="cm-variable">itemName</span>;<span class="cm-comment">//物品名称</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span>[<span class="cm-variable">Range</span>(<span class="cm-number">1</span>,<span class="cm-number">1000</span>)]</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">public</span> <span class="cm-variable-3">int</span> <span class="cm-variable">price</span>;<span class="cm-comment">//价格</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-keyword">public</span> <span class="cm-variable">List</span><span class="cm-operator">&lt;</span><span class="cm-variable">ItemEffectData</span><span class="cm-operator">&gt;</span> <span class="cm-variable">effect</span>;<span class="cm-comment">//使用效果</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 207px;"></div><div class="CodeMirror-gutters" style="display: none; height: 207px;"></div></div></div></pre></li><li><p><span>对特殊变量，如变量名和csv的头名称不一致时，需要指定解析规则</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">protected</span> <span class="cm-keyword">override</span> <span class="cm-keyword">void</span> <span class="cm-variable">OnProviderTableDataHandle</span>(<span class="cm-variable">Dictionary</span><span class="cm-operator">&lt;</span><span class="cm-variable-3">string</span>, <span class="cm-variable-3">string</span><span class="cm-operator">&gt;</span> <span class="cm-variable">tableData</span>, <span class="cm-variable">AttributeVO</span> <span class="cm-variable">vo</span>)</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">base</span>.<span class="cm-variable">OnProviderTableDataHandle</span>(<span class="cm-variable">tableData</span>, <span class="cm-variable">vo</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-comment">//强制覆盖数据</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-variable">tableData</span>.<span class="cm-variable">SetValue</span>(<span class="cm-string">"FixBelowZero"</span>, <span class="cm-variable">vo</span>.<span class="cm-variable">FixBelowZero</span> <span class="cm-operator">?</span> <span class="cm-string">"2"</span> : <span class="cm-string">"1"</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 161px;"></div><div class="CodeMirror-gutters" style="display: none; height: 161px;"></div></div></div></pre></li><li><p><span>如果成员变量是BaseKeyData或者BaseKeyData数组，需要实现BaseKeyData的OnWrite方法。</span></p></li></ol><hr /><p>&nbsp;</p></li></ul></li><li><h3><a name="相关类介绍" class="md-header-anchor"></a><span>相关类介绍</span></h3><ul><li><p><strong><span>CSV类</span></strong></p><p><strong><span>描述</span></strong></p><p><span>解析csv文本文件的工具类，封装了一些常用的API如获取某个格子的数据等等。该工具类只需要了解解析原理即可，一般不需要用到。他的作用是按照csv格式解析数据并缓存。</span></p><p><strong><span>方法</span></strong></p><figure><table><thead><tr><th><span>方法名</span></th><th><span>返回类型</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>ParseCSV</span></td><td><span>List&lt;string[]&gt;</span></td><td><span>解析文本文件，返回解析后的数据</span></td></tr><tr><td><span>ToCSVString</span></td><td><span>string</span></td><td><span>将数据转为csv数据（如果有双引号，则自动增加&quot;&quot;）</span></td></tr><tr><td><span>GetValueByLineAndRow</span></td><td><span>string</span></td><td><span>通过行和列获取数据</span></td></tr><tr><td><span>GetLineText</span></td><td><span>Dictionary&lt;string,string&gt;</span></td><td><span>获取行数据</span></td></tr><tr><td><span>GetDataByLine</span></td><td><span>Dictionary&lt;string,string&gt;</span></td><td><span>获取某行的数据项字典</span></td></tr><tr><td><span>GetDataByNameAndValue</span></td><td><span>Dictionary&lt;string,string&gt;</span></td><td><span>获取匹配key和value的格子数据</span></td></tr><tr><td><span>LineDatas</span></td><td><span>List&lt;Dictionary&lt;string,string&gt;&gt;</span></td><td><span>行数据</span></td></tr><tr><td><span>HeaderTypeData</span></td><td><span>Dictionary&lt;string, string&gt;</span></td><td><span>获取头类型</span></td></tr><tr><td><span>Datas</span></td><td><span>Dictionary&lt;string, Dictionary&lt;string, string&gt;&gt;</span></td><td><span>总数据</span></td></tr><tr><td><span>Count</span></td><td><span>int</span></td><td><span>总行</span></td></tr><tr><td><span>Headers</span></td><td><span>string[]</span></td><td><span>文件头</span></td></tr><tr><td><span>Comments</span></td><td><span>string[]</span></td><td><span>备注</span></td></tr><tr><td><span>HeaderTypes</span></td><td><span>string[]</span></td><td><span>头类型</span></td></tr><tr><td><span>Content</span></td><td><span>string</span></td><td><span>源文本数据</span></td></tr><tr><td><span>AssetName</span></td><td><span>string</span></td><td><span>文件名</span></td></tr></tbody></table></figure><hr /></li><li><p><strong><span>BaseConfig类</span></strong></p><p><strong><span>描述</span></strong></p><p><span>配置文件基类，主要功能是根据文件路径，自动加载文件并提供重写方法，供子类进行重写解析为对应格式的数据。文本文件修改时，自动更新类缓存的数据。</span></p><p><strong><span>方法</span></strong></p><figure><table><thead><tr><th><span>方法名</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>LoadFile</span></td><td><span>加载文件（一般情况下不需要调用，实例化构造体时会自行调用）</span></td></tr><tr><td><span>LoadCSV</span></td><td><span>改变CSV（直接设置CSV数据）</span></td></tr><tr><td><span>IsSameFile</span></td><td><span>判断是否是同名文件</span></td></tr><tr><td><span>Reload</span></td><td><span>重新读取该文件并通知数据变更</span></td></tr><tr><td><span>FileName</span></td><td><span>当前文件名</span></td></tr></tbody></table></figure><p><strong><span>可重写</span></strong></p><figure><table><thead><tr><th><span>方法名</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>OnParserBeginHandle</span></td><td><span>解析开始</span></td></tr><tr><td><span>OnParserHandle</span></td><td><span>正式解析</span></td></tr><tr><td><span>OnParserResetHandle</span></td><td><span>数据重置，一般用来清空自定义的缓存数据变量</span></td></tr><tr><td><span>OnParserEndHandle</span></td><td><span>解析结束</span></td></tr></tbody></table></figure><hr /></li><li><p><strong><span>CSVConfig&lt;T,T2&gt;类</span></strong></p><p><strong><span>描述</span></strong></p><p><span>该类是针对csv的解析类，自动将文本文件解析为特定类格式的数据，提供给其他类继承。T一般是VO类，而T2就是继承的类的本身。</span></p><p><strong><span>继承关系</span></strong></p><p><span>继承：BaseConfig</span></p><p><span>实现接口：IConfig</span></p><p><strong><span>属性</span></strong></p><figure><table><thead><tr><th><span>属性名</span></th><th><span>返回类型</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>ConfigList</span></td><td><span>List</span><T></td><td><span>所有配置项列表（如上面的示例，一行数据就会解析为一个T类）</span></td></tr><tr><td><span>Instance</span></td><td><span>T2</span></td><td><span>获取单例</span></td></tr><tr><td><span>ConfigItems</span></td><td><span>IList</span></td><td><span>同ConfigList，只是这个是返回IList</span></td></tr><tr><td><span>IdName</span></td><td><span>string</span></td><td><span>该表以哪个字段作为Key，一般是第一列的头名称</span></td></tr><tr><td><span>EditorItems</span></td><td><span>List</span><ConfigEditorItem></td><td><span>为了支持编辑器工具的数据（大概了解即可）</span></td></tr></tbody></table></figure><p><strong><span>方法</span></strong></p><figure><table><thead><tr><th><span>方法名</span></th><th><span>返回类型</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>GetData</span></td><td><span>T</span></td><td><span>通过键值获取T类，如上面示例，通过1001可以获取包装后的T类</span></td></tr><tr><td><span>HasData</span></td><td><span>bool</span></td><td><span>通过键值判断是否有该数据项</span></td></tr><tr><td><span>GetConfigList</span></td><td><span>List</span><T></td><td><span>获取配置列表。同属性ConfigList</span></td></tr><tr><td><span>GetTableData</span></td><td><span>Dictionary&lt;string, string&gt;</span></td><td><span>将一个vo转换为字典形式，可以转换填在配置表中。默认支持List、string、int、float。（编辑器使用，了解即可）</span></td></tr><tr><td><span>Clone</span></td><td><span>ConfigEditorItem</span></td><td><span>克隆EditorItem（编辑器使用，了解即可）</span></td></tr></tbody></table></figure><p><strong><span>可重写</span></strong></p><figure><table><thead><tr><th><span>方法名</span></th><th><span>返回类型</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>OnDecodeCSVHandle</span></td><td><span>T</span></td><td><span>提供将文本数据解析为类的实现接口</span></td></tr><tr><td><span>OnProviderEditorItemHandle</span></td><td><span>void</span></td><td><span>（编辑器工具使用）提供重写EditorItem数据（需实现，主要重写displayName）</span></td></tr><tr><td><span>OnProviderTableDataHandle</span></td><td><span>void</span></td><td><span>（编辑器工具使用）提供将数据反写入原始Excel表格的重定向，主要解决如果数据没有自动映射时，需要提供重定向。</span></td></tr></tbody></table></figure><hr /></li><li><p><strong><span>BaseKeyData类</span></strong></p><p><strong><span>描述</span></strong></p><p><span>该类的作用是作为VO类的成员，CSVConfig将类解析为VO类，但是如果某个单元格的数据是列表或者更复杂的数据呢？该类就是用来解析单元格复杂数据的，按照一定的格式。目前支持的格式为：#号分隔，$号分隔，;号分隔。请配合ConfigUtil类使用，后续会介绍到。</span></p><p><span>如上面的示例表，数据项hug#10;gold#-10;将解析为List</span><ItemEffectData><span>，分号代表数组分隔，#号代表数据分隔，$代表数据项的子数据分隔。</span></p><p><strong><span>使用方法</span></strong></p><ol start='' ><li><p><span>继承BaseKeyData</span></p></li><li><p><span>实现OnRead，获取数据，并将数据赋值到变量</span></p></li><li><p><span>实现OnWrite，按照数据顺序，将数据写入Excel（主要是编辑器工具使用）</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">/// &lt;summary&gt;</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">/// Key value数据类</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">/// &lt;/summary&gt;</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">class</span> <span class="cm-def">KeyValueData</span>:<span class="cm-variable">BaseKeyData</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">public</span> <span class="cm-variable-3">string</span> <span class="cm-variable">key</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">public</span> <span class="cm-variable-3">string</span> <span class="cm-keyword">value</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">protected</span> <span class="cm-keyword">override</span> <span class="cm-keyword">void</span> <span class="cm-variable">OnRead</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">key</span> <span class="cm-operator">=</span> <span class="cm-variable">GetString</span>(<span class="cm-number">0</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">value</span> <span class="cm-operator">=</span> <span class="cm-variable">GetString</span>(<span class="cm-number">1</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">protected</span> <span class="cm-keyword">override</span> <span class="cm-keyword">void</span> <span class="cm-variable">OnWrite</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">WriteData</span>(<span class="cm-variable">key</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">WriteData</span>(<span class="cm-keyword">value</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 460px;"></div><div class="CodeMirror-gutters" style="display: none; height: 460px;"></div></div></div></pre></li></ol><p><strong><span>方法</span></strong></p><figure><table><thead><tr><th><span>方法名</span></th><th><span>返回类型</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>GetString(int index)</span></td><td><span>string</span></td><td><span>获取string</span></td></tr><tr><td><span>GetInt(int index)</span></td><td><span>int</span></td><td><span>获取Int</span></td></tr><tr><td><span>GetFloat(int index)</span></td><td><span>float</span></td><td><span>获取float</span></td></tr><tr><td><span>GetBool(int index)</span></td><td><span>bool</span></td><td><span>获取bool</span></td></tr><tr><td><span>GetIntEnum</span><T><span>(int index)</span></td><td><span>T</span></td><td><span>获取枚举（如数据是1，则使用1转为枚举）</span></td></tr><tr><td><span>GetStringEnum</span><T><span>(string value)</span></td><td><span>T</span></td><td><span>通过字符串获取枚举（如数据是hug，则使用hug转为枚举）</span></td></tr><tr><td><span>WriteData(string value)</span></td><td><span>void</span></td><td><span>写入String</span></td></tr><tr><td><span>WriteData(float value)</span></td><td><span>void</span></td><td><span>写入float</span></td></tr><tr><td><span>WriteData(int value)</span></td><td><span>void</span></td><td><span>写入int</span></td></tr><tr><td><span>WriteData(BaseKeyData value)</span></td><td><span>void</span></td><td><span>写入BaseKeyData</span></td></tr><tr><td><span>HasData(int index)</span></td><td><span>bool</span></td><td><span>判断索引是否有数据</span></td></tr><tr><td><span>ToTextValue(List</span><string><span> datas)</span></td><td><span>string</span></td><td><span>转成Text</span></td></tr><tr><td><span>ToTextValue(string[] datas)</span></td><td><span>string</span></td><td><span>转成Text</span></td></tr><tr><td><span>GetTableStringData()</span></td><td><span>string</span></td><td><span>获取表格数据(编辑器用)</span></td></tr></tbody></table></figure><p><strong><span>属性</span></strong></p><figure><table><thead><tr><th><span>属性名</span></th><th><span>返回类型</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>ParserType</span></td><td><span>ConfigUtil.ParserType</span></td><td><span>解析类型</span></td></tr><tr><td><span>Text</span></td><td><span>string</span></td><td><span>原始文本</span></td></tr><tr><td><span>Error</span></td><td><span>string</span></td><td><span>错误信息（可以提供显示错误信息）</span></td></tr></tbody></table></figure><p><strong><span>可重写</span></strong></p><figure><table><thead><tr><th><span>方法名</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>OnRead</span></td><td><span>获取数据，并将数据赋值到变量</span></td></tr><tr><td><span>OnWrite</span></td><td><span>按照数据顺序，将数据写入Excel（主要是编辑器工具使用）</span></td></tr><tr><td><span>IsError</span></td><td><span>判断该类是否有解析数据错误信息（方便统一显示）</span></td></tr></tbody></table></figure><hr /></li><li><p><strong><span>ConfigUtil类</span></strong></p><p><strong><span>描述</span></strong></p><p><span>该类是一个静态工具类，主要作用是提供一些方法，快速将数据转换为对应KeyData类等等。</span></p><p><strong><span>方法</span></strong></p><figure><table><thead><tr><th><span>方法名</span></th><th><span>返回类型</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>ToIntEnum</span><T><span>(string value)</span></td><td><span>T</span></td><td><span>将int数据转换为枚举</span></td></tr><tr><td><span>T ToStringEnum</span><T><span>(string value)</span></td><td><span>T</span></td><td><span>将string数据转换为枚举</span></td></tr><tr><td><span>ToInt(string value)</span></td><td><span>int</span></td><td><span>转Int</span></td></tr><tr><td><span>ToFloat(string value)</span></td><td><span>float</span></td><td><span>转Float</span></td></tr><tr><td><span>ToBool(string value)</span></td><td><span>bool</span></td><td><span>转bool</span></td></tr><tr><td><span>ParserToKeyDatas</span><T></td><td><span>List</span><T></td><td><span>将string转成数据数组，如1#2#3;1#2#4。</span></td></tr><tr><td><span>ParserToKeyData</span><T></td><td><span>T:BaseKeyData</span></td><td><span>将string转成数据类</span></td></tr><tr><td><span>Parser2Array(string text)</span></td><td><span>string[]</span></td><td><span>将string转成数组(;号分隔)</span></td></tr><tr><td><span>Parser2Vector3(string text)</span></td><td><span>Vector3</span></td><td><span>将string转成Vector3(#号分隔)</span></td></tr><tr><td><span>Parser2List(string text)</span></td><td><span>List</span><string></td><td><span>将string转成数组</span></td></tr><tr><td><span>Parser2IntList(string text)</span></td><td><span>List</span><int></td><td><span>将string转成数组</span></td></tr><tr><td><span>ParserValueList</span></td><td><span>string[]</span></td><td><span>将string转换为数组</span></td></tr><tr><td><span>ValueListToText</span></td><td><span>string</span></td><td><span>数组转String</span></td></tr><tr><td><span>ParserSubValueList</span></td><td><span>string[]</span></td><td><span>将string转数组（数据是$号分隔）</span></td></tr><tr><td><span>SubValueListToText(string[] valueList)</span></td><td><span>string</span></td><td><span>数组转String（数据是$号分隔）</span></td></tr><tr><td><span>KeyDataToText(BaseKeyData keyData)</span></td><td><span>string</span></td><td><span>KeyData转string</span></td></tr><tr><td><span>KeyDatasToText(IList list)</span></td><td><span>string</span></td><td><span>KeyData数组转string</span></td></tr><tr><td><span>GetConfigDropdownItems</span></td><td><span>IEnumerable</span></td><td><span>获取配置表的ValueDropdownList Id，主要是为ValueDropdown标签提供数据</span></td></tr></tbody></table></figure><hr /></li><li><p><strong><span>拓展标签</span></strong></p><ul><li><p><span>ConfigAttribute</span></p><p><strong><span>说明</span></strong></p><p><span>为string类型变量提供选择功能</span></p><p><strong><span>使用示例</span></strong></p><p><span>使用ItemCfg类的ItemIdList变量作为选择列表</span></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">class</span> <span class="cm-def">ItemUI</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; [<span class="cm-variable">Config</span>(<span class="cm-keyword">typeof</span>(<span class="cm-variable">ItemCfg</span>),<span class="cm-string">"ItemIdList"</span>)]</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; <span class="cm-keyword">public</span> <span class="cm-variable-3">string</span> <span class="cm-variable">itemId</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">class</span> <span class="cm-def">ItemCfg</span>:<span class="cm-variable">CSVConfig</span><span class="cm-operator">&lt;</span><span class="cm-variable">ItemVO</span>,<span class="cm-variable">ItemCfg</span><span class="cm-operator">&gt;</span>,<span class="cm-variable">IConfigView</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">public</span> <span class="cm-variable">ItemCfg</span>():<span class="cm-keyword">base</span>(<span class="cm-string">"Config/item"</span>){}</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">public</span> <span class="cm-variable">List</span><span class="cm-operator">&lt;</span><span class="cm-variable">PopUpDataCollection</span><span class="cm-operator">&gt;</span> <span class="cm-variable">ItemIdList</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span> &nbsp; &nbsp;<span class="cm-keyword">get</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span> &nbsp; &nbsp;<span class="cm-variable">List</span><span class="cm-operator">&lt;</span><span class="cm-variable">PopUpDataCollection</span><span class="cm-operator">&gt;</span> <span class="cm-variable">result</span><span class="cm-operator">=</span><span class="cm-keyword">new</span> <span class="cm-variable">List</span><span class="cm-operator">&lt;</span><span class="cm-variable">PopUpDataCollection</span><span class="cm-operator">&gt;</span>();</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span> &nbsp; &nbsp;<span class="cm-keyword">foreach</span> (<span class="cm-keyword">var</span> <span class="cm-def">itemVo</span> <span class="cm-keyword">in</span> <span class="cm-variable">GetConfigList</span>())</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span> &nbsp; &nbsp;<span class="cm-variable">result</span>.<span class="cm-variable">Add</span>(<span class="cm-keyword">new</span> <span class="cm-variable">PopUpDataCollection</span>(){<span class="cm-variable">guiLabel</span> <span class="cm-operator">=</span> <span class="cm-variable">itemVo</span>.<span class="cm-variable">Name</span>,<span class="cm-variable">stringValue</span> <span class="cm-operator">=</span> <span class="cm-variable">itemVo</span>.<span class="cm-variable">ItemId</span>});</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span> &nbsp; &nbsp;<span class="cm-keyword">return</span> <span class="cm-variable">result</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 529px;"></div><div class="CodeMirror-gutters" style="display: none; height: 529px;"></div></div></div></pre></li><li><p><span>ValueDropdown</span></p><p><strong><span>说明</span></strong></p><p><span>该标签为Odin标签，更多Odin标签请参照官方教程。</span></p><p><span>该标签跟上面标签类似，提供源数据作为可选择列表。</span></p><p><strong><span>使用示例</span></strong></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">class</span> <span class="cm-def">AttributeCfgData</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  [<span class="cm-variable">ValueDropdown</span>(<span class="cm-string">"AttrIdSelectionList"</span>)]</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">public</span> <span class="cm-variable-3">string</span> <span class="cm-variable">attributeId</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">public</span> <span class="cm-variable">IEnumerable</span> <span class="cm-variable">AttrIdSelectionList</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">get</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">return</span> <span class="cm-variable">ConfigUtil</span>.<span class="cm-variable">GetConfigDropdownItems</span>(<span class="cm-variable">AttributeCfg</span>.<span class="cm-variable">Instance</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 299px;"></div><div class="CodeMirror-gutters" style="display: none; height: 299px;"></div></div></div></pre><p><strong><span>示例2：</span></strong></p><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">class</span> <span class="cm-def">AttributeCfgData</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  [<span class="cm-variable">ValueDropdown</span>(<span class="cm-string">"IdSelectionList"</span>)] </span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">public</span> <span class="cm-variable-3">string</span> <span class="cm-variable">attributeId</span>;</span></pre><div class="" style="position: relative;"><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">public</span> <span class="cm-variable">ValueDropdownList</span><span class="cm-operator">&lt;</span><span class="cm-variable-3">string</span><span class="cm-operator">&gt;</span> <span class="cm-variable">IdSelectionList</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">get</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">ValueDropdownList</span><span class="cm-operator">&lt;</span><span class="cm-variable-3">string</span><span class="cm-operator">&gt;</span> <span class="cm-variable">valueDropdownItems</span><span class="cm-operator">=</span><span class="cm-keyword">new</span> <span class="cm-variable">ValueDropdownList</span><span class="cm-operator">&lt;</span><span class="cm-variable-3">string</span><span class="cm-operator">&gt;</span>();</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">foreach</span> (<span class="cm-keyword">var</span> <span class="cm-def">attributeVo</span> <span class="cm-keyword">in</span> <span class="cm-variable">AttributeCfg</span>.<span class="cm-variable">Instance</span>.<span class="cm-variable">GetConfigList</span>())</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">valueDropdownItems</span>.<span class="cm-variable">Add</span>(<span class="cm-keyword">new</span> <span class="cm-variable">ValueDropdownItem</span><span class="cm-operator">&lt;</span><span class="cm-variable-3">string</span><span class="cm-operator">&gt;</span>(<span class="cm-variable">attributeVo</span>.<span class="cm-variable">Name</span>,<span class="cm-variable">attributeVo</span>.<span class="cm-variable">AttributeId</span>));</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">return</span> <span class="cm-variable">valueDropdownItems</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 460px;"></div><div class="CodeMirror-gutters" style="display: none; height: 460px;"></div></div></div></pre><ul><li><span>更多Odin标签请查看Tools/Odin Inspector/Getting Started或参照官方教程。</span></li></ul></li></ul></li></ul></li></ul><p>&nbsp;</p></div>
+</body>
+</html>
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/xian-ding-shu-zhi/">
+                  <h3 class="post-title">
+                    限定数值
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
