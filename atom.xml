@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-07-01T08:18:00.962Z</updated>
+    <updated>2021-07-01T12:07:50.459Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,135 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[BFT敌人与AI行为系统]]></title>
+        <id>https://Wei715547.github.io/post/bft-di-ren-yu-ai-xing-wei-xi-tong/</id>
+        <link href="https://Wei715547.github.io/post/bft-di-ren-yu-ai-xing-wei-xi-tong/">
+        </link>
+        <updated>2021-07-01T11:18:31.000Z</updated>
+        <content type="html"><![CDATA[<h4 id="配置表">配置表</h4>
+<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1625138436228.PNG" alt="" loading="lazy"></figure>
+<h4 id="ai系统">AI系统</h4>
+<ul>
+<li>
+<p>BaseDirector：一个AI实例下（BaseDirector）所有AI数据都能访问到的一个公共变量区域</p>
+<ul>
+<li>AIMark：存放一些AI产生的临时变量（比如播放变身动画后，标记一下现在为变身状态）</li>
+<li>enemysAICache：存放了敌人的缓存</li>
+</ul>
+</li>
+<li>
+<p>AIDirectorTree</p>
+<ul>
+<li>这个主要就是转接到行为树的</li>
+<li>SetOverwriteBehavior：更换AI的行为树，可以在初始化或者一些其他情况进行AI行为树的替换
+<ul>
+<li>比如出怪点，在A地点的怪可能与B地点的不一样。这样可以在出怪点产生怪物的时候，将其行为树覆盖为其他行为树，就可以有不同的行动逻辑。</li>
+</ul>
+</li>
+<li>ResetOverwriteBehavior
+<ul>
+<li>还原会默认的行为树</li>
+</ul>
+</li>
+</ul>
+<h4 id="行为树">行为树</h4>
+</li>
+<li>
+<p>行为树路径：Assets/Game/Resources/AI/BattleAI</p>
+</li>
+<li>
+<p>默认的行为树名字就是战斗对象的Id</p>
+</li>
+<li>
+<p>BDAIMove：移动数据容器节点</p>
+</li>
+<li>
+<p>BDAIAction：动作数据容器节点</p>
+</li>
+<li>
+<p>BDAIConditional：判断数据容器节点</p>
+</li>
+<li>
+<p>BDAIIdle：待机数据容器节点</p>
+</li>
+<li>
+<p>节点</p>
+</li>
+<li>
+<figure data-type="image" tabindex="2"><img src="https://Wei715547.github.io/post-images/1625140719698.PNG" alt="" loading="lazy"></figure>
+<ul>
+<li>通常情况下是不需要修改</li>
+<li>主要的数据是用 BaseAIRunScriptable （ScriptableObject）实现的</li>
+</ul>
+</li>
+<li>
+<p>AI数据初始化</p>
+<ul>
+<li>Target : 会在初始化的时候（将行为树加载到战斗对象上时）被初始化
+<ul>
+<li>Target 会被赋值为当前的战斗对象</li>
+<li>比如说，如果是狼的行为树，这个时候Target获取到的就是狼）</li>
+<li><img src="https://Wei715547.github.io/post-images/1625138817506.PNG" alt="" loading="lazy"></li>
+</ul>
+</li>
+</ul>
+<h4 id="扩展ai数据配置">扩展AI数据配置</h4>
+</li>
+</ul>
+<h5 id="ai数据通用api">AI数据通用API</h5>
+<ul>
+<li>BaseAIScriptableObject</li>
+<li>该类是所有AI数据的基类</li>
+<li>主要用于关联行为树、StaticObject</li>
+<li>TaskFailure：数据运行失败</li>
+<li>TaskSuccess：数据运行成功</li>
+</ul>
+<h5 id="判断">判断</h5>
+<p>-<strong>BaseAIConditional</strong><br>
+-直接继承BaseAIScriptableObject</p>
+<h5 id="动作">动作</h5>
+<ul>
+<li><strong>BaseAIAction</strong>：动作数据的基类</li>
+<li>动作通常不是循环的，播放一次性动画的</li>
+<li>包括
+<ul>
+<li>ActionRun：播放角色动画</li>
+<li>OnAnimationPlayEnd：ActionRun完成后会调用</li>
+</ul>
+</li>
+</ul>
+<h5 id="其他">其他</h5>
+<ul>
+<li>BaseAILoop：可随时随时打断的数据
+<ul>
+<li>其子类：</li>
+<li><strong>BaseAIMove</strong></li>
+<li><strong>BaseAIIdle</strong></li>
+</ul>
+</li>
+<li>BaseAIRunScriptable：BaseAILoop、BaseAIAction 的父类，直接继承BaseAIScriptableObject
+<ul>
+<li>封装了一个：Effects 变量，可以放一些进入这个数据和退出这个数据的一些特效</li>
+</ul>
+</li>
+</ul>
+<h4 id="新增ai数据">新增AI数据</h4>
+<ul>
+<li>新增AI数据步骤</li>
+<li>先选中AI行为树的文件夹，这样就会在对应行为树下自动添加数据以及创建文件</li>
+<li><img src="https://Wei715547.github.io/post-images/1625139179189.PNG" alt="" loading="lazy"></li>
+<li><img src="https://Wei715547.github.io/post-images/1625139304023.PNG" alt="" loading="lazy"></li>
+<li><img src="https://Wei715547.github.io/post-images/1625139354075.png" alt="" loading="lazy"></li>
+<li>创建后数据被添加到行为树变量列表中</li>
+<li><img src="https://Wei715547.github.io/post-images/1625140237294.PNG" alt="" loading="lazy"></li>
+<li>创建对应类型节点容器，关联变量</li>
+<li><img src="https://Wei715547.github.io/post-images/1625140892510.PNG" alt="" loading="lazy"></li>
+<li><img src="https://Wei715547.github.io/post-images/1625140929694.PNG" alt="" loading="lazy"></li>
+<li></li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[BFT装备系统]]></title>
         <id>https://Wei715547.github.io/post/bft-zhuang-bei-xi-tong/</id>
@@ -3362,77 +3491,6 @@ IEnumerator DesShiled()
     shiled.gameObject.transform.localScale = Vector3.zero;
     StopCoroutine(nameof(DesShiled));
 }</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[URP Post Processing/Base Shader]]></title>
-        <id>https://Wei715547.github.io/post/urp-post-processing/</id>
-        <link href="https://Wei715547.github.io/post/urp-post-processing/">
-        </link>
-        <updated>2021-05-10T06:46:34.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1620629367082.PNG" alt="" loading="lazy"><br>
-<img src="https://Wei715547.github.io/post-images/1620629450549.PNG" alt="" loading="lazy"></p>
-<p><strong>URP中基础Shader</strong><br>
-<img src="https://Wei715547.github.io/post-images/1620708581418.PNG" alt="" loading="lazy"><br>
-Shader &quot;Unlit/URPTestShader&quot;<br>
-{<br>
-Properties<br>
-{<br>
-_BaseColor(&quot;BaseColor&quot;, Color) = (1,1,1,1)<br>
-_MainTex (&quot;Texture&quot;, 2D) = &quot;white&quot; {}<br>
-}<br>
-SubShader<br>
-{<br>
-Tags { &quot;RenderType&quot;=&quot;Opaque&quot; &quot;RanderPipeline&quot; = &quot;UniversalPipeline&quot; }</p>
-<pre><code>    Pass//URP单Pass前项渲染的管线
-    {
-		HLSLPROGRAM//使用HLSL语言
-		#pragma vertex vert
-        #pragma fragment frag
-		#include &quot;Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl&quot;//引入URP核心文件
-		
-		sampler2D _MainTex;
-        //float4 _MainTex_ST;
-		//half4 _BaseColor;
-		
-		//兼容SRP属性
-		CBUFFER_START(UnityPerMaterial)
-			float4 _MainTex_ST;
-			half4 _BaseColor;
-		CBUFFER_END
-
-		struct appdata
-        {
-            float4 vertex : POSITION;
-            float2 uv : TEXCOORD0;
-        };
-
-        struct v2f
-        {
-            float2 uv : TEXCOORD0;
-            float4 vertex : SV_POSITION;
-        };
-
-        v2f vert (appdata v)
-        {
-            v2f o;
-            o.vertex = TransformObjectToHClip(v.vertex.xyz);//
-            o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-            return o;
-        }
-
-        half4 frag (v2f i) : SV_Target//HLSL中不再使用fixed类型(精度低)
-        {
-            // sample the texture
-            half4 col = tex2D(_MainTex, i.uv)*_BaseColor;
-            return col;
-        }
-		ENDHLSL
-    }
-}
-</code></pre>
-<p>}<br>
-<a href ="https://www.jianshu.com/p/3fef69e2efb6">内置管线Shader升级到URP详细手册</a></p>
 ]]></content>
     </entry>
 </feed>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>BFT敌人与AI行为系统 | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1625141267095">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="配置表
+
+AI系统
+
+
+BaseDirector：一个AI实例下（BaseDirector）所有AI数据都能访问到的一个公共变量区域
+
+AIMark：存放一些AI产生的临时变量（比如播放变身动画后，标记一下现在为变身状态）
+enemysAI..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1625141267095" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">BFT敌人与AI行为系统</h2>
+            <div class="post-date">2021-07-01</div>
+            
+            <div class="post-content" v-pre>
+              <h4 id="配置表">配置表</h4>
+<figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1625138436228.PNG" alt="" loading="lazy"></figure>
+<h4 id="ai系统">AI系统</h4>
+<ul>
+<li>
+<p>BaseDirector：一个AI实例下（BaseDirector）所有AI数据都能访问到的一个公共变量区域</p>
+<ul>
+<li>AIMark：存放一些AI产生的临时变量（比如播放变身动画后，标记一下现在为变身状态）</li>
+<li>enemysAICache：存放了敌人的缓存</li>
+</ul>
+</li>
+<li>
+<p>AIDirectorTree</p>
+<ul>
+<li>这个主要就是转接到行为树的</li>
+<li>SetOverwriteBehavior：更换AI的行为树，可以在初始化或者一些其他情况进行AI行为树的替换
+<ul>
+<li>比如出怪点，在A地点的怪可能与B地点的不一样。这样可以在出怪点产生怪物的时候，将其行为树覆盖为其他行为树，就可以有不同的行动逻辑。</li>
+</ul>
+</li>
+<li>ResetOverwriteBehavior
+<ul>
+<li>还原会默认的行为树</li>
+</ul>
+</li>
+</ul>
+<h4 id="行为树">行为树</h4>
+</li>
+<li>
+<p>行为树路径：Assets/Game/Resources/AI/BattleAI</p>
+</li>
+<li>
+<p>默认的行为树名字就是战斗对象的Id</p>
+</li>
+<li>
+<p>BDAIMove：移动数据容器节点</p>
+</li>
+<li>
+<p>BDAIAction：动作数据容器节点</p>
+</li>
+<li>
+<p>BDAIConditional：判断数据容器节点</p>
+</li>
+<li>
+<p>BDAIIdle：待机数据容器节点</p>
+</li>
+<li>
+<p>节点</p>
+</li>
+<li>
+<figure data-type="image" tabindex="2"><img src="https://Wei715547.github.io/post-images/1625140719698.PNG" alt="" loading="lazy"></figure>
+<ul>
+<li>通常情况下是不需要修改</li>
+<li>主要的数据是用 BaseAIRunScriptable （ScriptableObject）实现的</li>
+</ul>
+</li>
+<li>
+<p>AI数据初始化</p>
+<ul>
+<li>Target : 会在初始化的时候（将行为树加载到战斗对象上时）被初始化
+<ul>
+<li>Target 会被赋值为当前的战斗对象</li>
+<li>比如说，如果是狼的行为树，这个时候Target获取到的就是狼）</li>
+<li><img src="https://Wei715547.github.io/post-images/1625138817506.PNG" alt="" loading="lazy"></li>
+</ul>
+</li>
+</ul>
+<h4 id="扩展ai数据配置">扩展AI数据配置</h4>
+</li>
+</ul>
+<h5 id="ai数据通用api">AI数据通用API</h5>
+<ul>
+<li>BaseAIScriptableObject</li>
+<li>该类是所有AI数据的基类</li>
+<li>主要用于关联行为树、StaticObject</li>
+<li>TaskFailure：数据运行失败</li>
+<li>TaskSuccess：数据运行成功</li>
+</ul>
+<h5 id="判断">判断</h5>
+<p>-<strong>BaseAIConditional</strong><br>
+-直接继承BaseAIScriptableObject</p>
+<h5 id="动作">动作</h5>
+<ul>
+<li><strong>BaseAIAction</strong>：动作数据的基类</li>
+<li>动作通常不是循环的，播放一次性动画的</li>
+<li>包括
+<ul>
+<li>ActionRun：播放角色动画</li>
+<li>OnAnimationPlayEnd：ActionRun完成后会调用</li>
+</ul>
+</li>
+</ul>
+<h5 id="其他">其他</h5>
+<ul>
+<li>BaseAILoop：可随时随时打断的数据
+<ul>
+<li>其子类：</li>
+<li><strong>BaseAIMove</strong></li>
+<li><strong>BaseAIIdle</strong></li>
+</ul>
+</li>
+<li>BaseAIRunScriptable：BaseAILoop、BaseAIAction 的父类，直接继承BaseAIScriptableObject
+<ul>
+<li>封装了一个：Effects 变量，可以放一些进入这个数据和退出这个数据的一些特效</li>
+</ul>
+</li>
+</ul>
+<h4 id="新增ai数据">新增AI数据</h4>
+<ul>
+<li>新增AI数据步骤</li>
+<li>先选中AI行为树的文件夹，这样就会在对应行为树下自动添加数据以及创建文件</li>
+<li><img src="https://Wei715547.github.io/post-images/1625139179189.PNG" alt="" loading="lazy"></li>
+<li><img src="https://Wei715547.github.io/post-images/1625139304023.PNG" alt="" loading="lazy"></li>
+<li><img src="https://Wei715547.github.io/post-images/1625139354075.png" alt="" loading="lazy"></li>
+<li>创建后数据被添加到行为树变量列表中</li>
+<li><img src="https://Wei715547.github.io/post-images/1625140237294.PNG" alt="" loading="lazy"></li>
+<li>创建对应类型节点容器，关联变量</li>
+<li><img src="https://Wei715547.github.io/post-images/1625140892510.PNG" alt="" loading="lazy"></li>
+<li><img src="https://Wei715547.github.io/post-images/1625140929694.PNG" alt="" loading="lazy"></li>
+<li></li>
+</ul>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/bft-zhuang-bei-xi-tong/">
+                  <h3 class="post-title">
+                    BFT装备系统
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
