@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-06-28T04:04:25.763Z</updated>
+    <updated>2021-07-01T07:49:52.743Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,99 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[BFT装备系统]]></title>
+        <id>https://Wei715547.github.io/post/bft-zhuang-bei-xi-tong/</id>
+        <link href="https://Wei715547.github.io/post/bft-zhuang-bei-xi-tong/">
+        </link>
+        <updated>2021-06-30T06:06:52.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>相关配置表</strong><br>
+Iten:可直接配置一些属性加成<br>
+<img src="https://Wei715547.github.io/post-images/1625033800926.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1625033869717.PNG" alt="" loading="lazy"><br>
+Equipment:可配置可穿戴装备的动画，发射物，皮肤等<br>
+injectData: 攻击效果，特效，可在场景中创建的物体<br>
+包括创建物体类型，预制体路径，属性，额外效果<br>
+发射物体类型：<br>
+发射物这边是基于添加组件进行功能配置<br>
+预制类型的发射物，可以配置 InjectModuleItem 进行更过功能的扩展<br>
+默认根据发射物类型，然后创建不同的发射物，<br>
+<img src="https://Wei715547.github.io/post-images/1625037639024.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1625037675491.PNG" alt="" loading="lazy"><br>
+物体被创建初始化包含动画数据<br>
+<img src="https://Wei715547.github.io/post-images/1625038608211.PNG" alt="" loading="lazy"><br>
+不重复使用的单独包含动画美术素材的预制体不需要在加载素材<br>
+<img src="https://Wei715547.github.io/post-images/1625039524460.PNG" alt="" loading="lazy"></p>
+<h3 id="装备相关api">装备相关API</h3>
+<h4 id="整体说明">整体说明</h4>
+<ul>
+<li>装备系统目前是基于ScriptableObject进行数据存储</li>
+<li>通过组合不同效果的 ScriptableObject 进行功能组合</li>
+</ul>
+<h4 id="creatureequipsystem">CreatureEquipSystem</h4>
+<ul>
+<li>装备系统的基类</li>
+<li>控制装备的使用与卸载</li>
+<li>返回装备提供的buff</li>
+</ul>
+<h4 id="baseequipment">BaseEquipment</h4>
+<ul>
+<li>所有类型装备的父类</li>
+<li>复制关联道具Id</li>
+<li>装备相关动画控制</li>
+</ul>
+<h4 id="baseheroequipment">BaseHeroEquipment</h4>
+<ul>
+<li>可以获取Hero实例的一些信息</li>
+</ul>
+<h4 id="equipmentdata">EquipmentData</h4>
+<ul>
+<li>装备数据，是一个ScriptableObject</li>
+<li>主要是作为EquipmentEffect的容器</li>
+<li>放于 Assets/Game/Resources/Asset/EquipmentData 下，与道具Id保存一致的命名</li>
+</ul>
+<h4 id="baseequipmenteffect-scriptableobject">BaseEquipmentEffect （ScriptableObject）</h4>
+<ul>
+<li>装备效果的基类</li>
+<li>可以在穿上装备后进行一些监听</li>
+<li></li>
+</ul>
+<h3 id="发射物相关api">发射物相关API</h3>
+<h4 id="整体说明-2">整体说明</h4>
+<ul>
+<li>发射物这边是基于添加组件进行功能配置</li>
+<li>预制类型的发射物，可以配置 InjectModuleItem 进行更过功能的扩展</li>
+<li>默认根据发射物类型，然后创建不同的发射物</li>
+<li>如果类型是预制，就会读取预制文件夹进行创建
+<h4 id="baseinject">BaseInject</h4>
+</li>
+<li>发射物的基类</li>
+<li>用于控制发射物的初始化</li>
+<li>读取发射物配置表的通用参数，并适用</li>
+</ul>
+<h4 id="moduleprefabinject">ModulePrefabInject</h4>
+<ul>
+<li>加载各种 InjectModuleItem 的发射物</li>
+<li>如果需要保留配置表的参数，模块进行一些叠加，可以在此类进行更多的数据缓存</li>
+</ul>
+<h3 id="例子">例子</h3>
+<p><strong>武器</strong><br>
+<img src="https://Wei715547.github.io/post-images/1625119965440.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1625120049308.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1625120189708.PNG" alt="" loading="lazy"><br>
+<strong>新建发射物曲线子弹</strong><br>
+<img src="https://Wei715547.github.io/post-images/1625120693292.png" alt="" loading="lazy"><br>
+<strong>套装效果</strong><br>
+<img src="https://Wei715547.github.io/post-images/1625120876192.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1625121013249.PNG" alt="" loading="lazy"><br>
+根据装备编号加载放于 Assets/Game/Resources/Asset/EquipmentData 下，与道具Id保存一致命名的装备效果数据容器EquipmentData(ScriptableObject)。<br>
+<img src="https://Wei715547.github.io/post-images/1625121548184.PNG" alt="" loading="lazy"><br>
+继承BaseEquipmentEffect （ScriptableObject）装备效果的基类，可以在穿上装备后进行一些监听编辑装备逻辑。<br>
+<img src="https://Wei715547.github.io/post-images/1625121839097.PNG" alt="" loading="lazy"><br>
+右键打开创建窗口，选择效果将自动创建文件夹及ScriptableObject，同时添加到EquipmentData上，编辑效果参数即可。<br>
+<img src="https://Wei715547.github.io/post-images/1625122081815.PNG" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[EdoFramwork-EventCenter]]></title>
         <id>https://Wei715547.github.io/post/edoframwork-eventcenter/</id>
@@ -3340,128 +3433,6 @@ Tags { &quot;RenderType&quot;=&quot;Opaque&quot; &quot;RanderPipeline&quot; = &q
 </code></pre>
 <p>}<br>
 <a href ="https://www.jianshu.com/p/3fef69e2efb6">内置管线Shader升级到URP详细手册</a></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Input System]]></title>
-        <id>https://Wei715547.github.io/post/input-system/</id>
-        <link href="https://Wei715547.github.io/post/input-system/">
-        </link>
-        <updated>2021-05-09T08:36:56.000Z</updated>
-        <content type="html"><![CDATA[<p>#1.导入包<br>
-<img src="https://Wei715547.github.io/post-images/1620550852403.PNG" alt="" loading="lazy"><br>
-#2.创建Input Actions<br>
-<img src="https://Wei715547.github.io/post-images/1620551006582.PNG" alt="" loading="lazy"><br>
-#3.添加输入地图，绑定其中的数据类型及输入设备<br>
-<img src="https://Wei715547.github.io/post-images/1620551266011.PNG" alt="" loading="lazy"><br>
-#4.使用Input Actions生成C#代码<br>
-<img src="https://Wei715547.github.io/post-images/1620551368934.PNG" alt="" loading="lazy"><br>
-#5.创建Actions中的对应Action的可实例化回调接口<br>
-如对应Move的PlayerInput<br>
-using System;<br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.InputSystem;</p>
-<p>[CreateAssetMenu(menuName = &quot;Player Input&quot;)]//可创建的实例化<br>
-public class PlayerInput : ScriptableObject, InputActions.IGameplayActions//继承InputActions中对应输入地图的回调接口<br>
-{<br>
-public event Action<Vector2> onMove;<br>
-public event Action onStopMove;</p>
-<pre><code>InputActions inputActions;
-private void OnEnable()//实例化输入，设置此为对应地图回调
-{
-    inputActions = new InputActions();
-    inputActions.Gameplay.SetCallbacks(this);
-}
-private void OnDisable()//禁用输入
-{
-    DisableAllInputs();
-}
-public void DisableAllInputs()
-{
-    inputActions.Gameplay.Disable();
-}
-
-public void EnableGamePlayerInput()//外部启用方法
-{
-    inputActions.Gameplay.Enable();
-    //启用时鼠标隐藏，锁定
-    Cursor.visible = false;
-    Cursor.lockState = CursorLockMode.Locked;
-}
-//实现回调接口方法
-public void OnMove(InputAction.CallbackContext context)
-{
-    //根据输入，调用订阅对应事件的方法
-    if (context.phase == InputActionPhase.Performed)//按键处于按下状态时
-        onMove?.Invoke(context.ReadValue&lt;Vector2&gt;());
-
-    if (context.phase == InputActionPhase.Canceled)//松开按键时
-        onStopMove?.Invoke();
-}
-</code></pre>
-<p>}<br>
-#6.添加角色控制脚本，获取回调接口，订阅其中输入对应的事件，与实现逻辑<br>
-<img src="https://Wei715547.github.io/post-images/1620552666059.PNG" alt="" loading="lazy"><br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>[RequireComponent(typeof(Rigidbody2D))]//特性添加组件<br>
-public class Player : MonoBehaviour<br>
-{<br>
-[SerializeField] PlayerInput input;//回调接口<br>
-Rigidbody2D rig;<br>
-[SerializeField] float moveSpeed = 10f;<br>
-private void Awake()<br>
-{<br>
-rig = GetComponent<Rigidbody2D>();<br>
-}<br>
-private void OnEnable()<br>
-{<br>
-input.onMove += OnMove;<br>
-input.onStopMove += OnStopMove;<br>
-}<br>
-// Start is called before the first frame update<br>
-void Start()<br>
-{<br>
-rig.gravityScale = 0;<br>
-input.EnableGamePlayerInput();//激活动作表<br>
-}</p>
-<pre><code>// Update is called once per frame
-void Update()
-{
-    
-}
-private void OnMove(Vector2 dir)//根据输入实现逻辑
-{
-    //Vector2 moveAmount = dir * moveSpeed;
-    rig.velocity = dir * moveSpeed;
-}
-private void OnStopMove()
-{
-    rig.velocity = Vector2.zero;
-}
-</code></pre>
-<p>}<br>
-#设置文件<br>
-<img src="https://Wei715547.github.io/post-images/1620629585832.PNG" alt="" loading="lazy"></p>
-<p>#添加新的Action:Fire<br>
-<img src="https://Wei715547.github.io/post-images/1620661870528.PNG" alt="" loading="lazy"><br>
-<strong>保存后@InputActions中更新IGameplayActions接口中的方法</strong><br>
-<strong>之后实现PlayerInput继承的IGameplayActions中的方法</strong><br>
-//实现回调接口方法<br>
-public event Action onFire;<br>
-public event Action stopFire;</p>
-<pre><code>public void OnFire(InputAction.CallbackContext context)
-{
-    if (context.phase == InputActionPhase.Performed)//按键处于按下状态时
-        onFire?.Invoke();
-
-    if (context.phase == InputActionPhase.Canceled)//松开按键时
-        stopFire?.Invoke();
-}
-</code></pre>
 ]]></content>
     </entry>
 </feed>
