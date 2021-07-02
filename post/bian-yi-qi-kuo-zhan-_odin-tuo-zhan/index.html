@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>GameManager重新加载后不销毁 | WeiBlog</title>
+<title>编译器扩展_Odin拓展 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,11 +18,11 @@
 
 
 
-    <meta name="description" content="using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-//在其他物体上调用
-public class Loder : MonoBehav..." />
+    <meta name="description" content="Unity编译器扩展继承BaseEditorWindow脚本放在Editor文件夹下。
+using Sirenix.OdinInspector.Editor;
+using System;
+using System.Collections;
+..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -107,95 +107,101 @@ public class Loder : MonoBehav..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">GameManager重新加载后不销毁</h2>
-            <div class="post-date">2020-05-20</div>
+            <h2 class="post-title">编译器扩展_Odin拓展</h2>
+            <div class="post-date">2021-07-02</div>
             
             <div class="post-content" v-pre>
-              <p>using System.Collections;<br>
+              <p><strong>Unity编译器扩展继承BaseEditorWindow脚本放在Editor文件夹下。</strong></p>
+<p>using Sirenix.OdinInspector.Editor;<br>
+using System;<br>
+using System.Collections;<br>
 using System.Collections.Generic;<br>
-using UnityEngine;<br>
-//在其他物体上调用<br>
-public class Loder : MonoBehaviour<br>
+using System.Reflection;<br>
+using UnityEditor;<br>
+using UnityEngine;</p>
+<p>/// <summary><br>
+/// Unity默认编译器扩展<br>
+/// </summary><br>
+public class TestEditor : BaseEditorWindow//主界面上栏显示<br>
 {<br>
-public GameObject gamemenager;</p>
-<pre><code>// Start is called before the first frame update
-void Awake()
+[Test1(&quot;Unituedi&quot;)]//自定义特性<br>
+public string s;<br>
+public ItemVO itemvo;</p>
+<pre><code>[MenuItem(&quot;Test/Open&quot;)]//主界面Test栏下的选项(静态方法点击后执行)
+public static void Open()
 {
-    if (Gamemanager.Instence == null)
-        GameObject.Instantiate(gamemenager);
+    //打开窗口
+    GetWindow&lt;TestEditor&gt;().Show();
+    Debug.Log(&quot;Show&quot;);
 }
 </code></pre>
-<h2 id="">}</h2>
-<p>using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;<br>
-using UnityEngine.UI;<br>
-using UnityEngine.SceneManagement;<br>
-public class Gamemanager : MonoBehaviour<br>
+<p>}</p>
+<p>public class Test1Attribute : Attribute<br>
 {<br>
-//单例模式<br>
-private static Gamemanager _instence;</p>
-<pre><code>public static Gamemanager Instence 
+public string str;<br>
+public Test1Attribute(string s)<br>
+{<br>
+str = s;<br>
+}<br>
+}<br>
+<strong>——————————————————————————</strong><br>
+/// <summary><br>
+/// 为类中的属性添加特性，并改变特性中属性值<br>
+/// </summary><br>
+public class TestEditorAttributeProcessor : OdinAttributeProcessor<TestEditor><br>
+{<br>
+public override void ProcessChildMemberAttributes(InspectorProperty parentProperty, MemberInfo member, List<Attribute> attributes)<br>
+{<br>
+base.ProcessChildMemberAttributes(parentProperty, member, attributes);<br>
+if (member.Name == nameof(TestEditor.s))<br>
+{<br>
+attributes.Add(new Test1Attribute(&quot;attr&quot;));<br>
+}<br>
+}<br>
+}<br>
+<strong>——————————————————————————</strong><br>
+//对特性属性进行绘制，反射获取对应特性中内容.右键选项拓展<br>
+public class Test1AttributeDrawer : OdinAttributeDrawer<Test1Attribute>, IDefinesGenericMenuItems<br>
+{<br>
+/// <summary><br>
+/// 实现鼠标右键点击接口<br>
+/// </summary><br>
+/// <param name="property"></param><br>
+/// <param name="genericMenu"></param><br>
+public void PopulateGenericMenu(InspectorProperty property, GenericMenu genericMenu)<br>
+{<br>
+genericMenu.AddItem(new GUIContent(&quot;Rigth&quot;), false, AAA);</p>
+<pre><code>}
+//右键点击发方法
+private void AAA()
 {
-    get { return _instence; }
+    //throw new NotImplementedException();
+    EditorWindow.GetWindow&lt;EquipmentEffectWindow&gt;().Show();
+    Debug.Log(Attribute.str);
 }
 
-private void Awake()
+//重写Odin绘制方法
+protected override void DrawPropertyLayout(GUIContent label)
 {
-    _instence = this;
-    DontDestroyOnLoad(gameObject);//加载场景时不销毁
-    InitGame();
+    //绘制按钮
+    //if (GUILayout.Button(&quot;Test&quot;))
+    //{
+    //    Debug.Log(Attribute.str);
+    //}
+    //继续绘制链GUI元素(被特性编辑的属性)
+    CallNextDrawer(label);
 }
-
-//bool交替执行
-private bool sleepStep = true;
-    public void OnplayerMove()
-{
-    if (sleepStep ==true )
-    {
-        sleepStep =false ;
-    }else
-    {
-        foreach (var enemy in enemyList )
-        {
-            enemy.Move();
-        }
-        sleepStep = true;
-    }
-
-    //角色移动后
-    if (player.targetpos.x == mapmanager.xc - 1.5f &amp;&amp; player.targetpos.y == mapmanager.yc - 1.5f)
-    {
-        IsEnd = true;
-        //加载下一关
-        SceneManager.LoadScene(SceneManager .GetActiveScene ().buildIndex );
-    }
-}
-
-
-    //场景加载后执行
-private void OnLevelWasLoaded(int SceneLevel)
-{
-    level++;
-    InitGame();
-}
-
-    //失败后重新开始游戏
-private void Restart()
-{
-    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    food = 100;
-    level -= level;
-}</code></pre>
+</code></pre>
+<p>}</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/2d-xian-jian-ce/">
+                <a href="https://Wei715547.github.io/post/bft-di-ren-yu-ai-xing-wei-xi-tong/">
                   <h3 class="post-title">
-                    2D线检测、范围检测
+                    BFT敌人与AI行为系统
                   </h3>
                 </a>
               </div>

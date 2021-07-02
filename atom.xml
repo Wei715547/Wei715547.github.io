@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-07-01T12:22:00.429Z</updated>
+    <updated>2021-07-02T02:46:09.692Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,96 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[编译器扩展_Odin拓展]]></title>
+        <id>https://Wei715547.github.io/post/bian-yi-qi-kuo-zhan-_odin-tuo-zhan/</id>
+        <link href="https://Wei715547.github.io/post/bian-yi-qi-kuo-zhan-_odin-tuo-zhan/">
+        </link>
+        <updated>2021-07-02T01:50:33.000Z</updated>
+        <content type="html"><![CDATA[<p><strong>Unity编译器扩展继承BaseEditorWindow脚本放在Editor文件夹下。</strong></p>
+<p>using Sirenix.OdinInspector.Editor;<br>
+using System;<br>
+using System.Collections;<br>
+using System.Collections.Generic;<br>
+using System.Reflection;<br>
+using UnityEditor;<br>
+using UnityEngine;</p>
+<p>/// <summary><br>
+/// Unity默认编译器扩展<br>
+/// </summary><br>
+public class TestEditor : BaseEditorWindow//主界面上栏显示<br>
+{<br>
+[Test1(&quot;Unituedi&quot;)]//自定义特性<br>
+public string s;<br>
+public ItemVO itemvo;</p>
+<pre><code>[MenuItem(&quot;Test/Open&quot;)]//主界面Test栏下的选项(静态方法点击后执行)
+public static void Open()
+{
+    //打开窗口
+    GetWindow&lt;TestEditor&gt;().Show();
+    Debug.Log(&quot;Show&quot;);
+}
+</code></pre>
+<p>}</p>
+<p>public class Test1Attribute : Attribute<br>
+{<br>
+public string str;<br>
+public Test1Attribute(string s)<br>
+{<br>
+str = s;<br>
+}<br>
+}<br>
+<strong>——————————————————————————</strong><br>
+/// <summary><br>
+/// 为类中的属性添加特性，并改变特性中属性值<br>
+/// </summary><br>
+public class TestEditorAttributeProcessor : OdinAttributeProcessor<TestEditor><br>
+{<br>
+public override void ProcessChildMemberAttributes(InspectorProperty parentProperty, MemberInfo member, List<Attribute> attributes)<br>
+{<br>
+base.ProcessChildMemberAttributes(parentProperty, member, attributes);<br>
+if (member.Name == nameof(TestEditor.s))<br>
+{<br>
+attributes.Add(new Test1Attribute(&quot;attr&quot;));<br>
+}<br>
+}<br>
+}<br>
+<strong>——————————————————————————</strong><br>
+//对特性属性进行绘制，反射获取对应特性中内容.右键选项拓展<br>
+public class Test1AttributeDrawer : OdinAttributeDrawer<Test1Attribute>, IDefinesGenericMenuItems<br>
+{<br>
+/// <summary><br>
+/// 实现鼠标右键点击接口<br>
+/// </summary><br>
+/// <param name="property"></param><br>
+/// <param name="genericMenu"></param><br>
+public void PopulateGenericMenu(InspectorProperty property, GenericMenu genericMenu)<br>
+{<br>
+genericMenu.AddItem(new GUIContent(&quot;Rigth&quot;), false, AAA);</p>
+<pre><code>}
+//右键点击发方法
+private void AAA()
+{
+    //throw new NotImplementedException();
+    EditorWindow.GetWindow&lt;EquipmentEffectWindow&gt;().Show();
+    Debug.Log(Attribute.str);
+}
+
+//重写Odin绘制方法
+protected override void DrawPropertyLayout(GUIContent label)
+{
+    //绘制按钮
+    //if (GUILayout.Button(&quot;Test&quot;))
+    //{
+    //    Debug.Log(Attribute.str);
+    //}
+    //继续绘制链GUI元素(被特性编辑的属性)
+    CallNextDrawer(label);
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[BFT敌人与AI行为系统]]></title>
         <id>https://Wei715547.github.io/post/bft-di-ren-yu-ai-xing-wei-xi-tong/</id>
@@ -3366,131 +3456,6 @@ public void UnityMethod(string str)
 <img src="https://Wei715547.github.io/post-images/1621247554063.jpg" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1621248382498.PNG" alt="" loading="lazy"><br>
 <img src="https://Wei715547.github.io/post-images/1621248227474.PNG" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[插值曲线子弹]]></title>
-        <id>https://Wei715547.github.io/post/cha-zhi-qu-xian-zi-dan/</id>
-        <link href="https://Wei715547.github.io/post/cha-zhi-qu-xian-zi-dan/">
-        </link>
-        <updated>2021-05-12T13:37:27.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://Wei715547.github.io/post-images/1620828840969.PNG" alt="" loading="lazy"><br>
-<a href = "https://www.bilibili.com/video/BV1kv411r7x2?p=5">视频</a><br>
-<strong>子弹脚本</strong><br>
-using System.Collections;<br>
-using System.Collections.Generic;<br>
-using UnityEngine;</p>
-<p>public class FLProjectile : MonoBehaviour<br>
-{<br>
-[SerializeField]<br>
-float speed = 10f;<br>
-[SerializeField]<br>
-float rotateSpeed = 0.5f;<br>
-Vector2 dir;</p>
-<pre><code>GameObject[] enemys;
-[SerializeField]
-Transform enemyPos;
-
-TrailRenderer trail;
-BoxCollider2D collider;
-private void Awake()
-{
-    trail = GetComponentInChildren&lt;TrailRenderer&gt;();
-    collider = GetComponent&lt;BoxCollider2D&gt;();
-    collider.isTrigger = true;
-}
-private void OnEnable()
-{
-    enemys = GameObject.FindGameObjectsWithTag(&quot;Enemy&quot;);
-    enemyPos = GetTargertEnemyPos();
-    StartCoroutine(MoveDirectly());
-}
-private void OnDisable()
-{
-    trail.Clear();
-}
-Transform GetTargertEnemyPos()
-{
-    if (enemys.Length != 0)
-        return enemys[Random.Range(0, enemys.Length)].transform;
-    else return null;
-
-}
-//曲线移动
-IEnumerator MoveDirectly()
-{
-    while (gameObject.activeSelf)
-    {
-        if (enemyPos != null)            
-            transform.up = Vector3.Slerp(transform.up, enemyPos.position - transform.position,
-                rotateSpeed / Vector2.Distance(this.transform.position, enemyPos.position));                            
-        transform.position += transform.up * speed * Time.deltaTime;
-
-        yield return null;            
-    }
-    
-}
-private void OnTriggerEnter2D(Collider2D collision)
-{
-    gameObject.SetActive(false);//协成依赖于mono的Update,物体禁用后协成也不再执行
-}
-</code></pre>
-<p>}</p>
-<p><strong>角色控制部分</strong><br>
-private void Update()<br>
-{<br>
-if (power &gt;= 100)//能量达到100执行<br>
-{<br>
-StartCoroutine(nameof(StartRangeFire));<br>
-power = 0;<br>
-}<br>
-}<br>
-IEnumerator StartRangeFire()<br>
-{<br>
-StartCoroutine(nameof(RFire));//开启曲线子弹<br>
-yield return new WaitForSeconds(RFireTime);//设定时间后<br>
-StopCoroutine(nameof(RFire));//结束<br>
-StartCoroutine(nameof(DesShiled));//护盾消失<br>
-}<br>
-IEnumerator RFire()<br>
-{<br>
-//判断护盾是否显示<br>
-if (!shiled.gameObject.activeSelf)//未显示则，则显示护盾<br>
-{<br>
-shiled.material.SetColor(&quot;_FresnelColor&quot;, Color.red * 2.5f);<br>
-shiled.gameObject.SetActive(true);<br>
-shiled.gameObject.transform.DOScale(Vector3.one*100, 0.5f);<br>
-}<br>
-else//显示则改变护盾颜色<br>
-shiled.material.SetColor(&quot;_FresnelColor&quot;, Color.red * 2.5f);</p>
-<pre><code>    while (true)
-    {
-        PoolManager.Release(projectile4, pointR.position, pointR.rotation);
-        PoolManager.Release(projectile4, pointR2.position, pointR2.rotation);
-        yield return Rtime;
-    }
-}
-//护盾消失
-IEnumerator DesShiled()
-{ 
-    while (true)
-    {
-        t += Time.deltaTime;//rtime时间内r变为1
-        shiled.material.SetFloat(&quot;_BurnAmount&quot;, t);
-        yield return null;
-        if(t&gt;1)
-        {
-            t = 0;
-            break;
-        }
-        
-    }
-    shiled.gameObject.SetActive(false);
-    shiled.material.SetFloat(&quot;_BurnAmount&quot;, 0);
-    shiled.material.SetColor(&quot;_FresnelColor&quot;, shiledIdColor);
-    shiled.gameObject.transform.localScale = Vector3.zero;
-    StopCoroutine(nameof(DesShiled));
-}</code></pre>
 ]]></content>
     </entry>
 </feed>
