@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Unity面试易考题-问题 | WeiBlog</title>
+<title>BFT_StaticObject常用外部可获取属性 | WeiBlog</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,13 +18,14 @@
 
 
 
-    <meta name="description" content="
-array = {“Lua&quot;,&quot;C#&quot;,&quot;Java&quot;}
-for k,v in pairs(array) do
-print(k,v)
-end
-//遍历array中内容
-array[2]=ni..." />
+    <meta name="description" content="自身包含事件类型
+#region 事件
+public BeAttackHandle onBeAttackHandle;
+
+/// &lt;summary&gt;
+/// 属性改变后
+/// &lt;/summary&gt;
+public e..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -109,30 +110,95 @@ array[2]=ni..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Unity面试易考题-问题</h2>
-            <div class="post-date">2020-05-09</div>
+            <h2 class="post-title">BFT_StaticObject常用外部可获取属性</h2>
+            <div class="post-date">2021-07-02</div>
             
             <div class="post-content" v-pre>
-              <figure data-type="image" tabindex="1"><img src="https://Wei715547.github.io/post-images/1589001744941.jpg" alt="" loading="lazy"></figure>
-<p>array = {“Lua&quot;,&quot;C#&quot;,&quot;Java&quot;}<br>
-for k,v in pairs(array) do<br>
-print(k,v)<br>
-end<br>
-//遍历array中内容</p>
-<p>array[2]=nil<br>
-for k,v in ipairs(array) do//ipair:按照索引从1开始，递增遍历，遇到nil时即停止<br>
-print(k,v)<br>
-end<br>
-//只输出“Lua”</p>
+              <p>自身包含事件类型<br>
+#region 事件</p>
+<pre><code>public BeAttackHandle onBeAttackHandle;
+
+/// &lt;summary&gt;
+/// 属性改变后
+/// &lt;/summary&gt;
+public event AttributeHandle onAttributeChangedHandle;
+
+public BuffDataHandle onBuffAddedHandle;
+public BuffHandle onBuffRemovedHandle;
+public SimpleHandle onBuffListChangedHandle;
+public SimpleHandle onStateChange;
+public EnemyChangeHandle onEnemyChangeHandle;
+public AIMarkChangeHandle onAIMarkChangeHandle;
+public event SetActionHandle OnSetActionEnd;
+public EventCenter StaticObjectEvent = new EventCenter();
+
+#endregion
+</code></pre>
+<p>可添加事件类型：<br>
+public class StaticObjectEventName<br>
+{<br>
+/// <summary><br>
+/// nameof(AnimEventData)<br>
+/// </summary><br>
+public static string OnAnimEvent = &quot;OnAnimEvent&quot;;</p>
+<pre><code>public static string ImmuneBuffChanged = &quot;ImmuneBuffChanged&quot;;
+public static string InjectAttackedHit = &quot;InjectAttackedHit&quot;;
+public static string Attacked = &quot;Attacked&quot;;
+public static string Moveing = &quot;Moveing&quot;;
+public static string OnUpdateMovePosition = &quot;OnUpdateMovePosition&quot;;
+</code></pre>
+<p>}</p>
+<p><strong>当前动画动作类型</strong><br>
+Owner.CurrentAvatarType<br>
+public enum AvatarActionType<br>
+{<br>
+None,<br>
+Idle,<br>
+Walk,<br>
+Run,<br>
+Attack,<br>
+BeHit,<br>
+/// <summary><br>
+/// 击飞<br>
+/// </summary><br>
+BeHitFly,<br>
+BeHitFall,<br>
+/// <summary><br>
+/// 起身<br>
+/// </summary><br>
+GetUp,<br>
+Lie,<br>
+Dead,<br>
+SpecialAction,<br>
+BlockAction,<br>
+/// <summary><br>
+/// 循环执行的特殊行为<br>
+/// </summary><br>
+SpecialLoop,<br>
+Birth,<br>
+Action,<br>
+/// <summary><br>
+/// 被控制,通常是buff<br>
+/// </summary><br>
+NotControl<br>
+}<br>
+//切换动画（动画类型，名字）<br>
+Owner.AnimSystem.SetOverwriteAnimation(AvatarActionType.Run, newAni);</p>
+<p><strong>添加Buff</strong><br>
+Owner.AddBuff(new BuffValueData() {buffId = buffId, second = buffTime});<br>
+//是否有Buff<br>
+Owner.HasBuff(buffId)<br>
+//获取Buff数据<br>
+BuffSaveData buffSaveData = Owner.GetBuffSaveData(buffId);</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Wei715547.github.io/post/unity-mian-shi-yi-kao-ti-ji-ben-kuang-jia/">
+                <a href="https://Wei715547.github.io/post/bian-yi-qi-kuo-zhan-_odin-tuo-zhan/">
                   <h3 class="post-title">
-                    Unity面试易考题-基本框架
+                    编译器扩展_Odin拓展
                   </h3>
                 </a>
               </div>
