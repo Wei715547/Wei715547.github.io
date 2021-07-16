@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-07-16T12:34:06.116Z</updated>
+    <updated>2021-07-16T12:52:37.900Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -412,7 +412,7 @@ injectData: 攻击效果，特效，可在场景中创建的物体<br>
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[EdoFramwork-EventCenter]]></title>
+        <title type="html"><![CDATA[EgoFramwork-EventCenter]]></title>
         <id>https://Wei715547.github.io/post/edoframwork-eventcenter/</id>
         <link href="https://Wei715547.github.io/post/edoframwork-eventcenter/">
         </link>
@@ -999,7 +999,7 @@ EventHandle&lt;T1, T2, T3&gt; handle)</span></td><td><span>监听三个参数事
 </html>]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[EdoFramwork-事件中心]]></title>
+        <title type="html"><![CDATA[EgoFramwork-事件中心]]></title>
         <id>https://Wei715547.github.io/post/edoframwork-shi-jian-zhong-xin/</id>
         <link href="https://Wei715547.github.io/post/edoframwork-shi-jian-zhong-xin/">
         </link>
