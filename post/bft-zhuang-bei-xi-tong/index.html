@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1625660921302">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1626430156782">
 <link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
 
 
@@ -36,7 +36,7 @@ injectData: 攻击效果，特效，可在场景中创建的物体
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://Wei715547.github.io">
-        <img src="https://Wei715547.github.io/images/avatar.png?v=1625660921302" class="site-logo">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1626430156782" class="site-logo">
         <h1 class="site-title">WeiBlog</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -184,6 +184,10 @@ injectData: 攻击效果，特效，可在场景中创建的物体<br>
 <li>加载各种 InjectModuleItem 的发射物</li>
 <li>如果需要保留配置表的参数，模块进行一些叠加，可以在此类进行更多的数据缓存</li>
 </ul>
+<p>####创建发射物/特效方法<br>
+**在角色骨骼位置创建：**ActDataUtil.ShootInjectItem(Owner,&quot;root&quot;, InjetItemId);<br>
+**指定父级位置发射：**VirtualWorld.Instance.ShootInject(InjetItemId, target, (target.Position + Vector2.up * target.ObjectHeight));<br>
+**指定特效ID，路径，位置发射特效：**ModuleControl.effectModule.AddSceneEffect(ID, buildEffectResName, transform.position);</p>
 <h3 id="例子">例子</h3>
 <p><strong>武器</strong><br>
 <img src="https://Wei715547.github.io/post-images/1625119965440.PNG" alt="" loading="lazy"><br>

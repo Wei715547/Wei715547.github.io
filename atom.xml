@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-07-07T12:35:27.692Z</updated>
+    <updated>2021-07-16T10:09:36.278Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -389,6 +389,10 @@ injectData: 攻击效果，特效，可在场景中创建的物体<br>
 <li>加载各种 InjectModuleItem 的发射物</li>
 <li>如果需要保留配置表的参数，模块进行一些叠加，可以在此类进行更多的数据缓存</li>
 </ul>
+<p>####创建发射物/特效方法<br>
+**在角色骨骼位置创建：**ActDataUtil.ShootInjectItem(Owner,&quot;root&quot;, InjetItemId);<br>
+**指定父级位置发射：**VirtualWorld.Instance.ShootInject(InjetItemId, target, (target.Position + Vector2.up * target.ObjectHeight));<br>
+**指定特效ID，路径，位置发射特效：**ModuleControl.effectModule.AddSceneEffect(ID, buildEffectResName, transform.position);</p>
 <h3 id="例子">例子</h3>
 <p><strong>武器</strong><br>
 <img src="https://Wei715547.github.io/post-images/1625119965440.PNG" alt="" loading="lazy"><br>
