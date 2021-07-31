@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-07-30T12:38:12.950Z</updated>
+    <updated>2021-07-31T08:56:51.113Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -35,7 +35,7 @@
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[BFT_StaticObject常用外部可获取属性]]></title>
+        <title type="html"><![CDATA[BFT_StaticObject常用外部可获取属性方法]]></title>
         <id>https://Wei715547.github.io/post/staticobject-chang-yong-wai-bu-ke-huo-qu-shu-xing/</id>
         <link href="https://Wei715547.github.io/post/staticobject-chang-yong-wai-bu-ke-huo-qu-shu-xing/">
         </link>
@@ -116,6 +116,10 @@ Owner.AddBuff(new BuffValueData() {buffId = buffId, second = buffTime});<br>
 Owner.HasBuff(buffId)<br>
 //获取Buff数据<br>
 BuffSaveData buffSaveData = Owner.GetBuffSaveData(buffId);</p>
+<p><strong>是否有瞄准其他StaticObject</strong><br>
+ShootBy.AimTarget.Owner is StaticObject aimTarget<br>
+<strong>通过动画系统获取骨骼位置</strong><br>
+Transform target = aimTarget.AnimSystem.GetTargetTransform(SpineBoneName.BodyEffect);</p>
 ]]></content>
     </entry>
     <entry>
