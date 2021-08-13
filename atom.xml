@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Wei715547.github.io</id>
     <title>WeiBlog</title>
-    <updated>2021-07-31T09:21:39.398Z</updated>
+    <updated>2021-08-13T09:48:21.290Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Wei715547.github.io"/>
     <link rel="self" href="https://Wei715547.github.io/atom.xml"/>
@@ -11,6 +11,94 @@
     <logo>https://Wei715547.github.io/images/avatar.png</logo>
     <icon>https://Wei715547.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, WeiBlog</rights>
+    <entry>
+        <title type="html"><![CDATA[BFT_装备发射物扩展]]></title>
+        <id>https://Wei715547.github.io/post/bft_-zhuang-bei-fa-she-wu-kuo-zhan/</id>
+        <link href="https://Wei715547.github.io/post/bft_-zhuang-bei-fa-she-wu-kuo-zhan/">
+        </link>
+        <updated>2021-08-13T09:31:44.000Z</updated>
+        <content type="html"><![CDATA[<p>##骨骼位置/权重发射物##<br>
+配置表更改：<br>
+<img src="https://Wei715547.github.io/post-images/1628847358632.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1628847503655.PNG" alt="" loading="lazy"></p>
+<p>在ShootWeapon类中的InjectsId获取发射列表<br>
+<img src="https://Wei715547.github.io/post-images/1628847703883.PNG" alt="" loading="lazy"><br>
+private List<string> GetInjectSettingExId(List<InjectSettingEx> equipmentCfgAttackInjectSettingsEx)<br>
+{<br>
+isSpecialInject = true;<br>
+injectBonePair = new Dictionary&lt;string, string&gt;();<br>
+List<InjectSettingEx> InjectSettingsEx = new List<InjectSettingEx>(equipmentCfgAttackInjectSettingsEx.ToArray());</p>
+<pre><code>    BasePropSaveData basePropSaveData = GetHandSaveData();
+    if (basePropSaveData == null || string.IsNullOrEmpty(basePropSaveData.propId))
+    {
+        Debug.LogError(&quot;未知原因，找不到手持装备,装备Id:&quot; + ItemId);
+        return new List&lt;string&gt;();
+    }
+    string ammoId = basePropSaveData.EquipSepcificData.ammoId;
+    List&lt;string&gt; injectsList = new List&lt;string&gt;();
+    InjectSettingEx injectSettingEx = InjectSettingsEx.Find(id =&gt; id.ammoId == ammoId || id.ammoId == &quot;-1&quot;);
+</code></pre>
+<p>#if UNITY_EDITOR<br>
+if (injectSettingEx == null &amp;&amp; EditorValues.UnlimitBullet &amp;&amp; equipmentCfgAttackInjectSettingsEx.Count &gt; 0)<br>
+{<br>
+ammoId = equipmentCfgAttackInjectSettingsEx[0].ammoId;<br>
+injectSettingEx = InjectSettingsEx.Find(id =&gt; id.ammoId == ammoId || id.ammoId == &quot;-1&quot;);<br>
+}<br>
+#endif</p>
+<pre><code>    while (injectSettingEx != null)
+    {
+        List&lt;string&gt; injectsIds = new List&lt;string&gt;();
+        List&lt;float&gt; iteminjectRateWeight = new List&lt;float&gt;();
+
+        #region 平均权重
+        foreach (var itemdate in injectSettingEx.injectItems)
+        {
+            injectsIds.Add(itemdate.injectId);
+            iteminjectRateWeight.Add(itemdate.itemWeight);
+            injectBonePair.Add(itemdate.injectId, itemdate.boneName);
+        }
+        int averageCount = iteminjectRateWeight.Count;
+        float averageWeight = 100f;
+        List&lt;int&gt; averageIndex = new List&lt;int&gt;();
+        for (int i = 0; i &lt; iteminjectRateWeight.Count; i++)
+        {
+            if (!iteminjectRateWeight[i].Equals(0))
+            {
+                averageCount--;
+                averageWeight -= iteminjectRateWeight[i];
+            }
+            else
+                averageIndex.Add(i);
+        }
+        foreach (var item in averageIndex)
+        {
+            iteminjectRateWeight[item] = averageWeight / averageCount;
+        }
+        #endregion
+
+        injectsList.Add(injectsIds.GetRandom(100, iteminjectRateWeight.ToArray()));
+
+        InjectSettingsEx.Remove(injectSettingEx);
+
+        injectSettingEx = InjectSettingsEx.Find(id =&gt; id.ammoId == ammoId || id.ammoId == &quot;-1&quot;);
+    }
+    return injectsList;
+}
+</code></pre>
+<p>##额外发射物##<br>
+<img src="https://Wei715547.github.io/post-images/1628847973732.PNG" alt="" loading="lazy"><br>
+private List<string> MergeAdditional(List<string> routineInjectItems, List<AdditionalInjectSetting> additionalInjectSettings)<br>
+{<br>
+List<string> merge = new List<string>(routineInjectItems);<br>
+foreach (var addition in additionalInjectSettings)<br>
+{<br>
+if (Random.value*100 &lt; addition.rate)<br>
+merge.Add(addition.injectId);<br>
+}<br>
+return merge;<br>
+}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Monster_AI_发射物绑定Spin动画]]></title>
         <id>https://Wei715547.github.io/post/monster_ai_-fa-she-wu-bang-ding-spin-dong-hua/</id>
@@ -2213,591 +2301,5 @@ if (a &lt; 0)
         a = 0;
     }</code></pre>
 ]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[EgoFramework-UI]]></title>
-        <id>https://Wei715547.github.io/post/egoformwork-ui/</id>
-        <link href="https://Wei715547.github.io/post/egoformwork-ui/">
-        </link>
-        <updated>2021-06-23T04:11:51.000Z</updated>
-        <content type="html"><![CDATA[<p>&lt;!doctype html&gt;</p>
-<html>
-<head>
-<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
-<title>UI框架</title><link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
-html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; tab-size: 4; }
-iframe { margin: auto; }
-a.url { word-break: break-all; }
-a:active, a:hover { outline: 0px; }
-.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
-#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 40px; }
-#write.first-line-indent p { text-indent: 2em; }
-#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
-#write.first-line-indent li { margin-left: 2em; }
-.for-image #write { padding-left: 8px; padding-right: 8px; }
-body.typora-export { padding-left: 30px; padding-right: 30px; }
-.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
-.typora-export .task-list-item input { pointer-events: none; }
-@media screen and (max-width: 500px) {
-  body.typora-export { padding-left: 0px; padding-right: 0px; }
-  #write { padding-left: 20px; padding-right: 20px; }
-  .CodeMirror-sizer { margin-left: 0px !important; }
-  .CodeMirror-gutters { display: none !important; }
-}
-#write li > figure:last-child { margin-bottom: 0.5rem; }
-#write ol, #write ul { position: relative; }
-img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
-button, input, select, textarea { color: inherit; font: inherit; }
-input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
-*, ::after, ::before { box-sizing: border-box; }
-#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
-#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
-p { line-height: inherit; }
-h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
-p { orphans: 4; }
-h1 { font-size: 2rem; }
-h2 { font-size: 1.8rem; }
-h3 { font-size: 1.6rem; }
-h4 { font-size: 1.4rem; }
-h5 { font-size: 1.2rem; }
-h6 { font-size: 1rem; }
-.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
-.hidden { display: none; }
-.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
-a { cursor: pointer; }
-sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
-sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
-#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
-figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
-figure > table { margin: 0px; }
-tr { break-inside: avoid; break-after: auto; }
-thead { display: table-header-group; }
-table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
-table.md-table td { min-width: 32px; }
-.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
-.CodeMirror-linenumber { user-select: none; }
-.CodeMirror { text-align: left; }
-.CodeMirror-placeholder { opacity: 0.3; }
-.CodeMirror pre { padding: 0px 4px; }
-.CodeMirror-lines { padding: 0px; }
-div.hr:focus { cursor: none; }
-#write pre { white-space: pre-wrap; }
-#write.fences-no-line-wrapping pre { white-space: pre; }
-#write pre.ty-contain-cm { white-space: normal; }
-.CodeMirror-gutters { margin-right: 4px; }
-.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
-.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
-#write .md-fences.mock-cm { white-space: pre-wrap; }
-.md-fences.md-fences-with-lineno { padding-left: 0px; }
-#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
-.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
-.CodeMirror-line, twitterwidget { break-inside: avoid; }
-.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
-.footnotes + .footnotes { margin-top: 0px; }
-.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
-li div { padding-top: 0px; }
-blockquote { margin: 1rem 0px; }
-li .mathjax-block, li p { margin: 0.5rem 0px; }
-li { margin: 0px; position: relative; }
-blockquote > :last-child { margin-bottom: 0px; }
-blockquote > :first-child, li > :first-child { margin-top: 0px; }
-.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
-#write .footnote-line { white-space: pre-wrap; }
-@media print {
-  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
-  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
-  .typora-export * { -webkit-print-color-adjust: exact; }
-  html.blink-to-pdf { font-size: 13px; }
-  .typora-export #write { break-after: avoid; }
-  .typora-export #write::after { height: 0px; }
-  .is-mac table { break-inside: avoid; }
-}
-.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
-a img, img a { cursor: pointer; }
-pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
-p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
-#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
-p > .md-image:only-child { display: inline-block; width: 100%; }
-#write .MathJax_Display { margin: 0.8em 0px 0px; }
-.md-math-block { width: 100%; }
-.md-math-block:not(:empty)::after { display: none; }
-[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
-.md-task-list-item { position: relative; list-style-type: none; }
-.task-list-item.md-task-list-item { padding-left: 0px; }
-.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
-.math { font-size: 1rem; }
-.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
-.md-toc-content { position: relative; margin-left: 0px; }
-.md-toc-content::after, .md-toc::after { display: none; }
-.md-toc-item { display: block; color: rgb(65, 131, 196); }
-.md-toc-item a { text-decoration: none; }
-.md-toc-inner:hover { text-decoration: underline; }
-.md-toc-inner { display: inline-block; cursor: pointer; }
-.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
-.md-toc-h2 .md-toc-inner { margin-left: 2em; }
-.md-toc-h3 .md-toc-inner { margin-left: 4em; }
-.md-toc-h4 .md-toc-inner { margin-left: 6em; }
-.md-toc-h5 .md-toc-inner { margin-left: 8em; }
-.md-toc-h6 .md-toc-inner { margin-left: 10em; }
-@media screen and (max-width: 48em) {
-  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
-  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
-  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
-  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
-}
-a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
-.footnote-line a:not(.reversefootnote) { color: inherit; }
-.md-attr { display: none; }
-.md-fn-count::after { content: "."; }
-code, pre, samp, tt { font-family: var(--monospace); }
-kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
-.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
-code { text-align: left; vertical-align: initial; }
-a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
-.md-inline-math .MathJax_SVG .noError { display: none !important; }
-.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
-.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
-.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
-.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
-.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
-.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
-.MathJax_SVG * { transition: none 0s ease 0s; }
-.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; margin-top: 0px !important; }
-.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
-.md-diagram-panel > svg { max-width: 100%; }
-[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
-[lang="mermaid"] .node text { font-size: 1rem; }
-table tr th { border-bottom: 0px; }
-video { max-width: 100%; display: block; margin: 0px auto; }
-iframe { max-width: 100%; width: 100%; border: none; }
-.highlight td, .highlight tr { border: 0px; }
-svg[id^="mermaidChart"] { line-height: 1em; }
-mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
-.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
-mark .md-meta { color: rgb(0, 0, 0); opacity: 0.3 !important; }
-@media print {
-  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
-}
-<p>.CodeMirror { height: auto; }<br>
-.CodeMirror.cm-s-inner { background: inherit; }<br>
-.CodeMirror-scroll { overflow: auto hidden; z-index: 3; }<br>
-.CodeMirror-gutter-filler, .CodeMirror-scrollbar-filler { background-color: rgb(255, 255, 255); }<br>
-.CodeMirror-gutters { border-right: 1px solid rgb(221, 221, 221); background: inherit; white-space: nowrap; }<br>
-.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }<br>
-.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }<br>
-.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }<br>
-.cm-s-inner .cm-number { color: rgb(17, 102, 68); }<br>
-.cm-s-inner .cm-def { color: rgb(0, 0, 255); }<br>
-.cm-s-inner .cm-variable { color: rgb(0, 0, 0); }<br>
-.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }<br>
-.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }<br>
-.cm-s-inner .cm-string { color: rgb(170, 17, 17); }<br>
-.cm-s-inner .cm-property { color: rgb(0, 0, 0); }<br>
-.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }<br>
-.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }<br>
-.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }<br>
-.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }<br>
-.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }<br>
-.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }<br>
-.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }<br>
-.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }<br>
-.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }<br>
-.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: rgb(0, 0, 255); }<br>
-.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }<br>
-.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }<br>
-.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }<br>
-.cm-negative { color: rgb(221, 68, 68); }<br>
-.cm-positive { color: rgb(34, 153, 34); }<br>
-.cm-header, .cm-strong { font-weight: 700; }<br>
-.cm-del { text-decoration: line-through; }<br>
-.cm-em { font-style: italic; }<br>
-.cm-link { text-decoration: underline; }<br>
-.cm-error { color: red; }<br>
-.cm-invalidchar { color: red; }<br>
-.cm-constant { color: rgb(38, 139, 210); }<br>
-.cm-defined { color: rgb(181, 137, 0); }<br>
-div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }<br>
-div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }<br>
-.cm-s-inner .CodeMirror-activeline-background { background: inherit; }<br>
-.CodeMirror { position: relative; overflow: hidden; }<br>
-.CodeMirror-scroll { height: 100%; outline: 0px; position: relative; box-sizing: content-box; background: inherit; }<br>
-.CodeMirror-sizer { position: relative; }<br>
-.CodeMirror-gutter-filler, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-vscrollbar { position: absolute; z-index: 6; display: none; }<br>
-.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow: hidden; }<br>
-.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow: hidden; }<br>
-.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }<br>
-.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }<br>
-.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 30px; z-index: 3; }<br>
-.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }<br>
-.CodeMirror-gutter-wrapper { position: absolute; z-index: 4; background: 0px 0px !important; border: none !important; }<br>
-.CodeMirror-gutter-background { position: absolute; top: 0px; bottom: 0px; z-index: 4; }<br>
-.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }<br>
-.CodeMirror-lines { cursor: text; }<br>
-.CodeMirror pre { border-radius: 0px; border-width: 0px; background: 0px 0px; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; overflow-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; }<br>
-.CodeMirror-wrap pre { overflow-wrap: break-word; white-space: pre-wrap; word-break: normal; }<br>
-.CodeMirror-code pre { border-right: 30px solid transparent; width: fit-content; }<br>
-.CodeMirror-wrap .CodeMirror-code pre { border-right: none; width: auto; }<br>
-.CodeMirror-linebackground { position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 0; }<br>
-.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }<br>
-.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }<br>
-.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }<br>
-.CodeMirror-measure pre { position: static; }<br>
-.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right: none; width: 0px; }<br>
-.CodeMirror div.CodeMirror-cursor { visibility: hidden; }<br>
-.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }<br>
-.cm-searching { background: rgba(255, 255, 0, 0.4); }<br>
-@media print {<br>
-.CodeMirror div.CodeMirror-cursor { visibility: hidden; }<br>
-}</p>
-<p>:root {<br>
---side-bar-bg-color: #fafafa;<br>
---control-text-color: #777;<br>
-}</p>
-<p>@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&amp;subset=latin,latin-ext);</p>
-<p>/* open-sans-regular - latin-ext_latin <em>/<br>
-/</em> open-sans-italic - latin-ext_latin <em>/<br>
-/</em> open-sans-700 - latin-ext_latin <em>/<br>
-/</em> open-sans-700italic - latin-ext_latin */<br>
-html {<br>
-font-size: 16px;<br>
-}</p>
-<p>body {<br>
-font-family: &quot;Open Sans&quot;,&quot;Clear Sans&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;<br>
-color: rgb(51, 51, 51);<br>
-line-height: 1.6;<br>
-}</p>
-<p>#write {<br>
-max-width: 860px;<br>
-margin: 0 auto;<br>
-padding: 30px;<br>
-padding-bottom: 100px;<br>
-}</p>
-<p>@media only screen and (min-width: 1400px) {<br>
-#write {<br>
-max-width: 1024px;<br>
-}<br>
-}</p>
-<p>@media only screen and (min-width: 1800px) {<br>
-#write {<br>
-max-width: 1200px;<br>
-}<br>
-}</p>
-<p>#write &gt; ul:first-child,<br>
-#write &gt; ol:first-child{<br>
-margin-top: 30px;<br>
-}</p>
-<p>a {<br>
-color: #4183C4;<br>
-}<br>
-h1,<br>
-h2,<br>
-h3,<br>
-h4,<br>
-h5,<br>
-h6 {<br>
-position: relative;<br>
-margin-top: 1rem;<br>
-margin-bottom: 1rem;<br>
-font-weight: bold;<br>
-line-height: 1.4;<br>
-cursor: text;<br>
-}<br>
-h1:hover a.anchor,<br>
-h2:hover a.anchor,<br>
-h3:hover a.anchor,<br>
-h4:hover a.anchor,<br>
-h5:hover a.anchor,<br>
-h6:hover a.anchor {<br>
-text-decoration: none;<br>
-}<br>
-h1 tt,<br>
-h1 code {<br>
-font-size: inherit;<br>
-}<br>
-h2 tt,<br>
-h2 code {<br>
-font-size: inherit;<br>
-}<br>
-h3 tt,<br>
-h3 code {<br>
-font-size: inherit;<br>
-}<br>
-h4 tt,<br>
-h4 code {<br>
-font-size: inherit;<br>
-}<br>
-h5 tt,<br>
-h5 code {<br>
-font-size: inherit;<br>
-}<br>
-h6 tt,<br>
-h6 code {<br>
-font-size: inherit;<br>
-}<br>
-h1 {<br>
-font-size: 2.25em;<br>
-line-height: 1.2;<br>
-border-bottom: 1px solid #eee;<br>
-}<br>
-h2 {<br>
-font-size: 1.75em;<br>
-line-height: 1.225;<br>
-border-bottom: 1px solid #eee;<br>
-}</p>
-<p>/*@media print {<br>
-.typora-export h1,<br>
-.typora-export h2 {<br>
-border-bottom: none;<br>
-padding-bottom: initial;<br>
-}</p>
-<pre><code>.typora-export h1::after,
-.typora-export h2::after {
-    content: &quot;&quot;;
-    display: block;
-    height: 100px;
-    margin-top: -96px;
-    border-top: 1px solid #eee;
-}
-</code></pre>
-<p>}*/</p>
-<p>h3 {<br>
-font-size: 1.5em;<br>
-line-height: 1.43;<br>
-}<br>
-h4 {<br>
-font-size: 1.25em;<br>
-}<br>
-h5 {<br>
-font-size: 1em;<br>
-}<br>
-h6 {<br>
-font-size: 1em;<br>
-color: #777;<br>
-}<br>
-p,<br>
-blockquote,<br>
-ul,<br>
-ol,<br>
-dl,<br>
-table{<br>
-margin: 0.8em 0;<br>
-}<br>
-li&gt;ol,<br>
-li&gt;ul {<br>
-margin: 0 0;<br>
-}<br>
-hr {<br>
-height: 2px;<br>
-padding: 0;<br>
-margin: 16px 0;<br>
-background-color: #e7e7e7;<br>
-border: 0 none;<br>
-overflow: hidden;<br>
-box-sizing: content-box;<br>
-}</p>
-<p>li p.first {<br>
-display: inline-block;<br>
-}<br>
-ul,<br>
-ol {<br>
-padding-left: 30px;<br>
-}<br>
-ul:first-child,<br>
-ol:first-child {<br>
-margin-top: 0;<br>
-}<br>
-ul:last-child,<br>
-ol:last-child {<br>
-margin-bottom: 0;<br>
-}<br>
-blockquote {<br>
-border-left: 4px solid #dfe2e5;<br>
-padding: 0 15px;<br>
-color: #777777;<br>
-}<br>
-blockquote blockquote {<br>
-padding-right: 0;<br>
-}<br>
-table {<br>
-padding: 0;<br>
-word-break: initial;<br>
-}<br>
-table tr {<br>
-border-top: 1px solid #dfe2e5;<br>
-margin: 0;<br>
-padding: 0;<br>
-}<br>
-table tr:nth-child(2n),<br>
-thead {<br>
-background-color: #f8f8f8;<br>
-}<br>
-table tr th {<br>
-font-weight: bold;<br>
-border: 1px solid #dfe2e5;<br>
-border-bottom: 0;<br>
-margin: 0;<br>
-padding: 6px 13px;<br>
-}<br>
-table tr td {<br>
-border: 1px solid #dfe2e5;<br>
-margin: 0;<br>
-padding: 6px 13px;<br>
-}<br>
-table tr th:first-child,<br>
-table tr td:first-child {<br>
-margin-top: 0;<br>
-}<br>
-table tr th:last-child,<br>
-table tr td:last-child {<br>
-margin-bottom: 0;<br>
-}</p>
-<p>.CodeMirror-lines {<br>
-padding-left: 4px;<br>
-}</p>
-<p>.code-tooltip {<br>
-box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);<br>
-border-top: 1px solid #eef2f2;<br>
-}</p>
-<p>.md-fences,<br>
-code,<br>
-tt {<br>
-border: 1px solid #e7eaed;<br>
-background-color: #f8f8f8;<br>
-border-radius: 3px;<br>
-padding: 0;<br>
-padding: 2px 4px 0px 4px;<br>
-font-size: 0.9em;<br>
-}</p>
-<p>code {<br>
-background-color: #f3f4f4;<br>
-padding: 0 2px 0 2px;<br>
-}</p>
-<p>.md-fences {<br>
-margin-bottom: 15px;<br>
-margin-top: 15px;<br>
-padding-top: 8px;<br>
-padding-bottom: 6px;<br>
-}</p>
-<p>.md-task-list-item &gt; input {<br>
-margin-left: -1.3em;<br>
-}</p>
-<p>@media print {<br>
-html {<br>
-font-size: 13px;<br>
-}<br>
-table,<br>
-pre {<br>
-page-break-inside: avoid;<br>
-}<br>
-pre {<br>
-word-wrap: break-word;<br>
-}<br>
-}</p>
-<p>.md-fences {<br>
-background-color: #f8f8f8;<br>
-}<br>
-#write pre.md-meta-block {<br>
-padding: 1rem;<br>
-font-size: 85%;<br>
-line-height: 1.45;<br>
-background-color: #f7f7f7;<br>
-border: 0;<br>
-border-radius: 3px;<br>
-color: #777777;<br>
-margin-top: 0 !important;<br>
-}</p>
-<p>.mathjax-block&gt;.code-tooltip {<br>
-bottom: .375rem;<br>
-}</p>
-<p>.md-mathjax-midline {<br>
-background: #fafafa;<br>
-}</p>
-<p>#write&gt;h3.md-focus:before{<br>
-left: -1.5625rem;<br>
-top: .375rem;<br>
-}<br>
-#write&gt;h4.md-focus:before{<br>
-left: -1.5625rem;<br>
-top: .285714286rem;<br>
-}<br>
-#write&gt;h5.md-focus:before{<br>
-left: -1.5625rem;<br>
-top: .285714286rem;<br>
-}<br>
-#write&gt;h6.md-focus:before{<br>
-left: -1.5625rem;<br>
-top: .285714286rem;<br>
-}<br>
-.md-image&gt;.md-meta {<br>
-/<em>border: 1px solid #ddd;</em>/<br>
-border-radius: 3px;<br>
-padding: 2px 0px 0px 4px;<br>
-font-size: 0.9em;<br>
-color: inherit;<br>
-}</p>
-<p>.md-tag {<br>
-color: #a7a7a7;<br>
-opacity: 1;<br>
-}</p>
-<p>.md-toc {<br>
-margin-top:20px;<br>
-padding-bottom:20px;<br>
-}</p>
-<p>.sidebar-tabs {<br>
-border-bottom: none;<br>
-}</p>
-<p>#typora-quick-open {<br>
-border: 1px solid #ddd;<br>
-background-color: #f8f8f8;<br>
-}</p>
-<p>#typora-quick-open-item {<br>
-background-color: #FAFAFA;<br>
-border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;<br>
-border-style: solid;<br>
-border-width: 1px;<br>
-}</p>
-<p>/** focus mode */<br>
-.on-focus-mode blockquote {<br>
-border-left-color: rgba(85, 85, 85, 0.12);<br>
-}</p>
-<p>header, .context-menu, .megamenu-content, footer{<br>
-font-family: &quot;Segoe UI&quot;, &quot;Arial&quot;, sans-serif;<br>
-}</p>
-<p>.file-node-content:hover .file-node-icon,<br>
-.file-node-content:hover .file-node-open-state{<br>
-visibility: visible;<br>
-}</p>
-<p>.mac-seamless-mode #typora-sidebar {<br>
-background-color: #fafafa;<br>
-background-color: var(--side-bar-bg-color);<br>
-}</p>
-<p>.md-lang {<br>
-color: #b4654d;<br>
-}</p>
-<p>.html-for-mac .context-menu {<br>
---item-hover-bg-color: #E6F0FE;<br>
-}</p>
-<p>#md-notification .btn {<br>
-border: 0;<br>
-}</p>
-<p>.dropdown-menu .divider {<br>
-border-color: #e5e5e5;<br>
-}</p>
-<p>.ty-preferences .window-content {<br>
-background-color: #fafafa;<br>
-}</p>
-<p>.ty-preferences .nav-group-item.active {<br>
-color: white;<br>
-background: #999;<br>
-}</p>
-</style>
-</head>
-<body class='typora-export os-windows'>
-<div id='write'  class=''><h2><a name="ui框架" class="md-header-anchor"></a><span>UI框架</span></h2><ul><li><h3><a name="介绍" class="md-header-anchor"></a><span>介绍</span></h3><p><span>UI框架提供了两种概念，视图(View)和窗口(Window)的概念。</span></p><ol start='' ><li><span>视图：游戏中永远只有有一个视图存在，不同视图是一个切换关卡，也可以理解为页面。</span></li><li><span>窗口：类似操作系统，可以同时打开多个窗口，多个窗口有重叠概念，以及模态窗口的概念（模态也就是只能操作当前窗口，下面的窗口无法被点击）。</span></li></ol><p><span>UI框架用一种很便捷的方式跳转视图或打开窗口，他们在游戏中是独立的模块，跟游戏逻辑是低耦合的。</span></p><p><span>如果内存不足时，UI框架会对用不到的界面进行卸载，回收内存。</span>
-<span>UI框架管理当前UI的状态，你可以对这些状态变更进行监听，以适配不同的表现，如窗口打开时，菜单栏自动隐藏等效果。</span>
-<span>视图的基类为EgoView，窗口的基类为EgoWindow。</span></p></li><li><h3><a name="设计思路" class="md-header-anchor"></a><span>设计思路</span></h3><p><span>给窗口/视图分配一个唯一key，然后在游戏特定位置配置这个key与prefab的名称的关系，界面显示时自动读取预制，并显示，并且支持设置对应窗口的打开动效。</span></p></li><li><h3><a name="ui配置" class="md-header-anchor"></a><span>UI配置</span></h3><blockquote><p><span>配置路径：菜单栏Egogame-Setting选中，见UI Configs</span><span>	</span></p></blockquote><figure><table><thead><tr><th><span>设置项</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>View Folder Name</span></td><td><span>视图预制在Resources目录下的相对目录(默认是Views)</span></td></tr><tr><td><span>Window Folder Name</span></td><td><span>窗口预制在Resources目录下的相对目录(默认是Windows)</span></td></tr><tr><td><span>View Configs</span></td><td><span>配置key和prefab路径的对应关系</span></td></tr><tr><td><span>Window Configs</span></td><td><span>配置key和prefab路径的对应关系</span></td></tr></tbody></table></figure></li></ul><hr /><ul><li><h3><a name="快速开始" class="md-header-anchor"></a><span>快速开始</span></h3><blockquote><p><span>目前有的示例，视图预制在Assets/Game/Resources/Views，窗口预制在Assets/Game/Resources/Windows，可以参考制作。</span></p></blockquote><ul><li><p><span>如何快速制作视图（View）</span></p><ol start='' ><li><span>打开MainScene.unity，在Canvas创建空的GameObject，并重命名如TestView</span></li><li><span>创建类继承EgoView，如TestView.cs</span></li><li><span>对TestView.cs进行逻辑编写</span></li><li><span>将TestView挂到创建的空GameObject</span></li><li><span>在空的GameObject设置界面元素，如按钮、文本、图片等</span></li><li><span>将TestView拖到Assets/Game/Resources/Views目录下，做成预制</span></li><li><span>打开ScreenName枚举类，创建一个Test枚举</span></li><li><span>打开UI Configs，添加一条配置</span></li><li><span>配置结束，即可通过代码进行调用</span></li></ol></li><li><p><span>如何快速制作窗口（Window）</span></p><blockquote><p><span>跟创建视图类似，不一样的是类继承EgoWindow，下面介绍另外一种偷懒的作法。</span></p></blockquote><ol start='' ><li><span>找到已有的窗口，如OptionWindow，ctrl+D复制一份</span></li><li><span>修改预制名，以及修改类名</span></li><li><span>修改打开效果showMotion和closeMotion</span></li><li><span>UI Configs的配置</span></li><li><span>搞定</span></li></ol></li></ul></li></ul><hr /><ul><li><h3><a name="api介绍" class="md-header-anchor"></a><span>API介绍</span></h3><ul><li><h4><a name="guicontrol" class="md-header-anchor"></a><span>GUIControl</span></h4><h5><a name="描述" class="md-header-anchor"></a><span>描述</span></h5><p><span>UI框架的管理类，比如要打开窗口，切换视图，判断当前视图和当前打开列表等等，都通过该静态类调用。</span></p><h5><a name="属性" class="md-header-anchor"></a><span>属性</span></h5><figure><table><thead><tr><th><span>属性名</span></th><th><span>返回类型</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>CurrentView</span></td><td><span>EgoView</span></td><td><span>获取当前视图类</span></td></tr><tr><td><span>CurrentViewName</span></td><td><span>string</span></td><td><span>获取当前视图名</span></td></tr><tr><td><span>CurrentViewScreenName</span></td><td><span>ScreenName</span></td><td><span>获取当前视图名对应枚举</span></td></tr><tr><td><span>CurrentWindow</span></td><td><span>EgoWindow</span></td><td><span>获取当前最顶层窗口类</span></td></tr><tr><td><span>CurrentWindowName</span></td><td><span>string</span></td><td><span>获取当前窗口名</span></td></tr><tr><td><span>CurrentWindowScreenName</span></td><td><span>ScreenName</span></td><td><span>获取当前窗口枚举</span></td></tr><tr><td><span>CurrentWindowList</span></td><td><span>List</span><string></td><td><span>当前窗口列表</span></td></tr></tbody></table></figure><h5><a name="静态方法" class="md-header-anchor"></a><span>静态方法</span></h5><figure><table><thead><tr><th><span>方法名</span></th><th><span>返回类型</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>ChangeView</span></td><td><span>void</span></td><td><span>切换视图</span></td></tr><tr><td><span>OpenWindow</span></td><td><span>void</span></td><td><span>打开窗口</span></td></tr><tr><td><span>CloseWindow</span></td><td><span>void</span></td><td><span>关闭窗口</span></td></tr><tr><td><span>CloseCurrentWindow</span></td><td><span>void</span></td><td><span>关闭最顶层窗口</span></td></tr><tr><td><span>OpenOrCloseWindow</span></td><td><span>void</span></td><td><span>打开或者关闭窗口</span></td></tr><tr><td><span>CloseAllWindows</span></td><td><span>void</span></td><td><span>关闭所有窗口</span></td></tr><tr><td><span>ActiveWindow</span></td><td><span>void</span></td><td><span>激活窗口（不使用动效）</span></td></tr><tr><td><span>DeActiveWindow</span></td><td><span>void</span></td><td><span>不激活窗口（不使用动效）</span></td></tr><tr><td><span>HideAllWindows</span></td><td><span>void</span></td><td><span>直接隐藏所有窗口（不使用动效）</span></td></tr><tr><td><span>IsWindowShow</span></td><td><span>bool</span></td><td><span>判断窗口是否显示</span></td></tr><tr><td><span>IsCurrentView</span></td><td><span>bool</span></td><td><span>判断当前视图是否是某视图</span></td></tr><tr><td><span>IsCurrentWindow</span></td><td><span>bool</span></td><td><span>判断当前最顶层是否是某窗口</span></td></tr><tr><td><span>RegisterWindow</span></td><td><span>void</span></td><td><span>注册窗口配置，注意：一般情况下用UI配置注册即可，特殊情况可以采用代码注册</span></td></tr><tr><td><span>RegisterView</span></td><td><span>void</span></td><td><span>注册视图配置，注意：一般情况下用UI配置注册即可，特殊情况可以采用代码注册</span></td></tr><tr><td><span>CleanUICache</span></td><td><span>void</span></td><td><span>清空UI缓存，正常情况不需要代码调用，框架会自动处理</span></td></tr><tr><td><span>GetView</span></td><td><span>EgoView</span></td><td><span>通过名字获取视图对象(注意：该方法会去加载预制对象，没有特殊情况，不需要使用该方法获取)</span></td></tr><tr><td><span>GetWindow</span></td><td><span>EgoWindow</span></td><td><span>通过注册名获取窗口对象(注意：该方法会去加载预制对象，没有特殊情况，不需要使用该方法获取)</span></td></tr></tbody></table></figure><hr /></li><li><h4><a name="egoscreen" class="md-header-anchor"></a><span>EgoScreen</span></h4><h5><a name="描述" class="md-header-anchor"></a><span>描述</span></h5><p><span>视图和窗口的基类</span></p><h5><a name="属性" class="md-header-anchor"></a><span>属性</span></h5><figure><table><thead><tr><th><span>属性名</span></th><th><span>类型</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>target</span></td><td><span>GameObject</span></td><td><span>控制目标，无特殊情况，保持为空</span></td></tr><tr><td><span>showEffect</span></td><td><span>BaseMotion</span></td><td><span>显示动效</span></td></tr><tr><td><span>closeEffect</span></td><td><span>BaseMotion</span></td><td><span>关闭动效</span></td></tr><tr><td><span>screenName</span></td><td><span>string</span></td><td><span>当前标识key</span></td></tr><tr><td><span>donotCache</span></td><td><span>bool</span></td><td><span>是否需要缓存，false则关闭后立即销毁</span></td></tr><tr><td><span>IsOpened</span></td><td><span>bool</span></td><td><span>是否打开</span></td></tr><tr><td><span>IsShowed</span></td><td><span>bool</span></td><td><span>是否打开完毕（也就是如果有打开特效，特效已经播放完毕）</span></td></tr><tr><td><span>IsClosed</span></td><td><span>bool</span></td><td><span>是否关闭完毕（也就是如果有关闭特效，特效已经播放完毕）</span></td></tr></tbody></table></figure><h5><a name="方法" class="md-header-anchor"></a><span>方法</span></h5><figure><table><thead><tr><th><span>方法名</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>OpenScreen</span></td><td><span>显示</span></td></tr><tr><td><span>ShowScreen</span></td><td><span>显示（可传参数）</span></td></tr><tr><td><span>ActiveScreen</span></td><td><span>显示（不使用动效）</span></td></tr><tr><td><span>DeActiveScreen</span></td><td><span>关闭（不使用动效）</span></td></tr><tr><td><span>CloseScreen</span></td><td><span>关闭</span></td></tr><tr><td><span>BackScreen</span></td><td><span>返回（如按下Esc键，需要实现）</span></td></tr></tbody></table></figure><h5><a name="可重写" class="md-header-anchor"></a><span>可重写</span></h5><figure><table><thead><tr><th><span>方法名</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>OnShowIng</span></td><td><span>正要显示</span></td></tr><tr><td><span>OnShowed</span></td><td><span>显示完成（如有特效，特效播放完成后执行）</span></td></tr><tr><td><span>OnClosing</span></td><td><span>正要关闭</span></td></tr><tr><td><span>OnClosed</span></td><td><span>关闭完成（如有特效，特效播放完成后执行）</span></td></tr><tr><td><span>OnBackScreenHandle</span></td><td><span>按下返回键的效果，比如窗口按下esc的时候，关闭。视图按下esc的时候返回上一个视图。</span></td></tr></tbody></table></figure><hr /></li><li><h4><a name="egoview" class="md-header-anchor"></a><span>EgoView</span></h4></li></ul><h5><a name="继承关系" class="md-header-anchor"></a><span>继承关系</span></h5><p><span>		</span><span>继承：EgoScreen</span></p><h5><a name="描述" class="md-header-anchor"></a><span>描述</span></h5><p><span>		</span><span>视图的基类</span></p><h5><a name="属性" class="md-header-anchor"></a><span>属性</span></h5><p><span>		</span><span>同EgoScreen</span></p><h5><a name="方法" class="md-header-anchor"></a><span>方法</span></h5><p><span>		</span><span>同EgoScreen</span></p><hr /><h4><a name="egowindow" class="md-header-anchor"></a><span>EgoWindow</span></h4><h5><a name="继承关系-n295" class="md-header-anchor"></a><span>继承关系</span></h5><p><span>  继承：EgoScreen</span></p><h5><a name="描述-n297" class="md-header-anchor"></a><span>描述</span></h5><p><span>  窗口基类</span></p><h5><a name="属性-n299" class="md-header-anchor"></a><span>属性</span></h5><figure><table><thead><tr><th><span>属性名</span></th><th><span>类型</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>child</span></td><td><span>GameObject</span></td><td><span>动效操作的对象</span></td></tr><tr><td><span>modal</span></td><td><span>bool</span></td><td><span>是否是模态窗口</span></td></tr><tr><td><span>modalAlpha</span></td><td><span>float</span></td><td><span>模态黑框透明度</span></td></tr><tr><td><span>sceneBlurEffect</span></td><td><span>SceneBlurData</span></td><td><span>窗口模糊数据</span></td></tr></tbody></table></figure><h5><a name="方法-n321" class="md-header-anchor"></a><span>方法</span></h5><p><span>  同EgoScreen</span></p><h5><a name="可重写" class="md-header-anchor"></a><span>可重写</span></h5><figure><table><thead><tr><th><span>方法名</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>OnClickModalHandle</span></td><td><span>点击窗口外执行函数，如实现点击窗口外关闭窗口</span></td></tr></tbody></table></figure></li></ul><hr /><ul><li><h3><a name="ui事件" class="md-header-anchor"></a><span>UI事件</span></h3><figure><table><thead><tr><th><span>事件名</span></th><th><span>说明</span></th></tr></thead><tbody><tr><td><span>On_ViewChangeHandle</span></td><td><span>视图改变回调</span></td></tr><tr><td><span>On_WindowChangeHandle</span></td><td><span>窗口改变回调（说明当前有新窗口打开或窗口被关闭）</span></td></tr><tr><td><span>viewEvent</span></td><td><span>封装了视图打开中、打开完毕、关闭中、关闭完毕等高级事件回调</span></td></tr><tr><td><span>windowEvent</span></td><td><span>封装了窗口打开中、打开完毕、关闭中、关闭完毕等高级事件回调</span></td></tr></tbody></table></figure></li></ul><hr /><ul><li><p><strong><span>相关工具</span></strong></p><p><strong><span>描述</span></strong></p><p><span>框架提供了一个辅助工具，可以列出目前所有的窗口和视图，快速选中或快速编辑</span></p><p><span>打开方式：Egogame-Tool-UIEditor</span></p><p><img src="UI框架.assets/image-20201103174259428.png" referrerpolicy="no-referrer" alt="image-20201103174259428"><span> </span></p><p><span>选中：在Project视图中选中该预制</span></p><p><span>打开：播放前-进入预制编辑状态。播放后-打开该视图/窗口</span></p><hr /></li><li><h2><a name="fq" class="md-header-anchor"></a><span>F&amp;Q</span></h2><ul><li><p><span>如何创建自定义动效（方法1：使用DoTween或者EgoTweenPro，</span><strong><span>优点：代码控制流程</span></strong><span>）</span></p><blockquote><p><span>可以参考目前有的动效类，如FadeUIMotion、FallUIMotion、FadeMotion、FallMotion</span></p></blockquote><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">class</span> <span class="cm-def">PopUpUIMotion</span>:<span class="cm-variable">BaseUIMotion</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">private</span> <span class="cm-variable-3">bool</span> <span class="cm-variable">_isForward</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">private</span> <span class="cm-variable-3">float</span> <span class="cm-variable">_duration</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">public</span> <span class="cm-variable">PopUpUIMotion</span>(<span class="cm-variable-3">bool</span> <span class="cm-variable">isForward</span>,<span class="cm-variable-3">float</span> <span class="cm-variable">duration</span><span class="cm-operator">=</span><span class="cm-number">1f</span>)</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">_isForward</span> <span class="cm-operator">=</span> <span class="cm-variable">isForward</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">_duration</span> <span class="cm-operator">=</span> <span class="cm-variable">duration</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">protected</span> <span class="cm-keyword">override</span> <span class="cm-keyword">void</span> <span class="cm-variable">OnPlayHandle</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">fromScale</span> <span class="cm-operator">=</span> <span class="cm-variable">_isForward</span> <span class="cm-operator">?</span> <span class="cm-number">0f</span> : <span class="cm-number">1f</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">toScale</span> <span class="cm-operator">=</span> <span class="cm-variable">_isForward</span> <span class="cm-operator">?</span> <span class="cm-number">1f</span> : <span class="cm-number">0f</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" class="cm-tab-wrap-hack" style="padding-right: 0.1px;"><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">//使用类似DoTween的方式创建Tween</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">var</span> <span class="cm-def">tweener</span> <span class="cm-operator">=</span> <span class="cm-variable">transform</span>.<span class="cm-variable">TweenScale</span>(<span class="cm-variable">_duration</span>, <span class="cm-variable">fromScale</span>, <span class="cm-variable">toScale</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">tweener</span>.<span class="cm-variable">easeMethod</span> <span class="cm-operator">=</span> <span class="cm-variable">_isForward</span> <span class="cm-operator">?</span> <span class="cm-variable">EaseMethod</span>.<span class="cm-variable">easeOutElastic</span> : <span class="cm-variable">EaseMethod</span>.<span class="cm-variable">easeOutSine</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">tweener</span>.<span class="cm-variable">SetOnFinished</span>(<span class="cm-variable">TweenComplete</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">private</span> <span class="cm-keyword">void</span> <span class="cm-variable">TweenComplete</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">//动效完成后，调用基类的Complete函数，通知外部</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">PlayComplete</span>();</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">protected</span> <span class="cm-keyword">override</span> <span class="cm-keyword">void</span> <span class="cm-variable">OnStopHandle</span>()</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-comment">//被强行停止时，需要停止动效</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-variable">transform</span>.<span class="cm-variable">TweenStop</span>();</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 782px;"></div><div class="CodeMirror-gutters" style="display: none; height: 782px;"></div></div></div></pre><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="c#"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="c#"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-variable">GUIControl</span>.<span class="cm-variable">OpenWindow</span>(<span class="cm-variable">ScreenName</span>.<span class="cm-variable">Option</span>, <span class="cm-atom">false</span>, <span class="cm-keyword">new</span> <span class="cm-variable">PopUpUIMotion</span>(<span class="cm-atom">true</span>));</span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">//或者在继承EgoWindow的类中重写ShowMotion和CloseMotion</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">private</span> <span class="cm-variable">PopUpUIMotion</span> <span class="cm-variable">_popupMotion</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">public</span> <span class="cm-keyword">override</span> <span class="cm-variable">IMotion</span> <span class="cm-variable">ShowMotion</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">{</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-keyword">get</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  {</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">if</span> (<span class="cm-variable">_popupMotion</span> <span class="cm-operator">==</span> <span class="cm-atom">null</span>) <span class="cm-variable">_popupMotion</span> <span class="cm-operator">=</span> <span class="cm-keyword">new</span> <span class="cm-variable">PopUpUIMotion</span>(<span class="cm-atom">true</span>);</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-keyword">return</span> <span class="cm-variable">_popupMotion</span>;</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp;  }</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">}</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 253px;"></div><div class="CodeMirror-gutters" style="display: none; height: 253px;"></div></div></div></pre></li><li><p><span>如何创建自定义动效（方法2：使用EgoTween，挂在GameObject，</span><strong><span>优点：可以动态调参数</span></strong><span>）</span></p><blockquote><p><span>可以参考当前有的动效，FadeMotion、FallMotion、JumpMotion、PopupMotion等等</span></p></blockquote><ol start='' ><li><span>继承BaseMotion或BaseTweenMotion，实现逻辑</span></li><li><span>创建GameObject挂上脚本，关联EgoWindow引用</span></li></ol><p><img src="UI框架.assets/image-20201024103845388.png" referrerpolicy="no-referrer" alt="image-20201024103845388"><span> </span></p><p><img src="UI框架.assets/image-20201024103910712.png" referrerpolicy="no-referrer" alt="image-20201024103910712"><span> </span></p></li></ul></li></ul></div>
-</body>
-</html>]]></content>
     </entry>
 </feed>

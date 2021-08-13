@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>BFT_装备发射物扩展 | WeiBlog</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Wei715547.github.io/favicon.ico?v=1628847996598">
+<link rel="stylesheet" href="https://Wei715547.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="##骨骼位置/权重发射物##
+配置表更改：
+
+
+在ShootWeapon类中的InjectsId获取发射列表
+
+private List GetInjectSettingExId(List equipmentCfgAttackInjectS..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Wei715547.github.io">
+        <img src="https://Wei715547.github.io/images/avatar.png?v=1628847996598" class="site-logo">
+        <h1 class="site-title">WeiBlog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            总览
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/Wei715547" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://space.bilibili.com/29363247" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/u/5612050622" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      年月增长，我宜强盛。
+用于Unity+开发的技术积累
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://Wei715547.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">BFT_装备发射物扩展</h2>
+            <div class="post-date">2021-08-13</div>
+            
+            <div class="post-content" v-pre>
+              <p>##骨骼位置/权重发射物##<br>
+配置表更改：<br>
+<img src="https://Wei715547.github.io/post-images/1628847358632.PNG" alt="" loading="lazy"><br>
+<img src="https://Wei715547.github.io/post-images/1628847503655.PNG" alt="" loading="lazy"></p>
+<p>在ShootWeapon类中的InjectsId获取发射列表<br>
+<img src="https://Wei715547.github.io/post-images/1628847703883.PNG" alt="" loading="lazy"><br>
+private List<string> GetInjectSettingExId(List<InjectSettingEx> equipmentCfgAttackInjectSettingsEx)<br>
+{<br>
+isSpecialInject = true;<br>
+injectBonePair = new Dictionary&lt;string, string&gt;();<br>
+List<InjectSettingEx> InjectSettingsEx = new List<InjectSettingEx>(equipmentCfgAttackInjectSettingsEx.ToArray());</p>
+<pre><code>    BasePropSaveData basePropSaveData = GetHandSaveData();
+    if (basePropSaveData == null || string.IsNullOrEmpty(basePropSaveData.propId))
+    {
+        Debug.LogError(&quot;未知原因，找不到手持装备,装备Id:&quot; + ItemId);
+        return new List&lt;string&gt;();
+    }
+    string ammoId = basePropSaveData.EquipSepcificData.ammoId;
+    List&lt;string&gt; injectsList = new List&lt;string&gt;();
+    InjectSettingEx injectSettingEx = InjectSettingsEx.Find(id =&gt; id.ammoId == ammoId || id.ammoId == &quot;-1&quot;);
+</code></pre>
+<p>#if UNITY_EDITOR<br>
+if (injectSettingEx == null &amp;&amp; EditorValues.UnlimitBullet &amp;&amp; equipmentCfgAttackInjectSettingsEx.Count &gt; 0)<br>
+{<br>
+ammoId = equipmentCfgAttackInjectSettingsEx[0].ammoId;<br>
+injectSettingEx = InjectSettingsEx.Find(id =&gt; id.ammoId == ammoId || id.ammoId == &quot;-1&quot;);<br>
+}<br>
+#endif</p>
+<pre><code>    while (injectSettingEx != null)
+    {
+        List&lt;string&gt; injectsIds = new List&lt;string&gt;();
+        List&lt;float&gt; iteminjectRateWeight = new List&lt;float&gt;();
+
+        #region 平均权重
+        foreach (var itemdate in injectSettingEx.injectItems)
+        {
+            injectsIds.Add(itemdate.injectId);
+            iteminjectRateWeight.Add(itemdate.itemWeight);
+            injectBonePair.Add(itemdate.injectId, itemdate.boneName);
+        }
+        int averageCount = iteminjectRateWeight.Count;
+        float averageWeight = 100f;
+        List&lt;int&gt; averageIndex = new List&lt;int&gt;();
+        for (int i = 0; i &lt; iteminjectRateWeight.Count; i++)
+        {
+            if (!iteminjectRateWeight[i].Equals(0))
+            {
+                averageCount--;
+                averageWeight -= iteminjectRateWeight[i];
+            }
+            else
+                averageIndex.Add(i);
+        }
+        foreach (var item in averageIndex)
+        {
+            iteminjectRateWeight[item] = averageWeight / averageCount;
+        }
+        #endregion
+
+        injectsList.Add(injectsIds.GetRandom(100, iteminjectRateWeight.ToArray()));
+
+        InjectSettingsEx.Remove(injectSettingEx);
+
+        injectSettingEx = InjectSettingsEx.Find(id =&gt; id.ammoId == ammoId || id.ammoId == &quot;-1&quot;);
+    }
+    return injectsList;
+}
+</code></pre>
+<p>##额外发射物##<br>
+<img src="https://Wei715547.github.io/post-images/1628847973732.PNG" alt="" loading="lazy"><br>
+private List<string> MergeAdditional(List<string> routineInjectItems, List<AdditionalInjectSetting> additionalInjectSettings)<br>
+{<br>
+List<string> merge = new List<string>(routineInjectItems);<br>
+foreach (var addition in additionalInjectSettings)<br>
+{<br>
+if (Random.value*100 &lt; addition.rate)<br>
+merge.Add(addition.injectId);<br>
+}<br>
+return merge;<br>
+}</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Wei715547.github.io/post/monster_ai_-fa-she-wu-bang-ding-spin-dong-hua/">
+                  <h3 class="post-title">
+                    Monster_AI_发射物绑定Spin动画
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
